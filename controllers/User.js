@@ -316,7 +316,7 @@ module.exports = function (app) {
                 } else {
                     //verifica o token do usuário
                     user.checkToken(request.param('token', null), function(valid) {
-                        response.send({valid : valid});
+                        response.send({valid : valid, error : ''});
                     });
                 }
             }
