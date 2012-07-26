@@ -23,7 +23,7 @@ module.exports = function (app) {
      * @request : {username, password, password_confirmation}
      * @response : {token, confirmation}
      */
-    app.post('/', function (request,response) {
+    app.post('user/', function (request,response) {
         response.contentType('json');
         
         // valida se a senha e a confirmação senha conferem
@@ -68,7 +68,7 @@ module.exports = function (app) {
      * @request : {token}
      * @response : {confirmation}
      */
-    app.put('/:login/deactivate', function (request,response) {
+    app.put('user/:login/deactivate', function (request,response) {
         response.contentType('json');
         
         //localiza o usuário
@@ -113,7 +113,7 @@ module.exports = function (app) {
      * @request : {token}
      * @response : {confirmation}
      */
-    app.put('/:login/activate', function (request,response) {
+    app.put('user/:login/activate', function (request,response) {
         response.contentType('json');
         
         //localiza o usuário
@@ -158,7 +158,7 @@ module.exports = function (app) {
      * @request : {token, newpassword, newpasswordconfirmation}
      * @response : {newtoken, confirmation}
      */
-    app.put('/:login/password-recovery', function (request,response) {
+    app.put('user/:login/password-recovery', function (request,response) {
         response.contentType('json');
         
         // valida se a senha e a confirmação senha conferem
@@ -215,7 +215,7 @@ module.exports = function (app) {
      * @request : {login, password}
      * @response : { token, confirmation}
      */
-    app.put('/:login/login', function (request,response) {
+    app.put('user/:login/login', function (request,response) {
         response.contentType('json');
         
         //localiza o usuário
@@ -258,7 +258,7 @@ module.exports = function (app) {
      * @request : {token}
      * @response : {confirmation}
      */
-    app.put('/:login/logout', function (request,response) {
+    app.put('user/:login/logout', function (request,response) {
         response.contentType('json');
         
         //localiza o usuário
@@ -303,7 +303,7 @@ module.exports = function (app) {
      * @request : {token}
      * @response : {confirmation}
      */
-    app.get('/:login/validate', function (request,response) {
+    app.get('user/:login/validate', function (request,response) {
         response.contentType('json');
         
         //localiza o usuário

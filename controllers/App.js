@@ -23,7 +23,7 @@ module.exports = function (app) {
      * @request : {token}
      * @response : {token, confirmation}
      */
-    app.post('/app/:app_id', function (request,response) {
+    app.post('user/:login/app/:app_id', function (request,response) {
     
     });
     
@@ -40,7 +40,7 @@ module.exports = function (app) {
      * @request : {token}
      * @response : {confirmation}
      */
-    app.del('/app/:app_id', function (request,response) {
+    app.del('user/:login/app/:app_id', function (request,response) {
     
     });
     
@@ -57,7 +57,7 @@ module.exports = function (app) {
      * @request : {token}
      * @response : {authorizationDate,  expirationDate}
      */
-    app.get('/app/:app_id', function (request,response) {
+    app.get('user/:login/app/:app_id', function (request,response) {
     
     });
     
@@ -74,7 +74,7 @@ module.exports = function (app) {
      * @request : {authorizationDate, expirationDate}
      * @response : {confirmation}
      */
-    app.get('/app/:app_id', function (request,response) {
+    app.get('user/:login/app/:app_id', function (request,response) {
     
     });
     
@@ -91,7 +91,7 @@ module.exports = function (app) {
      * @request : {token}
      * @response : {authorizationDate, expirationDate}
      */
-    app.get('/app/:app_id/validate', function (request,response) {
+    app.get('user/:login/app/:app_id/validate', function (request,response) {
     
     });
     

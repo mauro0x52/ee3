@@ -28,15 +28,10 @@ app.configure(function () {
     app.use(app.router);
 });
 
-/*  Configurando controllers */
-app.namespace('/user', function () {
-    require('./controllers/User.js')(app);
-});
-
-app.namespace('/user/:login', function () {
-    require('./controllers/ThirdPartyLogin.js')(app);
-    require('./controllers/App.js')(app);
-});
+/*  Chamando controllers */
+require('./controllers/User.js')(app);
+require('./controllers/ThirdPartyLogin.js')(app);
+require('./controllers/App.js')(app);
 
 /*  Ativando o server */
 app.listen(config.host.port);

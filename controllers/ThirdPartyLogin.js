@@ -23,7 +23,7 @@ module.exports = function (app) {
      * @request : {server}
      * @response : {confirmation}
      */
-    app.post('/', function (request,response) {
+    app.post('user/:login/third-party-login', function (request,response) {
     
     });
      
@@ -40,7 +40,7 @@ module.exports = function (app) {
      * @request : {token}
      * @response : {[{server}]}
      */
-    app.get('/third-party-logins', function (request,response) {
+    app.get('user/:login/third-party-logins', function (request,response) {
     
     });
      
@@ -57,7 +57,7 @@ module.exports = function (app) {
      * @request : {token}
      * @response : {server}
      */
-    app.get('/third-party-login/:server', function (request,response) {
+    app.get('user/:login/third-party-login/:server', function (request,response) {
     
     });
      
@@ -74,7 +74,7 @@ module.exports = function (app) {
      * @request : {token}
      * @response : {confirmation}
      */
-    app.del('/third-party-login/:server', function (request,response) {
+    app.del('user/:login/third-party-login/:server', function (request,response) {
     
     });
 };
