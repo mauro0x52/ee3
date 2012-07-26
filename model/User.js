@@ -5,7 +5,8 @@
  * @description : Representação da entidade de usuários
  */
  
-var mongoose = require('mongoose'),
+var crypto = require('crypto'),
+    mongoose = require('mongoose'),
     schema   = mongoose.Schema,
     objectId = schema.ObjectId,
     userSchema, User;
