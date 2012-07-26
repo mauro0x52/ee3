@@ -304,6 +304,23 @@ module.exports = function (app) {
      * @response : {confirmation}
      */
     app.get('/:login/validate', function (request,response) {
-    
+        response.contentType('json');
+        
+        //localiza o usuário
+        User.findOne({username : request.params.login}, function (user, error) {
+            if (error) {
+                response.send({error : error});
+            } else {
+                //verifica se o usuario foi encontrado
+                if (user === null) {
+                    response.send({error : 'usuário ou senha inválidos'});
+                } else {
+                    //verifica o token do usuário
+                    user.checkToken(request.param('token', null), function(valid) {
+                        response.send({valid : valid});
+                    });
+                }
+            }
+        });
     });
 };
