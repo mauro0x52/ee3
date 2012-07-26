@@ -1,2 +1,3 @@
 .nide
 config.js
+node_modules/*
