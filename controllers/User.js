@@ -259,7 +259,35 @@ module.exports = function (app) {
      * @response : {confirmation}
      */
     app.put('/:login/logout', function (request,response) {
-    
+        response.contentType('json');
+        
+        //localiza o usuário
+        User.findOne({username : request.params.login}, function (user, error) {
+            if (error) {
+                response.send({error : error});
+            } else {
+                //verifica se o usuario foi encontrado
+                if (user === null) {
+                    response.send({error : 'usuário ou senha inválidos'});
+                } else {
+                    //verifica o token do usuário
+                    user.checkToken(request.param('token', null), function(valid) {
+                        if (!valid) {
+                            response.send({error : 'token inválido'});
+                        } else {
+                            //desloga o usuário
+                            user.logout(function (error) {
+                                if (error) {
+                                    response.send({error : error});
+                                } else {
+                                    response.send({error : ''});
+                                }
+                            });
+                        }
+                    });
+                }
+            }
+        });
     });
     
     /** GET /user/:login/validate
