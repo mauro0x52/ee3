@@ -19,6 +19,7 @@ app.configure(function () {
 
     app.use(express.bodyParser());
     app.use(express.methodOverride());
+    app.set('view engine', 'ejs');
     
     //caso seja ambiente de produção, esconder erros
     if(config.host.debuglevel === 0){
@@ -29,9 +30,13 @@ app.configure(function () {
 });
 
 /*  Chamando controllers */
-require('./controllers/User.js')(app);
-require('./controllers/ThirdPartyLogin.js')(app);
-require('./controllers/App.js')(app);
+require('./controller/User.js')(app);
+require('./controller/ThirdPartyLogin.js')(app);
+require('./controller/App.js')(app);
+
+app.get('/test', function (request,response) {
+    response.render('test');
+});
 
 /*  Ativando o server */
 app.listen(config.host.port);
