@@ -24,7 +24,28 @@ module.exports = function (app) {
      * @response : {token, confirmation}
      */
     app.post('user/:login/app/:app_id', function (request,response) {
-    
+        response.contentType('json');
+        
+        //localiza o usuário
+        User.findOne({username : request.params.login}, function (user, error) {
+            if (error) {
+                response.send({error : error});
+            } else {
+                //verifica se o usuario foi encontrado
+                if (user === null) {
+                    response.send({error : 'usuário ou senha inválidos'});
+                } else {
+                    //verifica o token do usuário
+                    user.checkToken(request.param('token', null), function(valid) {
+                        if (!valid) {
+                            response.send({error : 'token inválido'});
+                        } else {
+                        
+                        }
+                    });
+                }
+            }
+        });
     });
     
     /** DEL /user/:login/app/:app_id

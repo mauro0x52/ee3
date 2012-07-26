@@ -34,7 +34,6 @@ module.exports = function (app) {
                 password : request.param('password', null),
                 status   : 'active'
             });
-            
             //salva novo usuário
             user.save(function (error) {
                 if (error) {
