@@ -28,8 +28,7 @@ userSchema = new schema({
  * @param cb : callback a ser chamado após a ativação da conta
  */
 userSchema.methods.generateToken = function () {
-    //TODO colocar chave de criptografia
-    return crypto.createHash('md5').update(this.login + this.password).digest('hex');
+    return crypto.createHash('md5', config.security.token).update(this.login + this.password).digest('hex');
 };
 
 /** CheckToken
