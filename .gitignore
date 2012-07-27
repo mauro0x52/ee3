@@ -8,3 +8,7 @@ Apps/node_modules/*
 Auth/package.json
 Auth/config.js
 Auth/node_modules/*
+
+Location/package.json
+Location/config.js
+Location/node_modules/*
