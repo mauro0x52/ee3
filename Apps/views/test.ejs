@@ -36,219 +36,73 @@
         </style>
     </head>
     <body>
-        <h1>Lista de chamadas da API AUTH</h1>
+        <h1>Lista de chamadas da API APPS</h1>
         <ul>
             <li>
-                <h2>Testes com usuário</h2>
+                <h2>Testes com app</h2>
                 <h3>Chamadas API</h3>
                 <ul>
                     <li>
-                        <h4>Cadastrar novo usuário</h4>
-                        <form onsubmit="test($(this).serialize(), '../user', 'POST'); return false;">
+                        <h4>Cadastrar novo app</h4>
+                        <form onsubmit="test($(this).serialize(), '../app', 'POST'); return false;">
                             Parâmetros
                             <ul>
-                                <li>username <input type="text" name="username" /></li>
-                                <li>password <input type="text" name="password" /></li>
-                                <li>password_confirmation <input type="text" name="password_confirmation" /></li>
-                            </ul>
-                            <input type="submit" value="testar" />
-                        </form>
-                    </li>
-                    <li>
-                        <h4>Desativar conta do usuário</h4>
-                        <form onsubmit="test($(this).serialize(), '../user/' + $(this).find('input[name=username]').val() +'/deactivate', 'PUT'); return false;">
-                            Parâmetros
-                            <ul>
-                                <li>username <input type="text" name="username" /></li>
+                                <li>username <input type="text" name="login" /></li>
                                 <li>token <input type="text" name="token" /></li>
+                                <li>name <input type="text" name="name" /></li>
+                                <li>slug <input type="text" name="slug" /></li>
+                                <li>type <input type="text" name="type" /></li>
                             </ul>
                             <input type="submit" value="testar" />
                         </form>
                     </li>
                     <li>
-                        <h4>Ativar conta do usuário</h4>
-                        <form onsubmit="test($(this).serialize(), '../user/' + $(this).find('input[name=username]').val() +'/activate', 'PUT'); return false;">
+                        <h4>Listar apps</h4>
+                        <form onsubmit="test($(this).serialize(), '../apps', 'GET'); return false;">
                             Parâmetros
                             <ul>
-                                <li>username <input type="text" name="username" /></li>
+                            </ul>
+                            <input type="submit" value="testar" />
+                        </form>
+                    </li>
+                    <li>
+                        <h4>Exibir app</h4>
+                        <form onsubmit="test($(this).serialize(), '../app/' + $(this).find('input[name=slug]').val(), 'GET'); return false;">
+                            Parâmetros
+                            <ul>
+                                <li>slug <input type="text" name="slug" /></li>
+                            </ul>
+                            <input type="submit" value="testar" />
+                        </form>
+                    </li>
+                    <li>
+                        <h4>Excluir app</h4>
+                        <form onsubmit="test($(this).serialize(), '../app/' + $(this).find('input[name=slug]').val(), 'DELETE'); return false;">
+                            Parâmetros
+                            <ul>
+                                <li>username <input type="text" name="login" /></li>
                                 <li>token <input type="text" name="token" /></li>
+                                <li>slug <input type="text" name="slug" /></li>
                             </ul>
                             <input type="submit" value="testar" />
                         </form>
                     </li>
                     <li>
-                        <h4>Recuperar senha do usuário</h4>
-                        <form onsubmit="test($(this).serialize(), '../user/' + $(this).find('input[name=username]').val() +'/password-recovery', 'PUT'); return false;">
+                        <h4>Editar app</h4>
+                        <form onsubmit="test($(this).serialize(), '../app/' + $(this).find('input[name=slug]').val(), 'DELETE'); return false;">
                             Parâmetros
                             <ul>
-                                <li>username <input type="text" name="username" /></li>
-                                <li>newpassword <input type="text" name="newpassword" /></li>
-                                <li>newpasswordconfirmation <input type="text" name="newpasswordconfirmation" /></li>
+                                <li>username <input type="text" name="login" /></li>
                                 <li>token <input type="text" name="token" /></li>
-                            </ul>
-                            <input type="submit" value="testar" />
-                        </form>
-                    </li>
-                    <li>
-                        <h4>Autenticar o usuário</h4>
-                        <form onsubmit="test($(this).serialize(), '../user/' + $(this).find('input[name=username]').val() +'/login', 'PUT'); return false;">
-                            Parâmetros
-                            <ul>
-                                <li>username <input type="text" name="username" /></li>
-                                <li>password <input type="text" name="password" /></li>
-                            </ul>
-                            <input type="submit" value="testar" />
-                        </form>
-                    </li>
-                    <li>
-                        <h4>Desautenticar o usuário</h4>
-                        <form onsubmit="test($(this).serialize(), '../user/' + $(this).find('input[name=username]').val() +'/logout', 'PUT'); return false;">
-                            Parâmetros
-                            <ul>
-                                <li>username <input type="text" name="username" /></li>
-                                <li>token <input type="text" name="token" /></li>
-                            </ul>
-                            <input type="submit" value="testar" />
-                        </form>
-                    </li>
-                    <li>
-                        <h4>Validar token</h4>
-                        <form onsubmit="test($(this).serialize(), '../user/' + $(this).find('input[name=username]').val() +'/validate', 'GET'); return false;">
-                            Parâmetros
-                            <ul>
-                                <li>username <input type="text" name="username" /></li>
-                                <li>token <input type="text" name="token" /></li>
+                                <li>slug <input type="text" name="slug" /></li>
+                                <li>name <input type="text" name="name" /></li>
+                                <li>type <input type="text" name="type" /></li>
                             </ul>
                             <input type="submit" value="testar" />
                         </form>
                     </li>
                 </ul>
-            </li>
-            
-            <li>
-                <h2>Testes com logins externos</h2>
-                <h3>Chamadas API</h3>
-                <ul>
-                    <li>
-                        <h4>Cadastrar login externo do usuário</h4>
-                        <form onsubmit="test($(this).serialize(), '../user/' + $(this).find('input[name=username]').val() +'/third-party-login', 'POST'); return false;">
-                            Parâmetros
-                            <ul>
-                                <li>username <input type="text" name="username" /></li>
-                                <li>token <input type="text" name="token" /></li>
-                                <li>server <input type="text" name="server" /></li>
-                                <li>external_token <input type="text" name="external_token" /></li>
-                                <li>id <input type="text" name="id" /></li>
-                            </ul>
-                            <input type="submit" value="testar" />
-                        </form>
-                    </li>
-                    <li>
-                        <h4>Listar logins externos do usuário</h4>
-                        <form onsubmit="test($(this).serialize(), '../user/' + $(this).find('input[name=username]').val() +'/third-party-logins', 'GET'); return false;">
-                            Parâmetros
-                            <ul>
-                                <li>username <input type="text" name="username" /></li>
-                                <li>token <input type="text" name="token" /></li>
-                            </ul>
-                            <input type="submit" value="testar" />
-                        </form>
-                    </li>
-                    <li>
-                        <h4>Pegar login externo</h4>
-                        <form onsubmit="test($(this).serialize(), '../user/' + $(this).find('input[name=username]').val() +'/third-party-login/' + $(this).find('input[name=server]').val(), 'GET'); return false;">
-                            Parâmetros
-                            <ul>
-                                <li>username <input type="text" name="username" /></li>
-                                <li>token <input type="text" name="token" /></li>
-                                <li>server <input type="text" name="server" /></li>
-                            </ul>
-                            <input type="submit" value="testar" />
-                        </form>
-                    </li>
-                    <li>
-                        <h4>Remover login externo</h4>
-                        <form onsubmit="test($(this).serialize(), '../user/' + $(this).find('input[name=username]').val() +'/third-party-login/' + $(this).find('input[name=server]').val(), 'DELETE'); return false;">
-                            Parâmetros
-                            <ul>
-                                <li>username <input type="text" name="username" /></li>
-                                <li>token <input type="text" name="token" /></li>
-                                <li>server <input type="text" name="server" /></li>
-                            </ul>
-                            <input type="submit" value="testar" />
-                        </form>
-                    </li>
-                </ul>
-            </li>
-            
-            <li>
-                <h2>Testes com autorização de apps</h2>
-                <h3>Chamadas API</h3>
-                <ul>
-                    <li>
-                        <h4>Autorizar o usuário no app</h4>
-                        <form onsubmit="test($(this).serialize(), '../user/' + $(this).find('input[name=username]').val() +'/app/' + $(this).find('input[name=app_id]').val(), 'POST'); return false;">
-                            Parâmetros
-                            <ul>
-                                <li>username <input type="text" name="username" /></li>
-                                <li>token <input type="text" name="token" /></li>
-                                <li>app_id <input type="text" name="app_id" /></li>
-                            </ul>
-                            <input type="submit" value="testar" />
-                        </form>
-                    </li>
-                    <li>
-                        <h4>Remover autorização do usuário no app</h4>
-                        <form onsubmit="test($(this).serialize(), '../user/' + $(this).find('input[name=username]').val() +'/app/' + $(this).find('input[name=app_id]').val(), 'DELETE'); return false;">
-                            Parâmetros
-                            <ul>
-                                <li>username <input type="text" name="username" /></li>
-                                <li>token <input type="text" name="token" /></li>
-                                <li>app_id <input type="text" name="app_id" /></li>
-                            </ul>
-                            <input type="submit" value="testar" />
-                        </form>
-                    </li>
-                    <li>
-                        <h4>Detalhar a autorização do usuario no app</h4>
-                        <form onsubmit="test($(this).serialize(), '../user/' + $(this).find('input[name=username]').val() +'/app/' + $(this).find('input[name=app_id]').val(), 'GET'); return false;">
-                            Parâmetros
-                            <ul>
-                                <li>username <input type="text" name="username" /></li>
-                                <li>token <input type="text" name="token" /></li>
-                                <li>app_id <input type="text" name="app_id" /></li>
-                            </ul>
-                            <input type="submit" value="testar" />
-                        </form>
-                    </li>
-                    <li>
-                        <h4>Editar detalhes da autorização do usuário no app</h4>
-                        <form onsubmit="test($(this).serialize(), '../user/' + $(this).find('input[name=username]').val() +'/app/' + $(this).find('input[name=app_id]').val(), 'GET'); return false;">
-                            Parâmetros
-                            <ul>
-                                <li>username <input type="text" name="username" /></li>
-                                <li>token <input type="text" name="token" /></li>
-                                <li>app_id <input type="text" name="app_id" /></li>
-                                <li>authorizationDate <input type="text" name="authorizationDate" /></li>
-                                <li>expirationDate <input type="text" name="expirationDate" /></li>
-                            </ul>
-                            <input type="submit" value="testar" />
-                        </form>
-                    </li>
-                    <li>
-                        <h4>Validar token</h4>
-                        <form onsubmit="test($(this).serialize(), '../user/' + $(this).find('input[name=username]').val() +'/app/' + $(this).find('input[name=app_id]').val(), 'GET'); return false;">
-                            Parâmetros
-                            <ul>
-                                <li>username <input type="text" name="username" /></li>
-                                <li>token <input type="text" name="token" /></li>
-                                <li>app_id <input type="text" name="app_id" /></li>
-                            </ul>
-                            <input type="submit" value="testar" />
-                        </form>
-                    </li>
-                </ul>
-            </li>
+            </li>            
         </ul>
     </body>
 </html>

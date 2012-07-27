@@ -128,31 +128,35 @@ module.exports = function (app) {
         
         //valida o token do usuário
         Auth(request.param('login', null), request.param('token', null), function (valid) {
-            //busca o app
-            App.findOne({slug : request.params.slug}, function (error, app) {
-                if (error) {
-                    response.send({error : error});
-                } else {
-                    //verifica se o app foi encontrado
-                    if (app === null) {
-                        response.send({error : 'app not found'});
+            if (valid) {
+                //busca o app
+                App.findOne({slug : request.params.slug}, function (error, app) {
+                    if (error) {
+                        response.send({error : error});
                     } else {
-                        //verifica se o usuário é o criador do app
-                        if (request.param('login', null) !== app.creator) {
-                            response.send({error : 'permission denied'});
+                        //verifica se o app foi encontrado
+                        if (app === null) {
+                            response.send({error : 'app not found'});
                         } else {
-                            //remove o aplicativo
-                            app.remove(function (error) {
-                                if (error) {
-                                    response.send({error : error});
-                                } else {
-                                    response.send({error : ''});
-                                }
-                            });
+                            //verifica se o usuário é o criador do app
+                            if (request.param('login', null) !== app.creator) {
+                                response.send({error : 'permission denied'});
+                            } else {
+                                //remove o aplicativo
+                                app.remove(function (error) {
+                                    if (error) {
+                                        response.send({error : error});
+                                    } else {
+                                        response.send({error : ''});
+                                    }
+                                });
+                            }
                         }
                     }
-                }
-            });
+                });
+            } else {
+                response.send({error : 'invalid token'});
+            }
         });
     });
     
@@ -174,35 +178,39 @@ module.exports = function (app) {
         
         //valida o token do usuário
         Auth(request.param('login', null), request.param('token', null), function (valid) {
-            //busca o app
-            App.findOne({slug : request.params.slug}, function (error, app) {
-                if (error) {
-                    response.send({error : error});
-                } else {
-                    //verifica se o app foi encontrado
-                    if (app === null) {
-                        response.send({error : 'app not found'});
+            if (valid) {
+                //busca o app
+                App.findOne({slug : request.params.slug}, function (error, app) {
+                    if (error) {
+                        response.send({error : error});
                     } else {
-                        //verifica se o usuário é o criador do app
-                        if (request.param('login', null) !== app.creator) {
-                            response.send({error : 'permission denied'});
+                        //verifica se o app foi encontrado
+                        if (app === null) {
+                            response.send({error : 'app not found'});
                         } else {
-                            //altera os dados do aplicativo
-                            app.name = request.param('name', null);
-                            app.slug = request.param('slug', null);
-                            app.type = request.param('type', null);
-                            //salva as modificações
-                            app.save(function (error) {
-                                if (error) {
-                                    response.send({error : error});
-                                } else {
-                                    response.send({error : ''});
-                                }
-                            });
+                            //verifica se o usuário é o criador do app
+                            if (request.param('login', null) !== app.creator) {
+                                response.send({error : 'permission denied'});
+                            } else {
+                                //altera os dados do aplicativo
+                                app.name = request.param('name', null);
+                                app.slug = request.param('slug', null);
+                                app.type = request.param('type', null);
+                                //salva as modificações
+                                app.save(function (error) {
+                                    if (error) {
+                                        response.send({error : error});
+                                    } else {
+                                        response.send({error : ''});
+                                    }
+                                });
+                            }
                         }
                     }
-                }
-            });
+                });
+            } else {
+                response.send({error : 'invalid token'});
+            }
         });
     });
 };
