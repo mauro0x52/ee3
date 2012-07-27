@@ -5,7 +5,7 @@
  * @description : Representação da entidade de Aplicativo
  */
  
-var Version = require('./Version.js').Version;
+var Version = require('./Version.js').Version,
     mongoose = require('mongoose'),
     schema   = mongoose.Schema,
     objectId = schema.ObjectId,
@@ -14,7 +14,7 @@ var Version = require('./Version.js').Version;
 appSchema = new schema({
     name : {type : String, trim : true, required : true},
     slug : {type : String, trim : true, required : true},
-    creator : objectId,
+    creator : {type : String, trim : true, required : true},
     type : {type : String, required : true, enum : ['free', 'payed', 'compulsory']}
 });
 
@@ -38,7 +38,7 @@ appSchema.methods.versions = function (cb) {
  * @param cb : callback a ser chamado após achada a versão
  */
 appSchema.methods.findVersion = function (number, cb) {
-    Version.find({appId : this._id, number : number}, cb);
+    Version.findOne({appId : this._id, number : number}, cb);
 };
 
 /*  Exportando o pacote  */

@@ -38,7 +38,7 @@ versionSchema.methods.tools = function (cb) {
  * @param cb : callback a ser chamado após achada a ferramenta
  */
 versionSchema.methods.findTool = function (name, cb) {
-    Tool.find({versionId : this._id, name : name}, cb);
+    Tool.findOne({versionId : this._id, name : name}, cb);
 };
 
 /** Plugins
@@ -61,7 +61,7 @@ versionSchema.methods.plugins = function (cb) {
  * @param cb : callback a ser chamado após achado o plugin
  */
 versionSchema.methods.findPlugin = function (name, cb) {
-    Plugin.find({versionId : this._id, name : name}, cb);
+    Plugin.findOne({versionId : this._id, name : name}, cb);
 };
 
 /** Dialogs
@@ -84,7 +84,7 @@ versionSchema.methods.dialogs = function (cb) {
  * @param cb : callback a ser chamado após achado o dialogo
  */
 versionSchema.methods.findDialog = function (name, cb) {
-    Dialog.find({versionId : this._id, name : name}, cb);
+    Dialog.findOne({versionId : this._id, name : name}, cb);
 };
 
 /*  Exportando o pacote  */

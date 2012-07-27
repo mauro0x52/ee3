@@ -6,6 +6,7 @@
  */
  
 var crypto = require('crypto'),
+    config = require('./../config.js'),
     mongoose = require('mongoose'),
     schema   = mongoose.Schema,
     objectId = schema.ObjectId,
