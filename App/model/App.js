@@ -25,7 +25,7 @@ appSchema = new schema({
  * @description : Pega as versões de um aplicativo
  * @param cb : callback a ser chamado após achadas as versões
  */
-userSchema.methods.versions = function (cb) {
+appSchema.methods.versions = function (cb) {
     Version.find({appId : this._id}, cb);
 };
 
@@ -37,7 +37,7 @@ userSchema.methods.versions = function (cb) {
  * @param number : número da versão a ser buscada
  * @param cb : callback a ser chamado após achada a versão
  */
-userSchema.methods.findVersion = function (number, cb) {
+appSchema.methods.findVersion = function (number, cb) {
     Version.find({appId : this._id, number : number}, cb);
 };
 

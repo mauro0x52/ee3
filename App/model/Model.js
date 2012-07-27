@@ -11,4 +11,8 @@ var config   = require('./../config.js'),
 mongoose.connect('mongodb://' + config.mongodb.username + ':' + config.mongodb.password + '@' + config.mongodb.url + ':' + config.mongodb.port + '/' + config.mongodb.db);
 
 /*  Exportar name-space  */
-exports.User = require('./User.js').User;
+exports.App     = require('./App.js').App;
+exports.Version = require('./Version.js').Version;
+exports.Tool    = require('./Tool.js').Tool;
+exports.Plugin  = require('./Plugin.js').Plugin;
+exports.Dialog  = require('./Dialog.js').Dialog;
