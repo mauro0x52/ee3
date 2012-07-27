@@ -3,7 +3,7 @@
  * @autor : Rafael Erthal
  * @since : 2012-07
  *
- * @description : Server de autenticação da empreendemia
+ * @description : Server de aplicativos da empreendemia
  */
 
 var express = require('express'),
@@ -38,13 +38,10 @@ require('./controller/App.js')(app);
 app.get('/ping', function (request,response) {
     response.send(true);
 });
-   
-//caso seja ambiente de produção, esconder erros
-if(config.host.debuglevel === 1){
-    app.get('/test', function (request,response) {
-        response.render('test');
-    });
-}
+
+app.get('/test', function (request,response) {
+    response.render('test');
+});
 
 /*  Ativando o server */
 app.listen(config.host.port);

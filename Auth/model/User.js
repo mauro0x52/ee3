@@ -9,7 +9,7 @@ var crypto = require('crypto'),
     mongoose = require('mongoose'),
     schema   = mongoose.Schema,
     objectId = schema.ObjectId,
-    userSchema, User;
+    userSchema;
 
 userSchema = new schema({
     username         : {type : String, trim : true, required : true},
@@ -17,7 +17,7 @@ userSchema = new schema({
     token            : {type : String, trim : true},
     status           : {type : String, required : true, enum : ['active', 'inactive']},
     thirdPartyLogins : [require('./ThirdPartyLogin')],
-    authorizedApps   : [require('./AuthorizedApp')],
+    authorizedApps   : [require('./AuthorizedApp')]
 });
 
 /** GenerateToken
