@@ -119,9 +119,22 @@ module.exports = function (app) {
                         if (error) {
                             response.send({error : error});
                         } else {
-                            response.send({states : state});
+                            if (state) {
+                                filter = {stateId:state._id,slug:request.params.slugCity};
+                                City.findOne(filter, function (error,city) {
+                                    if (error) {
+                                        response.send({error : error});
+                                    } else {
+                                        response.send({city : city});
+                                    }
+                                });
+                            } else {
+                                response.send({error : "Estado não encontrado."});
+                            }
                         }
                     })
+                } else {
+                    response.send({error : "País não encontrado."});
                 }
             }
         })

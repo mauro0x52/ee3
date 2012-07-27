@@ -111,12 +111,38 @@
                     </li>
                     <li>
                         <h4>Retorna uma Cidade</h4>
-                        <form onsubmit="test($(this).serialize(), '../country/'+ $(this).find('input[name=slugCountry]').val() +'/state/'+ $(this).find('input[name=slugState]').val()'/city/'+ $(this).find('input[name=slugCity]').val(), 'GET'); return false;">
+                        <form onsubmit="test($(this).serialize(), '../country/' + $(this).find('input[name=slugCountry]').val() + '/state/' + $(this).find('input[name=slugState]').val() + '/city/' + $(this).find('input[name=slugCity]').val(), 'GET'); return false;">
                             Parâmetros
                             <ul>
                                 <li>Coloque o Slug do País <input type="text" name="slugCountry" /></li>
                                 <li>Coloque o Slug do Estado <input type="text" name="slugState" /></li>
                                 <li>Coloque o Slug da Cidade <input type="text" name="slugCity" /></li>
+                            </ul>
+                            <input type="submit" value="testar" />
+                        </form>
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <h2>Testes com regiões</h2>
+                <h3>Chamadas API</h3>
+                <ul>
+                    <li>
+                        <h4>Retorna todos as regiões</h4>
+                        <form onsubmit="test($(this).serialize(), '../regions/', 'GET'); return false;">
+                            Parâmetros
+                            <ul>
+                                <li>Coloque o Nome da Região (opcional) <input type="text" name="filterByName" /></li>
+                            </ul>
+                            <input type="submit" value="testar" />
+                        </form>
+                    </li>
+                    <li>
+                        <h4>Retorna todos as regiões</h4>
+                        <form onsubmit="test($(this).serialize(), '../region/'+$(this).find('input[name=slug]').val(), 'GET'); return false;">
+                            Parâmetros
+                            <ul>
+                                <li>Coloque o Slug da Região <input type="text" name="slug" /></li>
                             </ul>
                             <input type="submit" value="testar" />
                         </form>

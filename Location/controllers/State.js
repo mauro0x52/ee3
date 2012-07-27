@@ -42,6 +42,8 @@ module.exports = function (app) {
                             response.send({states : states});
                         }
                     })
+                } else {
+                    response.send({error : "País não encontrado"});
                 }
             }
         })
@@ -77,6 +79,8 @@ module.exports = function (app) {
                             response.send({states : state});
                         }
                     })
+                } else {
+                    response.send({error : "País não encontrado"});
                 }
             }
         })
