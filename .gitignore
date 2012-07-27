@@ -1,7 +1,10 @@
 .DS_Store
 .nide
-package.json
-config.js
-node_modules/*
-package.json
-Icon
+
+App/package.json
+App/config.js
+App/node_modules/*
+
+Auth/package.json
+Auth/config.js
+Auth/node_modules/*
