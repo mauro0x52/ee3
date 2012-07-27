@@ -34,6 +34,11 @@ require('./controller/User.js')(app);
 require('./controller/ThirdPartyLogin.js')(app);
 require('./controller/App.js')(app);
 
+/*  Métodos para dev e teste */
+app.get('/ping', function (request,response) {
+    response.send(true);
+});
+
 app.get('/test', function (request,response) {
     response.render('test');
 });
