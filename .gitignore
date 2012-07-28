@@ -1,6 +1,8 @@
 .DS_Store
 .nide
 
+scripts/deploy/config.sh
+
 Apps/package.json
 Apps/config.js
 Apps/node_modules/*

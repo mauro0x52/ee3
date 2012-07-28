@@ -1,0 +1,14 @@
+#!/bin/bash
+
+# ------------------------------------------------------------------------------
+# Arquivo de Configuracao 
+# ------------------------------------------------------------------------------
+
+# Diretorio onde esta localizado o projeto
+CONFIG_PROJECT_FOLDER="../../"
+
+# Nome do repositorio
+CONFIG_GIT_REPOSITORY="origin"
+
+# Nome do branch
+CONFIG_GIT_BRANCH="master"
