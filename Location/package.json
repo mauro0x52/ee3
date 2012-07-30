@@ -1,0 +1,14 @@
+{
+  "name": "App",
+  "description": "serviço de localização do empreendemia 3",
+  "version": "0.0.1",
+  "author": "Lucas Calado",
+  "dependencies": {
+    "express": "~3.0.0rc1",
+    "mongodb": "~1.1.1",
+    "mongoose": "~2.7.2",
+    "express-namespace": "~0.1.1",
+    "ejs": "~0.8.0"
+  },
+  "devDependencies": {}
+}
