@@ -103,6 +103,286 @@
                     </li>
                 </ul>
             </li>            
+            <li>
+                <h2>Testes com versões</h2>
+                <h3>Chamadas API</h3>
+                <ul>
+                    <li>
+                        <h4>Cadastrar versão</h4>
+                        <form onsubmit="test($(this).serialize(), '../app/' + $(this).find('input[name=slug]').val() + '/version', 'POST'); return false;">
+                            Parâmetros
+                            <ul>
+                                <li>slug <input type="text" name="slug" /></li>
+                                <li>username <input type="text" name="login" /></li>
+                                <li>token <input type="text" name="token" /></li>
+                                <li>number <input type="text" name="number" /></li>
+                            </ul>
+                            <input type="submit" value="testar" />
+                        </form>
+                    </li>
+                    <li>
+                        <h4>Listar versões</h4>
+                        <form onsubmit="test($(this).serialize(), '../app/' + $(this).find('input[name=slug]').val() + '/versions', 'GET'); return false;">
+                            Parâmetros
+                            <ul>
+                                <li>slug <input type="text" name="slug" /></li>
+                            </ul>
+                            <input type="submit" value="testar" />
+                        </form>
+                    </li>
+                    <li>
+                        <h4>Exibir versão</h4>
+                        <form onsubmit="test($(this).serialize(), '../app/' + $(this).find('input[name=slug]').val() + '/version/' + $(this).find('input[name=number]').val(), 'GET'); return false;">
+                            Parâmetros
+                            <ul>
+                                <li>slug <input type="text" name="slug" /></li>
+                                <li>number <input type="text" name="number" /></li>
+                            </ul>
+                            <input type="submit" value="testar" />
+                        </form>
+                    </li>
+                    <li>
+                        <h4>Remover versão</h4>
+                        <form onsubmit="test($(this).serialize(), '../app/' + $(this).find('input[name=slug]').val() + '/version/' + $(this).find('input[name=number]').val(), 'DELETE'); return false;">
+                            Parâmetros
+                            <ul>
+                                <li>token <input type="text" name="token" /></li>
+                                <li>username <input type="text" name="login" /></li>
+                                <li>slug <input type="text" name="slug" /></li>
+                                <li>number <input type="text" name="number" /></li>
+                            </ul>
+                            <input type="submit" value="testar" />
+                        </form>
+                    </li>
+                    <li>
+                        <h4>Editar versão</h4>
+                        <form onsubmit="test($(this).serialize(), '../app/' + $(this).find('input[name=slug]').val() + '/version/' + $(this).find('input[name=old_number]').val(), 'PUT'); return false;">
+                            Parâmetros
+                            <ul>
+                                <li>token <input type="text" name="token" /></li>
+                                <li>username <input type="text" name="login" /></li>
+                                <li>slug <input type="text" name="slug" /></li>
+                                <li>number <input type="text" name="old_number" /></li>
+                                <li>new number <input type="text" name="number" /></li>
+                            </ul>
+                            <input type="submit" value="testar" />
+                        </form>
+                    </li>
+                </ul>
+            </li>               
+            <li>
+                <h2>Testes com Ferramentas</h2>
+                <h3>Chamadas API</h3>
+                <ul>
+                    <li>
+                        <h4>Cadastrar ferramenta</h4>
+                        <form onsubmit="test($(this).serialize(), '../app/' + $(this).find('input[name=slug]').val() + '/version/' + $(this).find('input[name=number]').val() + '/tool', 'POST'); return false;">
+                            Parâmetros
+                            <ul>
+                                <li>token <input type="text" name="token" /></li>
+                                <li>username <input type="text" name="login" /></li>
+                                <li>slug <input type="text" name="slug" /></li>
+                                <li>number <input type="text" name="number" /></li>
+                                <li>name <input type="text" name="name" /></li>
+                                <li>code <input type="text" name="code" /></li>
+                            </ul>
+                            <input type="submit" value="testar" />
+                        </form>
+                    </li>
+                    <li>
+                        <h4>Listar ferramentas</h4>
+                        <form onsubmit="test($(this).serialize(), '../app/' + $(this).find('input[name=slug]').val() + '/version/' + $(this).find('input[name=number]').val() + '/tools', 'GET'); return false;">
+                            Parâmetros
+                            <ul>
+                                <li>slug <input type="text" name="slug" /></li>
+                                <li>number <input type="text" name="number" /></li>
+                            </ul>
+                            <input type="submit" value="testar" />
+                        </form>
+                    </li>
+                    <li>
+                        <h4>Exibir ferramenta</h4>
+                        <form onsubmit="test($(this).serialize(), '../app/' + $(this).find('input[name=slug]').val() + '/version/' + $(this).find('input[name=number]').val() + '/tool/' + $(this).find('input[name=name]').val(), 'GET'); return false;">
+                            Parâmetros
+                            <ul>
+                                <li>slug <input type="text" name="slug" /></li>
+                                <li>number <input type="text" name="number" /></li>
+                                <li>name <input type="text" name="name" /></li>
+                            </ul>
+                            <input type="submit" value="testar" />
+                        </form>
+                    </li>
+                    <li>
+                        <h4>Excluir ferramenta</h4>
+                        <form onsubmit="test($(this).serialize(), '../app/' + $(this).find('input[name=slug]').val() + '/version/' + $(this).find('input[name=number]').val() + '/tool/' + $(this).find('input[name=name]').val(), 'DELETE'); return false;">
+                            Parâmetros
+                            <ul>
+                                <li>slug <input type="text" name="slug" /></li>
+                                <li>number <input type="text" name="number" /></li>
+                                <li>name <input type="text" name="name" /></li>
+                            </ul>
+                            <input type="submit" value="testar" />
+                        </form>
+                    </li>
+                    <li>
+                        <h4>Editar ferramenta</h4>
+                        <form onsubmit="test($(this).serialize(), '../app/' + $(this).find('input[name=slug]').val() + '/version/' + $(this).find('input[name=number]').val() + '/tool/' + $(this).find('input[name=name]').val(), 'PUT'); return false;">
+                            Parâmetros
+                            <ul>
+                                <li>token <input type="text" name="token" /></li>
+                                <li>username <input type="text" name="login" /></li>
+                                <li>slug <input type="text" name="slug" /></li>
+                                <li>number <input type="text" name="number" /></li>
+                                <li>name <input type="text" name="name" /></li>
+                                <li>code <input type="text" name="code" /></li>
+                            </ul>
+                            <input type="submit" value="testar" />
+                        </form>
+                    </li>
+                </ul>
+            </li>            
+            <li>
+                <h2>Testes com Plugins</h2>
+                <h3>Chamadas API</h3>
+                <ul>
+                    <li>
+                        <h4>Cadastrar plugin</h4>
+                        <form onsubmit="test($(this).serialize(), '../app/' + $(this).find('input[name=slug]').val() + '/version/' + $(this).find('input[name=number]').val() + '/plugin', 'POST'); return false;">
+                            Parâmetros
+                            <ul>
+                                <li>token <input type="text" name="token" /></li>
+                                <li>username <input type="text" name="login" /></li>
+                                <li>slug <input type="text" name="slug" /></li>
+                                <li>number <input type="text" name="number" /></li>
+                                <li>name <input type="text" name="name" /></li>
+                                <li>code <input type="text" name="code" /></li>
+                            </ul>
+                            <input type="submit" value="testar" />
+                        </form>
+                    </li>
+                    <li>
+                        <h4>Listar plugins</h4>
+                        <form onsubmit="test($(this).serialize(), '../app/' + $(this).find('input[name=slug]').val() + '/version/' + $(this).find('input[name=number]').val() + '/plugins', 'GET'); return false;">
+                            Parâmetros
+                            <ul>
+                                <li>slug <input type="text" name="slug" /></li>
+                                <li>number <input type="text" name="number" /></li>
+                            </ul>
+                            <input type="submit" value="testar" />
+                        </form>
+                    </li>
+                    <li>
+                        <h4>Exibir plugin</h4>
+                        <form onsubmit="test($(this).serialize(), '../app/' + $(this).find('input[name=slug]').val() + '/version/' + $(this).find('input[name=number]').val() + '/plugin/' + $(this).find('input[name=name]').val(), 'GET'); return false;">
+                            Parâmetros
+                            <ul>
+                                <li>slug <input type="text" name="slug" /></li>
+                                <li>number <input type="text" name="number" /></li>
+                                <li>name <input type="text" name="name" /></li>
+                            </ul>
+                            <input type="submit" value="testar" />
+                        </form>
+                    </li>
+                    <li>
+                        <h4>Excluir plugin</h4>
+                        <form onsubmit="test($(this).serialize(), '../app/' + $(this).find('input[name=slug]').val() + '/version/' + $(this).find('input[name=number]').val() + '/plugin/' + $(this).find('input[name=name]').val(), 'DELETE'); return false;">
+                            Parâmetros
+                            <ul>
+                                <li>slug <input type="text" name="slug" /></li>
+                                <li>number <input type="text" name="number" /></li>
+                                <li>name <input type="text" name="name" /></li>
+                            </ul>
+                            <input type="submit" value="testar" />
+                        </form>
+                    </li>
+                    <li>
+                        <h4>Editar plugin</h4>
+                        <form onsubmit="test($(this).serialize(), '../app/' + $(this).find('input[name=slug]').val() + '/version/' + $(this).find('input[name=number]').val() + '/plugin/' + $(this).find('input[name=name]').val(), 'PUT'); return false;">
+                            Parâmetros
+                            <ul>
+                                <li>token <input type="text" name="token" /></li>
+                                <li>username <input type="text" name="login" /></li>
+                                <li>slug <input type="text" name="slug" /></li>
+                                <li>number <input type="text" name="number" /></li>
+                                <li>name <input type="text" name="name" /></li>
+                                <li>code <input type="text" name="code" /></li>
+                            </ul>
+                            <input type="submit" value="testar" />
+                        </form>
+                    </li>
+                </ul>
+            </li>            
+            <li>
+                <h2>Testes com Dialogs</h2>
+                <h3>Chamadas API</h3>
+                <ul>
+                    <li>
+                        <h4>Cadastrar dialog</h4>
+                        <form onsubmit="test($(this).serialize(), '../app/' + $(this).find('input[name=slug]').val() + '/version/' + $(this).find('input[name=number]').val() + '/dialog', 'POST'); return false;">
+                            Parâmetros
+                            <ul>
+                                <li>token <input type="text" name="token" /></li>
+                                <li>username <input type="text" name="login" /></li>
+                                <li>slug <input type="text" name="slug" /></li>
+                                <li>number <input type="text" name="number" /></li>
+                                <li>name <input type="text" name="name" /></li>
+                                <li>code <input type="text" name="code" /></li>
+                            </ul>
+                            <input type="submit" value="testar" />
+                        </form>
+                    </li>
+                    <li>
+                        <h4>Listar dialog</h4>
+                        <form onsubmit="test($(this).serialize(), '../app/' + $(this).find('input[name=slug]').val() + '/version/' + $(this).find('input[name=number]').val() + '/dialogs', 'GET'); return false;">
+                            Parâmetros
+                            <ul>
+                                <li>slug <input type="text" name="slug" /></li>
+                                <li>number <input type="text" name="number" /></li>
+                            </ul>
+                            <input type="submit" value="testar" />
+                        </form>
+                    </li>
+                    <li>
+                        <h4>Exibir dialog</h4>
+                        <form onsubmit="test($(this).serialize(), '../app/' + $(this).find('input[name=slug]').val() + '/version/' + $(this).find('input[name=number]').val() + '/dialog/' + $(this).find('input[name=name]').val(), 'GET'); return false;">
+                            Parâmetros
+                            <ul>
+                                <li>slug <input type="text" name="slug" /></li>
+                                <li>number <input type="text" name="number" /></li>
+                                <li>name <input type="text" name="name" /></li>
+                            </ul>
+                            <input type="submit" value="testar" />
+                        </form>
+                    </li>
+                    <li>
+                        <h4>Excluir dialog</h4>
+                        <form onsubmit="test($(this).serialize(), '../app/' + $(this).find('input[name=slug]').val() + '/version/' + $(this).find('input[name=number]').val() + '/dialog/' + $(this).find('input[name=name]').val(), 'DELETE'); return false;">
+                            Parâmetros
+                            <ul>
+                                <li>slug <input type="text" name="slug" /></li>
+                                <li>number <input type="text" name="number" /></li>
+                                <li>name <input type="text" name="name" /></li>
+                            </ul>
+                            <input type="submit" value="testar" />
+                        </form>
+                    </li>
+                    <li>
+                        <h4>Editar dialog</h4>
+                        <form onsubmit="test($(this).serialize(), '../app/' + $(this).find('input[name=slug]').val() + '/version/' + $(this).find('input[name=number]').val() + '/dialog/' + $(this).find('input[name=name]').val(), 'PUT'); return false;">
+                            Parâmetros
+                            <ul>
+                                <li>token <input type="text" name="token" /></li>
+                                <li>username <input type="text" name="login" /></li>
+                                <li>slug <input type="text" name="slug" /></li>
+                                <li>number <input type="text" name="number" /></li>
+                                <li>name <input type="text" name="name" /></li>
+                                <li>code <input type="text" name="code" /></li>
+                            </ul>
+                            <input type="submit" value="testar" />
+                        </form>
+                    </li>
+                </ul>
+            </li>            
         </ul>
     </body>
 </html>
