@@ -5,9 +5,9 @@
  * @description : Representação da entidade de versões de um aplicativo
  */
  
-var Tool = require('./Tool.js'),
-    Plugin = require('./Plugin.js'),
-    Dialog = require('./Dialog.js'),
+var Tool = require('./Tool.js').Tool,
+    Plugin = require('./Plugin.js').Plugin,
+    Dialog = require('./Dialog.js').Dialog,
     mongoose = require('mongoose'),
     schema   = mongoose.Schema,
     objectId = schema.ObjectId,

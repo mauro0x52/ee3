@@ -48,7 +48,7 @@ module.exports = function (app) {
                             } else {
                                 //coloca os dados do post em um objeto
                                 version = new Version({
-                                    number : request.param('version', null),
+                                    number : request.param('number', null),
                                     appId  : app._id
                                 });
                                 //salva a versão
@@ -85,8 +85,8 @@ module.exports = function (app) {
     app.get('/app/:slug/versions', function (request, response) {
         response.contentType('json');
         
-        //busca o app
-        App.find({slug : request.params.slug}, function (error, app) {
+        //busca o app        
+        App.findOne({slug : request.params.slug}, function (error, app) {
             if (error) {
                 response.send({error : error});
             } else {
@@ -124,7 +124,7 @@ module.exports = function (app) {
         response.contentType('json');
         
         //busca o app
-        App.find({slug : request.params.slug}, function (error, app) {
+        App.findOne({slug : request.params.slug}, function (error, app) {
             if (error) {
                 response.send({error : error});
             } else {

@@ -58,7 +58,7 @@ module.exports = function (app) {
                                             //pega os dados do post e coloca em um objeto
                                             dialog = new Dialog({
                                                 name      : request.param('name', null),
-                                                code      : request.param('code', null),
+                                                source    : request.param('code', null),
                                                 versionId : version._id
                                             });
                                             //salva a nova dialogo

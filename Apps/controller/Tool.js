@@ -58,7 +58,7 @@ module.exports = function (app) {
                                             //pega os dados do post e coloca em um objeto
                                             tool = new Tool({
                                                 name      : request.param('name', null),
-                                                code      : request.param('code', null),
+                                                source    : request.param('code', null),
                                                 versionId : version._id
                                             });
                                             //salva a nova ferramenta
@@ -99,7 +99,7 @@ module.exports = function (app) {
         response.contentType('json');
         
         //busca o app
-        App.find({slug : request.params.slug}, function (error, app) {
+        App.findOne({slug : request.params.slug}, function (error, app) {
             if (error) {
                 response.send({error : error});
             } else {
