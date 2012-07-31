@@ -5,7 +5,7 @@
  * @description : Representação da entidade de participante de chat
  */
  
-var Thread = require('Thread.js').Thread,
+var Thread = require('./Thread.js').Thread,
     mongoose = require('mongoose'),
     schema   = mongoose.Schema,
     objectId = schema.ObjectId,
@@ -25,7 +25,7 @@ conversantSchema = new schema({
  * @description : busca as threads de um usuário
  * @param cb : callback a ser chamado para cada thread
  */
-appSchema.methods.threads = function (cb) {
+conversantSchema.methods.threads = function (cb) {
     Thread.find({ _id : { $in : this.threadIds } }, cb);
 };
 
@@ -36,7 +36,7 @@ appSchema.methods.threads = function (cb) {
  * @description : retorna se o usuário esta online
  * @param cb : callback a ser chamado após calculado o status
  */
-appSchema.methods.isOnline = function (cb) {
+conversantSchema.methods.isOnline = function (cb) {
     var now = new Date();
     cb (now.getTime() - this.lastCheck.getTime() < 20000);
 };

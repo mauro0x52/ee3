@@ -32,7 +32,7 @@ threadSchema = new schema({
  * @description : desativa uma thread
  * @param cb : callback a ser chamado após mudificado o estado da thread
  */
-appSchema.methods.deactivate = function (cb) {
+threadSchema.methods.deactivate = function (cb) {
     this.label = 'inactive';
     this.save(cb);
 };
