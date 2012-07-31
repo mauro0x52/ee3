@@ -19,14 +19,10 @@ app.configure(function () {
 
     app.use(express.bodyParser());
     app.use(express.methodOverride());
-    
-    if (config.host.debuglevel === 1){
-        app.set('view engine', 'ejs');
-    }
-    
+    app.set('view engine', 'ejs');
     
     //caso seja ambiente de produção, esconder erros
-    if (config.host.debuglevel === 0) {
+    if(config.host.debuglevel === 0){
         app.use(express.errorHandler({ dumpExceptions: true }));
     }
     
@@ -34,16 +30,21 @@ app.configure(function () {
 });
 
 /*  Chamando controllers */
-require('./controllers/Country.js')(app);
-require('./controllers/State.js')(app);
-require('./controllers/City.js')(app);
+require('./controller/User.js')(app);
+require('./controller/ThirdPartyLogin.js')(app);
+require('./controller/App.js')(app);
 
-//caso seja ambiente de produção, esconder url de testes
-    if (config.host.debuglevel === 1) {
-        app.get('/test', function (request,response) {
-            response.render('test');
-        });
-    }
+/*  Métodos para dev e teste */
+app.get('/ping', function (request,response) {
+    response.send(true);
+});
+   
+//caso seja ambiente de produção, esconder url de teste
+if(config.host.debuglevel === 1){
+    app.get('/test', function (request,response) {
+        response.render('test');
+    });
+}
 
 /*  Ativando o server */
 app.listen(config.host.port);
