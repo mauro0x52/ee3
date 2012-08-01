@@ -61,7 +61,7 @@ threadSchema.methods.unreadMessages = function (user, cb) {
         //verifica se a mensagem já foi lida pelo usuário
         unread = true;
         for (j = 0; j < this.messages[i].readBy.length; j = j + 1) {
-            if (this.messages[i].readBy[j] === user._id) {
+            if (this.messages[i].readBy[j].toString() === user._id.toString()) {
                 unread = false;
             }
         }
