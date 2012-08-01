@@ -8,19 +8,25 @@
 var mongoose = require('mongoose'),
     schema   = mongoose.Schema,
     objectId = schema.ObjectId,
-    profileSchema;
+    profileSchema,
+    slugs,
+    Profile;
+
+slugs = new schema({
+    name : {type : String, trim : true}
+});
 
 profileSchema = new schema({
-    users       : {type : objectId},
+    username    : {type : String},
     jobs        : [require('./Job')],
-    slugs       : [{type : String, trim : true}],
+    slugs       : [slugs],
     name        : {type : String, trim : true},
     surname     : {type : String, trim : true},
     thumbnail   : [require('./Thumbnail')],
     about       : {type : String},
-    phones      : {[require('./Phone')]},
+    phones      : [require('./Phone')],
     contacts    : [require('./Contact')],
-    links       : {[require('./Link')]},
+    links       : [require('./Link')],
     dateCreated : {type : Date},
     dateUpdated : {type : Date}
 });
@@ -33,7 +39,7 @@ profileSchema = new schema({
  * @param slug : o slug que vai ser feito a busca.
  * @param cb : callback a ser chamado após achado o profile
  */
-appSchema.methods.findProfileForSlug = function (slug, cb) {
+profileSchema.statics.findProfileForSlug = function (slug, cb) {
     var query = Profile.findOne();
     
     query.where("slugs");
@@ -43,4 +49,4 @@ appSchema.methods.findProfileForSlug = function (slug, cb) {
 }
 
 /*  Exportando o pacote  */
-exports.Profile = mongoose.model('Profile', profileSchema);
+Profile = exports.Profile = mongoose.model('Profile', profileSchema);

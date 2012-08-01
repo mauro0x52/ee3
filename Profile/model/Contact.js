@@ -11,7 +11,7 @@ var mongoose = require('mongoose'),
     contactSchema;
 
 contactSchema = new schema({
-    type : {type : String, required : true, enum : ['Twitter', 'Msn', 'Email', 'Skype', 'GTalk']},
+    type : {type : String, required : true, enum : ['twitter', 'msn', 'email', 'skype', 'gtalk']},
     address  : {type : String, trim : true}
 });
 

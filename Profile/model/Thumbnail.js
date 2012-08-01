@@ -13,8 +13,8 @@ var mongoose = require('mongoose'),
 thumbnailSchema = new schema({
     small  : {type : objectId},
     medium : {type : objectId},
-    large  : {type : objectId},
+    large  : {type : objectId}
 });
 
 /*  Exportando o pacote  */
-exports.Job = mongoose.model('Job', jobSchema);
+exports.Thumbnail = mongoose.model('Thumbnail', thumbnailSchema);
