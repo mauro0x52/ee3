@@ -17,8 +17,8 @@ userSchema = new Schema({
     password         : {type : String, required : true},
     token            : {type : String, trim : true},
     status           : {type : String, required : true, enum : ['active', 'inactive']},
-    thirdPartyLogins : [require('./ThirdPartyLogin')],
-    authorizedApps   : [require('./AuthorizedApp')]
+    thirdPartyLogins : [require('./ThirdPartyLogin').ThirdPartyLogin],
+    authorizedApps   : [require('./AuthorizedApp').AuthorizedApp]
 });
 
 /** GenerateToken
