@@ -1,13 +1,11 @@
 /** Profile
  * @author : Lucas Kalado
- * @since : 2012-07
+ * @since : 2012-08
  *
  * @description : Representação da entidade de profile
  */
  
-var crypto = require('crypto'),
-    config = require('./../config.js'),
-    mongoose = require('mongoose'),
+var mongoose = require('mongoose'),
     schema   = mongoose.Schema,
     objectId = schema.ObjectId,
     profileSchema;
@@ -20,12 +18,12 @@ profileSchema = new schema({
     surname     : {type : String, trim : true},
     thumbnail   : [require('./Thumbnail')],
     about       : {type : String},
-    phones      : [require('./Phone')],
+    phones      : {[require('./Phone')]},
     contacts    : [require('./Contact')],
-    links       : [require('./Link')],
+    links       : {[require('./Link')]},
     dateCreated : {type : Date},
     dateUpdated : {type : Date}
 });
 
 /*  Exportando o pacote  */
-exports.User = mongoose.model('Users', userSchema);
+exports.Profile = mongoose.model('Profile', profileSchema);

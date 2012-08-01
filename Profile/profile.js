@@ -1,6 +1,6 @@
-/** Auth
+/** Profile
  *
- * @autor : Rafael Erthal
+ * @autor : Lucas Kalado
  * @since : 2012-07
  *
  * @description : Server de autenticação da empreendemia
