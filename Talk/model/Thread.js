@@ -4,20 +4,21 @@
  *
  * @description : Representação da entidade thread
  */
- 
-var mongoose = require('mongoose'),
-    schema   = mongoose.Schema,
-    objectId = schema.ObjectId,
-    threadSchema, messageSchema;
 
-messageSchema = new schema({
+var mongoose = require('mongoose'),
+    Schema   = mongoose.Schema,
+    objectId = Schema.ObjectId,
+    threadSchema,
+    messageSchema;
+
+messageSchema = new Schema({
     content   : {type : String, required : true},
     date      : {type : Date, required : true},
     readBy    : [objectId],
     sender    : {type : objectId}
 });
 
-threadSchema = new schema({
+threadSchema = new Schema({
     place     : {type : String, trim : true, required : true},
     slug      : {type : String, trim : true, required : true},
     name      : {type : String, trim : true, required : true},
@@ -33,6 +34,8 @@ threadSchema = new schema({
  * @param cb : callback a ser chamado após mudificado o estado da thread
  */
 threadSchema.methods.deactivate = function (cb) {
+    "use strict";
+
     this.label = 'inactive';
     this.save(cb);
 };
@@ -46,14 +49,18 @@ threadSchema.methods.deactivate = function (cb) {
  * @param user : usuário que procura as mensagens
  */
 threadSchema.methods.unreadMessages = function (user, cb) {
-    var i,j,
+    "use strict";
+
+    var i,
+        j,
         unread,
         res;
+
     //percorre todas as mensagens da thread
-    for (i = 0; i < this.messages.length; i++) {
+    for (i = 0; i < this.messages.length; i = i + 1) {
         //verifica se a mensagem já foi lida pelo usuário
-        unread = true;        
-        for (j = 0; j < this.messages[i].readBy.length; j++) {
+        unread = true;
+        for (j = 0; j < this.messages[i].readBy.length; j = j + 1) {
             if (this.messages[i].readBy[j] === user._id) {
                 unread = false;
             }

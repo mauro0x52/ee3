@@ -4,9 +4,10 @@
  *
  * @description : Módulo que implementa as funcionalidades de contas externas de um usuário
  */
- 
+
 module.exports = function (app) {
-    
+    "use strict";
+
     var Model = require('./../model/Model.js'),
         User  = Model.User;
 
@@ -23,9 +24,9 @@ module.exports = function (app) {
      * @request : {server, external_token, id, token}
      * @response : {confirmation}
      */
-    app.post('/user/:login/third-party-login', function (request,response) {
+    app.post('/user/:login/third-party-login', function (request, response) {
         response.contentType('json');
-        
+
         //localiza o usuário
         User.findOne({username : request.params.login}, function (error, user) {
             if (error) {
@@ -36,7 +37,7 @@ module.exports = function (app) {
                     response.send({error : 'user not found'});
                 } else {
                     //verifica o token do usuário
-                    user.checkToken(request.param('token', null), function(valid) {
+                    user.checkToken(request.param('token', null), function (valid) {
                         if (!valid) {
                             response.send({error : 'invalid token'});
                         } else {
@@ -60,7 +61,7 @@ module.exports = function (app) {
             }
         });
     });
-     
+
     /** GET /user/:login/third-party-logins
      *
      * @autor : Rafael Erthal
@@ -74,9 +75,9 @@ module.exports = function (app) {
      * @request : {token}
      * @response : {[{server}]}
      */
-    app.get('/user/:login/third-party-logins', function (request,response) {
+    app.get('/user/:login/third-party-logins', function (request, response) {
         response.contentType('json');
-        
+
         //localiza o usuário
         User.findOne({username : request.params.login}, function (error, user) {
             if (error) {
@@ -87,7 +88,7 @@ module.exports = function (app) {
                     response.send({error : 'user not found'});
                 } else {
                     //verifica o token do usuário
-                    user.checkToken(request.param('token', null), function(valid) {
+                    user.checkToken(request.param('token', null), function (valid) {
                         if (!valid) {
                             response.send({error : 'invalid token'});
                         } else {
@@ -98,7 +99,7 @@ module.exports = function (app) {
             }
         });
     });
-     
+
     /** GET /user/:login/third-party-login/:server
      *
      * @autor : Rafael Erthal
@@ -112,12 +113,12 @@ module.exports = function (app) {
      * @request : {token}
      * @response : {server}
      */
-    app.get('/user/:login/third-party-login/:server', function (request,response) {
+    app.get('/user/:login/third-party-login/:server', function (request, response) {
         var i,
             found = false;
 
         response.contentType('json');
-        
+
         //localiza o usuário
         User.findOne({username : request.params.login}, function (error, user) {
             if (error) {
@@ -128,12 +129,12 @@ module.exports = function (app) {
                     response.send({error : 'user not found'});
                 } else {
                     //verifica o token do usuário
-                    user.checkToken(request.param('token', null), function(valid) {
+                    user.checkToken(request.param('token', null), function (valid) {
                         if (!valid) {
                             response.send({error : 'invalid token'});
                         } else {
                             //procura o login externo nos logins externos do usuário
-                            for (i = 0; i < user.thirdPartyLogins.length; i++) {
+                            for (i = 0; i < user.thirdPartyLogins.length; i = i + 1) {
                                 if (user.thirdPartyLogins[i].server === request.params.server) {
                                     response.send({thirdPartyLogin : user.thirdPartyLogins[i]});
                                     found = true;
@@ -149,7 +150,7 @@ module.exports = function (app) {
             }
         });
     });
-     
+
     /** DEL /user/:login/third-party-login/:server
      *
      * @autor : Rafael Erthal
@@ -163,12 +164,13 @@ module.exports = function (app) {
      * @request : {token}
      * @response : {confirmation}
      */
-    app.del('/user/:login/third-party-login/:server', function (request,response) {
+    app.del('/user/:login/third-party-login/:server', function (request, response) {
         var i,
+            thirdPartyLogin,
             found = false;
 
         response.contentType('json');
-        
+
         //localiza o usuário
         User.findOne({username : request.params.login}, function (error, user) {
             if (error) {
@@ -179,28 +181,30 @@ module.exports = function (app) {
                     response.send({error : 'user not found'});
                 } else {
                     //verifica o token do usuário
-                    user.checkToken(request.param('token', null), function(valid) {
+                    user.checkToken(request.param('token', null), function (valid) {
                         if (!valid) {
                             response.send({error : 'invalid token'});
                         } else {
                             //procura o login externo nos logins externos do usuário
-                            for (i = 0; i < user.thirdPartyLogins.length; i++) {
+                            for (i = 0; i < user.thirdPartyLogins.length; i = i + 1) {
                                 if (user.thirdPartyLogins[i].server === request.params.server) {
-                                    //remove o login externo
-                                    user.thirdPartyLogins[i].remove();
-                                    user.save(function (error) {
-                                        if (error) {
-                                            response.send({error : error});
-                                        } else {
-                                            response.send({error : ''});
-                                        }
-                                    });
                                     found = true;
+                                    thirdPartyLogin = i;
                                 }
                             }
                             //caso não tenha sido achado, enviar mensagem de erro
                             if (!found) {
                                 response.send({error : 'third party login not found'});
+                            } else {
+                                //remove o login externo
+                                user.thirdPartyLogins[thirdPartyLogin].remove();
+                                user.save(function (error) {
+                                    if (error) {
+                                        response.send({error : error});
+                                    } else {
+                                        response.send({error : ''});
+                                    }
+                                });
                             }
                         }
                     });

@@ -4,13 +4,13 @@
  *
  * @description : Representação da entidade de ferramenta de uma versão de um aplicativo
  */
- 
+
 var mongoose = require('mongoose'),
-    schema   = mongoose.Schema,
-    objectId = schema.ObjectId,
+    Schema   = mongoose.Schema,
+    objectId = Schema.ObjectId,
     toolSchema;
-    
-toolSchema = new schema({
+
+toolSchema = new Schema({
     name      : {type : String, trim : true, required : true},
     source    : {type : String, required : true},
     versionId : objectId

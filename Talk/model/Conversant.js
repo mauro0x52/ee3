@@ -4,21 +4,21 @@
  *
  * @description : Representação da entidade de participante de chat
  */
- 
+
 var Thread = require('./Thread.js').Thread,
     mongoose = require('mongoose'),
-    schema   = mongoose.Schema,
-    objectId = schema.ObjectId,
+    Schema   = mongoose.Schema,
+    objectId = Schema.ObjectId,
     conversantSchema;
 
-conversantSchema = new schema({
+conversantSchema = new Schema({
     user      : {type : String, trim : true, required : true},
     label     : {type : String, trim : true, required : true},
     lastCheck : {type : Date, required : true},
     threadIds : [objectId]
 });
 
-/** ChangeLabel
+/** Threads
  * @author : Rafael Erthal
  * @since : 2012-07
  *
@@ -26,6 +26,8 @@ conversantSchema = new schema({
  * @param cb : callback a ser chamado para cada thread
  */
 conversantSchema.methods.threads = function (cb) {
+    "use strict";
+
     Thread.find({ _id : { $in : this.threadIds } }, cb);
 };
 
@@ -37,8 +39,11 @@ conversantSchema.methods.threads = function (cb) {
  * @param cb : callback a ser chamado após calculado o status
  */
 conversantSchema.methods.isOnline = function (cb) {
+    "use strict";
+
     var now = new Date();
-    cb (now.getTime() - this.lastCheck.getTime() < 20000);
+
+    cb(now.getTime() - this.lastCheck.getTime() < 20000);
 };
 
 /*  Exportando o pacote  */

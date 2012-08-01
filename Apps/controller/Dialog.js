@@ -4,14 +4,15 @@
  *
  * @description : Módulo que implementa as funcionalidades de dialogos
  */
- 
+
 module.exports = function (app) {
-    
+    "use strict";
+
     var Model = require('./../model/Model.js'),
-        Auth  = require('./../Utils.js').auth,
+        auth  = require('./../Utils.js').auth,
         App  = Model.App,
         Dialog  = Model.Dialog;
-        
+
     /** POST /app/:slug/dialog
      *
      * @autor : Rafael Erthal
@@ -27,11 +28,11 @@ module.exports = function (app) {
      */
     app.post('/app/:slug/version/:number/dialog', function (request, response) {
         var dialog;
-        
+
         response.contentType('json');
-        
+
         //valida o token do usuário
-        Auth(request.param('login', null), request.param('token', null), function (valid) {
+        auth(request.param('login', null), request.param('token', null), function (valid) {
             if (valid) {
                 //busca o app
                 App.findOne({slug : request.params.slug}, function (error, app) {
@@ -53,7 +54,7 @@ module.exports = function (app) {
                                     } else {
                                         //verifica se a versão foi encontrada
                                         if (version === null) {
-                                            response.send({error : 'version not found'})
+                                            response.send({error : 'version not found'});
                                         } else {
                                             //pega os dados do post e coloca em um objeto
                                             dialog = new Dialog({
@@ -75,13 +76,13 @@ module.exports = function (app) {
                             }
                         }
                     }
-                });                
+                });
             } else {
                 response.send({error : 'invalid token'});
             }
         });
     });
-    
+
     /** GET /app/:slug/version/:number/dialogs
      *
      * @autor : Rafael Erthal
@@ -97,7 +98,7 @@ module.exports = function (app) {
      */
     app.get('/app/:slug/version/:number/dialogs', function (request, response) {
         response.contentType('json');
-        
+
         //busca o app
         App.find({slug : request.params.slug}, function (error, app) {
             if (error) {
@@ -131,7 +132,7 @@ module.exports = function (app) {
             }
         });
     });
-        
+
     /** GET /app/:slug/version/:number/dialog/:name
      *
      * @autor : Rafael Erthal
@@ -147,7 +148,7 @@ module.exports = function (app) {
      */
     app.get('/app/:slug/version/:number/dialog/:name', function (request, response) {
         response.contentType('json');
-        
+
         //busca o app
         App.find({slug : request.params.slug}, function (error, app) {
             if (error) {
@@ -158,7 +159,7 @@ module.exports = function (app) {
                     response.send({error : 'app not found'});
                 } else {
                     //pega a versão do app
-                    app.findVersion(request.params.number ,function (error, version) {
+                    app.findVersion(request.params.number, function (error, version) {
                         if (error) {
                             response.send({error : error});
                         } else {
@@ -185,7 +186,7 @@ module.exports = function (app) {
             }
         });
     });
-         
+
     /** DEL /app/:slug/version/:number/dialog/:name
      *
      * @autor : Rafael Erthal
@@ -199,11 +200,11 @@ module.exports = function (app) {
      * @request : {token}
      * @response : {confirmation}
      */
-    app.del('/app/:slug/version/:number/dialog/:name', function (request, response) {        
+    app.del('/app/:slug/version/:number/dialog/:name', function (request, response) {
         response.contentType('json');
-        
+
         //valida o token do usuário
-        Auth(request.param('login', null), request.param('token', null), function (valid) {
+        auth(request.param('login', null), request.param('token', null), function (valid) {
             if (valid) {
                 //busca o app
                 App.findOne({slug : request.params.slug}, function (error, app) {
@@ -228,7 +229,7 @@ module.exports = function (app) {
                                             response.send({error : 'version not found'});
                                         } else {
                                             //pega a dialogo
-                                            version.findDialog(request.params.name, function(error, dialog) {
+                                            version.findDialog(request.params.name, function (error, dialog) {
                                                 if (error) {
                                                     response.send({error : error});
                                                 } else {
@@ -253,13 +254,13 @@ module.exports = function (app) {
                             }
                         }
                     }
-                });                
+                });
             } else {
                 response.send({error : 'invalid token'});
             }
         });
     });
-        
+
     /** PUT /app/:slug/version/:number/dialog/:name
      *
      * @autor : Rafael Erthal
@@ -275,9 +276,9 @@ module.exports = function (app) {
      */
     app.put('/app/:slug/version/:number/dialog/:name', function (request, response) {
         response.contentType('json');
-        
+
         //valida o token do usuário
-        Auth(request.param('login', null), request.param('token', null), function (valid) {
+        auth(request.param('login', null), request.param('token', null), function (valid) {
             if (valid) {
                 //busca o app
                 App.findOne({slug : request.params.slug}, function (error, app) {
@@ -314,7 +315,7 @@ module.exports = function (app) {
                                                         dialog.name = request.param('name', null);
                                                         dialog.code = request.param('code', null);
                                                         //salva modificações
-                                                        dialog.save(function(error) {
+                                                        dialog.save(function (error) {
                                                             if (error) {
                                                                 response.send({error : error});
                                                             } else {
@@ -330,7 +331,7 @@ module.exports = function (app) {
                             }
                         }
                     }
-                });            
+                });
             } else {
                 response.send({error : 'invalid token'});
             }

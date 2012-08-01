@@ -4,16 +4,16 @@
  *
  * @description : Representação da entidade de versões de um aplicativo
  */
- 
+
 var Tool = require('./Tool.js').Tool,
     Plugin = require('./Plugin.js').Plugin,
     Dialog = require('./Dialog.js').Dialog,
     mongoose = require('mongoose'),
-    schema   = mongoose.Schema,
-    objectId = schema.ObjectId,
+    Schema   = mongoose.Schema,
+    objectId = Schema.ObjectId,
     versionSchema;
-    
-versionSchema = new schema({
+
+versionSchema = new Schema({
     number : {type : String, trim : true, required : true},
     appId  : objectId
 });
@@ -26,6 +26,8 @@ versionSchema = new schema({
  * @param cb : callback a ser chamado após achadas as ferramentas
  */
 versionSchema.methods.tools = function (cb) {
+    "use strict";
+
     Tool.find({versionId : this._id}, cb);
 };
 
@@ -38,6 +40,8 @@ versionSchema.methods.tools = function (cb) {
  * @param cb : callback a ser chamado após achada a ferramenta
  */
 versionSchema.methods.findTool = function (name, cb) {
+    "use strict";
+
     Tool.findOne({versionId : this._id, name : name}, cb);
 };
 
@@ -49,6 +53,8 @@ versionSchema.methods.findTool = function (name, cb) {
  * @param cb : callback a ser chamado após achadas os plugins
  */
 versionSchema.methods.plugins = function (cb) {
+    "use strict";
+
     Plugin.find({versionId : this._id}, cb);
 };
 
@@ -61,6 +67,8 @@ versionSchema.methods.plugins = function (cb) {
  * @param cb : callback a ser chamado após achado o plugin
  */
 versionSchema.methods.findPlugin = function (name, cb) {
+    "use strict";
+
     Plugin.findOne({versionId : this._id, name : name}, cb);
 };
 
@@ -72,6 +80,8 @@ versionSchema.methods.findPlugin = function (name, cb) {
  * @param cb : callback a ser chamado após achadas os plugins
  */
 versionSchema.methods.dialogs = function (cb) {
+    "use strict";
+
     Dialog.find({versionId : this._id}, cb);
 };
 
@@ -84,6 +94,8 @@ versionSchema.methods.dialogs = function (cb) {
  * @param cb : callback a ser chamado após achado o dialogo
  */
 versionSchema.methods.findDialog = function (name, cb) {
+    "use strict";
+
     Dialog.findOne({versionId : this._id, name : name}, cb);
 };
 

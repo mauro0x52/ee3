@@ -1,17 +1,17 @@
 /** State
- * @author : Rafael Erthal & Mauro Ribeiro & Lucas Kalado
+ * @author : Lucas Kalado
  * @since : 2012-07
  *
  * @description : Representação da entidade de estados
  */
- 
+
 var crypto = require('crypto'),
     mongoose = require('mongoose'),
-    schema   = mongoose.Schema,
-    objectId = schema.ObjectId,
-    stateSchema, State;
-    
-stateSchema = new schema({
+    Schema   = mongoose.Schema,
+    objectId = Schema.ObjectId,
+    stateSchema;
+
+stateSchema = new Schema({
     name      : {type : String, trim : true, required : true},
     slug      : {type : String, trim : true, required : true},
     countryId : {type: objectId},

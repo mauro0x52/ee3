@@ -4,14 +4,14 @@
  *
  * @description : Representação da entidade de Aplicativo
  */
- 
+
 var Version = require('./Version.js').Version,
     mongoose = require('mongoose'),
-    schema   = mongoose.Schema,
-    objectId = schema.ObjectId,
+    Schema   = mongoose.Schema,
+    objectId = Schema.ObjectId,
     appSchema;
 
-appSchema = new schema({
+appSchema = new Schema({
     name : {type : String, trim : true, required : true},
     slug : {type : String, trim : true, required : true},
     creator : {type : String, trim : true, required : true},
@@ -26,6 +26,8 @@ appSchema = new schema({
  * @param cb : callback a ser chamado após achadas as versões
  */
 appSchema.methods.versions = function (cb) {
+    "use strict";
+
     Version.find({appId : this._id}, cb);
 };
 
@@ -38,6 +40,8 @@ appSchema.methods.versions = function (cb) {
  * @param cb : callback a ser chamado após achada a versão
  */
 appSchema.methods.findVersion = function (number, cb) {
+    "use strict";
+
     Version.findOne({appId : this._id, number : number}, cb);
 };
 

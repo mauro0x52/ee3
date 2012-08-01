@@ -1,10 +1,10 @@
 /** Model
- * @author : Rafael Erthal
+ * @author : Lucas Calado
  * @since : 2012-07
  *
  * @description : Montagem da model
  */
- 
+
 var config   = require('./../config.js'),
     mongoose = require('mongoose');
 

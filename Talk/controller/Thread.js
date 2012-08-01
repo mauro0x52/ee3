@@ -4,14 +4,15 @@
  *
  * @description : Módulo que implementa as funcionalidades de threads
  */
- 
+
 module.exports = function (app) {
-    
+    "use strict";
+
     var Model = require('./../model/Model.js'),
-        Auth  = require('./../Utils.js').auth,
+        auth  = require('./../Utils.js').auth,
         Conversant  = Model.Conversant,
         Thread  = Model.Thread;
-    
+
     /** POST /conversant/:user_id/thread
      *
      * @autor : Rafael Erthal
@@ -27,11 +28,11 @@ module.exports = function (app) {
      */
     app.post('/conversant/:user_id/thread', function (request, response) {
         var thread;
-        
+
         response.contentType('json');
-        
+
         //valida o token do usuário
-        Auth(request.params.user_id, request.param('token', null), function (valid) {
+        auth(request.params.user_id, request.param('token', null), function (valid) {
             if (valid) {
                 //busca o usuário
                 Conversant.findOne({user : request.params.user_id}, function (error, conversant) {
@@ -73,7 +74,7 @@ module.exports = function (app) {
             }
         });
     });
-    
+
     /** PUT /conversant/:user_id/thread/:slug
      *
      * @autor : Rafael Erthal
@@ -84,14 +85,14 @@ module.exports = function (app) {
      * @allowedApp : Qualquer app
      * @allowedUser : Logado
      *
-     * @request : {}
+     * @request : {token}
      * @response : {confirmation}
      */
     app.put('/conversant/:user_id/thread/:slug', function (request, response) {
         response.contentType('json');
-        
+
         //valida o token do usuário
-        Auth(request.params.user_id, request.param('token', null), function (valid) {
+        auth(request.params.user_id, request.param('token', null), function (valid) {
             if (valid) {
                 //busca o usuário
                 Conversant.findOne({user : request.params.user_id}, function (error, conversant) {
@@ -132,7 +133,7 @@ module.exports = function (app) {
             }
         });
     });
-        
+
     /** GET /conversant/:user_id/threads
      *
      * @autor : Rafael Erthal
@@ -143,14 +144,14 @@ module.exports = function (app) {
      * @allowedApp : Qualquer app
      * @allowedUser : Logado
      *
-     * @request : {login,token,label}
+     * @request : {token}
      * @response : {confirmation}
      */
     app.get('/conversant/:user_id/threads', function (request, response) {
         response.contentType('json');
-        
+
         //valida o token do usuário
-        Auth(request.params.user_id, request.param('token', null), function (valid) {
+        auth(request.params.user_id, request.param('token', null), function (valid) {
             if (valid) {
                 //busca o usuário
                 Conversant.findOne({user : request.params.user_id}, function (error, conversant) {
@@ -177,7 +178,7 @@ module.exports = function (app) {
             }
         });
     });
-        
+
     /** POST /conversant/:user_id/thread/:slug/message
      *
      * @autor : Rafael Erthal
@@ -188,14 +189,14 @@ module.exports = function (app) {
      * @allowedApp : Qualquer app
      * @allowedUser : Logado
      *
-     * @request : {message}
+     * @request : {message,token}
      * @response : {confirmation}
      */
-    app.get('/conversant/:user_id/thread/:slug/messages', function (request, response) {
+    app.get('/conversant/:user_id/thread/:slug/message', function (request, response) {
         response.contentType('json');
-        
+
         //valida o token do usuário
-        Auth(request.params.user_id, request.param('token', null), function (valid) {
+        auth(request.params.user_id, request.param('token', null), function (valid) {
             if (valid) {
                 //busca o usuário
                 Conversant.findOne({user : request.params.user_id}, function (error, conversant) {
@@ -240,7 +241,7 @@ module.exports = function (app) {
             }
         });
     });
-        
+
     /** GET /conversant/:user_id/thread/:slug/messages
      *
      * @autor : Rafael Erthal
@@ -251,14 +252,14 @@ module.exports = function (app) {
      * @allowedApp : Qualquer app
      * @allowedUser : Logado
      *
-     * @request : {}
+     * @request : {token}
      * @response : {confirmation}
      */
     app.get('/conversant/:user_id/thread/:slug/messages', function (request, response) {
         response.contentType('json');
-        
+
         //valida o token do usuário
-        Auth(request.params.user_id, request.param('token', null), function (valid) {
+        auth(request.params.user_id, request.param('token', null), function (valid) {
             if (valid) {
                 //busca o usuário
                 Conversant.findOne({user : request.params.user_id}, function (error, conversant) {
@@ -290,7 +291,7 @@ module.exports = function (app) {
             }
         });
     });
-        
+
     /** GET /conversant/:user_id/thread/:slug/unread-messages
      *
      * @autor : Rafael Erthal
@@ -301,14 +302,14 @@ module.exports = function (app) {
      * @allowedApp : Qualquer app
      * @allowedUser : Logado
      *
-     * @request : {}
+     * @request : {token}
      * @response : {confirmation}
      */
     app.get('/conversant/:user_id/thread/:slug/unread-messages', function (request, response) {
         response.contentType('json');
-        
+
         //valida o token do usuário
-        Auth(request.params.user_id, request.param('token', null), function (valid) {
+        auth(request.params.user_id, request.param('token', null), function (valid) {
             if (valid) {
                 //busca o usuário
                 Conversant.findOne({user : request.params.user_id}, function (error, conversant) {
@@ -328,9 +329,17 @@ module.exports = function (app) {
                                     if (thread === null) {
                                         response.send({error : 'thread not found'});
                                     } else {
-                                        //busca as mensagens não lidas pelo usuário na thread
-                                        thread.unreadMessages(conversant, function (messages) {
-                                            response.send({messages : messages});
+                                        //atualiza o lastCheck do usuário para mante-lo online
+                                        conversant.lastCheck = new Date();
+                                        conversant.save(function (error) {
+                                            if (error) {
+                                                response.send({error : error});
+                                            } else {
+                                                //busca as mensagens não lidas pelo usuário na thread
+                                                thread.unreadMessages(conversant, function (messages) {
+                                                    response.send({messages : messages});
+                                                });
+                                            }
                                         });
                                     }
                                 }

@@ -4,13 +4,14 @@
  *
  * @description : Módulo que implementa as funcionalidades de usuário
  */
- 
+
 module.exports = function (app) {
-    
+    "use strict";
+
     var Model = require('./../model/Model.js'),
-        Auth  = require('./../Utils.js').auth,
+        auth  = require('./../Utils.js').auth,
         Conversant  = Model.Conversant;
-        
+
     /** POST /conversant
      *
      * @autor : Rafael Erthal
@@ -26,17 +27,17 @@ module.exports = function (app) {
      */
     app.post('/conversant', function (request, response) {
         var conversant;
-        
+
         response.contentType('json');
-        
+
         //valida o token do usuário
-        Auth(request.param('login', null), request.param('token', null), function (valid) {
+        auth(request.param('login', null), request.param('token', null), function (valid) {
             if (valid) {
                 //pega os dados do post e coloca em um novo objeto
                 conversant = new Conversant({
-                    user      : request.param('login', null), 
+                    user      : request.param('login', null),
                     label     : request.param('label', null),
-                    lastCheck : request.param('lastCheck', null)
+                    lastCheck : new Date()
                 });
                 //salva novo usuário
                 conversant.save(function (error) {
@@ -65,11 +66,11 @@ module.exports = function (app) {
      * @request : {token, new_label}
      * @response : {confirmation}
      */
-    app.put('/conversant/:user/change-label', function (request,response) {
+    app.put('/conversant/:user/change-label', function (request, response) {
         response.contentType('json');
-        
+
         //valida o token do usuário
-        Auth(request.params.user, request.param('token', null), function (valid) {
+        auth(request.params.user, request.param('token', null), function (valid) {
             if (valid) {
                 //busca o usuário
                 Conversant.findOne({user : request.params.user}, function (error, conversant) {
@@ -90,7 +91,7 @@ module.exports = function (app) {
                                     response.send({error : ''});
                                 }
                             });
-                        }     
+                        }
                     }
                 });
             } else {
@@ -98,7 +99,7 @@ module.exports = function (app) {
             }
         });
     });
-     
+
     /** GET /conversant/:user_id/status
      *
      * @autor : Rafael Erthal
@@ -112,9 +113,9 @@ module.exports = function (app) {
      * @request : {}
      * @response : {status}
      */
-    app.get('/conversant/:user_id/status', function (request,response) {
+    app.get('/conversant/:user_id/status', function (request, response) {
         response.contentType('json');
-        
+
         //busca usuário
         Conversant.findOne({user : request.params.user_id}, function (error, conversant) {
             if (error) {
@@ -133,6 +134,6 @@ module.exports = function (app) {
                     });
                 }
             }
-        })
+        });
     });
 };

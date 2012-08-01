@@ -4,15 +4,15 @@
  *
  * @description : Representação da entidade de usuários
  */
- 
+
 var crypto = require('crypto'),
     config = require('./../config.js'),
     mongoose = require('mongoose'),
-    schema   = mongoose.Schema,
-    objectId = schema.ObjectId,
+    Schema   = mongoose.Schema,
+    objectId = Schema.ObjectId,
     userSchema;
 
-userSchema = new schema({
+userSchema = new Schema({
     username         : {type : String, trim : true, required : true},
     password         : {type : String, required : true},
     token            : {type : String, trim : true},
@@ -29,6 +29,8 @@ userSchema = new schema({
  * @param cb : callback a ser chamado após a ativação da conta
  */
 userSchema.methods.generateToken = function () {
+    "use strict";
+
     return crypto.createHash('md5', config.security.token).update(this.login + this.password).digest('hex');
 };
 
@@ -39,7 +41,9 @@ userSchema.methods.generateToken = function () {
  * @description : Verifica se o token passado é correo
  * @param cb : callback a ser chamado após a ativação da conta
  */
-userSchema.methods.checkToken = function (token,cb) {
+userSchema.methods.checkToken = function (token, cb) {
+    "use strict";
+
     cb(token === this.generateToken());
 };
 
@@ -51,6 +55,8 @@ userSchema.methods.checkToken = function (token,cb) {
  * @param cb : callback a ser chamado após a ativação da conta
  */
 userSchema.methods.activate = function (cb) {
+    "use strict";
+
     this.status = 'active';
     this.save(cb);
 };
@@ -63,6 +69,8 @@ userSchema.methods.activate = function (cb) {
  * @param cb : callback a ser chamado após a desativação da conta
  */
 userSchema.methods.deactivate = function (cb) {
+    "use strict";
+
     this.status = 'inactive';
     this.save(cb);
 };
@@ -75,6 +83,8 @@ userSchema.methods.deactivate = function (cb) {
  * @param cb : callback a ser chamado após o usuário ser logado
  */
 userSchema.methods.login = function (cb) {
+    "use strict";
+
     this.token = this.generateToken();
     this.save(cb);
 };
@@ -87,6 +97,8 @@ userSchema.methods.login = function (cb) {
  * @param cb : callback a ser chamado após o usuário ser deslogado
  */
 userSchema.methods.logout = function (cb) {
+    "use strict";
+
     this.token = undefined;
     this.save(cb);
 };
@@ -100,6 +112,8 @@ userSchema.methods.logout = function (cb) {
  * @param cb : callback a ser chamado após a mudança da senha
  */
 userSchema.methods.changePassword = function (password, cb) {
+    "use strict";
+
     this.password = password;
     this.save(cb);
 };
