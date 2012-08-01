@@ -54,7 +54,7 @@ threadSchema.methods.unreadMessages = function (user, cb) {
     var i,
         j,
         unread,
-        res;
+        res = [];
 
     //percorre todas as mensagens da thread
     for (i = 0; i < this.messages.length; i = i + 1) {

@@ -192,7 +192,7 @@ module.exports = function (app) {
      * @request : {message,token}
      * @response : {confirmation}
      */
-    app.get('/conversant/:user_id/thread/:slug/message', function (request, response) {
+    app.post('/conversant/:user_id/thread/:slug/message', function (request, response) {
         response.contentType('json');
 
         //valida o token do usuário
