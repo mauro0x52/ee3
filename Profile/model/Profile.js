@@ -25,5 +25,22 @@ profileSchema = new schema({
     dateUpdated : {type : Date}
 });
 
+/** findProfileForSlug
+ * @author : Lucas Kalado
+ * @since : 2012-08
+ *
+ * @description : Busca um profile pelo Slug enviado.
+ * @param slug : o slug que vai ser feito a busca.
+ * @param cb : callback a ser chamado após achado o profile
+ */
+appSchema.methods.findProfileForSlug = function (slug, cb) {
+    var query = Profile.findOne();
+    
+    query.where("slugs");
+    query.in([slug]);
+    
+    query.exec(cb);
+}
+
 /*  Exportando o pacote  */
 exports.Profile = mongoose.model('Profile', profileSchema);
