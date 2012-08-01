@@ -1,0 +1,14 @@
+{
+  "name": "Profile",
+  "description": "",
+  "version": "0.0.1",
+  "author": "Empreendemia",
+  "dependencies": {
+    "express": "~3.0.0rc1",
+    "mongoose": "~2.7.2",
+    "mongodb": "~1.1.2",
+    "express-namespace": "~0.1.1",
+    "ejs": "~0.8.0"
+  },
+  "devDependencies": {}
+}
