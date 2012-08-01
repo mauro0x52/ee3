@@ -12,148 +12,79 @@ module.exports = function (app) {
 
     var config  = require('../config.js');
 
-    app.get('/teste', function (request,response) {
-        var image = new Image({
-            path : 'testeeeeeeeeeeeeee',
-            url  : 'testeeeeeeeeeeeeeeeeee'
+    /** POST /image
+     *
+     * @autor : Mauro Ribeiro
+     * @since : 2012-07
+     *
+     * @description : Salva nova imagem
+     *
+     * @allowedApp : Apenas o www
+     * @allowedUser : Público
+     *
+     * @request : {path, file}
+     * @response : {image}
+     */
+    app.post('/image', function (request,response) {
+        var crypto = require('crypto'),
+            path = require('path'),
+            dateUtils = require('date-utils'),
+            file, image, hash, folder, folderPath, fileNameSplit, fileExt, filePath;
+        
+        response.contentType('json');
+
+        // caminho escolhido
+        folderPath = request.param('path', null);
+        
+        // arquivo da imagem
+        file = request.files.file;
+
+        // extensao do arquivo
+        fileNameSplit = path.extname(request.files.file.name||'').split('.');
+        fileExt = fileNameSplit[fileNameSplit.length - 1];
+
+        // nome unico para a pasta: ANO + MES + DIA + hash[10]
+        hash = crypto.createHash('md5').update(crypto.randomBytes(10)).digest('hex').substring(0, 10);
+        folder = Date.today().toFormat('YYYYMMDD') + hash;
+        // caminho do arquivo    
+        filePath = folderPath + '/' + folder + '/original.' + fileExt;
+
+        image = new Image({
+            path : filePath,
+            file : file
         });
-        image.save(function(error) {
+
+        image.save(function(error){
             if (error) console.log(error);
         });
-    });
 
-    app.post('/image', function (request,response) {
-
-        var fs = require('fs');
-        var crypto = require('crypto');
-        var fileUtils = require('file-utils');
-        var dateUtils = require('date-utils');
-        var path = require('path');
-        var File = fileUtils.File;
-
-        var folderPath = request.param('path', '/');
-
-        var hash = crypto.createHash('md5').update(Date.now().toString()).digest('hex').substring(0, 10);
-
-        var folder = '/' + Date.today().toFormat('YYYYMMDD') + hash + '/';
-
-        var filenameSplit = path.extname(request.files.file.name||'').split('.');
-        var fileExt = filenameSplit[filenameSplit.length - 1];
-
-        if (request.files.file.size <= config.images.maxsize) {
-            if (config.s3.enabled) {
-
-            }
-            else {
-                var filePath = config.images.folder + folderPath + folder ;
-
-                new File(filePath).createDirectory(function() {
-
-                    fs.rename(
-                        request.files.file.path, 
-                        filePath + 'original.' + fileExt,
-                        function(error) {
-                            if (error) console.log(error);
-                            else console.log(filePath + 'original.' + fileExt+' salvo');
-                        }
-                    );
-                });
-            }
-        }
-        else {
-            console.log('tamanho excedido');
-        }   
-    });
+    }); // post /image
 
     app.put('/image/*/resize', function (request,response) {
+        var crypto = require('crypto'),
+            width = request.param('width', null),
+            height = request.param('height', null),
+            style = request.param('style', null),
+            label = request.param('label', null),
+            image, filePath;
+        
+        response.contentType('json');
 
-
-        var imagemagick = require('imagemagick'),
-             fs = require('fs'),
-            path = require('path');
-
-        var fileUtils = require('file-utils');
-        var File = fileUtils.File;
-
-        var width = request.param('width', null);
-        var height = request.param('height', null);
-        var style = request.param('style', null);
-        var label = request.param('label', null);
-
-        var filePath = config.images.folder + request.params[0];
-        var folderPath = filePath.substring(0, filePath.lastIndexOf("/"));
-
-        var filenameSplit = path.extname(filePath||'').split('.');
-        var newFilePath = folderPath + '/' + label + '.' + filenameSplit[filenameSplit.length - 1];
- 
-
-        var image = fs.readFileSync(filePath, 'binary');
-
-        // fit = nao corta a imagem
-        if (style == 'fit') {
-            var imageProperties = {};
-            imageProperties.srcData = image;
-
-            if (width) imageProperties.width = width;
-            if (height) imageProperties.height = height;
-
-            imagemagick.resize(imageProperties, function(err, stdout, stderr){
-                if (err) console.log(err)
-                fs.writeFileSync(newFilePath, stdout, 'binary');
-            });
-        }
-        // extend = pode cortar a imagem
-        else {
-
-            imagemagick.identify('/home/mauro/images/teste.jpg', function(err, features){
-                if (err) console.log(err);
-
-                var original_width = features.width;
-                var original_height = features.height;
-                var original_aspect = original_width/original_height;
-
-                var aspect = width/height;
-
-                var resizeImageProperties = {};
-                resizeImageProperties.srcData = image;
-
-                if (original_aspect >= aspect) {
-                    resizeImageProperties.width = width;
-                    imagemagick.resize(resizeImageProperties, function(err, stdout, stderr){
-                        if (err) console.log(err)
-                        fs.writeFileSync(newFilePath, stdout, 'binary');
-                        var cropImageProperties = {};
-                        cropImageProperties.srcPath = newFilePath;
-                        cropImageProperties.dstPath = newFilePath;
-                        if (width) cropImageProperties.width = width;
-                        if (height) cropImageProperties.height = height;
-
-                        imagemagick.crop(cropImageProperties, function(err, stdout, stderr){
-                            if (err) console.log(err);
-                            else console.log("Imagem salva!");
-                        }); 
-                    });
-                }
-                else {
-                    resizeImageProperties.height = height;
-                    imagemagick.resize(resizeImageProperties, function(err, stdout, stderr){
-                        if (err) console.log(err)
-                        fs.writeFileSync(newFilePath, stdout, 'binary');
-                        var cropImageProperties = {};
-                        cropImageProperties.srcPath = newFilePath;
-                        cropImageProperties.dstPath = newFilePath;
-                        if (width) cropImageProperties.width = width;
-                        if (height) cropImageProperties.height = height;
-
-                        imagemagick.crop(cropImageProperties, function(err, stdout, stderr){
-                            if (err) console.log(err);
-                            else console.log("Imagem salva!");
-                        }); 
-                    }); 
-                }
-            });
-        }
-    });
+        // arquivo a ser resizeado
+        filePath = '/'+request.params[0];
+        
+        Image.findOne({ path : filePath }, function (error, image) {
+            if (error) {
+                console.log(error);
+            }
+            else if (!image) {
+                console.log(filePath + ' nao existe');
+            }
+            else {
+                image.resize({style:style, width:width, height:height, label:label}, function(error){});
+            }
+        });
+    }); // put /image/*/resize
 
     app.del('/image/*', function (request,response) {
         
