@@ -6,10 +6,11 @@
  */
  
 module.exports = function (app) {
-    
     var Model = require('./../model/Model.js'),
-        Profile  = Model.Profile;
-
+        Auth = require('./../Utils.js').auth,
+        Profile  = Model.Profile,
+        Job = Model.Job;
+        
     /** GET /profile/:slug
      *
      * @autor : Lucas Kalado
@@ -47,7 +48,6 @@ module.exports = function (app) {
         }
     });
     
-    
     /** POST /profile
      *
      * @autor : Lucas Kalado
@@ -58,310 +58,147 @@ module.exports = function (app) {
      * @allowedApp : Profiles
      * @allowedUser : Logado
      *
-     * @request : {jobs, slugs, name, surname, thumbnail, about, phones, contacts, links}
+     * @request : {jobs, slugs, name, surname, thumbnail, about, phones, contacts, links, login, token}
      * @response : {this}
      */
-    app.post('/user', function (request,response) {
-        var user;
+    app.post('/profile', function (request,response) {
+        var profile,
+            jobs,
+            slugs,
+            thumbnails,
+            phones,
+            contacts,
+            links,
+            parsJobs = [],
+            parsSlugs = [],
+            parsThumbnails = [],
+            parsPhones = [],
+            parsContacts = [],
+            parsLinks = [];
         
         response.contentType('json');
         
-        // valida se a senha e a confirmação senha conferem
-        if (request.param('password', null) === request.param('password_confirmation', null)) {
-            //pega os dados do post e coloca em um novo objeto
-            user = new User({
-                username : request.param('username', null),
-                password : request.param('password', null),
-                status   : 'active'
-            });
-            //salva novo usuário
-            user.save(function (error) {
-                if (error) {
-                    response.send({error : error});
-                } else {
-                    //loga o usuário no sistema                    
-                    user.login(function (error) {
-                        if (error) {
-                            response.send({error : error});
-                        } else {
-                            response.send({error : '', token : user.token});
-                        }
-                    });
-                }
-            });
-        } else {
-            response.send({error : 'Password confirmation invalid'});
-        }
-    });
-     
-     
-     
-    /** PUT /user/:login/deactivate
-     *
-     * @autor : Rafael Erthal
-     * @since : 2012-07
-     *
-     * @description : desativa conta do usuário
-     *
-     * @allowedApp : Aplicativo: Apenas o www
-     * @allowedUser : Logado
-     *
-     * @request : {token}
-     * @response : {confirmation}
-     */
-    app.put('/user/:login/deactivate', function (request,response) {
-        response.contentType('json');
-        
-        //localiza o usuário
-        User.findOne({username : request.params.login}, function (error, user) {
-            if (error) {
-                response.send({error : error});
-            } else {
-                //verifica se o usuario foi encontrado
-                if (user === null) {
-                    response.send({error : 'user not found'});
-                } else {
-                    //checa token
-                    user.checkToken(request.param('token', null), function(valid) {
-                        if (!valid) {
-                            response.send({error : 'invalid token'});
-                        } else {
-                            //desativa a conta do usuário
-                            user.deactivate(function (error) {
-                                if (error) {
-                                    response.send({error : error});
-                                } else {
-                                    response.send({error : ''});
+        //Verifica se o usuário logado é válido
+        Auth(request.param('login'), request.param('token'), function (valid) {
+            if (valid) {
+                //Verifica se existe o parametro Jobs e trata os dados para adicionar no Model
+                if (request.param('jobs', null)) {
+                    jobs = request.param('jobs', null);
+                    //Percorre entre os Jobs enviados
+                    for(var job in jobs){
+                        if (jobs.hasOwnProperty(job)) {
+                            var temp = {};
+                            //Percorre entre cada campo do job enviado
+                            for(var jobField in jobs[job]){
+                                if (jobs[job].hasOwnProperty(jobField)) {
+                                    temp[jobField] = jobs[job][jobField];
                                 }
-                            });
-                        }
-                    });     
-                }
-            }
-        });
-    });
-     
-    /** PUT /user/:login/activate
-     *
-     * @autor : Rafael Erthal
-     * @since : 2012-07
-     *
-     * @description : ativa conta do usuário
-     *
-     * @allowedApp: Apenas o www
-     * @allowedUser : Logado
-     *
-     * @request : {token}
-     * @response : {confirmation}
-     */
-    app.put('/user/:login/activate', function (request,response) {
-        response.contentType('json');
-        
-        //localiza o usuário
-        User.findOne({username : request.params.login}, function (error, user) {
-            if (error) {
-                response.send({error : error});
-            } else {
-                //verifica se o usuario foi encontrado
-                if (user === null) {
-                    response.send({error : 'user not found'});
-                } else {
-                    //checa token
-                    user.checkToken(request.param('token', null), function(valid) {
-                        if (!valid) {
-                            response.send({error : 'invalid token'});
-                        } else {
-                            //ativa a conta do usuário
-                            user.activate(function (error) {
-                                if (error) {
-                                    response.send({error : error});
-                                } else {
-                                    response.send({error : ''});
-                                }
-                            });
-                        }
-                    });     
-                }
-            }
-        });
-    });
-    
-    /** PUT /user/:login/password-recovery
-     *
-     * @autor : Rafael Erthal
-     * @since : 2012-07
-     *
-     * @description : recupera senha do usuário
-     *
-     * @allowedApp : Apenas o www, redirecionamento por e-mail
-     * @allowedUser : Público
-     *
-     * @request : {token, newpassword, newpasswordconfirmation}
-     * @response : {newtoken, confirmation}
-     */
-    app.put('/user/:login/password-recovery', function (request,response) {
-        response.contentType('json');
-        
-        // valida se a senha e a confirmação senha conferem
-        if (request.param('newpassword', null) === request.param('newpasswordconfirmation', null)) {
-            //localiza o usuário
-            User.findOne({username : request.params.login}, function (error, user) {
-                if (error) {
-                    response.send({error : error});
-                } else {
-                    //verifica se o usuario foi encontrado
-                    if (user === null) {
-                        response.send({error : 'user not found'});
-                    } else {
-                        //checa token
-                        user.checkToken(request.param('token', null), function(valid) {
-                            if (!valid) {
-                                response.send({error : 'invalid token'});
-                            } else {
-                                //altera a senha
-                                user.changePassword(request.param('newpassword', null), function (error) {
-                                    if (error) {
-                                        response.send({error : error});
-                                    } else {
-                                        //reloga o usuário
-                                        user.login(function (error) {
-                                            if (error) {
-                                                response.send({error : error});
-                                            } else {
-                                                response.send({token : this.token, error : ''});
-                                            }
-                                        });
-                                    }
-                                });
                             }
-                        });     
+                            parsJobs.push(temp);
+                        }
                     }
                 }
-            });
-        } else {
-            response.send({error : 'Password confirmation invalid'});
-        }
-    });
-    
-    /** PUT /user/:login/login
-     *
-     * @autor : Rafael Erthal
-     * @since : 2012-07
-     *
-     * @description : autentica o usuário
-     *
-     * @allowedApp : Apenas o www
-     * @allowedUser : Público
-     *
-     * @request : {login, password}
-     * @response : { token, confirmation}
-     */
-    app.put('/user/:login/login', function (request,response) {
-        response.contentType('json');
-        
-        //localiza o usuário
-        User.findOne({username : request.params.login}, function (error, user) {
-            if (error) {
-                response.send({error : error});
-            } else {
-                //verifica se o usuario foi encontrado
-                if (user === null) {
-                    response.send({error : 'invalid username or password'});
-                } else {
-                    //verifica a senha do usuário
-                    if (user.password !== request.param('password', null)) {
-                        response.send({error : 'invalid username or password'});
-                    } else {
-                        //loga o usuário
-                        user.login(function (error) {
-                            if (error) {
-                                response.send({error : error});
-                            } else {
-                                response.send({token : this.token, error : ''});
+                //Verifica se existe o parametro Slugs e trata os dados para adicionar no Model
+                if (request.param('slugs', null)) {
+                    slugs = request.param('slugs', null);
+                    //Percorre entre os Slugs enviados
+                    for(var slug in slugs){
+                        if (slugs.hasOwnProperty(slug)) {
+                            //Percorre entre cada campo do Slug enviado
+                            for(var slugField in slug){
+                                if (slug.hasOwnProperty(slugField)) {
+                                    parsSlugs.push(slug[slugField]);
+                                }
                             }
-                        });
+                        }
                     }
                 }
-            }
-        });
-    });
-    
-    /** PUT /user/:login/logout
-     *
-     * @autor : Rafael Erthal
-     * @since : 2012-07
-     *
-     * @description : desautentica o usuário
-     *
-     * @allowedApp : Apenas o www
-     * @allowedUser : Logado
-     *
-     * @request : {token}
-     * @response : {confirmation}
-     */
-    app.put('/user/:login/logout', function (request,response) {
-        response.contentType('json');
-        
-        //localiza o usuário
-        User.findOne({username : request.params.login}, function (error, user) {
-            if (error) {
-                response.send({error : error});
-            } else {
-                //verifica se o usuario foi encontrado
-                if (user === null) {
-                    response.send({error : 'user not found'});
-                } else {
-                    //verifica o token do usuário
-                    user.checkToken(request.param('token', null), function(valid) {
-                        if (!valid) {
-                            response.send({error : 'invalid token'});
-                        } else {
-                            //desloga o usuário
-                            user.logout(function (error) {
-                                if (error) {
-                                    response.send({error : error});
-                                } else {
-                                    response.send({error : ''});
+                //Verifica se existe o parametro thumbnails e trata os dados para adicionar no Model
+                if (request.param('thumbnails', null)) {
+                    thumbnails = request.param('thumbnails', null);
+                    //Percorre entre os Thumbnails enviados
+                    for(var thumbnail in thumbnails){
+                        if (thumbnails.hasOwnProperty(thumbnail)) {
+                            //Percorre entre cada campo do Thumbnail enviado
+                            for(var thumbnailField in thumbnail){
+                                if (thumbnail.hasOwnProperty(thumbnailField)) {
+                                    parsThumbnails.push(thumbnail[thumbnailField]);
                                 }
-                            });
+                            }
                         }
-                    });
+                    }
                 }
-            }
-        });
-    });
-    
-    /** GET /user/:login/validate
-     *
-     * @autor : Rafael Erthal
-     * @since : 2012-07
-     *
-     * @description : valida token
-     *
-     * @allowedApp : Qualquer App
-     * @allowedUser : Logado
-     *
-     * @request : {token}
-     * @response : {confirmation}
-     */
-    app.get('/user/:login/validate', function (request,response) {
-        response.contentType('json');
-        
-        //localiza o usuário
-        User.findOne({username : request.params.login}, function (error, user) {
-            if (error) {
-                response.send({error : error});
+                //Verifica se existe o parametro phones e trata os dados para adicionar no Model
+                if (request.param('phones', null)) {
+                    phones = request.param('phones', null);
+                    //Percorre entre os Phones enviados
+                    for(var phone in phones){
+                        if (phones.hasOwnProperty(phone)) {
+                            //Percorre entre cada campo do Phone enviado
+                            for(var phoneField in phone){
+                                if (phone.hasOwnProperty(phoneField)) {
+                                    parsPhones.push(phone[phoneField]);
+                                }
+                            }
+                        }
+                    }
+                }
+                //Verifica se existe o parametro contacts e trata os dados para adicionar no Model
+                if (request.param('contacts', null)) {
+                    contacts = request.param('contacts', null);
+                    //Percorre entre os Contacts enviados
+                    for(var contact in contacts){
+                        if (contacts.hasOwnProperty(contact)) {
+                            //Percorre entre cada campo do Contact enviado
+                            for(var contactField in contact){
+                                if (contact.hasOwnProperty(contactField)) {
+                                    parsContacts.push(contact[contactField]);
+                                }
+                            }
+                        }
+                    }
+                }
+                //Verifica se existe o parametro links e trata os dados para adicionar no Model
+                if (request.param('links', null)) {
+                    links = request.param('links', null);
+                    //Percorre entre os Links enviados
+                    for(var link in links){
+                        if (links.hasOwnProperty(link)) {
+                            //Percorre entre cada campo do Link enviado
+                            for(var linkField in link){
+                                if (link.hasOwnProperty(linkField)) {
+                                    parsLinks.push(link[linkField]);
+                                }
+                            }
+                        }
+                    }
+                }
+                //Cria o Objeto Profile para adicionar no Model
+                profile = new Profile({
+                    users       : request.param('login', null),
+                    jobs        : parsJobs,
+                    slugs       : parsSlugs,
+                    name        : request.param('name', null),
+                    surname     : request.param('surname', null),
+                    thumbnail   : parsThumbnails,
+                    about       : request.param('about', null),
+                    phones      : parsPhones,
+                    contacts    : parsContacts,
+                    links       : parsLinks,
+                    dateCreated : new Date(),
+                    dateUpdated : new Date()
+                });
+                //Salva o objeto no Model de Profile e retorna o objeto para o solicitante
+                profile.save(function (error) {
+                    if (error) {
+                        response.send({error : error});
+                    } else {
+                        response.send({profile : profile});
+                    }
+                });
             } else {
-                //verifica se o usuario foi encontrado
-                if (user === null) {
-                    response.send({error : 'user not found'});
-                } else {
-                    //verifica o token do usuário
-                    user.checkToken(request.param('token', null), function(valid) {
-                        response.send({valid : valid, error : ''});
-                    });
-                }
+                request.send({error : error});
             }
-        });
+        })
     });
 };

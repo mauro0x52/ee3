@@ -12,10 +12,10 @@ var mongoose = require('mongoose'),
 
 imageSchema = new schema({
     file   : {type : objectId},
-    url    : {type : string, trim: true},
-    title  : {type : string, trim: true},
-    legend : {type : string}
+    url    : {type : String, trim: true},
+    title  : {type : String, trim: true},
+    legend : {type : String}
 });
 
 /*  Exportando o pacote  */
-exports.Image = mongoose.model('Image', imagSchema);
+exports.Image = mongoose.model('Image', imageSchema);

@@ -30,9 +30,7 @@ app.configure(function () {
 });
 
 /*  Chamando controllers */
-require('./controller/User.js')(app);
-require('./controller/ThirdPartyLogin.js')(app);
-require('./controller/App.js')(app);
+require('./controller/Profile.js')(app);
 
 /*  Métodos para dev e teste */
 app.get('/ping', function (request,response) {
