@@ -2,7 +2,7 @@
  * @author : Rafael Almeida Erthal Hermano
  * @since : 2012-08
  *
- * @description : Módulo que implementa as funcionalidades de embbeded
+ * @description : Módulo que implementa as funcionalidades de embedded
  */
 
 module.exports = function (app) {
@@ -12,12 +12,12 @@ module.exports = function (app) {
         auth  = require('./../Utils.js').auth,
         Company = Model.Company;
 
-    /** POST /company/:slug/embbeded
+    /** POST /company/:slug/embedded
      *
      * @autor : Rafael Erthal
      * @since : 2012-08
      *
-     * @description : Cadastrar embbeded
+     * @description : Cadastrar embedded
      *
      * @allowedApp : Lista de Empresas
      * @allowedUser : Logado
@@ -25,7 +25,7 @@ module.exports = function (app) {
      * @request : {login,token,link,embed}
      * @response : {confirmation}
      */
-    app.post('/company/:slug/embbeded', function (request, response) {
+    app.post('/company/:slug/embedded', function (request, response) {
         response.contentType('json');
 
         //valida o token do usuário
@@ -44,7 +44,19 @@ module.exports = function (app) {
                             if (! company.isOwner(request.param('login', null))) {
                                 response.send({error : 'permission denied'});
                             } else {
-                                //TODO implementar funcionalidades
+                                //coloca os dados do post em um objeto
+                                company.embededds.push({
+                                    link  : request.param('link', null),
+                                    embed : request.param('embed', null)
+                                });
+                                //salva o embedded
+                                company.save(function (error) {
+                                    if (error) {
+                                        response.send({error : error});
+                                    } else {
+                                        response.send({error : ''});
+                                    }
+                                });
                             }
                         }
                     }
@@ -55,12 +67,12 @@ module.exports = function (app) {
         });
     });
 
-    /** GET /company/:company_slug/embbededs
+    /** GET /company/:company_slug/embeddeds
      *
      * @autor : Rafael Erthal
      * @since : 2012-08
      *
-     * @description : Listar embbededs
+     * @description : Listar embedded
      *
      * @allowedApp : Qualquer App
      * @allowedUser : Deslogado
@@ -68,7 +80,7 @@ module.exports = function (app) {
      * @request : {}
      * @response : {[{type,street,link,embed}]}
      */
-    app.get('/company/:slug/embbededs', function (request, response) {
+    app.get('/company/:slug/embedded', function (request, response) {
         response.contentType('json');
 
         //busca a compania
@@ -80,18 +92,25 @@ module.exports = function (app) {
                 if (company === null) {
                     response.send({error : 'company not found'});
                 } else {
-                    //TODO implementar funcionalidades
+                    //busca embbededs
+                    company.embeddeds(function (error, embeddeds) {
+                        if (error) {
+                            response.send({error : error});
+                        } else {
+                            response.send({embeddeds : embeddeds});
+                        }
+                    });
                 }
             }
         });
     });
 
-    /** GET /company/:slug/embbeded/:id
+    /** GET /company/:slug/embedded/:id
      *
      * @autor : Rafael Erthal
      * @since : 2012-08
      *
-     * @description : Exibir embbeded
+     * @description : Exibir embedded
      *
      * @allowedApp : Qualquer App
      * @allowedUser : Deslogado
@@ -99,7 +118,7 @@ module.exports = function (app) {
      * @request : {}
      * @response : {type,number,link,embed}
      */
-    app.get('/company/:slug/embbeded/:id', function (request, response) {
+    app.get('/company/:slug/embedded/:id', function (request, response) {
         response.contentType('json');
 
         //busca a compania
@@ -111,18 +130,30 @@ module.exports = function (app) {
                 if (company === null) {
                     response.send({error : 'company not found'});
                 } else {
-                    //TODO implementar funcionalidades
+                    //busca o embbeded
+                    company.findEmbedded(request.params.id, function (error, embedded) {
+                        if (error) {
+                            response.send({error : error});
+                        } else {
+                            //verifica se o embedded foi encontrado
+                            if (contact === null) {
+                                response.send({error : 'embedded not found'});
+                            } else {
+                                response.send({embedded : embedded});
+                            }
+                        }
+                    });
                 }
             }
         });
     });
 
-    /** PUT /company/:slug/embbeded/:id
+    /** PUT /company/:slug/embedded/:id
      *
      * @autor : Rafael Erthal
      * @since : 2012-08
      *
-     * @description : Editar embbededço
+     * @description : Editar embedded
      *
      * @allowedApp : Lista de Empresas
      * @allowedUser : Logado
@@ -130,7 +161,7 @@ module.exports = function (app) {
      * @request : {login,token,link,embed}
      * @response : {confirmation}
      */
-    app.put('/company/:slug/embbeded/:id', function (request, response) {
+    app.put('/company/:slug/embedded/:id', function (request, response) {
         response.contentType('json');
 
         //valida o token do usuário
@@ -149,7 +180,29 @@ module.exports = function (app) {
                             if (! company.isOwner(request.param('login', null))) {
                                 response.send({error : 'permission denied'});
                             } else {
-                                //TODO implementar funcionalidades
+                                //busca o embedded
+                                company.findEmbedded(request.params.id, function (error, embedded) {
+                                    if (error) {
+                                        response.send({error : error});
+                                    } else {
+                                        //verifica se o embedded foi encontrado
+                                        if (embedded === null) {
+                                            response.send({error : 'embedded not found'});
+                                        } else {
+                                            //altera os dados do embbeded
+                                            embedded.link = request.param('link', null);
+                                            embedded.embed = request.param('embed', null);
+                                            //salva as alterações
+                                            embedded.save(function (error) {
+                                                if (error) {
+                                                    response.send({error : error});
+                                                } else {
+                                                    response.send({error : ''});
+                                                }
+                                            });
+                                        }
+                                    }
+                                });
                             }
                         }
                     }
@@ -160,12 +213,12 @@ module.exports = function (app) {
         });
     });
 
-    /** DEL /company/:slug/embbeded/:id
+    /** DEL /company/:slug/embedded/:id
      *
      * @autor : Rafael Erthal
      * @since : 2012-08
      *
-     * @description : Excluir embbeded
+     * @description : Excluir embedded
      *
      * @allowedApp : Lista de Empresas
      * @allowedUser : Logado
@@ -173,7 +226,7 @@ module.exports = function (app) {
      * @request : {login,token}
      * @response : {confirmation}
      */
-    app.del('/company/:slug/embbeded/:id', function (request, response) {
+    app.del('/company/:slug/embedded/:id', function (request, response) {
         response.contentType('json');
 
         //valida o token do usuário
@@ -192,7 +245,26 @@ module.exports = function (app) {
                             if (! company.isOwner(request.param('login', null))) {
                                 response.send({error : 'permission denied'});
                             } else {
-                                //TODO implementar funcionalidades
+                                //busca o embedded
+                                company.findEmbedded(request.params.id, function (error, embedded) {
+                                    if (error) {
+                                        response.send({error : error});
+                                    } else {
+                                        //verifica se o embedded foi encontrado
+                                        if (embedded === null) {
+                                            response.send({error : 'embedded not found'});
+                                        } else {
+                                            //remove o embedded
+                                            embedded.remove(function (error) {
+                                                if (error) {
+                                                    response.send({error : error});
+                                                } else {
+                                                    response.send({error : ''});
+                                                }
+                                            });
+                                        }
+                                    }
+                                });
                             }
                         }
                     }
