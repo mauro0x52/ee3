@@ -30,6 +30,16 @@ app.configure(function () {
 });
 
 /*  Chamando controllers */
+require('./controller/Sector.js')(app);
+require('./controller/Company.js')(app);
+require('./controller/Product.js')(app);
+require('./controller/Image.js')(app);
+require('./controller/Thumbnail.js')(app);
+require('./controller/Phone.js')(app);
+require('./controller/Address.js')(app);
+require('./controller/Embedded.js')(app);
+require('./controller/Link.js')(app);
+require('./controller/Contact.js')(app);
 
 /*  Métodos para dev e teste */
 app.get('/ping', function (request, response) {
