@@ -15,7 +15,7 @@ companySchema = new Schema({
     name        : {type : String, trim : true, required : true},
     thumbnails  : [require('./Thumbnail.js')],
     members     : [objectId],
-    users       : [objectId],
+    users       : [String],
     sectors     : [objectId],
     products    : [require('./Product.js').Product],
     addresses   : [require('./Address.js').Address],

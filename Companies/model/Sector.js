@@ -8,12 +8,27 @@
 var mongoose = require('mongoose'),
     Schema   = mongoose.Schema,
     objectId = Schema.ObjectId,
-    sectorSchema;
+    sectorSchema,
+    Sector;
 
 sectorSchema = new Schema({
-    name     : {type : String, trim : true, required : true},
-    slug     : {type : String, lowercase : true , trim : true, required : true, unique : true},
-    children : [{type : objectId, required : true}]
+    name        : {type : String, trim : true, required : true},
+    slug        : {type : String, lowercase : true , trim : true, required : true, unique : true},
+    childrenIds : [{type : objectId}]
 });
 
-exports.Sector = mongoose.model('Sectors', sectorSchema);
+/** findRecursively
+ * @author : Rafael Erthal
+ * @since : 2012-07
+ *
+ * @description : Pega os setores e os filhos recursivamente
+ * @param cb : callback a ser chamado após achados os setores
+ * @param levels : profundidade da busca dos setores
+ */
+sectorSchema.statics.findRecursively = function (levels, cb) {
+    //busca todos os setores do banco de dados
+    //TODO fazer recursão para montar arvore de filhos
+    Sector.find(cb);
+};
+
+Sector = exports.Sector = mongoose.model('Sectors', sectorSchema);
