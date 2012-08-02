@@ -22,7 +22,7 @@ module.exports = function (app) {
      * @allowedApp : Lista de Empresas
      * @allowedUser : Logado
      *
-     * @request : {login,token,file,title,legend}
+     * @request : {login,token,url,type}
      * @response : {confirmation}
      */
     app.post('/company/:company_slug/product/:product_slug/link', function (request, response) {
@@ -78,7 +78,7 @@ module.exports = function (app) {
      * @allowedUser : Deslogado
      *
      * @request : {}
-     * @response : {[file,url,title,legend]}
+     * @response : {[url,type]}
      */
     app.get('/company/:company_slug/product/:product_slug/links', function (request, response) {
         response.contentType('json');
@@ -121,7 +121,7 @@ module.exports = function (app) {
      * @allowedUser : Deslogado
      *
      * @request : {}
-     * @response : {file,url,title,legend}
+     * @response : {url,type}
      */
     app.get('/company/:company_slug/product/:product_slug/link/:id', function (request, response) {
         response.contentType('json');
@@ -163,7 +163,7 @@ module.exports = function (app) {
      * @allowedApp : Lista de Empresas
      * @allowedUser : Logado
      *
-     * @request : {login,token,title,legend}
+     * @request : {login,token,url,type}
      * @response : {confirmation}
      */
     app.put('/company/:company_slug/product/:product_slug/link/:id', function (request, response) {
@@ -273,7 +273,7 @@ module.exports = function (app) {
      * @allowedApp : Lista de Empresas
      * @allowedUser : Logado
      *
-     * @request : {login,token,file,title,legend}
+     * @request : {login,token,url,type}
      * @response : {confirmation}
      */
     app.post('/company/:slug/link', function (request, response) {
@@ -317,7 +317,7 @@ module.exports = function (app) {
      * @allowedUser : Deslogado
      *
      * @request : {}
-     * @response : {[file,url,title,legend]}
+     * @response : {[url,type]}
      */
     app.get('/company/:slug/links', function (request, response) {
         response.contentType('json');
@@ -348,7 +348,7 @@ module.exports = function (app) {
      * @allowedUser : Deslogado
      *
      * @request : {}
-     * @response : {file,url,title,legend}
+     * @response : {url,type}
      */
     app.get('/company/:slug/link/:id', function (request, response) {
         response.contentType('json');
@@ -378,7 +378,7 @@ module.exports = function (app) {
      * @allowedApp : Lista de Empresas
      * @allowedUser : Logado
      *
-     * @request : {login,token,title,legend}
+     * @request : {login,token,url,type}
      * @response : {confirmation}
      */
     app.put('/company/:slug/link/:id', function (request, response) {

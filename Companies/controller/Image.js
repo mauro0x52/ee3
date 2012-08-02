@@ -22,7 +22,7 @@ module.exports = function (app) {
      * @allowedApp : Lista de Empresas
      * @allowedUser : Logado
      *
-     * @request : {login,token,file,title,legend}
+     * @request : {login,token,url,file,title,legend}
      * @response : {confirmation}
      */
     app.post('/company/:company_slug/product/:product_slug/image', function (request, response) {
@@ -53,7 +53,21 @@ module.exports = function (app) {
                                         if (product === null) {
                                             response.send({error : 'product not found'});
                                         } else {
-                                            //TODO implementar funcionalidades
+                                            //coloca os dados do post em um objeto
+                                            product.images.push({
+                                                url : request.param('url', null),
+                                                file : request.param('file', null),
+                                                title : request.param('title', null),
+                                                legend : request.param('legend', null)
+                                            });
+                                            //salva a imagem
+                                            product.save(function (error) {
+                                                if (error) {
+                                                    response.send({error : error});
+                                                } else {
+                                                    response.send({error : ''});
+                                                }
+                                            });
                                         }
                                     }
                                 });
@@ -101,7 +115,7 @@ module.exports = function (app) {
                             if (product === null) {
                                 response.send({error : 'product not found'});
                             } else {
-                                //TODO implementar funcionalidades
+                                response.send({images : product.images});
                             }
                         }
                     });
@@ -144,7 +158,19 @@ module.exports = function (app) {
                             if (product === null) {
                                 response.send({error : 'product not found'});
                             } else {
-                                //TODO implementar funcionalidades
+                                //busca a imagem
+                                product.findImage(request.params.id, function (error, image) {
+                                    if (error) {
+                                        response.send({error : error});
+                                    } else {
+                                        //verifica se a imagem foi encontrada
+                                        if (image === null) {
+                                            response.send({error : 'image not found'});
+                                        } else {
+                                            response.send({images : image});
+                                        }
+                                    }
+                                });
                             }
                         }
                     });
@@ -163,7 +189,7 @@ module.exports = function (app) {
      * @allowedApp : Lista de Empresas
      * @allowedUser : Logado
      *
-     * @request : {login,token,title,legend}
+     * @request : {login,token,title,legend,url}
      * @response : {confirmation}
      */
     app.put('/company/:company_slug/product/:product_slug/image/:id', function (request, response) {
@@ -194,7 +220,30 @@ module.exports = function (app) {
                                         if (product === null) {
                                             response.send({error : 'product not found'});
                                         } else {
-                                            //TODO implementar funcionalidades
+                                            //busca a imagem
+                                            product.findImage(request.params.id, function (error, image) {
+                                                if (error) {
+                                                    response.send({error : error});
+                                                } else {
+                                                    //verifica se a imagem foi encontrada
+                                                    if (image === null) {
+                                                        response.send({error : 'image not found'});
+                                                    } else {
+                                                        //altera os dados da imagem
+                                                        image.title = request.param('title', null);
+                                                        image.legend = request.param('legend', null);
+                                                        image.url = request.param('url', null);
+                                                        //salva as modificações
+                                                        image.save(function (error) {
+                                                            if (error) {
+                                                                response.send({error : error});
+                                                            } else {
+                                                                response.send({error : ''});
+                                                            }
+                                                        });
+                                                    }
+                                                }
+                                            });
                                         }
                                     }
                                 });
@@ -249,7 +298,26 @@ module.exports = function (app) {
                                         if (product === null) {
                                             response.send({error : 'product not found'});
                                         } else {
-                                            //TODO implementar funcionalidades
+                                            //busca a imagem
+                                            product.findImage(request.params.id, function (error, image) {
+                                                if (error) {
+                                                    response.send({error : error});
+                                                } else {
+                                                    //verifica se a imagem foi encontrada
+                                                    if (image === null) {
+                                                        response.send({error : 'image not found'});
+                                                    } else {
+                                                        //remove a imagem
+                                                        image.remove(function (error) {
+                                                            if (error) {
+                                                                response.send({error : error});
+                                                            } else {
+                                                                response.send({error : ''});
+                                                            }
+                                                        });
+                                                    }
+                                                }
+                                            });
                                         }
                                     }
                                 });

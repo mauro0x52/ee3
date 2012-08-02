@@ -20,4 +20,10 @@ productSchema = new Schema({
     images     : [require('./Image.js').Image],
 });
 
+/*
+TODO
+findImage
+findThumbnail
+*/
+
 exports.Produtct = productSchema;

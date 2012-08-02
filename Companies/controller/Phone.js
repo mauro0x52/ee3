@@ -44,7 +44,22 @@ module.exports = function (app) {
                             if (! company.isOwner(request.param('login', null))) {
                                 response.send({error : 'permission denied'});
                             } else {
-                                //TODO implementar funcionalidades
+                                //coloca os dados do post em um objeto
+                                company.phones.push({
+                                    type : request.param('type', null),
+                                    number : request.param('number', null),
+                                    extension : request.param('extension', null),
+                                    areaCode : request.param('areaCode', null),
+                                    intCode : request.param('intCode', null)
+                                });
+                                //salva o telefone
+                                company.save(function (error) {
+                                    if (error) {
+                                        response.send({error : error});
+                                    } else {
+                                        response.send({error : ''});
+                                    }
+                                });
                             }
                         }
                     }
@@ -80,7 +95,7 @@ module.exports = function (app) {
                 if (company === null) {
                     response.send({error : 'company not found'});
                 } else {
-                    //TODO implementar funcionalidades
+                    response.send({phones : company.phones});
                 }
             }
         });
@@ -111,7 +126,19 @@ module.exports = function (app) {
                 if (company === null) {
                     response.send({error : 'company not found'});
                 } else {
-                    //TODO implementar funcionalidades
+                    //busca o telefone
+                    company.findPhone(request.params.id, function (error, phone) {
+                        if (error) {
+                            response.send({error : error});
+                        } else {
+                            //verifica se o telefone foi encontrado
+                            if (phone === null) {
+                                response.send({error : 'phone not found'});
+                            } else {
+                                response.send({phone : phone});
+                            }
+                        }
+                    });
                 }
             }
         });
@@ -149,7 +176,32 @@ module.exports = function (app) {
                             if (! company.isOwner(request.param('login', null))) {
                                 response.send({error : 'permission denied'});
                             } else {
-                                //TODO implementar funcionalidades
+                                //busca o telefone
+                                company.findPhone(request.params.id, function (error, phone) {
+                                    if (error) {
+                                        response.send({error : error});
+                                    } else {
+                                        //verifica se o telefone foi encontrado
+                                        if (phone === null) {
+                                            response.send({error : 'phone not found'});
+                                        } else {
+                                            //altera os dados do telefone
+                                            phone.type = request.param('type', null);
+                                            phone.number = request.param('number', null);
+                                            phone.extension = request.param('extension', null);
+                                            phone.areaCode = request.param('areaCode', null);
+                                            phone.intCode = request.param('intCode', null);
+                                            //salva as alterações
+                                            phone.save(function (error) {
+                                                if (error) {
+                                                    response.send({error : error});
+                                                } else {
+                                                    response.send({error : ''});
+                                                }
+                                            });
+                                        }
+                                    }
+                                });
                             }
                         }
                     }
@@ -192,7 +244,26 @@ module.exports = function (app) {
                             if (! company.isOwner(request.param('login', null))) {
                                 response.send({error : 'permission denied'});
                             } else {
-                                //TODO implementar funcionalidades
+                                //busca o telefone
+                                company.findPhone(request.params.id, function (error, phone) {
+                                    if (error) {
+                                        response.send({error : error});
+                                    } else {
+                                        //verifica se o telefone foi encontrado
+                                        if (phone === null) {
+                                            response.send({error : 'phone not found'});
+                                        } else {
+                                            //remove o telefone
+                                            phone.remove(function (error) {
+                                                if (error) {
+                                                    response.send({error : error});
+                                                } else {
+                                                    response.send({error : ''});
+                                                }
+                                            });
+                                        }
+                                    }
+                                });
                             }
                         }
                     }

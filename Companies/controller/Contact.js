@@ -92,14 +92,7 @@ module.exports = function (app) {
                 if (company === null) {
                     response.send({error : 'company not found'});
                 } else {
-                    //busca contatos
-                    company.contacts(function (error, contacts) {
-                        if (error) {
-                            response.send({error : error});
-                        } else {
-                            response.send({contacts : contacts});
-                        }
-                    });
+                    response.send({addresses : company.contacts});
                 }
             }
         });

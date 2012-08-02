@@ -44,7 +44,22 @@ module.exports = function (app) {
                             if (! company.isOwner(request.param('login', null))) {
                                 response.send({error : 'permission denied'});
                             } else {
-                                //TODO implementar funcionalidades
+                                //coloca os dados do post em um objeto
+                                company.addresses.push({
+                                    street : request.param('street', null),
+                                    number : request.param('number', null),
+                                    complement : request.param('complement', null),
+                                    city : request.param('city', null),
+                                    headQuarters : request.param('headQuarters', null)
+                                });
+                                //salva o endereço
+                                company.save(function (error) {
+                                    if (error) {
+                                        response.send({error : error});
+                                    } else {
+                                        response.send({error : ''});
+                                    }
+                                });
                             }
                         }
                     }
@@ -80,7 +95,7 @@ module.exports = function (app) {
                 if (company === null) {
                     response.send({error : 'company not found'});
                 } else {
-                    //TODO implementar funcionalidades
+                    response.send({addresses : company.addresses});
                 }
             }
         });
@@ -111,7 +126,19 @@ module.exports = function (app) {
                 if (company === null) {
                     response.send({error : 'company not found'});
                 } else {
-                    //TODO implementar funcionalidades
+                    //busca o endereço
+                    company.findAddress(request.params.id, function (error, address) {
+                        if (error) {
+                            response.send({error : error});
+                        } else {
+                            //verifica se o endereço foi encontrado
+                            if (address === null) {
+                                response.send({error : 'address not found'});
+                            } else {
+                                response.send({address : address});
+                            }
+                        }
+                    });
                 }
             }
         });
@@ -149,7 +176,32 @@ module.exports = function (app) {
                             if (! company.isOwner(request.param('login', null))) {
                                 response.send({error : 'permission denied'});
                             } else {
-                                //TODO implementar funcionalidades
+                                //busca o endereço
+                                company.findAddress(request.params.id, function (error, address) {
+                                    if (error) {
+                                        response.send({error : error});
+                                    } else {
+                                        //verifica se o endereço foi encontrado
+                                        if (address === null) {
+                                            response.send({error : 'address not found'});
+                                        } else {
+                                            //altera os dados do endereço
+                                            address.street = request.param('street', null);
+                                            address.number = request.param('number', null);
+                                            address.complement = request.param('complement', null);
+                                            address.city = request.param('city', null);
+                                            address.headQuarters = request.param('headQuarters', null);
+                                            //salva as alterações
+                                            address.save(function (error) {
+                                                if (error) {
+                                                    response.send({error : error});
+                                                } else {
+                                                    response.send({error : ''});
+                                                }
+                                            });
+                                        }
+                                    }
+                                });
                             }
                         }
                     }
@@ -192,7 +244,26 @@ module.exports = function (app) {
                             if (! company.isOwner(request.param('login', null))) {
                                 response.send({error : 'permission denied'});
                             } else {
-                                //TODO implementar funcionalidades
+                                //busca o endereço
+                                company.findAddress(request.params.id, function (error, address) {
+                                    if (error) {
+                                        response.send({error : error});
+                                    } else {
+                                        //verifica se o endereço foi encontrado
+                                        if (address === null) {
+                                            response.send({error : 'address not found'});
+                                        } else {
+                                            //remove o endereço
+                                            address.remove(function (error) {
+                                                if (error) {
+                                                    response.send({error : error});
+                                                } else {
+                                                    response.send({error : ''});
+                                                }
+                                            });
+                                        }
+                                    }
+                                });
                             }
                         }
                     }

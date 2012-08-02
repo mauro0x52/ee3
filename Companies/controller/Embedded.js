@@ -92,14 +92,7 @@ module.exports = function (app) {
                 if (company === null) {
                     response.send({error : 'company not found'});
                 } else {
-                    //busca embbededs
-                    company.embeddeds(function (error, embeddeds) {
-                        if (error) {
-                            response.send({error : error});
-                        } else {
-                            response.send({embeddeds : embeddeds});
-                        }
-                    });
+                    response.send({addresses : company.embbededs});
                 }
             }
         });

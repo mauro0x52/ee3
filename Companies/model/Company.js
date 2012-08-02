@@ -32,4 +32,14 @@ companySchema = new Schema({
     embeddeds   : [require('./Embedded.js').Embedded]
 });
 
+/*
+TODO
+isOwner
+findProduct
+findContact
+findEmbbeded
+findAddress
+findPhone
+*/
+
 exports.Company = mongoose.model('Companies', companySchema);
