@@ -1,6 +1,6 @@
 /** Image
  * @author : Mauro Ribeiro
- * @since : 2012-07
+ * @since : 2012-08
  *
  * @description : Manipulacao de imagens 
  */
@@ -18,14 +18,14 @@ imageSchema = new schema({
 
 /** Save
  * @author : Mauro Ribeiro
- * @since : 2012-07
+ * @since : 2012-08
  *
  * @description : Salva imagem no filesystem
  */
 imageSchema.pre('save', function (next) {
     var
     // modulos
-         fs = require('fs'),
+        fs = require('fs'),
         fileUtils = require('file-utils'),
         File = fileUtils.File,
     // atributos
@@ -48,7 +48,6 @@ imageSchema.pre('save', function (next) {
  		fullPath = fullPath.replace('//', '/');
 	}
 
-
     if (file.size > config.images.maxsize) {
         next('error');
     }
@@ -69,5 +68,198 @@ imageSchema.pre('save', function (next) {
 });
 
 
+
+/** Open
+ * @author : Mauro Ribeiro
+ * @since : 2012-08
+ *
+ * @description : Abre uma imagem num arquivo temporario
+ */
+imageSchema.statics.open = function (path, cb) {
+    var
+    // modulos
+        fs = require('fs'),
+        fileUtils = require('file-utils'),
+        File = fileUtils.File,
+    // variaveis
+        image, fileFullPath;
+
+    // abre imagem do s3
+    if (config.s3.enabled) {
+
+    }
+    // abre imagem da máquina local
+    else {
+        fileFullPath = config.images.folder + '/' + path;
+        while (fileFullPath.indexOf('//') != -1) {
+     		fileFullPath = fileFullPath.replace('//', '/');
+	    }
+        new File(fileFullPath).isFile(function(error, isFile) {
+            if (error) {
+                cb(error, undefined);
+            }
+            else {
+                cb(undefined, new Image({path:fileFullPath}));
+            }
+        });
+    }
+};
+
+
+/** Resize
+ * @author : Mauro Ribeiro
+ * @since : 2012-08
+ *
+ * @description : Cria um arquivo temporário resizeado
+ */
+imageSchema.statics.resize = function (params, cb) {
+    var
+    // modulos
+        imagemagick = require('imagemagick'),
+        fs = require('fs'),
+        path = require('path'),
+        fileUtils = require('file-utils'),
+        File = fileUtils.File,
+    // parametros
+        style  = params.style ? params.style : 'extend',
+        width  = params.width ? params.width : undefined,
+        height = params.height ? params.height : undefined,
+        label  = params.label ? params.label : null,
+        image = params.image,
+    // variaveis
+        filePath, folderPath, fullFilePath, fullFolderPath, image,
+        originalImage, originalfullFilePath, fileNameSplit, fileExt;
+
+    // constroi label, caso nao tenha passado
+    if (!label) {
+        label = style;
+        if (width) {
+            label += '_w'+width;
+        }
+        if (height) {
+            label += '_h'+height;
+        }
+    }
+
+    if (width && height) {
+
+    }
+    else {
+        if (height) width = height;
+        else height = width;
+    }
+
+    originalfullFilePath = image.path;
+
+
+    // extensao do arquivo
+    fileNameSplit = path.extname(originalfullFilePath||'').split('.');
+    fileExt = fileNameSplit[fileNameSplit.length - 1];
+
+    // caminho relativo do novo arquivo
+    filePath = originalfullFilePath;
+    filePath = filePath.replace(config.images.folder, '/');
+    filePath = filePath.replace(config.images.temp, '/');
+    filePath = filePath.substring(0, filePath.lastIndexOf("/")) + '/' + label + '.' + fileExt;
+
+    fullFilePath = config.images.temp + filePath;
+       
+    while (filePath.indexOf('//') != -1) {
+ 		filePath = filePath.replace('//', '/');
+	}
+
+    while (fullFilePath.indexOf('//') != -1) {
+ 		fullFilePath = fullFilePath.replace('//', '/');
+	}
+
+    // pasta do novo arquivo
+    folderPath = filePath.substring(0, filePath.lastIndexOf("/"));
+    fullFolderPath = config.images.temp + folderPath;
+
+    originalImage = fs.readFileSync(originalfullFilePath, 'binary');
+
+    // fit = nao corta a imagem
+    if (style == 'fit') {
+        var imageProperties = {};
+        imageProperties.srcData = originalImage;
+
+        if (width) imageProperties.width = width;
+        if (height) imageProperties.height = height;
+
+        imagemagick.resize(imageProperties, function(error, stdout, stderr){
+            if (error) {
+                console.log(err);
+            }
+            else {
+                new File(fullFolderPath).createDirectory(function() {
+                    fs.writeFile(fullFilePath, stdout, 'binary', function(error) {
+                        if (error) {
+                            console.log(error);
+                        }
+                        else {
+                            cb(undefined, new Image({path:fullFilePath}), filePath); 
+                        }
+                    });
+                });
+            }
+        });
+    }
+    // extend = pode cortar a imagem
+    else {
+
+        imagemagick.identify(originalFullFilePath, function(err, features){
+            if (err) console.log(err);
+
+            var original_width = features.width;
+            var original_height = features.height;
+            var original_aspect = original_width/original_height;
+
+            var aspect = width/height;
+
+            var resizeImageProperties = {};
+            resizeImageProperties.srcData = originalImage;
+
+            if (original_aspect >= aspect) {
+                resizeImageProperties.width = width;
+                imagemagick.resize(resizeImageProperties, function(err, stdout, stderr){
+                    if (err) console.log(err)
+                    fs.writeFileSync(fullFilePath, stdout, 'binary');
+                    var cropImageProperties = {};
+                    cropImageProperties.srcPath = fullFilePath;
+                    cropImageProperties.dstPath = fullFilePath;
+                    if (width) cropImageProperties.width = width;
+                    if (height) cropImageProperties.height = height;
+
+                    imagemagick.crop(cropImageProperties, function(err, stdout, stderr){
+                        if (err) console.log(err);
+                        else console.log("Imagem salva!");
+                    }); 
+                });
+            }
+            else {
+                resizeImageProperties.height = height;
+                imagemagick.resize(resizeImageProperties, function(err, stdout, stderr){
+                    if (err) console.log(err)
+                    fs.writeFileSync(fullFilePath, stdout, 'binary');
+                    var cropImageProperties = {};
+                    cropImageProperties.srcPath = fullFilePath;
+                    cropImageProperties.dstPath = fullFilePath;
+                    if (width) cropImageProperties.width = width;
+                    if (height) cropImageProperties.height = height;
+
+                    imagemagick.crop(cropImageProperties, function(err, stdout, stderr){
+                        if (err) console.log(err);
+                        else console.log("Imagem salva!");
+                    }); 
+                }); 
+            }
+        });
+    }
+
+
+};
+
+
+
 /*  Exportando o pacote  */
-exports.Image = mongoose.model('Images', imageSchema);
+Image = exports.Image = mongoose.model('Images', imageSchema);

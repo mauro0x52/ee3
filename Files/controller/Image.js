@@ -44,7 +44,8 @@ module.exports = function (app) {
 
         // salva a imagem no filesystem
         image = new Image({
-            path : filePath
+            path : filePath,
+            file : tmpFile
         });
 
         image.save(function(error, image) {
@@ -72,7 +73,7 @@ module.exports = function (app) {
     });
 
 
-    app.put('/image/resize', function (request,response) {
+    app.post('/image/resize', function (request,response) {
         var 
         // modulos
             crypto = require('crypto'),
@@ -83,12 +84,12 @@ module.exports = function (app) {
             style = request.param('style', null),
             label = request.param('label', null),
         // variaveis 
-            image, filePath;
+            image, newImage, filePath;
 
         response.contentType('json');
 
         // abre a imagem
-        Image.open({ path : filePath }, function (error, file) {
+        Image.open(filePath, function (error, imageFile) {
             if (error) {
 
             }
@@ -96,18 +97,20 @@ module.exports = function (app) {
                 // cria uma imagem temporaria resizeada
                 Image.resize(
                     {
-                        style:style, 
-                        width:width, 
-                        height:height, 
-                        label:label
+                        style   :   style, 
+                        width   :   width, 
+                        height  :   height, 
+                        label   :   label,
+                        image   :   imageFile
                     },
-                    function(error, tmpFile){
+                    function(error, tmpFile, newFilePath){
                         // salva a imagem no filesystem
-                        image = new Image({
-                            path : tmpFile
+                        newImage = new Image({
+                            path : newFilePath,
+                            file : tmpFile
                         });
 
-                        image.save(function(error, image) {
+                        newImage.save(function(error, image) {
                             if (error) {
                                 console.log(error);
                             }
