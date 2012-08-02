@@ -8,36 +8,28 @@
 module.exports = function (app) {
     
     var Model = require('./../model/Model.js'),
-        Image  = Model.Image;
+        Image  = Model.Image,
+        File = Model.File;
 
     var config  = require('../config.js');
 
-    /** POST /image
-     *
-     * @autor : Mauro Ribeiro
-     * @since : 2012-07
-     *
-     * @description : Salva nova imagem
-     *
-     * @allowedApp : Apenas o www
-     * @allowedUser : Público
-     *
-     * @request : {path, file}
-     * @response : {image}
-     */
+
     app.post('/image', function (request,response) {
-        var crypto = require('crypto'),
+        var
+        // modulos
+            crypto = require('crypto'),
             path = require('path'),
             dateUtils = require('date-utils'),
-            file, image, hash, folder, folderPath, fileNameSplit, fileExt, filePath;
-        
+        // variaveis
+            tmpFile, imageFile, hash, folder, folderPath, fileNameSplit, fileExt, filePath;
+
         response.contentType('json');
 
         // caminho escolhido
         folderPath = request.param('path', null);
-        
-        // arquivo da imagem
-        file = request.files.file;
+
+        // arquivo da imagem temporaria
+        tmpFile = request.files.file;
 
         // extensao do arquivo
         fileNameSplit = path.extname(request.files.file.name||'').split('.');
@@ -46,48 +38,101 @@ module.exports = function (app) {
         // nome unico para a pasta: ANO + MES + DIA + hash[10]
         hash = crypto.createHash('md5').update(crypto.randomBytes(10)).digest('hex').substring(0, 10);
         folder = Date.today().toFormat('YYYYMMDD') + hash;
+
         // caminho do arquivo    
         filePath = folderPath + '/' + folder + '/original.' + fileExt;
 
+        // salva a imagem no filesystem
         image = new Image({
-            path : filePath,
-            file : file
+            path : filePath
         });
 
-        image.save(function(error){
-            if (error) console.log(error);
+        image.save(function(error, image) {
+            if (error) {
+                console.log(error);
+            }
+            else {
+                // salva informacoes da imagem no bd
+                var file = new File({
+                    type : 'image',
+                    path : image.path
+                });
+
+                file.save(function(error, file){
+                    if (error) {
+                        console.log(error);
+                    }
+                    else {
+
+                    }
+                });
+            }
         });
 
-    }); // post /image
+    });
 
-    app.put('/image/*/resize', function (request,response) {
-        var crypto = require('crypto'),
+
+    app.put('/image/resize', function (request,response) {
+        var 
+        // modulos
+            crypto = require('crypto'),
+        // parametros 
+            filePath = request.param('path', null),
             width = request.param('width', null),
             height = request.param('height', null),
             style = request.param('style', null),
             label = request.param('label', null),
+        // variaveis 
             image, filePath;
-        
+
         response.contentType('json');
 
-        // arquivo a ser resizeado
-        filePath = '/'+request.params[0];
-        
-        Image.findOne({ path : filePath }, function (error, image) {
+        // abre a imagem
+        Image.open({ path : filePath }, function (error, file) {
             if (error) {
-                console.log(error);
-            }
-            else if (!image) {
-                console.log(filePath + ' nao existe');
+
             }
             else {
-                image.resize({style:style, width:width, height:height, label:label}, function(error){});
+                // cria uma imagem temporaria resizeada
+                Image.resize(
+                    {
+                        style:style, 
+                        width:width, 
+                        height:height, 
+                        label:label
+                    },
+                    function(error, tmpFile){
+                        // salva a imagem no filesystem
+                        image = new Image({
+                            path : tmpFile
+                        });
+
+                        image.save(function(error, image) {
+                            if (error) {
+                                console.log(error);
+                            }
+                            else {
+                                // salva informacoes da imagem no bd
+                                var file = new File({
+                                    type : 'image',
+                                    path : image.path
+                                });
+
+                                file.save(function(error, file){
+                                    if (error) {
+                                        console.log(error);
+                                    }
+                                    else {
+
+                                    }
+                                });
+                            }
+                        });
+                    }
+                );
             }
         });
-    }); // put /image/*/resize
 
-    app.del('/image/*', function (request,response) {
-        
     });
 
 };
