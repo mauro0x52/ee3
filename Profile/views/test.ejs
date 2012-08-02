@@ -53,6 +53,9 @@
                                 <li>surname <input type="text" name="surname" /></li>
                                 <li>about <input type="text" name="about" /></li>
                                 
+                                <li>slug-name <input type="text" name="slugs[0][name]"/></li>
+                                <li>slug-name2 <input type="text" name="slugs[1][name]"/></li>
+                                
                                 <li>job-name <input type="text" name="jobs[0][name]" /></li>
                                 <li>job-companyName <input type="text" name="jobs[0][companyName]" /></li>
                                 <li>job-description <input type="text" name="jobs[0][description]" /></li>
@@ -126,7 +129,98 @@
                                     </select>
                                 </li>
                                 <li>link-url2 <input type="text" name="links[1][url]" /></li>
+                            </ul>
+                            <input type="submit" value="testar" />
+                        </form>
+                    </li>
+                    <li>
+                        <h4>Buscar Profile</h4>
+                        <form onsubmit="test($(this).serialize(), '../profile/' + $(this).find('input[name=slug]').val(), 'GET'); return false;">
+                            Parâmetros
+                            <ul>
+                                <li>Slug <input type="text" value="" name="slug" /></li>
+                            </ul>
+                            <input type="submit" value="testar" />
+                        </form>
+                    </li>
+                    <li>
+                        <h4>Editar Profile</h4>
+                        <form onsubmit="test($(this).serialize(), '../profile/'+$(this).find('input[name=slug]').val(), 'PUT'); return false;">
+                            Parâmetros
+                            <ul>
+                                <li>slug <input type="text" value="" name="slug" /></li>
+                                <li>login <input type="text" value="teste" name="login" /></li>
+                                <li>token <input type="text" value="3f2b5b78a7e8c77553346d0de8345308" name="token" /></li>
+                                <li>name <input type="text" name="name" /></li>
+                                <li>surname <input type="text" name="surname" /></li>
+                                <li>about <input type="text" name="about" /></li>
+                            </ul>
+                            <input type="submit" value="testar" />
+                        </form>
+                    </li>
+                    <li>
+                        <h4>Deletar Profile</h4>
+                        <form onsubmit="test($(this).serialize(), '../profile/'+$(this).find('input[name=slug]').val(), 'DELETE'); return false;">
+                            Parâmetros
+                            <ul>
+                                <li>slug <input type="text" value="" name="slug" /></li>
+                                <li>login <input type="text" value="teste" name="login" /></li>
+                                <li>token <input type="text" value="3f2b5b78a7e8c77553346d0de8345308" name="token" /></li>
+                            </ul>
+                            <input type="submit" value="testar" />
+                        </form>
+                    </li>
+                </ul>
+                <ul>
+                    <li>
+                        <h4>Buscar Phones</h4>
+                        <form onsubmit="test($(this).serialize(), '../profile/'+$(this).find('input[name=slug]').val()+'/phones', 'GET'); return false;">
+                            Parâmetros
+                            <ul>
+                                <li>slug Profile <input type="text" value="" name="slug" /></li>
+                            </ul>
+                            <input type="submit" value="testar" />
+                        </form>
+                    </li>
+                    <li>
+                        <h4>Cadastra Phone</h4>
+                        <form onsubmit="test($(this).serialize(), '../profile/'+$(this).find('input[name=slug]').val()+'/phone', 'POST'); return false;">
+                            Parâmetros
+                            <ul>
+                                <li>slug Profile <input type="text" value="" name="slug" /></li>
+                                <li>phone-type
+                                    <select name="type">
+                                        <option value='office'>Office</option>
+                                        <option value='home'>Home</option>
+                                        <option value='cellphone'>CellPhone</option>
+                                    </select>
                                 </li>
+                                <li>phone-number <input type="text" name="number" /></li>
+                                <li>phone-extension <input type="text" name="extension" /></li>
+                                <li>phone-areacode <input type="text" name="areacode" /></li>
+                                <li>phone-intcode <input type="text" name="intcode" /></li>
+                            </ul>
+                            <input type="submit" value="testar" />
+                        </form>
+                    </li>
+                    <li>
+                        <h4>Edita Phone</h4>
+                        <form onsubmit="test($(this).serialize(), '../profile/'+$(this).find('input[name=slug]').val()+'/phone/'+$(this).find('input[name=id]').val(), 'PUT'); return false;">
+                            Parâmetros
+                            <ul>
+                                <li>slug Profile <input type="text" value="" name="slug" /></li>
+                                <li>id Phone <input type="text" value="" name="id" /></li>
+                                <li>phone-type
+                                    <select name="type">
+                                        <option value='office'>Office</option>
+                                        <option value='home'>Home</option>
+                                        <option value='cellphone'>CellPhone</option>
+                                    </select>
+                                </li>
+                                <li>phone-number <input type="text" name="number" /></li>
+                                <li>phone-extension <input type="text" name="extension" /></li>
+                                <li>phone-areacode <input type="text" name="areacode" /></li>
+                                <li>phone-intcode <input type="text" name="intcode" /></li>
                             </ul>
                             <input type="submit" value="testar" />
                         </form>

@@ -19,4 +19,4 @@ phoneSchema = new schema({
 });
 
 /*  Exportando o pacote  */
-exports.Phone = mongoose.model('Phone', phoneSchema);
+exports.Phone = phoneSchema;

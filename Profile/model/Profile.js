@@ -9,44 +9,52 @@ var mongoose = require('mongoose'),
     schema   = mongoose.Schema,
     objectId = schema.ObjectId,
     profileSchema,
-    slugs,
     Profile;
-
-slugs = new schema({
-    name : {type : String, trim : true}
-});
 
 profileSchema = new schema({
     username    : {type : String},
-    jobs        : [require('./Job')],
-    slugs       : [slugs],
+    jobs        : [require('./Job.js').Job],
+    slugs       : [require('./Slug.js').Slug],
     name        : {type : String, trim : true},
     surname     : {type : String, trim : true},
-    thumbnail   : [require('./Thumbnail')],
+    thumbnail   : [require('./Thumbnail.js').Thumbnail],
     about       : {type : String},
-    phones      : [require('./Phone')],
-    contacts    : [require('./Contact')],
-    links       : [require('./Link')],
+    phones      : [require('./Phone.js').Phone],
+    contacts    : [require('./Contact.js').Contact],
+    links       : [require('./Link.js').Link],
     dateCreated : {type : Date},
     dateUpdated : {type : Date}
 });
 
-/** findProfileForSlug
+/** editProfile
  * @author : Lucas Kalado
  * @since : 2012-08
  *
- * @description : Busca um profile pelo Slug enviado.
- * @param slug : o slug que vai ser feito a busca.
+ * @description : Edita um profile.
+ * @param request : os dados enviados via PUT.
+ * @param parsSlugs : slugs tratados no Controller e enviado para serem salvos.
  * @param cb : callback a ser chamado após achado o profile
  */
-profileSchema.statics.findProfileForSlug = function (slug, cb) {
-    var query = Profile.findOne();
+profileSchema.methods.editProfile = function (request, parsSlugs, cb) {
+    if (request.param('name', null)) {
+        this.name = request.param('name', null);
+    }
     
-    query.where("slugs");
-    query.in([slug]);
+    if (request.param('surname', null)) {
+        this.surname = request.param('surname', null);
+    }
     
-    query.exec(cb);
-}
+    if (request.param('about', null)) {
+        this.about = request.param('about', null);
+    }
+    
+    this.dateUpdated = new Date();
+    this.save(cb);
+};
+
+
+
+
 
 /*  Exportando o pacote  */
-Profile = exports.Profile = mongoose.model('Profile', profileSchema);
+Profile = exports.Profile = mongoose.model('Profiles', profileSchema);

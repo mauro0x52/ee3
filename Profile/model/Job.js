@@ -4,12 +4,11 @@
  *
  * @description : Representação da entidade de Jobs
  */
- 
-var mongoose = require('mongoose'),
+ var mongoose = require('mongoose'),
     schema   = mongoose.Schema,
     objectId = schema.ObjectId,
     jobSchema;
-
+ 
 jobSchema = new schema({
     name        : {type : String, trim : true},
     company     : {type : objectId},
@@ -20,4 +19,4 @@ jobSchema = new schema({
 });
 
 /*  Exportando o pacote  */
-exports.Job = mongoose.model('Job', jobSchema);
+exports.Job = jobSchema;

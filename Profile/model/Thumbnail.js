@@ -17,4 +17,4 @@ thumbnailSchema = new schema({
 });
 
 /*  Exportando o pacote  */
-exports.Thumbnail = mongoose.model('Thumbnail', thumbnailSchema);
+exports.Thumbnail = thumbnailSchema;

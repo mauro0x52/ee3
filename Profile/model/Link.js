@@ -11,9 +11,9 @@ var mongoose = require('mongoose'),
     linkSchema;
 
 linkSchema = new schema({
-    type : {type : String, required : true, enum : ['Blog', 'Youtube', 'Facebook', 'Vimeo', 'Slideshare', 'Website']},
+    type : {type : String, required : true, enum : ['blog', 'youtube', 'facebook', 'vimeo', 'slideshare', 'website']},
     url  : {type : String, trim : true}
 });
 
 /*  Exportando o pacote  */
-exports.Link = mongoose.model('Link', linkSchema);
+exports.Link = linkSchema;

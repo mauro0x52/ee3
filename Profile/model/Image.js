@@ -18,4 +18,4 @@ imageSchema = new schema({
 });
 
 /*  Exportando o pacote  */
-exports.Image = mongoose.model('Image', imageSchema);
+exports.Image = imageSchema;

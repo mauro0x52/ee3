@@ -31,6 +31,7 @@ app.configure(function () {
 
 /*  Chamando controllers */
 require('./controller/Profile.js')(app);
+require('./controller/Phone.js')(app);
 
 /*  Métodos para dev e teste */
 app.get('/ping', function (request,response) {

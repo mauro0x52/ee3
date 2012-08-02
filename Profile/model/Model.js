@@ -11,10 +11,9 @@ var config   = require('./../config.js'),
 mongoose.connect('mongodb://' + config.mongodb.username + ':' + config.mongodb.password + '@' + config.mongodb.url + ':' + config.mongodb.port + '/' + config.mongodb.db);
 
 /*  Exportar name-space  */
-exports.Job = require('./Job.js').Job;
-exports.Profile = require('./Profile.js').Profile;
 exports.Thumbnail = require('./Thumbnail.js').Thumbnail;
 exports.Image = require('./Image.js').Image;
 exports.Phone = require('./Phone.js').Phone;
-exports.Link = require('./Phone.js').Link;
+exports.Link = require('./Link.js').Link;
 exports.Contact = require('./Contact.js').Contact;
+exports.Profile = require('./Profile.js').Profile;

@@ -16,4 +16,4 @@ contactSchema = new schema({
 });
 
 /*  Exportando o pacote  */
-exports.Contact = mongoose.model('Contact', contactSchema);
+exports.Contact = contactSchema;
