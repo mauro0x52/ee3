@@ -77,7 +77,19 @@ module.exports = function (app) {
     app.get('/company/:slug', function (request, response) {
         response.contentType('json');
 
-        //TODO implementar funcionalidades
+        //busca a compania
+        Company.find({slug : request.params.slug}, function (error, company) {
+            if (error) {
+                response.send({error : error});
+            } else {
+                //verifica se a compania foi encontrada
+                if (company === null) {
+                    response.send({error : 'company not found'});
+                } else {
+                    //TODO implementar funcionalidades
+                }
+            }
+        });
     });
 
     /** PUT /company/:slug
@@ -99,7 +111,24 @@ module.exports = function (app) {
         //valida o token do usuário
         auth(request.param('login', null), request.param('token', null), function (valid) {
             if (valid) {
-                //TODO implementar funcionalidades
+                //busca a compania
+                Company.find({slug : request.params.slug}, function (error, company) {
+                    if (error) {
+                        response.send({error : error});
+                    } else {
+                        //verifica se a compania foi encontrada
+                        if (company === null) {
+                            response.send({error : 'company not found'});
+                        } else {
+                            //verifica se o usuário é dono da compania
+                            if (! company.isOwner(request.param('login', null))) {
+                                response.send({error : 'permission denied'});
+                            } else {
+                                //TODO implementar funcionalidades
+                            }
+                        }
+                    }
+                });
             } else {
                 response.send({error : 'invalid token'});
             }
@@ -125,7 +154,31 @@ module.exports = function (app) {
         //valida o token do usuário
         auth(request.param('login', null), request.param('token', null), function (valid) {
             if (valid) {
-                //TODO implementar funcionalidades
+                //busca a compania
+                Company.find({slug : request.params.slug}, function (error, company) {
+                    if (error) {
+                        response.send({error : error});
+                    } else {
+                        //verifica se a compania foi encontrada
+                        if (company === null) {
+                            response.send({error : 'company not found'});
+                        } else {
+                            //verifica se o usuário é dono da compania
+                            if (! company.isOwner(request.param('login', null))) {
+                                response.send({error : 'permission denied'});
+                            } else {
+                                //remove a compania
+                                company.remove(function (error) {
+                                    if (error) {
+                                        response.send({error : error});
+                                    } else {
+                                        response.send({error : ''});
+                                    }
+                                });
+                            }
+                        }
+                    }
+                });
             } else {
                 response.send({error : 'invalid token'});
             }

@@ -44,7 +44,19 @@ module.exports = function (app) {
                             if (! company.isOwner(request.param('login', null))) {
                                 response.send({error : 'permission denied'});
                             } else {
-                                //TODO implementar funcionalidades
+                                //coloca os dados do post em um objeto
+                                company.contacts.push({
+                                    address : request.param('address', null),
+                                    type    : request.param('type', null)
+                                });
+                                //salva o contato
+                                company.save(function (error) {
+                                    if (error) {
+                                        response.send({error : error});
+                                    } else {
+                                        response.send({error : ''});
+                                    }
+                                });
                             }
                         }
                     }
@@ -80,7 +92,14 @@ module.exports = function (app) {
                 if (company === null) {
                     response.send({error : 'company not found'});
                 } else {
-                    //TODO implementar funcionalidades
+                    //busca contatos
+                    company.contacts(function (error, contacts) {
+                        if (error) {
+                            response.send({error : error});
+                        } else {
+                            response.send({contacts : contacts});
+                        }
+                    });
                 }
             }
         });
@@ -111,7 +130,19 @@ module.exports = function (app) {
                 if (company === null) {
                     response.send({error : 'company not found'});
                 } else {
-                    //TODO implementar funcionalidades
+                    //busca o contato
+                    company.findContact(request.params.id, function (error, contact) {
+                        if (error) {
+                            response.send({error : error});
+                        } else {
+                            //verifica se o contato foi encontrado
+                            if (contact === null) {
+                                response.send({error : 'contact not found'});
+                            } else {
+                                response.send({contact : contact});
+                            }
+                        }
+                    });
                 }
             }
         });
@@ -149,7 +180,29 @@ module.exports = function (app) {
                             if (! company.isOwner(request.param('login', null))) {
                                 response.send({error : 'permission denied'});
                             } else {
-                                //TODO implementar funcionalidades
+                                //busca o contato
+                                company.findContact(request.params.id, function (error, contact) {
+                                    if (error) {
+                                        response.send({error : error});
+                                    } else {
+                                        //verifica se o contato foi encontrado
+                                        if (contact === null) {
+                                            response.send({error : 'contact not found'});
+                                        } else {
+                                            //altera os dados do contato
+                                            contact.address = request.param('address', null);
+                                            contact.type = request.param('type', null);
+                                            //salva as alterações
+                                            contact.save(function (error) {
+                                                if (error) {
+                                                    response.send({error : error});
+                                                } else {
+                                                    response.send({error : ''});
+                                                }
+                                            });
+                                        }
+                                    }
+                                });
                             }
                         }
                     }
@@ -192,7 +245,26 @@ module.exports = function (app) {
                             if (! company.isOwner(request.param('login', null))) {
                                 response.send({error : 'permission denied'});
                             } else {
-                                //TODO implementar funcionalidades
+                                //busca o contato
+                                company.findContact(request.params.id, function (error, contact) {
+                                    if (error) {
+                                        response.send({error : error});
+                                    } else {
+                                        //verifica se o contato foi encontrado
+                                        if (contact === null) {
+                                            response.send({error : 'contact not found'});
+                                        } else {
+                                            //remove o contato
+                                            contact.remove(function (error) {
+                                                if (error) {
+                                                    response.send({error : error});
+                                                } else {
+                                                    response.send({error : ''});
+                                                }
+                                            });
+                                        }
+                                    }
+                                });
                             }
                         }
                     }
