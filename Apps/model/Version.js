@@ -11,11 +11,34 @@ var Tool = require('./Tool.js').Tool,
     mongoose = require('mongoose'),
     Schema   = mongoose.Schema,
     objectId = Schema.ObjectId,
-    versionSchema;
+    versionSchema,
+    Version;
 
 versionSchema = new Schema({
     number : {type : String, trim : true, required : true},
     appId  : objectId
+});
+
+/** pre('save')
+ * @author : Rafael Erthal
+ * @since : 2012-08
+ *
+ * @description : verifica se versao ja existe
+ */
+versionSchema.pre('save', function (next) {
+    "use strict";
+
+    Version.findOne({number : this.number}, function (error, version) {
+        if (error) {
+            next(error);
+        } else {
+            if (version === null) {
+                next();
+            } else {
+                next('version already exists');
+            }
+        }
+    });
 });
 
 /** Tools
@@ -100,4 +123,4 @@ versionSchema.methods.findDialog = function (name, cb) {
 };
 
 /*  Exportando o pacote  */
-exports.Version = mongoose.model('Versions', versionSchema);
+Version = exports.Version = mongoose.model('Versions', versionSchema);

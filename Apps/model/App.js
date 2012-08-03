@@ -9,13 +9,36 @@ var Version = require('./Version.js').Version,
     mongoose = require('mongoose'),
     Schema   = mongoose.Schema,
     objectId = Schema.ObjectId,
-    appSchema;
+    appSchema,
+    App;
 
 appSchema = new Schema({
     name : {type : String, trim : true, required : true},
     slug : {type : String, trim : true, required : true},
     creator : {type : String, trim : true, required : true},
     type : {type : String, required : true, enum : ['free', 'payed', 'compulsory']}
+});
+
+/** pre('save')
+ * @author : Rafael Erthal
+ * @since : 2012-08
+ *
+ * @description : verifica se o slug ja existe
+ */
+appSchema.pre('save', function (next) {
+    "use strict";
+
+    App.findOne({slug : this.slug}, function (error, app) {
+        if (error) {
+            next(error);
+        } else {
+            if (app === null) {
+                next();
+            } else {
+                next('slug already exists');
+            }
+        }
+    });
 });
 
 /** Versions
@@ -46,4 +69,4 @@ appSchema.methods.findVersion = function (number, cb) {
 };
 
 /*  Exportando o pacote  */
-exports.App = mongoose.model('Apps', appSchema);
+App = exports.App = mongoose.model('Apps', appSchema);

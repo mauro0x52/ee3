@@ -8,7 +8,8 @@
 var mongoose = require('mongoose'),
     Schema   = mongoose.Schema,
     objectId = Schema.ObjectId,
-    toolSchema;
+    toolSchema,
+    Tool;
 
 toolSchema = new Schema({
     name      : {type : String, trim : true, required : true},
@@ -16,5 +17,27 @@ toolSchema = new Schema({
     versionId : objectId
 });
 
+/** pre('save')
+ * @author : Rafael Erthal
+ * @since : 2012-08
+ *
+ * @description : verifica se tool ja existe
+ */
+toolSchema.pre('save', function (next) {
+    "use strict";
+
+    Tool.findOne({name : this.name}, function (error, tool) {
+        if (error) {
+            next(error);
+        } else {
+            if (tool === null) {
+                next();
+            } else {
+                next('tool already exists');
+            }
+        }
+    });
+});
+
 /*  Exportando o pacote  */
-exports.Tool = mongoose.model('Tools', toolSchema);
+Tool = exports.Tool = mongoose.model('Tools', toolSchema);

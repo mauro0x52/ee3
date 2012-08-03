@@ -26,5 +26,27 @@ profileSchema = new schema({
     dateUpdated : {type : Date}
 });
 
+/** pre('save')
+ * @author : Rafael Erthal
+ * @since : 2012-08
+ *
+ * @description : verifica se o username ainda não foi cadastrado
+ */
+profileSchema.pre('save', function (next) {
+    "use strict";
+
+    Profile.findOne({username : this.username}, function (error, user) {
+        if (error) {
+            next(error);
+        } else {
+            if (user === null) {
+                next();
+            } else {
+                next('username already exists');
+            }
+        }
+    });
+});
+
 /*  Exportando o pacote  */
 Profile = exports.Profile = mongoose.model('Profiles', profileSchema);
