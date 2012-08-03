@@ -32,7 +32,6 @@ companySchema = new Schema({
     embeddeds   : [require('./Embedded.js').Embedded]
 });
 
-<<<<<<< HEAD
 /** IsOwner
  * @author : Rafael Erthal
  * @since : 2012-08
@@ -179,14 +178,4 @@ companySchema.methods.findLink = function (id, cb) {
     cb('link not found', null);
 };
 
-=======
-/*
-TODO
-findProduct
-findContact
-findEmbbeded
-findAddress
-findPhone
-*/
->>>>>>> Ajustes Companies
 exports.Company = mongoose.model('Companies', companySchema);
