@@ -53,7 +53,19 @@ module.exports = function (app) {
                                         if (product === null) {
                                             response.send({error : 'product not found'});
                                         } else {
-                                            //TODO implementar funcionalidades
+                                            //coloca os dados do post em um objeto
+                                            product.links.push({
+                                                url : request.param('url', null),
+                                                type : request.param('file', null)
+                                            });
+                                            //salva o link
+                                            product.save(function (error) {
+                                                if (error) {
+                                                    response.send({error : error});
+                                                } else {
+                                                    response.send({error : ''});
+                                                }
+                                            });
                                         }
                                     }
                                 });
@@ -101,7 +113,7 @@ module.exports = function (app) {
                             if (product === null) {
                                 response.send({error : 'product not found'});
                             } else {
-                                //TODO implementar funcionalidades
+                                response.send({links : product.links});
                             }
                         }
                     });
@@ -144,7 +156,19 @@ module.exports = function (app) {
                             if (product === null) {
                                 response.send({error : 'product not found'});
                             } else {
-                                //TODO implementar funcionalidades
+                                //busca o link
+                                product.findLink(request.params.id, function (error, link) {
+                                    if (error) {
+                                        response.send({error : error});
+                                    } else {
+                                        //verifica se o link foi encontrada
+                                        if (link === null) {
+                                            response.send({error : 'link not found'});
+                                        } else {
+                                            response.send({link : link});
+                                        }
+                                    }
+                                });
                             }
                         }
                     });
@@ -194,7 +218,29 @@ module.exports = function (app) {
                                         if (product === null) {
                                             response.send({error : 'product not found'});
                                         } else {
-                                            //TODO implementar funcionalidades
+                                            //busca o link
+                                            product.findLink(request.params.id, function (error, link) {
+                                                if (error) {
+                                                    response.send({error : error});
+                                                } else {
+                                                    //verifica se o link foi encontrada
+                                                    if (link === null) {
+                                                        response.send({error : 'link not found'});
+                                                    } else {
+                                                        //altera os dados do link
+                                                        link.type = request.param('type', null);
+                                                        link.url = request.param('url', null);
+                                                        //salva as modificações
+                                                        link.save(function (error) {
+                                                            if (error) {
+                                                                response.send({error : error});
+                                                            } else {
+                                                                response.send({error : ''});
+                                                            }
+                                                        });
+                                                    }
+                                                }
+                                            });
                                         }
                                     }
                                 });
@@ -249,7 +295,26 @@ module.exports = function (app) {
                                         if (product === null) {
                                             response.send({error : 'product not found'});
                                         } else {
-                                            //TODO implementar funcionalidades
+                                            //busca o link
+                                            product.findLink(request.params.id, function (error, link) {
+                                                if (error) {
+                                                    response.send({error : error});
+                                                } else {
+                                                    //verifica se o link foi encontrada
+                                                    if (link === null) {
+                                                        response.send({error : 'link not found'});
+                                                    } else {
+                                                        //remove o link
+                                                        link.remove(function (error) {
+                                                            if (error) {
+                                                                response.send({error : error});
+                                                            } else {
+                                                                response.send({error : ''});
+                                                            }
+                                                        });
+                                                    }
+                                                }
+                                            });
                                         }
                                     }
                                 });
@@ -295,7 +360,19 @@ module.exports = function (app) {
                             if (! company.isOwner(request.param('login', null))) {
                                 response.send({error : 'permission denied'});
                             } else {
-                                //TODO implementar funcionalidades
+                                //coloca os dados do post em um objeto
+                                company.links.push({
+                                    url : request.param('url', null),
+                                    type : request.param('file', null)
+                                });
+                                //salva a link
+                                company.save(function (error) {
+                                    if (error) {
+                                        response.send({error : error});
+                                    } else {
+                                        response.send({error : ''});
+                                    }
+                                });
                             }
                         }
                     }
@@ -331,7 +408,7 @@ module.exports = function (app) {
                 if (company === null) {
                     response.send({error : 'company not found'});
                 } else {
-                    //TODO implementar funcionalidades
+                    response.send({links : company.links});
                 }
             }
         });
@@ -362,7 +439,19 @@ module.exports = function (app) {
                 if (company === null) {
                     response.send({error : 'company not found'});
                 } else {
-                    //TODO implementar funcionalidades
+                    //busca o link
+                    company.findLink(request.params.id, function (error, link) {
+                        if (error) {
+                            response.send({error : error});
+                        } else {
+                            //verifica se o link foi encontrada
+                            if (link === null) {
+                                response.send({error : 'link not found'});
+                            } else {
+                                response.send({link : link});
+                            }
+                        }
+                    });
                 }
             }
         });
@@ -400,7 +489,29 @@ module.exports = function (app) {
                             if (! company.isOwner(request.param('login', null))) {
                                 response.send({error : 'permission denied'});
                             } else {
-                                //TODO implementar funcionalidades
+                                //busca o link
+                                company.findLink(request.params.id, function (error, link) {
+                                    if (error) {
+                                        response.send({error : error});
+                                    } else {
+                                        //verifica se o link foi encontrada
+                                        if (link === null) {
+                                            response.send({error : 'link not found'});
+                                        } else {
+                                            //altera os dados do link
+                                            link.type = request.param('type', null);
+                                            link.url = request.param('url', null);
+                                            //salva as modificações
+                                            link.save(function (error) {
+                                                if (error) {
+                                                    response.send({error : error});
+                                                } else {
+                                                    response.send({error : ''});
+                                                }
+                                            });
+                                        }
+                                    }
+                                });
                             }
                         }
                     }
@@ -443,7 +554,26 @@ module.exports = function (app) {
                             if (! company.isOwner(request.param('login', null))) {
                                 response.send({error : 'permission denied'});
                             } else {
-                                //TODO implementar funcionalidades
+                                //busca o link
+                                company.findLink(request.params.id, function (error, link) {
+                                if (error) {
+                                    response.send({error : error});
+                                } else {
+                                    //verifica se o link foi encontrada
+                                    if (link === null) {
+                                        response.send({error : 'link not found'});
+                                    } else {
+                                        //remove o link
+                                        link.remove(function (error) {
+                                            if (error) {
+                                                response.send({error : error});
+                                            } else {
+                                                response.send({error : ''});
+                                            }
+                                        });
+                                    }
+                                }
+                            });
                             }
                         }
                     }

@@ -167,7 +167,7 @@ module.exports = function (app) {
                                         if (image === null) {
                                             response.send({error : 'image not found'});
                                         } else {
-                                            response.send({images : image});
+                                            response.send({image : image});
                                         }
                                     }
                                 });

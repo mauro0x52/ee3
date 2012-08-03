@@ -20,10 +20,64 @@ productSchema = new Schema({
     images     : [require('./Image.js').Image],
 });
 
-/*
-TODO
-findImage
-findThumbnail
-*/
+/** FindImage
+ * @author : Rafael Erthal
+ * @since : 2012-08
+ *
+ * @description : Procura uma imagem de um produto.
+ * @param id : id da imagem
+ * @param cb : callback a ser chamado após achada a imagem
+ */
+productSchema.methods.findImage = function (id, cb) {
+    var i;
+    
+    //varre os links do produto
+    for (i = 0; i < this.images.length; i = i + 1) {
+        if (this.images[i]._id.toString() === id.toString()) {
+            cb(undefined, this.images[i])
+        }
+    }
+    cb('image not found', null);
+};
+
+/** FindLink
+ * @author : Rafael Erthal
+ * @since : 2012-08
+ *
+ * @description : Procura um link de um produto.
+ * @param id : id do link
+ * @param cb : callback a ser chamado após achado o link
+ */
+productSchema.methods.findLink = function (id, cb) {
+    var i;
+    
+    //varre os links do produto
+    for (i = 0; i < this.links.length; i = i + 1) {
+        if (this.links[i]._id.toString() === id.toString()) {
+            cb(undefined, this.links[i])
+        }
+    }
+    cb('link not found', null);
+};
+
+/** findThumbnail
+ * @author : Rafael Erthal
+ * @since : 2012-08
+ *
+ * @description : Procura um thumbnail de um produto.
+ * @param id : id do thumbnail
+ * @param cb : callback a ser chamado após achado o thumbnail
+ */
+productSchema.methods.findThumbnail = function (id, cb) {
+    var i;
+    
+    //varre os links do produto
+    for (i = 0; i < this.thumbnails.length; i = i + 1) {
+        if (this.thumbnails[i]._id.toString() === id.toString()) {
+            cb(undefined, this.thumbnails[i])
+        }
+    }
+    cb('thumbnail not found', null);
+};
 
 exports.Produtct = productSchema;
