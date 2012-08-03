@@ -115,13 +115,25 @@ module.exports = function (app) {
         //Verifica se existe o parametro Slug
         if (request.params.slug) {
             //Localiza o Profile
-            Profile.findOne({"phones._id" : request.params.id}, function (error, profile) {
+            Profile.findOne({"phones._id" : request.params.id}, ['phones'], function (error, profile) {
                 if (error) {
                     response.send({error: error});
                 } else {
                     //Verifica se o Profile foi encontrado
                     if (profile) {
-                        console.log("testes");
+                        var i = 0;
+                        for (var phone in profile.phones) {
+                            if (phone._id === request.params.id) {
+                                phone.type = request.param('type');
+                                phone.number = request.param('number');
+                                phone.extension = request.param('extension');
+                                phone.areacode = request.param('areacode');
+                                phone.intcode = request.param('intcode');
+                                
+                                profile.phones[i] = phone;
+                            }
+                            i++;
+                        };
                     } else {
                         response.send({error: "Profile não encontrado."});
                     }

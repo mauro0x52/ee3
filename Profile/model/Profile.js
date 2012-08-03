@@ -52,9 +52,5 @@ profileSchema.methods.editProfile = function (request, parsSlugs, cb) {
     this.save(cb);
 };
 
-
-
-
-
 /*  Exportando o pacote  */
 Profile = exports.Profile = mongoose.model('Profiles', profileSchema);

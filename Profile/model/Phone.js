@@ -18,5 +18,7 @@ phoneSchema = new schema({
     intCode   : {type : String, trim : true}
 });
 
+
+
 /*  Exportando o pacote  */
 exports.Phone = phoneSchema;
