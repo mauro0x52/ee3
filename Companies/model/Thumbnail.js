@@ -11,9 +11,9 @@ var mongoose = require('mongoose'),
     thumbnailSchema;
 
 thumbnailSchema = new Schema({
-    small  : require('./Image.js').Image,
-    medium : require('./Image.js').Image,
-    large  : require('./Image.js').Image
+    small  : {type : String, trim : true, required : true},
+    medium : {type : String, trim : true, required : true},
+    large  : {type : String, trim : true, required : true}
 });
 
 exports.Thumbnail = thumbnailSchema;
