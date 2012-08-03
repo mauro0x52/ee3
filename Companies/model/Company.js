@@ -42,6 +42,8 @@ companySchema = new Schema({
  * @return : Boolean
  */
 companySchema.methods.isOwner = function (id) {
+    "use strict";
+
     var i,
         isOwner = false;
 
@@ -63,9 +65,11 @@ companySchema.methods.isOwner = function (id) {
  * @param cb : callback a ser chamado após achado o produto
  */
 companySchema.methods.findProduct = function (slug, cb) {
+    "use strict";
+
     var i,
         j;
-    
+
     //varre os produtos da empresa
     for (i = 0; i < this.products.length; i = i + 1) {
         //varre as slugs do produto
@@ -87,8 +91,10 @@ companySchema.methods.findProduct = function (slug, cb) {
  * @param cb : callback a ser chamado após achado o contato
  */
 companySchema.methods.findContact = function (id, cb) {
+    "use strict";
+
     var i;
-    
+
     //varre os contatos da empresa
     for (i = 0; i < this.contacts.length; i = i + 1) {
         if (this.contacts[i]._id.toString() === id.toString()) {
@@ -107,8 +113,10 @@ companySchema.methods.findContact = function (id, cb) {
  * @param cb : callback a ser chamado após achado o embedded
  */
 companySchema.methods.findEmbedded = function (id, cb) {
+    "use strict";
+
     var i;
-    
+
     //varre os embeddeds da empresa
     for (i = 0; i < this.embeddeds.length; i = i + 1) {
         if (this.embeddeds[i]._id.toString() === id.toString()) {
@@ -127,8 +135,10 @@ companySchema.methods.findEmbedded = function (id, cb) {
  * @param cb : callback a ser chamado após achado o endereço
  */
 companySchema.methods.findAddress = function (id, cb) {
+    "use strict";
+
     var i;
-    
+
     //varre os endereços da empresa
     for (i = 0; i < this.addresses.length; i = i + 1) {
         if (this.addresses[i]._id.toString() === id.toString()) {
@@ -147,8 +157,10 @@ companySchema.methods.findAddress = function (id, cb) {
  * @param cb : callback a ser chamado após achado o telefone
  */
 companySchema.methods.findPhone = function (id, cb) {
+    "use strict";
+
     var i;
-    
+
     //varre os produtos da empresa
     for (i = 0; i < this.phones.length; i = i + 1) {
         if (this.phones[i]._id.toString() === id.toString()) {
@@ -167,8 +179,10 @@ companySchema.methods.findPhone = function (id, cb) {
  * @param cb : callback a ser chamado após achado o link
  */
 companySchema.methods.findLink = function (id, cb) {
+    "use strict";
+
     var i;
-    
+
     //varre os links da empresa
     for (i = 0; i < this.links.length; i = i + 1) {
         if (this.links[i]._id.toString() === id.toString()) {

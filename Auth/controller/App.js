@@ -81,10 +81,6 @@ module.exports = function (app) {
      * @response : {confirmation}
      */
     app.del('/user/:login/app/:app_id', function (request, response) {
-        var i,
-            authorizedApp,
-            found = false;
-
         response.contentType('json');
 
         //localiza o usuário
@@ -101,27 +97,26 @@ module.exports = function (app) {
                         if (!valid) {
                             response.send({error : 'invalid token'});
                         } else {
-                            //busca a autorização de app nos apps autorizados do usuário
-                            for (i = 0; i < user.authorizedApps.length; i = i + 1) {
-                                if (user.authorizedApps[i].appId === request.params.app_id) {
-                                    authorizedApp = i;
-                                    found = true;
-                                }
-                            }
-                            //caso não tenha sido achado, enviar mensagem de erro
-                            if (!found) {
-                                response.send({error : 'auth not found'});
-                            } else {
-                                //remove autorização de app
-                                user.authorizedApps[authorizedApp].remove();
-                                user.save(function (error) {
-                                    if (error) {
-                                        response.send({error : error});
+                            //busca a autorização
+                            user.findAuthorizedApp(request.params.app_id, function (error, app) {
+                                if (error) {
+                                    response.send({error : error});
+                                } else {
+                                    //verifica se a autorização foi encontrada
+                                    if (app === null) {
+                                        response.send({error : 'app not found'});
                                     } else {
-                                        response.send({error : ''});
+                                        //remove a autorização
+                                        app.remove(function (error) {
+                                            if (error) {
+                                                response.send({error : error});
+                                            } else {
+                                                response.send({error : ''});
+                                            }
+                                        });
                                     }
-                                });
-                            }
+                                }
+                            });
                         }
                     });
                 }
@@ -143,9 +138,6 @@ module.exports = function (app) {
      * @response : {authorizationDate,  expirationDate}
      */
     app.get('/user/:login/app/:app_id', function (request, response) {
-        var i,
-            found = false;
-
         response.contentType('json');
 
         //localiza o usuário
@@ -162,18 +154,19 @@ module.exports = function (app) {
                         if (!valid) {
                             response.send({error : 'invalid token'});
                         } else {
-                            //busca a autorização de app nos apps autorizados do usuário
-                            for (i = 0; i < user.authorizedApps.length; i = i + 1) {
-                                if (user.authorizedApps[i].appId === request.params.app_id) {
-                                    //envia dados da autorização
-                                    response.send({error : '', authorizedApp : user.authorizedApps[i]});
-                                    found = true;
+                            //busca a autorização
+                            user.findAuthorizedApp(request.params.app_id, function (error, app) {
+                                if (error) {
+                                    response.send({error : error});
+                                } else {
+                                    //verifica se a autorização foi encontrada
+                                    if (app === null) {
+                                        response.send({error : 'app not found'});
+                                    } else {
+                                        response.send({authorizedApp : app});
+                                    }
                                 }
-                            }
-                            //caso não tenha sido achado, enviar mensagem de erro
-                            if (!found) {
-                                response.send({error : 'auth not found'});
-                            }
+                            });
                         }
                     });
                 }
@@ -215,29 +208,29 @@ module.exports = function (app) {
                         if (!valid) {
                             response.send({error : 'invalid token'});
                         } else {
-                            //busca a autorização de app nos apps autorizados do usuário
-                            for (i = 0; i < user.authorizedApps.length; i = i + 1) {
-                                if (user.authorizedApps[i].appId === request.params.app_id) {
-                                    authorizedApp = i;
-                                    found = true;
-                                }
-                            }
-                            //caso não tenha sido achado, enviar mensagem de erro
-                            if (!found) {
-                                response.send({error : 'auth not found'});
-                            } else {
-                                //edita dados da autorização
-                                user.authorizedApps[authorizedApp].authorizationDate = request.param('authorizationDate', null);
-                                user.authorizedApps[authorizedApp].expirationDate = request.param('expirationDate', null);
-                                //salva dados da autorização
-                                user.save(function (error) {
-                                    if (error) {
-                                        response.send({error : error});
+                            //busca a autorização
+                            user.findAuthorizedApp(request.params.app_id, function (error, app) {
+                                if (error) {
+                                    response.send({error : error});
+                                } else {
+                                    //verifica se a autorização foi encontrada
+                                    if (app === null) {
+                                        response.send({error : 'app not found'});
                                     } else {
-                                        response.send({error : ''});
+                                        //edita dados da autorização
+                                        app.authorizationDate = request.param('authorizationDate', null);
+                                        app.expirationDate = request.param('expirationDate', null);
+                                        //salva dados da autorização
+                                        app.save(function (error) {
+                                            if (error) {
+                                                response.send({error : error});
+                                            } else {
+                                                response.send({error : ''});
+                                            }
+                                        });
                                     }
-                                });
-                            }
+                                }
+                            });
                         }
                     });
                 }
@@ -273,21 +266,21 @@ module.exports = function (app) {
                 if (user === null) {
                     response.send({error : 'user not found'});
                 } else {
-                    //busca a autorização de app nos apps autorizados do usuário
-                    for (i = 0; i < user.authorizedApps.length; i = i + 1) {
-                        if (user.authorizedApps[i].appId === request.params.app_id) {
-                            //valida o token
-                            response.send({valid : user.authorizedApps[i].token === request.param('token', null), error : ''});
-                            found = true;
+                    //busca a autorização
+                    user.findAuthorizedApp(request.params.app_id, function (error, app) {
+                        if (error) {
+                            response.send({error : error});
+                        } else {
+                            //verifica se a autorização foi encontrada
+                            if (app === null) {
+                                response.send({error : 'app not found'});
+                            } else {
+                                response.send({valid : user.authorizedApps[i].token === request.param('token', null), error : ''});
+                            }
                         }
-                    }
-                    //caso não tenha sido achado, enviar mensagem de erro
-                    if (!found) {
-                        response.send({error : 'auth not found'});
-                    }
+                    });
                 }
             }
         });
     });
-
 };

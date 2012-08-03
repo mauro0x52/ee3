@@ -133,17 +133,19 @@ module.exports = function (app) {
                         if (!valid) {
                             response.send({error : 'invalid token'});
                         } else {
-                            //procura o login externo nos logins externos do usuário
-                            for (i = 0; i < user.thirdPartyLogins.length; i = i + 1) {
-                                if (user.thirdPartyLogins[i].server === request.params.server) {
-                                    response.send({thirdPartyLogin : user.thirdPartyLogins[i]});
-                                    found = true;
+                            //busca o login externo
+                            user.findThirdPartyLogin(request.params.server, function (error, thirdPartyLogin) {
+                                if (error) {
+                                    response.send({error});
+                                } else {
+                                    //verifica se o login externo foi encontrado
+                                    if (thirdPartyLogin === null) {
+                                        response.send({error : 'third party login not found'});
+                                    } else {
+                                        response.send({thirdPartyLogin : thirdPartyLogin});
+                                    }
                                 }
-                            }
-                            //caso não tenha sido achado, enviar mensagem de erro
-                            if (!found) {
-                                response.send({error : 'third party login not found'});
-                            }
+                            });
                         }
                     });
                 }
@@ -185,27 +187,26 @@ module.exports = function (app) {
                         if (!valid) {
                             response.send({error : 'invalid token'});
                         } else {
-                            //procura o login externo nos logins externos do usuário
-                            for (i = 0; i < user.thirdPartyLogins.length; i = i + 1) {
-                                if (user.thirdPartyLogins[i].server === request.params.server) {
-                                    found = true;
-                                    thirdPartyLogin = i;
-                                }
-                            }
-                            //caso não tenha sido achado, enviar mensagem de erro
-                            if (!found) {
-                                response.send({error : 'third party login not found'});
-                            } else {
-                                //remove o login externo
-                                user.thirdPartyLogins[thirdPartyLogin].remove();
-                                user.save(function (error) {
-                                    if (error) {
-                                        response.send({error : error});
+                            //busca o login externo
+                            user.findThirdPartyLogin(request.params.server, function (error, thirdPartyLogin) {
+                                if (error) {
+                                    response.send({error});
+                                } else {
+                                    //verifica se o login externo foi encontrado
+                                    if (thirdPartyLogin === null) {
+                                        response.send({error : 'third party login not found'});
                                     } else {
-                                        response.send({error : ''});
+                                        //remove o login externo
+                                        thirdPartyLogin.remove(function (error) {
+                                            if (error) {
+                                                response.send({error : error});
+                                            } else {
+                                                response.send({error : ''});
+                                            }
+                                        });
                                     }
-                                });
-                            }
+                                }
+                            });
                         }
                     });
                 }

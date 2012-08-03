@@ -10,7 +10,8 @@ var crypto = require('crypto'),
     mongoose = require('mongoose'),
     Schema   = mongoose.Schema,
     objectId = Schema.ObjectId,
-    userSchema;
+    userSchema,
+    User;
 
 userSchema = new Schema({
     username         : {type : String, trim : true, required : true},
@@ -19,6 +20,28 @@ userSchema = new Schema({
     status           : {type : String, required : true, enum : ['active', 'inactive']},
     thirdPartyLogins : [require('./ThirdPartyLogin').ThirdPartyLogin],
     authorizedApps   : [require('./AuthorizedApp').AuthorizedApp]
+});
+
+/** pre('save')
+ * @author : Rafael Erthal
+ * @since : 2012-08
+ *
+ * @description : verifica se o username ainda não foi cadastrado
+ */
+userSchema.pre('save', function (next) {
+    "use strict";
+
+    User.findOne({username : this.username}, function (error, user) {
+        if (error) {
+            next(error);
+        } else {
+            if (user === null) {
+                next();
+            } else {
+                next('username already exists');
+            }
+        }
+    });
 });
 
 /** GenerateToken
@@ -118,5 +141,43 @@ userSchema.methods.changePassword = function (password, cb) {
     this.save(cb);
 };
 
+/** FindAuthorizedApp
+ * @author : Rafael Erthal
+ * @since : 2012-08
+ *
+ * @description : busca uma autorização de app do usuário
+ * @param id : id do app
+ * @param cb : callback a ser chamado após localizado o app
+ */
+userSchema.methods.findAuthorizedApp = function (id, cb) {
+    "use strict";
+
+    for (i = 0; i < this.authorizedApps.length; i = i + 1) {
+        if (this.authorizedApps[i].appId === id) {
+            cb(undefined, this.authorizedApps[i]);
+        }
+    }
+    cb('app not found', null);
+};
+
+/** FindThirdPartyLogin
+ * @author : Rafael Erthal
+ * @since : 2012-08
+ *
+ * @description : busca um login externo do usuário
+ * @param id : server do login externo
+ * @param cb : callback a ser chamado após localizado o login externo
+ */
+userSchema.methods.findThirdPartyLogin = function (server, cb) {
+    "use strict";
+
+    for (i = 0; i < this.thirdPartyLogins.length; i = i + 1) {
+        if (this.thirdPartyLogins[i].server === server) {
+            cb(undefined, this.thirdPartyLogins[i]);
+        }
+    }
+    cb('third party login not found', null);
+};
+
 /*  Exportando o pacote  */
-exports.User = mongoose.model('Users', userSchema);
+User = exports.User = mongoose.model('Users', userSchema);
