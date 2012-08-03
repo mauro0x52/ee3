@@ -1,8 +1,8 @@
-/** Phone
+/** Link
  * @author : Rafael Almeida Erthal Hermano
  * @since : 2012-08
  *
- * @description : Módulo que implementa as funcionalidades de telefone
+ * @description : Módulo que implementa as funcionalidades de link
  */
 
 module.exports = function (app) {
@@ -12,20 +12,20 @@ module.exports = function (app) {
         auth  = require('./../Utils.js').auth,
         Profile = Model.Profile;
 
-    /** POST /profile/:slug/phone
+    /** POST /profile/:slug/link
      *
      * @autor : Rafael Erthal
      * @since : 2012-08
      *
-     * @description : Cadastrar telefone
+     * @description : Cadastrar link
      *
      * @allowedApp : Profiles
      * @allowedUser : Logado
      *
-     * @request : {login,token,type,number,extension,areaCode,intCode}
+     * @request : {login,token,type,url}
      * @response : {confirmation}
      */
-    app.post('/profile/:slug/phone', function (request, response) {
+    app.post('/profile/:slug/link', function (request, response) {
         response.contentType('json');
 
         //valida o token do usuário
@@ -45,14 +45,11 @@ module.exports = function (app) {
                                 response.send({error : 'permission denied'});
                             } else {
                                 //coloca os dados do post em um objeto
-                                profile.phones.push({
+                                profile.links.push({
                                     type : request.param('type', null),
-                                    number : request.param('number', null),
-                                    extension : request.param('extension', null),
-                                    areaCode : request.param('areaCode', null),
-                                    intCode : request.param('intCode', null),
+                                    utl : request.param('url', null)
                                 });
-                                //salva o telefone
+                                //salva o link
                                 profile.save(function (error) {
                                     if (error) {
                                         response.send({error : error});
@@ -70,20 +67,20 @@ module.exports = function (app) {
         });
     });
 
-    /** GET /company/:slug/phones
+    /** GET /company/:slug/links
      *
      * @autor : Rafael Erthal
      * @since : 2012-08
      *
-     * @description : Listar telefones
+     * @description : Listar links
      *
      * @allowedApp : Profiles
      * @allowedUser : Deslogado
      *
      * @request : {}
-     * @response : {[{type,number,extension,areaCode,intCode}]}
+     * @response : {[{type,url}]}
      */
-    app.get('/profile/:slug/phones', function (request, response) {
+    app.get('/profile/:slug/links', function (request, response) {
         response.contentType('json');
 
         //busca o perfil
@@ -95,26 +92,26 @@ module.exports = function (app) {
                 if (profile === null) {
                     response.send({error : 'profile not found'});
                 } else {
-                    response.send({phone : profile.phones});
+                    response.send({links : profile.links});
                 }
             }
         });
     });
 
-    /** GET /company/:slug/phone/:id
+    /** GET /company/:slug/link/:id
      *
      * @autor : Rafael Erthal
      * @since : 2012-08
      *
-     * @description : Exibir telefone
+     * @description : Exibir link
      *
      * @allowedApp : Profiles
      * @allowedUser : Deslogado
      *
      * @request : {}
-     * @response : {type,number,extension,areaCode,intCode}
+     * @response : {type,url}
      */
-    app.get('/company/:slug/phone/:id', function (request, response) {
+    app.get('/company/:slug/link/:id', function (request, response) {
         response.contentType('json');
 
         //busca o perfil
@@ -126,16 +123,16 @@ module.exports = function (app) {
                 if (profile === null) {
                     response.send({error : 'profile not found'});
                 } else {
-                    //busca telefone
-                    profile.findPhone(request.params.id, function (error, phone) {
+                    //busca link
+                    profile.findLink(request.params.id, function (error, link) {
                         if (error) {
                             response.send({error : error});
                         } else {
-                            //verifica se telefone foi encontrado
-                            if (phone === null) {
-                                response.send({error : 'phone not found'});
+                            //verifica se link foi encontrado
+                            if ( === null) {
+                                response.send({error : 'link not found'});
                             } else {
-                                response.send({phone : phone});
+                                response.send({link : link});
                             }
                         }
                     });
@@ -144,20 +141,20 @@ module.exports = function (app) {
         });
     });
 
-    /** PUT /company/:slug/phone/:id
+    /** PUT /company/:slug/link/:id
      *
      * @autor : Rafael Erthal
      * @since : 2012-08
      *
-     * @description : Editar telefone
+     * @description : Editar link
      *
      * @allowedApp : Profiles
      * @allowedUser : Logado
      *
-     * @request : {login,token,type,number,extension,areaCode,intCode}
+     * @request : {login,token,type,url}
      * @response : {confirmation}
      */
-    app.put('/company/:slug/phone/:id', function (request, response) {
+    app.put('/company/:slug/link/:id', function (request, response) {
         response.contentType('json');
 
         //valida o token do usuário
@@ -176,23 +173,20 @@ module.exports = function (app) {
                             if (! profile.isOwner(request.param('login', null))) {
                                 response.send({error : 'permission denied'});
                             } else {
-                                //busca o telefone
-                                profile.findPhone(request.params.id, function (error, phone) {
+                                //busca o link
+                                profile.findLink(request.params.id, function (error, link) {
                                     if (error) {
                                         response.send({error : error});
                                     } else {
-                                        //verifica se o telefone foi encontrado
-                                        if (phone === null) {
-                                            response.send({error : 'phone not found'});
+                                        //verifica se o link foi encontrado
+                                        if (link === null) {
+                                            response.send({error : 'link not found'});
                                         } else {
-                                            //altera os dados do telefone
-                                            phone.type = request.param('type', null);
-                                            phone.number = request.param('number', null);
-                                            phone.extension = request.param('extension', null);
-                                            phone.areaCode = request.param('areaCode', null);
-                                            phone.intCode = request.param('intCode', null);
+                                            //altera os dados do link
+                                            link.type = request.param('type', null);
+                                            link.url = request.param('url', null);
                                             //salva as alterações
-                                            phone.save(function (error) {
+                                            link.save(function (error) {
                                                 if (error) {
                                                     response.send({error : error});
                                                 } else {
@@ -212,12 +206,12 @@ module.exports = function (app) {
         });
     });
 
-    /** DEL /company/:slug/phone/:id
+    /** DEL /company/:slug/link/:id
      *
      * @autor : Rafael Erthal
      * @since : 2012-08
      *
-     * @description : Excluir telefone
+     * @description : Excluir link
      *
      * @allowedApp : Profiles
      * @allowedUser : Logado
@@ -225,7 +219,7 @@ module.exports = function (app) {
      * @request : {login,token}
      * @response : {confirmation}
      */
-    app.del('/company/:slug/phone/:id', function (request, response) {
+    app.del('/company/:slug/link/:id', function (request, response) {
         response.contentType('json');
 
         //valida o token do usuário
@@ -244,17 +238,17 @@ module.exports = function (app) {
                             if (! profile.isOwner(request.param('login', null))) {
                                 response.send({error : 'permission denied'});
                             } else {
-                                //busca o telefone
-                                profile.findPhone(request.params.id, function (error, phone) {
+                                //busca o link
+                                profile.findLink(request.params.id, function (error, link) {
                                     if (error) {
                                         response.send({error : error});
                                     } else {
-                                        //verifica se telefone foi encontrado
-                                        if (phone === null) {
-                                            response.send({error : 'phone not found'});
+                                        //verifica se link foi encontrado
+                                        if (link === null) {
+                                            response.send({error : 'link not found'});
                                         } else {
-                                            //remove o telefone
-                                            phone.remove(function (error) {
+                                            //remove o link
+                                            link.remove(function (error) {
                                                 if (error) {
                                                     response.send({error : error});
                                                 } else {

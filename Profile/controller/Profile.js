@@ -255,9 +255,12 @@ module.exports = function (app) {
                                     }
                                 }
                             }
-                            
                             //Alterando o Profile
-                            profile.editProfile(request, parsSlugs, function (error) {
+                            this.name = request.param('name', null);
+                            this.surname = request.param('surname', null);
+                            this.about = request.param('about', null);
+                            this.dateUpdated = new Date();
+                            this.save(function (error) {
                                 if (error) {
                                     response.send({error : error});
                                 } else {

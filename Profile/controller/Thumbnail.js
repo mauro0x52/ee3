@@ -1,8 +1,8 @@
-/** Phone
+/** Thumbnail
  * @author : Rafael Almeida Erthal Hermano
  * @since : 2012-08
  *
- * @description : Módulo que implementa as funcionalidades de telefone
+ * @description : Módulo que implementa as funcionalidades de thumbnail
  */
 
 module.exports = function (app) {
@@ -12,20 +12,20 @@ module.exports = function (app) {
         auth  = require('./../Utils.js').auth,
         Profile = Model.Profile;
 
-    /** POST /profile/:slug/phone
+    /** POST /profile/:slug/thumbnail
      *
      * @autor : Rafael Erthal
      * @since : 2012-08
      *
-     * @description : Cadastrar telefone
+     * @description : Cadastrar thumbnail
      *
      * @allowedApp : Profiles
      * @allowedUser : Logado
      *
-     * @request : {login,token,type,number,extension,areaCode,intCode}
+     * @request : {login,token}
      * @response : {confirmation}
      */
-    app.post('/profile/:slug/phone', function (request, response) {
+    app.post('/profile/:slug/thumbnail', function (request, response) {
         response.contentType('json');
 
         //valida o token do usuário
@@ -45,14 +45,10 @@ module.exports = function (app) {
                                 response.send({error : 'permission denied'});
                             } else {
                                 //coloca os dados do post em um objeto
-                                profile.phones.push({
-                                    type : request.param('type', null),
-                                    number : request.param('number', null),
-                                    extension : request.param('extension', null),
-                                    areaCode : request.param('areaCode', null),
-                                    intCode : request.param('intCode', null),
+                                profile.thumbnails.push({
+                                     //TODO pensar em lógica
                                 });
-                                //salva o telefone
+                                //salva o thumbnail
                                 profile.save(function (error) {
                                     if (error) {
                                         response.send({error : error});
@@ -70,20 +66,20 @@ module.exports = function (app) {
         });
     });
 
-    /** GET /company/:slug/phones
+    /** GET /company/:slug/thumbnails
      *
      * @autor : Rafael Erthal
      * @since : 2012-08
      *
-     * @description : Listar telefones
+     * @description : Listar thumbnails
      *
      * @allowedApp : Profiles
      * @allowedUser : Deslogado
      *
      * @request : {}
-     * @response : {[{type,number,extension,areaCode,intCode}]}
+     * @response : {[{}]}
      */
-    app.get('/profile/:slug/phones', function (request, response) {
+    app.get('/profile/:slug/thumbnails', function (request, response) {
         response.contentType('json');
 
         //busca o perfil
@@ -95,26 +91,26 @@ module.exports = function (app) {
                 if (profile === null) {
                     response.send({error : 'profile not found'});
                 } else {
-                    response.send({phone : profile.phones});
+                    response.send({thumbnails : profile.thumbnails});
                 }
             }
         });
     });
 
-    /** GET /company/:slug/phone/:id
+    /** GET /company/:slug/thumbnail/:id
      *
      * @autor : Rafael Erthal
      * @since : 2012-08
      *
-     * @description : Exibir telefone
+     * @description : Exibir thumbnail
      *
      * @allowedApp : Profiles
      * @allowedUser : Deslogado
      *
      * @request : {}
-     * @response : {type,number,extension,areaCode,intCode}
+     * @response : {}
      */
-    app.get('/company/:slug/phone/:id', function (request, response) {
+    app.get('/company/:slug/thumbnail/:id', function (request, response) {
         response.contentType('json');
 
         //busca o perfil
@@ -126,16 +122,16 @@ module.exports = function (app) {
                 if (profile === null) {
                     response.send({error : 'profile not found'});
                 } else {
-                    //busca telefone
-                    profile.findPhone(request.params.id, function (error, phone) {
+                    //busca thumbnail
+                    profile.findThumbnail(request.params.id, function (error, thumbnail) {
                         if (error) {
                             response.send({error : error});
                         } else {
-                            //verifica se telefone foi encontrado
-                            if (phone === null) {
-                                response.send({error : 'phone not found'});
+                            //verifica se thumbnail foi encontrado
+                            if ( === null) {
+                                response.send({error : 'thumbnail not found'});
                             } else {
-                                response.send({phone : phone});
+                                response.send({thumbnail : thumbnail});
                             }
                         }
                     });
@@ -144,20 +140,20 @@ module.exports = function (app) {
         });
     });
 
-    /** PUT /company/:slug/phone/:id
+    /** PUT /company/:slug/thumbnail/:id
      *
      * @autor : Rafael Erthal
      * @since : 2012-08
      *
-     * @description : Editar telefone
+     * @description : Editar thumbnail
      *
      * @allowedApp : Profiles
      * @allowedUser : Logado
      *
-     * @request : {login,token,type,number,extension,areaCode,intCode}
+     * @request : {login,token}
      * @response : {confirmation}
      */
-    app.put('/company/:slug/phone/:id', function (request, response) {
+    app.put('/company/:slug/thumbnail/:id', function (request, response) {
         response.contentType('json');
 
         //valida o token do usuário
@@ -176,23 +172,19 @@ module.exports = function (app) {
                             if (! profile.isOwner(request.param('login', null))) {
                                 response.send({error : 'permission denied'});
                             } else {
-                                //busca o telefone
-                                profile.findPhone(request.params.id, function (error, phone) {
+                                //busca o thumbnail
+                                profile.findThumbnail(request.params.id, function (error, thumbnail) {
                                     if (error) {
                                         response.send({error : error});
                                     } else {
-                                        //verifica se o telefone foi encontrado
-                                        if (phone === null) {
-                                            response.send({error : 'phone not found'});
+                                        //verifica se o thumbnail foi encontrado
+                                        if (thumbnail === null) {
+                                            response.send({error : 'thumbnail not found'});
                                         } else {
-                                            //altera os dados do telefone
-                                            phone.type = request.param('type', null);
-                                            phone.number = request.param('number', null);
-                                            phone.extension = request.param('extension', null);
-                                            phone.areaCode = request.param('areaCode', null);
-                                            phone.intCode = request.param('intCode', null);
+                                            //altera os dados do thumbnail
+                                            //TODO pensar em lógica
                                             //salva as alterações
-                                            phone.save(function (error) {
+                                            thumbnail.save(function (error) {
                                                 if (error) {
                                                     response.send({error : error});
                                                 } else {
@@ -212,12 +204,12 @@ module.exports = function (app) {
         });
     });
 
-    /** DEL /company/:slug/phone/:id
+    /** DEL /company/:slug/thumbnail/:id
      *
      * @autor : Rafael Erthal
      * @since : 2012-08
      *
-     * @description : Excluir telefone
+     * @description : Excluir thumbnail
      *
      * @allowedApp : Profiles
      * @allowedUser : Logado
@@ -225,7 +217,7 @@ module.exports = function (app) {
      * @request : {login,token}
      * @response : {confirmation}
      */
-    app.del('/company/:slug/phone/:id', function (request, response) {
+    app.del('/company/:slug/thumbnail/:id', function (request, response) {
         response.contentType('json');
 
         //valida o token do usuário
@@ -244,17 +236,17 @@ module.exports = function (app) {
                             if (! profile.isOwner(request.param('login', null))) {
                                 response.send({error : 'permission denied'});
                             } else {
-                                //busca o telefone
-                                profile.findPhone(request.params.id, function (error, phone) {
+                                //busca o thumbnail
+                                profile.findThumbnail(request.params.id, function (error, thumbnail) {
                                     if (error) {
                                         response.send({error : error});
                                     } else {
-                                        //verifica se telefone foi encontrado
-                                        if (phone === null) {
-                                            response.send({error : 'phone not found'});
+                                        //verifica se thumbnail foi encontrado
+                                        if (thumbnail === null) {
+                                            response.send({error : 'thumbnail not found'});
                                         } else {
-                                            //remove o telefone
-                                            phone.remove(function (error) {
+                                            //remove o thumbnail
+                                            thumbnail.remove(function (error) {
                                                 if (error) {
                                                     response.send({error : error});
                                                 } else {
