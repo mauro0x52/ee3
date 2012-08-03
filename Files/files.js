@@ -32,6 +32,7 @@ app.configure(function () {
 
 /*  Chamando controllers */
 require('./controller/Image.js')(app);
+require('./controller/File.js')(app);
 
 /*  Métodos para dev e teste */
 app.get('/ping', function (request,response) {

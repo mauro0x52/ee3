@@ -13,7 +13,8 @@ var crypto = require('crypto'),
     imageSchema;
 
 imageSchema = new schema({
-    path        : {type : String, trim : true, required : true}
+    path        : {type : String, trim : true, required : true},
+    url         : {type : String, trim : true}
 });
 
 /** Save
@@ -22,7 +23,7 @@ imageSchema = new schema({
  *
  * @description : Salva imagem no filesystem
  */
-imageSchema.pre('save', function (next) {
+imageSchema.methods.save = function (cb) {
     var
     // modulos
         fs = require('fs'),
@@ -32,40 +33,72 @@ imageSchema.pre('save', function (next) {
         file = this.toJSON().file,
         path = this.path,
     // definicoes
-        fullPath = config.images.folder + '/' + path,
+        fullPath = config.files.folder + '/' + path,
     // variaveis
         folderPath;
-
 
     // tira barras duplicadas
     while (path.indexOf('//') != -1) {
  		path = path.replace('//', '/');
 	}
-
     this.path = path;
 
+    // tira barras duplicadas
     while (fullPath.indexOf('//') != -1) {
  		fullPath = fullPath.replace('//', '/');
 	}
 
-    if (file.size > config.images.maxsize) {
-        next('error');
-    }
+    // tem algum arquivo?
+    if (!file) {
+        cb('Arquivo de imagem é obrigatório', undefined);
+    } 
     else {
-        // cria diretorio
-        folderPath = fullPath.substring(0, fullPath.lastIndexOf("/"));
-        new File(folderPath).createDirectory(function() {
-            // salva arquivo
-            fs.rename(
-                file.path, 
-                fullPath,
-                function(error) {
-                    //next(error);
-                }
-            );
-        });
+        // foi definido o caminho?
+        if (!path) {
+            cb('Caminho não definido', undefined);
+        }
+        else {
+            // tamanho muito grande?
+            if (file.size > config.files.maxsize) {
+                cb('Tamanho máximo excedido', undefined);
+            }
+            else {
+                // arquivo ja existe?
+                fs.exists(fullPath, function(exists) {
+                    if (exists) {
+                        cb('Arquivo com nome "'+path+'" já existe', undefined);
+                    }
+                    else {
+                        // cria diretorio
+                        folderPath = fullPath.substring(0, fullPath.lastIndexOf("/"));
+                        new File(folderPath).createDirectory(function() {
+                            // salva na aws s3
+                            if (config.s3.enabled) {
+
+                            }
+                            // salva no filesystem
+                            else {
+                                // salva arquivo
+                                fs.rename(
+                                    file.path, 
+                                    fullPath,
+                                    function(error) {
+                                        if (error) {
+                                            cb('Ocorreu algum erro ao salvar imagem', undefined);
+                                        }
+                                        else {
+                                            cb(undefined, new Image({path:fullPath}), path); 
+                                        }
+                                    }
+                                );
+                            }
+                        });
+                    }
+                });
+            }
+        }
     }
-});
+}
 
 
 
@@ -84,13 +117,13 @@ imageSchema.statics.open = function (path, cb) {
     // variaveis
         image, fileFullPath;
 
-    // abre imagem do s3
+    // abre imagem do s3 na pasta temporaria
     if (config.s3.enabled) {
 
     }
     // abre imagem da máquina local
     else {
-        fileFullPath = config.images.folder + '/' + path;
+        fileFullPath = config.files.folder + '/' + path;
         while (fileFullPath.indexOf('//') != -1) {
      		fileFullPath = fileFullPath.replace('//', '/');
 	    }
@@ -128,7 +161,7 @@ imageSchema.statics.resize = function (params, cb) {
         image = params.image,
     // variaveis
         filePath, folderPath, fullFilePath, fullFolderPath, image,
-        originalImage, originalfullFilePath, fileNameSplit, fileExt;
+        originalImage, originalFullFilePath, fileNameSplit, fileExt;
 
     // constroi label, caso nao tenha passado
     if (!label) {
@@ -149,20 +182,20 @@ imageSchema.statics.resize = function (params, cb) {
         else height = width;
     }
 
-    originalfullFilePath = image.path;
+    originalFullFilePath = image.path;
 
 
     // extensao do arquivo
-    fileNameSplit = path.extname(originalfullFilePath||'').split('.');
+    fileNameSplit = path.extname(originalFullFilePath||'').split('.');
     fileExt = fileNameSplit[fileNameSplit.length - 1];
 
     // caminho relativo do novo arquivo
-    filePath = originalfullFilePath;
-    filePath = filePath.replace(config.images.folder, '/');
-    filePath = filePath.replace(config.images.temp, '/');
+    filePath = originalFullFilePath;
+    filePath = filePath.replace(config.files.folder, '/');
+    filePath = filePath.replace(config.files.temp, '/');
     filePath = filePath.substring(0, filePath.lastIndexOf("/")) + '/' + label + '.' + fileExt;
 
-    fullFilePath = config.images.temp + filePath;
+    fullFilePath = config.files.temp + filePath;
        
     while (filePath.indexOf('//') != -1) {
  		filePath = filePath.replace('//', '/');
@@ -174,9 +207,9 @@ imageSchema.statics.resize = function (params, cb) {
 
     // pasta do novo arquivo
     folderPath = filePath.substring(0, filePath.lastIndexOf("/"));
-    fullFolderPath = config.images.temp + folderPath;
+    fullFolderPath = config.files.temp + folderPath;
 
-    originalImage = fs.readFileSync(originalfullFilePath, 'binary');
+    originalImage = fs.readFileSync(originalFullFilePath, 'binary');
 
     // fit = nao corta a imagem
     if (style == 'fit') {
@@ -206,7 +239,6 @@ imageSchema.statics.resize = function (params, cb) {
     }
     // extend = pode cortar a imagem
     else {
-
         imagemagick.identify(originalFullFilePath, function(err, features){
             if (err) console.log(err);
 
@@ -221,44 +253,56 @@ imageSchema.statics.resize = function (params, cb) {
 
             if (original_aspect >= aspect) {
                 resizeImageProperties.width = width;
-                imagemagick.resize(resizeImageProperties, function(err, stdout, stderr){
-                    if (err) console.log(err)
-                    fs.writeFileSync(fullFilePath, stdout, 'binary');
-                    var cropImageProperties = {};
-                    cropImageProperties.srcPath = fullFilePath;
-                    cropImageProperties.dstPath = fullFilePath;
-                    if (width) cropImageProperties.width = width;
-                    if (height) cropImageProperties.height = height;
+                imagemagick.resize(resizeImageProperties, function(error, stdout, stderr){
+                    if (error) cb(error, undefined, undefined);
+                    else {
+                        new File(fullFolderPath).createDirectory(function() {
+                            fs.writeFileSync(fullFilePath, stdout, 'binary');
+                            var cropImageProperties = {};
+                            cropImageProperties.srcPath = fullFilePath;
+                            cropImageProperties.dstPath = fullFilePath;
+                            if (width) cropImageProperties.width = width;
+                            if (height) cropImageProperties.height = height;
 
-                    imagemagick.crop(cropImageProperties, function(err, stdout, stderr){
-                        if (err) console.log(err);
-                        else console.log("Imagem salva!");
-                    }); 
+                            imagemagick.crop(cropImageProperties, function(err, stdout, stderr){
+                                if (error) {
+                                    cb(error, undefined, undefined);
+                                }
+                                else {
+                                    cb(undefined, new Image({path:fullFilePath}), filePath);
+                                }
+                            }); 
+                        });
+                    }
                 });
             }
             else {
                 resizeImageProperties.height = height;
-                imagemagick.resize(resizeImageProperties, function(err, stdout, stderr){
-                    if (err) console.log(err)
-                    fs.writeFileSync(fullFilePath, stdout, 'binary');
-                    var cropImageProperties = {};
-                    cropImageProperties.srcPath = fullFilePath;
-                    cropImageProperties.dstPath = fullFilePath;
-                    if (width) cropImageProperties.width = width;
-                    if (height) cropImageProperties.height = height;
-
-                    imagemagick.crop(cropImageProperties, function(err, stdout, stderr){
-                        if (err) console.log(err);
-                        else console.log("Imagem salva!");
-                    }); 
+                imagemagick.resize(resizeImageProperties, function(error, stdout, stderr){
+                    if (error) cb(error, undefined, undefined);
+                    else {
+                        new File(fullFolderPath).createDirectory(function() {
+                            fs.writeFileSync(fullFilePath, stdout, 'binary');
+                            var cropImageProperties = {};
+                            cropImageProperties.srcPath = fullFilePath;
+                            cropImageProperties.dstPath = fullFilePath;
+                            if (width) cropImageProperties.width = width;
+                            if (height) cropImageProperties.height = height;
+                            imagemagick.crop(cropImageProperties, function(error, stdout, stderr){
+                                if (error) {
+                                    cb(error, undefined, undefined);
+                                }
+                                else {
+                                    cb(undefined, new Image({path:fullFilePath}), filePath);
+                                }
+                            }); 
+                        });
+                    }
                 }); 
             }
         });
     }
-
-
 };
-
 
 
 /*  Exportando o pacote  */

@@ -12,4 +12,4 @@ mongoose.connect('mongodb://' + config.mongodb.username + ':' + config.mongodb.p
 
 /*  Exportar name-space  */
 exports.Image = require('./Image.js').Image;
-exports.File = require('./File.js').Image;
+exports.File = require('./File.js').File;

@@ -21,7 +21,7 @@ module.exports = function (app) {
             path = require('path'),
             dateUtils = require('date-utils'),
         // variaveis
-            tmpFile, imageFile, hash, folder, folderPath, fileNameSplit, fileExt, filePath;
+            tmpFile, imageFile, hash, folder, folderPath, fileNameSplit, fileExt, filePath, url;
 
         response.contentType('json');
 
@@ -48,23 +48,25 @@ module.exports = function (app) {
             file : tmpFile
         });
 
-        image.save(function(error, image) {
+        image.save(function(error, image, imagePath) {
             if (error) {
-                console.log(error);
+                response.send({request:{error:error}});
             }
             else {
                 // salva informacoes da imagem no bd
                 var file = new File({
                     type : 'image',
-                    path : image.path
+                    path : imagePath
                 });
 
                 file.save(function(error, file){
                     if (error) {
-                        console.log(error);
+                        response.send({request:{error:error}});
                     }
                     else {
-
+                        response.send({
+                            data: file
+                        });
                     }
                 });
             }
@@ -91,7 +93,7 @@ module.exports = function (app) {
         // abre a imagem
         Image.open(filePath, function (error, imageFile) {
             if (error) {
-
+                response.send({request:{error:error}});
             }
             else {
                 // cria uma imagem temporaria resizeada
@@ -112,21 +114,21 @@ module.exports = function (app) {
 
                         newImage.save(function(error, image) {
                             if (error) {
-                                console.log(error);
+                                response.send({request:{error:error}});
                             }
                             else {
                                 // salva informacoes da imagem no bd
                                 var file = new File({
                                     type : 'image',
-                                    path : image.path
+                                    path : newFilePath
                                 });
 
                                 file.save(function(error, file){
                                     if (error) {
-                                        console.log(error);
+                                        response.send({request:{error:error}});
                                     }
                                     else {
-
+                                        response.send({data:file});
                                     }
                                 });
                             }
