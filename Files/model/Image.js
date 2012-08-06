@@ -27,26 +27,20 @@ imageSchema.methods.save = function (cb) {
     var
     // modulos
         fs = require('fs'),
+        knox = require('knox'),
         fileUtils = require('file-utils'),
         File = fileUtils.File,
     // atributos
         file = this.toJSON().file,
         path = this.path,
-    // definicoes
-        fullPath = config.files.folder + '/' + path,
     // variaveis
-        folderPath;
+        fullPath, folderPath;
 
     // tira barras duplicadas
     while (path.indexOf('//') != -1) {
  		path = path.replace('//', '/');
 	}
     this.path = path;
-
-    // tira barras duplicadas
-    while (fullPath.indexOf('//') != -1) {
- 		fullPath = fullPath.replace('//', '/');
-	}
 
     // tem algum arquivo?
     if (!file) {
@@ -63,21 +57,47 @@ imageSchema.methods.save = function (cb) {
                 cb('Tamanho máximo excedido', undefined);
             }
             else {
-                // arquivo ja existe?
-                fs.exists(fullPath, function(exists) {
-                    if (exists) {
-                        cb('Arquivo com nome "'+path+'" já existe', undefined);
-                    }
-                    else {
-                        // cria diretorio
-                        folderPath = fullPath.substring(0, fullPath.lastIndexOf("/"));
-                        new File(folderPath).createDirectory(function() {
-                            // salva na aws s3
-                            if (config.s3.enabled) {
+                // ----------------------------------------
+                // salva na aws s3
 
-                            }
-                            // salva no filesystem
-                            else {
+                if (config.aws.s3.enabled) {
+                    var s3Client = knox.createClient({
+                        key: config.aws.key,
+                        secret: config.aws.secret,
+                        bucket: config.aws.s3.bucket
+                    });
+
+                    s3Client.putFile(file.path, path, function(error, response) {
+                        if (200 != response.statusCode) {
+                            cb('Ocorreu algum erro ao salvar imagem', undefined);
+                        }
+                        else {
+                            cb(undefined, new Image({path:file.path}), path); 
+                        }
+                    });
+                }
+                // ----------------------------------------
+
+                // ----------------------------------------
+                // salva no filesystem
+
+                else {
+                    fullPath = config.files.folder + '/' + path;
+                    // tira barras duplicadas
+                    while (fullPath.indexOf('//') != -1) {
+                 		fullPath = fullPath.replace('//', '/');
+                    }
+
+                    // arquivo ja existe?
+                    fs.exists(fullPath, function(exists) {
+                        if (exists) {
+                            cb('Arquivo com nome "'+path+'" já existe', undefined);
+                        }
+                        else {
+                            // cria diretorio
+                            folderPath = fullPath.substring(0, fullPath.lastIndexOf("/"));
+                            new File(folderPath).createDirectory(function() {
+    
                                 // salva arquivo
                                 fs.rename(
                                     file.path, 
@@ -91,10 +111,12 @@ imageSchema.methods.save = function (cb) {
                                         }
                                     }
                                 );
-                            }
-                        });
-                    }
-                });
+                            });
+                        }
+                    });
+                }
+                // salva no filesystem
+                // ----------------------------------------
             }
         }
     }
@@ -112,15 +134,62 @@ imageSchema.statics.open = function (path, cb) {
     var
     // modulos
         fs = require('fs'),
+        url = require('url'),
+        http = require('http'),
+        knox = require('knox'),
         fileUtils = require('file-utils'),
         File = fileUtils.File,
     // variaveis
-        image, fileFullPath;
+        image, fileFullPath, fileUrl, options, fileName, fileStream, folderPath;
 
+    // ----------------------------------------
     // abre imagem do s3 na pasta temporaria
-    if (config.s3.enabled) {
-
+    if (config.aws.s3.enabled) {
+        fileUrl = config.aws.s3.bucket+'.s3.amazonaws.com/'+path;
+        
+        while (fileUrl.indexOf('//') != -1) {
+            fileUrl = fileUrl.replace('//', '/');
+        }
+        fileUrl = 'http://'+fileUrl;
+        
+        
+        options = {
+            host: url.parse(fileUrl).host,
+            port: 80,
+            path: url.parse(fileUrl).pathname
+        };
+        
+        fileFullPath = config.files.temp + '/' + path;
+        while (fileFullPath.indexOf('//') != -1) {
+            fileFullPath = fileFullPath.replace('//', '/');
+        }
+        folderPath = fileFullPath.substring(0, fileFullPath.lastIndexOf("/"));
+        
+        new File(folderPath).createDirectory(function() {
+            fileName = url.parse(fileUrl).pathname.split('/').pop();
+            
+            http.get(options, function(response) {
+                response.setEncoding('binary');
+                fileStream = '';
+                response.on('data', function(data) {
+                    fileStream += data;
+                });
+                response.on('end', function() {
+                    fs.writeFile(fileFullPath, fileStream, 'binary', function(error) {
+                        if (error) {
+                            cb('Erro ao ler imagem', undefined);
+                        }
+                        else {
+                            cb(undefined, new Image({path:fileFullPath}));
+                        }
+                    });
+                });
+            });
+         });
     }
+    // ----------------------------------------
+
+    // ----------------------------------------
     // abre imagem da máquina local
     else {
         fileFullPath = config.files.folder + '/' + path;
@@ -136,6 +205,7 @@ imageSchema.statics.open = function (path, cb) {
             }
         });
     }
+    // ----------------------------------------
 };
 
 
@@ -227,7 +297,7 @@ imageSchema.statics.resize = function (params, cb) {
                 new File(fullFolderPath).createDirectory(function() {
                     fs.writeFile(fullFilePath, stdout, 'binary', function(error) {
                         if (error) {
-                            console.log(error);
+                            cb(error, undefined);
                         }
                         else {
                             cb(undefined, new Image({path:fullFilePath}), filePath); 
