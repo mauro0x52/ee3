@@ -35,7 +35,7 @@ profileSchema = new schema({
 profileSchema.pre('save', function (next) {
     "use strict";
 
-    Profile.findOne({username : this.username}, function (error, user) {
+    Profile.findOne({username : this.username, _id : {$ne : this._id}}, function (error, user) {
         if (error) {
             next(error);
         } else {

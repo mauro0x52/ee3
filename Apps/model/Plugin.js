@@ -26,7 +26,7 @@ pluginSchema = new Schema({
 pluginSchema.pre('save', function (next) {
     "use strict";
 
-    Plugin.findOne({name : this.name}, function (error, plugin) {
+    Plugin.findOne({name : this.name, versionId : this.versionId, _id : {$ne : this._id}}, function (error, plugin) {
         if (error) {
             next(error);
         } else {

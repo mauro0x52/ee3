@@ -28,7 +28,7 @@ versionSchema = new Schema({
 versionSchema.pre('save', function (next) {
     "use strict";
 
-    Version.findOne({number : this.number}, function (error, version) {
+    Version.findOne({number : this.number, appId : this.appId, _id : {$ne : this._id}}, function (error, version) {
         if (error) {
             next(error);
         } else {

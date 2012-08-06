@@ -31,7 +31,7 @@ userSchema = new Schema({
 userSchema.pre('save', function (next) {
     "use strict";
 
-    User.findOne({username : this.username}, function (error, user) {
+    User.findOne({username : this.username, _id : {$ne : this._id}}, function (error, user) {
         if (error) {
             next(error);
         } else {

@@ -28,7 +28,7 @@ conversantSchema = new Schema({
 conversantSchema.pre('save', function (next) {
     "use strict";
 
-    Conversant.findOne({user : this.user}, function (error, user) {
+    Conversant.findOne({user : this.user, _id : {$ne : this._id}}, function (error, user) {
         if (error) {
             next(error);
         } else {

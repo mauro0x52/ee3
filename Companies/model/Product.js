@@ -8,7 +8,8 @@
 var mongoose = require('mongoose'),
     Schema   = mongoose.Schema,
     objectId = Schema.ObjectId,
-    productSchema;
+    productSchema,
+    Product;
 
 productSchema = new Schema({
     name       : {type : String, trim : true, required : true},
@@ -18,6 +19,28 @@ productSchema = new Schema({
     about      : {type : String},
     links      : [require('./Link.js').Link],
     images     : [require('./Image.js').Image],
+});
+
+/** pre('save')
+ * @author : Rafael Erthal
+ * @since : 2012-08
+ *
+ * @description : verifica se o slug ja existe
+ */
+productSchema.pre('save', function (next) {
+    "use strict";
+
+    Product.findOne({"slugs.name" : {$in : this.slugs}, _id : {$ne : this._id}}, function (error, app) {
+        if (error) {
+            next(error);
+        } else {
+            if (app === null) {
+                next();
+            } else {
+                next('slug already exists');
+            }
+        }
+    });
 });
 
 /** FindImage
@@ -86,4 +109,4 @@ productSchema.methods.findThumbnail = function (id, cb) {
     cb('thumbnail not found', null);
 };
 
-exports.Produtct = productSchema;
+Product = exports.Produtct = productSchema;

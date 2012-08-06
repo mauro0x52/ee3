@@ -28,7 +28,7 @@ appSchema = new Schema({
 appSchema.pre('save', function (next) {
     "use strict";
 
-    App.findOne({slug : this.slug}, function (error, app) {
+    App.findOne({slug : this.slug, _id : {$ne : this._id}}, function (error, app) {
         if (error) {
             next(error);
         } else {

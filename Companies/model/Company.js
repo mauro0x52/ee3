@@ -32,6 +32,28 @@ companySchema = new Schema({
     embeddeds   : [require('./Embedded.js').Embedded]
 });
 
+/** pre('save')
+ * @author : Rafael Erthal
+ * @since : 2012-08
+ *
+ * @description : verifica se o slug ja existe
+ */
+appSchema.pre('save', function (next) {
+    "use strict";
+
+    App.findOne({slug : this.slug, _id : {$ne : this._id}}, function (error, app) {
+        if (error) {
+            next(error);
+        } else {
+            if (app === null) {
+                next();
+            } else {
+                next('slug already exists');
+            }
+        }
+    });
+});
+
 /** IsOwner
  * @author : Rafael Erthal
  * @since : 2012-08

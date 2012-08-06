@@ -26,7 +26,7 @@ toolSchema = new Schema({
 toolSchema.pre('save', function (next) {
     "use strict";
 
-    Tool.findOne({name : this.name}, function (error, tool) {
+    Tool.findOne({name : this.name, versionId : this.versionId, _id : {$ne : this._id}}, function (error, tool) {
         if (error) {
             next(error);
         } else {

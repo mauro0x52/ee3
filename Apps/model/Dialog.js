@@ -26,7 +26,7 @@ dialogSchema = new Schema({
 dialogSchema.pre('save', function (next) {
     "use strict";
 
-    Dialog.findOne({name : this.name}, function (error, dialog) {
+    Dialog.findOne({name : this.name, versionId : this.versionId, _id : {$ne : this._id}}, function (error, dialog) {
         if (error) {
             next(error);
         } else {
