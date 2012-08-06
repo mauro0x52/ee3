@@ -35,25 +35,25 @@ module.exports = function (app) {
             if (valid) {
                 //Cria o Objeto Company para adicionar no Model
                 company = new Company({
-                    slug        : request.param("slug"),
-                    name        : request.param("name"),
-                    thumbnails  : request.param("thumbnails"),
-                    members     : request.param("members"),
-                    users       : request.param("users"),
-                    sectors     : request.param("sectors"),
-                    products    : request.param("products"),
-                    addresses   : request.param("addresses"),
-                    type        : request.param("type"),
-                    profile     : request.param("profile"),
-                    active      : request.param("active"),
-                    tags        : request.param("tags"),
-                    activity    : request.param("activity"),
-                    abstract    : request.param("abstract"),
-                    about       : request.param("about"),
-                    phones      : request.param("phones"),
-                    contacts    : request.param("contacts"),
-                    links       : request.param("links"),
-                    embeddeds   : request.param("embeddeds")
+                    slug       : request.param("slug"),
+                    name       : request.param("name"),
+                    thumbnails : request.param("thumbnails"),
+                    members    : request.param("members"),
+                    users      : request.param("users"),
+                    sectors    : request.param("sectors"),
+                    products   : request.param("products"),
+                    addresses  : request.param("addresses"),
+                    type       : request.param("type"),
+                    profile    : request.param("profile"),
+                    active     : request.param("active"),
+                    tags       : request.param("tags"),
+                    activity   : request.param("activity"),
+                    abstract   : request.param("abstract"),
+                    about      : request.param("about"),
+                    phones     : request.param("phones"),
+                    contacts   : request.param("contacts"),
+                    links      : request.param("links"),
+                    embeddeds  : request.param("embeddeds")
                 });
                 //Salva o objeto no Model de Companies e retorna o objeto para o solicitante
                 company.save(function (error) {
@@ -89,7 +89,13 @@ module.exports = function (app) {
     app.get('/companies', function (request, response) {
         response.contentType('json');
 
-        //TODO implementar funcionalidades
+        Company.find(function (error, companies){
+            if (error) {
+                response.send({error : error })
+            } else {
+                response.send({Companies : companies});
+            }
+        })
     });
 
     /** GET /company/:slug
@@ -143,7 +149,7 @@ module.exports = function (app) {
         auth(request.param('login', null), request.param('token', null), function (valid) {
             if (valid) {
                 //busca a compania
-                Company.find({slug : request.params.slug}, function (error, company) {
+                Company.findOne({slug : request.params.slug}, function (error, company) {
                     if (error) {
                         response.send({error : error});
                     } else {
@@ -249,7 +255,7 @@ module.exports = function (app) {
         auth(request.param('login', null), request.param('token', null), function (valid) {
             if (valid) {
                 //busca a compania
-                Company.find({slug : request.params.slug}, function (error, company) {
+                Company.findOne({slug : request.params.slug}, function (error, company) {
                     if (error) {
                         response.send({error : error});
                     } else {
