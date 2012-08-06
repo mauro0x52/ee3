@@ -4,18 +4,41 @@
  *
  * @description : Representação da entidade de versões de um aplicativo
  */
- 
-var Tool = require('./Tool.js'),
-    Plugin = require('./Plugin.js'),
-    Dialog = require('./Dialog.js'),
+
+var Tool = require('./Tool.js').Tool,
+    Plugin = require('./Plugin.js').Plugin,
+    Dialog = require('./Dialog.js').Dialog,
     mongoose = require('mongoose'),
-    schema   = mongoose.Schema,
-    objectId = schema.ObjectId,
-    versionSchema;
-    
-versionSchema = new schema({
+    Schema   = mongoose.Schema,
+    objectId = Schema.ObjectId,
+    versionSchema,
+    Version;
+
+versionSchema = new Schema({
     number : {type : String, trim : true, required : true},
     appId  : objectId
+});
+
+/** pre('save')
+ * @author : Rafael Erthal
+ * @since : 2012-08
+ *
+ * @description : verifica se versao ja existe
+ */
+versionSchema.pre('save', function (next) {
+    "use strict";
+
+    Version.findOne({number : this.number, appId : this.appId, _id : {$ne : this._id}}, function (error, version) {
+        if (error) {
+            next(error);
+        } else {
+            if (version === null) {
+                next();
+            } else {
+                next('version already exists');
+            }
+        }
+    });
 });
 
 /** Tools
@@ -26,6 +49,8 @@ versionSchema = new schema({
  * @param cb : callback a ser chamado após achadas as ferramentas
  */
 versionSchema.methods.tools = function (cb) {
+    "use strict";
+
     Tool.find({versionId : this._id}, cb);
 };
 
@@ -38,6 +63,8 @@ versionSchema.methods.tools = function (cb) {
  * @param cb : callback a ser chamado após achada a ferramenta
  */
 versionSchema.methods.findTool = function (name, cb) {
+    "use strict";
+
     Tool.findOne({versionId : this._id, name : name}, cb);
 };
 
@@ -49,6 +76,8 @@ versionSchema.methods.findTool = function (name, cb) {
  * @param cb : callback a ser chamado após achadas os plugins
  */
 versionSchema.methods.plugins = function (cb) {
+    "use strict";
+
     Plugin.find({versionId : this._id}, cb);
 };
 
@@ -61,6 +90,8 @@ versionSchema.methods.plugins = function (cb) {
  * @param cb : callback a ser chamado após achado o plugin
  */
 versionSchema.methods.findPlugin = function (name, cb) {
+    "use strict";
+
     Plugin.findOne({versionId : this._id, name : name}, cb);
 };
 
@@ -72,6 +103,8 @@ versionSchema.methods.findPlugin = function (name, cb) {
  * @param cb : callback a ser chamado após achadas os plugins
  */
 versionSchema.methods.dialogs = function (cb) {
+    "use strict";
+
     Dialog.find({versionId : this._id}, cb);
 };
 
@@ -84,8 +117,10 @@ versionSchema.methods.dialogs = function (cb) {
  * @param cb : callback a ser chamado após achado o dialogo
  */
 versionSchema.methods.findDialog = function (name, cb) {
+    "use strict";
+
     Dialog.findOne({versionId : this._id, name : name}, cb);
 };
 
 /*  Exportando o pacote  */
-exports.Version = mongoose.model('Versions', versionSchema);
+Version = exports.Version = mongoose.model('Versions', versionSchema);

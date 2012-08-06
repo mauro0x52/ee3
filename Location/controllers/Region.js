@@ -1,11 +1,13 @@
-/** Country
+/** Region
  * @author : Lucas Kalado
  * @since : 2012-07
  *
  * @description : Módulo que implementa as funcionalidades de regiões
  */
- 
+
 module.exports = function (app) {
+    "use strict";
+
     var Model = require('./../model/Model.js'),
         Region = Model.Region;
 
@@ -22,21 +24,23 @@ module.exports = function (app) {
      * @request : {filterByName}
      * @response : {Name, Slug, CountryIds, StateIds, CityIds}
     */
-    app.get('/regions/', function (request,response) {
+    app.get('/regions/', function (request, response) {
+        var filter;
+
         response.contentType('json');
-        
+
         if (request.param('filterByName', null)) {
             filter.name = request.param('filterByName', null);
         }
-        Region.find(filter, function (error,regions) {
+        Region.find(filter, function (error, regions) {
             if (error) {
                 response.send({error : error});
             } else {
                 response.send({regions : regions});
             }
-        })
+        });
     });
-    
+
     /** GET /region/:slug
      *
      * @autor : Lucas Kalado
@@ -50,15 +54,15 @@ module.exports = function (app) {
      * @request : {}
      * @response : {Name, Slug, CountryIds, StateIds, CityIds}
     */
-    app.get('/region/:slug/', function (request, response){
+    app.get('/region/:slug/', function (request, response) {
         response.contentType('json');
-        
+
         Region.findOne({slug : request.params.slug}, function (error, region) {
             if (error) {
                 response.send({error : error});
             } else {
                 response.send(region);
             }
-        })
+        });
     });
 };

@@ -4,9 +4,10 @@
  *
  * @description : Módulo que implementa as funcionalidades de conta de usuário
  */
- 
+
 module.exports = function (app) {
-    
+    "use strict";
+
     var Model = require('./../model/Model.js'),
         User  = Model.User;
 
@@ -23,11 +24,11 @@ module.exports = function (app) {
      * @request : {username, password, password_confirmation}
      * @response : {token, confirmation}
      */
-    app.post('/user', function (request,response) {
+    app.post('/user', function (request, response) {
         var user;
-        
+
         response.contentType('json');
-        
+
         // valida se a senha e a confirmação senha conferem
         if (request.param('password', null) === request.param('password_confirmation', null)) {
             //pega os dados do post e coloca em um novo objeto
@@ -55,7 +56,7 @@ module.exports = function (app) {
             response.send({error : 'Password confirmation invalid'});
         }
     });
- 
+
     /** PUT /user/:login/deactivate
      *
      * @autor : Rafael Erthal
@@ -69,9 +70,9 @@ module.exports = function (app) {
      * @request : {token}
      * @response : {confirmation}
      */
-    app.put('/user/:login/deactivate', function (request,response) {
+    app.put('/user/:login/deactivate', function (request, response) {
         response.contentType('json');
-        
+
         //localiza o usuário
         User.findOne({username : request.params.login}, function (error, user) {
             if (error) {
@@ -82,7 +83,7 @@ module.exports = function (app) {
                     response.send({error : 'user not found'});
                 } else {
                     //checa token
-                    user.checkToken(request.param('token', null), function(valid) {
+                    user.checkToken(request.param('token', null), function (valid) {
                         if (!valid) {
                             response.send({error : 'invalid token'});
                         } else {
@@ -95,12 +96,12 @@ module.exports = function (app) {
                                 }
                             });
                         }
-                    });     
+                    });
                 }
             }
         });
     });
-     
+
     /** PUT /user/:login/activate
      *
      * @autor : Rafael Erthal
@@ -114,9 +115,9 @@ module.exports = function (app) {
      * @request : {token}
      * @response : {confirmation}
      */
-    app.put('/user/:login/activate', function (request,response) {
+    app.put('/user/:login/activate', function (request, response) {
         response.contentType('json');
-        
+
         //localiza o usuário
         User.findOne({username : request.params.login}, function (error, user) {
             if (error) {
@@ -127,7 +128,7 @@ module.exports = function (app) {
                     response.send({error : 'user not found'});
                 } else {
                     //checa token
-                    user.checkToken(request.param('token', null), function(valid) {
+                    user.checkToken(request.param('token', null), function (valid) {
                         if (!valid) {
                             response.send({error : 'invalid token'});
                         } else {
@@ -140,12 +141,12 @@ module.exports = function (app) {
                                 }
                             });
                         }
-                    });     
+                    });
                 }
             }
         });
     });
-    
+
     /** PUT /user/:login/password-recovery
      *
      * @autor : Rafael Erthal
@@ -159,9 +160,9 @@ module.exports = function (app) {
      * @request : {token, newpassword, newpasswordconfirmation}
      * @response : {newtoken, confirmation}
      */
-    app.put('/user/:login/password-recovery', function (request,response) {
+    app.put('/user/:login/password-recovery', function (request, response) {
         response.contentType('json');
-        
+
         // valida se a senha e a confirmação senha conferem
         if (request.param('newpassword', null) === request.param('newpasswordconfirmation', null)) {
             //localiza o usuário
@@ -174,7 +175,7 @@ module.exports = function (app) {
                         response.send({error : 'user not found'});
                     } else {
                         //checa token
-                        user.checkToken(request.param('token', null), function(valid) {
+                        user.checkToken(request.param('token', null), function (valid) {
                             if (!valid) {
                                 response.send({error : 'invalid token'});
                             } else {
@@ -194,7 +195,7 @@ module.exports = function (app) {
                                     }
                                 });
                             }
-                        });     
+                        });
                     }
                 }
             });
@@ -202,7 +203,7 @@ module.exports = function (app) {
             response.send({error : 'Password confirmation invalid'});
         }
     });
-    
+
     /** PUT /user/:login/login
      *
      * @autor : Rafael Erthal
@@ -216,9 +217,9 @@ module.exports = function (app) {
      * @request : {login, password}
      * @response : { token, confirmation}
      */
-    app.put('/user/:login/login', function (request,response) {
+    app.put('/user/:login/login', function (request, response) {
         response.contentType('json');
-        
+
         //localiza o usuário
         User.findOne({username : request.params.login}, function (error, user) {
             if (error) {
@@ -245,7 +246,7 @@ module.exports = function (app) {
             }
         });
     });
-    
+
     /** PUT /user/:login/logout
      *
      * @autor : Rafael Erthal
@@ -259,9 +260,9 @@ module.exports = function (app) {
      * @request : {token}
      * @response : {confirmation}
      */
-    app.put('/user/:login/logout', function (request,response) {
+    app.put('/user/:login/logout', function (request, response) {
         response.contentType('json');
-        
+
         //localiza o usuário
         User.findOne({username : request.params.login}, function (error, user) {
             if (error) {
@@ -272,7 +273,7 @@ module.exports = function (app) {
                     response.send({error : 'user not found'});
                 } else {
                     //verifica o token do usuário
-                    user.checkToken(request.param('token', null), function(valid) {
+                    user.checkToken(request.param('token', null), function (valid) {
                         if (!valid) {
                             response.send({error : 'invalid token'});
                         } else {
@@ -290,7 +291,7 @@ module.exports = function (app) {
             }
         });
     });
-    
+
     /** GET /user/:login/validate
      *
      * @autor : Rafael Erthal
@@ -304,9 +305,9 @@ module.exports = function (app) {
      * @request : {token}
      * @response : {confirmation}
      */
-    app.get('/user/:login/validate', function (request,response) {
+    app.get('/user/:login/validate', function (request, response) {
         response.contentType('json');
-        
+
         //localiza o usuário
         User.findOne({username : request.params.login}, function (error, user) {
             if (error) {
@@ -317,7 +318,7 @@ module.exports = function (app) {
                     response.send({error : 'user not found'});
                 } else {
                     //verifica o token do usuário
-                    user.checkToken(request.param('token', null), function(valid) {
+                    user.checkToken(request.param('token', null), function (valid) {
                         response.send({valid : valid, error : ''});
                     });
                 }

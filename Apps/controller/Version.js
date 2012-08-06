@@ -4,14 +4,15 @@
  *
  * @description : Módulo que implementa as funcionalidades de versões
  */
- 
+
 module.exports = function (app) {
-    
+    "use strict";
+
     var Model = require('./../model/Model.js'),
-        Auth  = require('./../Utils.js').auth,
+        auth  = require('./../Utils.js').auth,
         App  = Model.App,
         Version  = Model.Version;
-        
+
     /** POST /app/:slug/version
      *
      * @autor : Rafael Erthal
@@ -27,14 +28,14 @@ module.exports = function (app) {
      */
     app.post('/app/:slug/version', function (request, response) {
         var version;
-        
+
         response.contentType('json');
-        
+
         //valida o token do usuário
-        Auth(request.param('login', null), request.param('token', null), function (valid) {
+        auth(request.param('login', null), request.param('token', null), function (valid) {
             if (valid) {
                 //busca o app
-                App.findOne({slug : request.params.slug}, function (error, app) {                
+                App.findOne({slug : request.params.slug}, function (error, app) {
                     if (error) {
                         response.send({error : error});
                     } else {
@@ -48,7 +49,7 @@ module.exports = function (app) {
                             } else {
                                 //coloca os dados do post em um objeto
                                 version = new Version({
-                                    number : request.param('version', null),
+                                    number : request.param('number', null),
                                     appId  : app._id
                                 });
                                 //salva a versão
@@ -68,7 +69,7 @@ module.exports = function (app) {
             }
         });
     });
-    
+
     /** GET /app/:slug/versions
      *
      * @autor : Rafael Erthal
@@ -84,9 +85,9 @@ module.exports = function (app) {
      */
     app.get('/app/:slug/versions', function (request, response) {
         response.contentType('json');
-        
-        //busca o app
-        App.find({slug : request.params.slug}, function (error, app) {
+
+        //busca o app        
+        App.findOne({slug : request.params.slug}, function (error, app) {
             if (error) {
                 response.send({error : error});
             } else {
@@ -106,7 +107,7 @@ module.exports = function (app) {
             }
         });
     });
-        
+
     /** GET /app/:slug/version/:number
      *
      * @autor : Rafael Erthal
@@ -122,9 +123,9 @@ module.exports = function (app) {
      */
     app.get('/app/:slug/version/:number', function (request, response) {
         response.contentType('json');
-        
+
         //busca o app
-        App.find({slug : request.params.slug}, function (error, app) {
+        App.findOne({slug : request.params.slug}, function (error, app) {
             if (error) {
                 response.send({error : error});
             } else {
@@ -133,7 +134,7 @@ module.exports = function (app) {
                     response.send({error : 'app not found'});
                 } else {
                     //pega a versão do app
-                    app.findVersion(request.params.number ,function (error, version) {
+                    app.findVersion(request.params.number, function (error, version) {
                         if (error) {
                             response.send({error : error});
                         } else {
@@ -149,7 +150,7 @@ module.exports = function (app) {
             }
         });
     });
-        
+
     /** DEL /app/:slug/version/:number
      *
      * @autor : Rafael Erthal
@@ -163,11 +164,11 @@ module.exports = function (app) {
      * @request : {token}
      * @response : {confirmation}
      */
-    app.del('/app/:slug/version/:number', function (request, response) {        
+    app.del('/app/:slug/version/:number', function (request, response) {
         response.contentType('json');
-        
+
         //valida o token do usuário
-        Auth(request.param('login', null), request.param('token', null), function (valid) {
+        auth(request.param('login', null), request.param('token', null), function (valid) {
             if (valid) {
                 //busca o app
                 App.findOne({slug : request.params.slug}, function (error, app) {
@@ -205,13 +206,13 @@ module.exports = function (app) {
                             }
                         }
                     }
-                });                
+                });
             } else {
                 response.send({error : 'invalid token'});
             }
         });
     });
-        
+
     /** PUT /app/:slug/version/:number
      *
      * @autor : Rafael Erthal
@@ -227,9 +228,9 @@ module.exports = function (app) {
      */
     app.put('/app/:slug/version/:number', function (request, response) {
         response.contentType('json');
-        
+
         //valida o token do usuário
-        Auth(request.param('login', null), request.param('token', null), function (valid) {
+        auth(request.param('login', null), request.param('token', null), function (valid) {
             if (valid) {
                 //busca o app
                 App.findOne({slug : request.params.slug}, function (error, app) {
@@ -269,7 +270,7 @@ module.exports = function (app) {
                             }
                         }
                     }
-                });            
+                });
             } else {
                 response.send({error : 'invalid token'});
             }

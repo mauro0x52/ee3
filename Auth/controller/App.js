@@ -4,13 +4,14 @@
  *
  * @description : Módulo que implementa as funcionalidades autorização de aplicativos
  */
- 
+
 module.exports = function (app) {
-    
+    "use strict";
+
     var Model = require('./../model/Model.js'),
         User  = Model.User,
         crypto = require('crypto');
-        
+
     /** POST /user/:login/app/:app_id
      *
      * @autor : Rafael Erthal
@@ -24,11 +25,11 @@ module.exports = function (app) {
      * @request : {token}
      * @response : {token, confirmation}
      */
-    app.post('/user/:login/app/:app_id', function (request,response) {
+    app.post('/user/:login/app/:app_id', function (request, response) {
         var token;
-        
+
         response.contentType('json');
-        
+
         //localiza o usuário
         User.findOne({username : request.params.login}, function (error, user) {
             if (error) {
@@ -39,7 +40,7 @@ module.exports = function (app) {
                     response.send({error : 'user not found'});
                 } else {
                     //verifica o token do usuário
-                    user.checkToken(request.param('token', null), function(valid) {
+                    user.checkToken(request.param('token', null), function (valid) {
                         if (!valid) {
                             response.send({error : 'invalid token'});
                         } else {
@@ -65,7 +66,7 @@ module.exports = function (app) {
             }
         });
     });
-    
+
     /** DEL /user/:login/app/:app_id
      *
      * @autor : Rafael Erthal
@@ -79,12 +80,9 @@ module.exports = function (app) {
      * @request : {token}
      * @response : {confirmation}
      */
-    app.del('/user/:login/app/:app_id', function (request,response) {
-        var i,
-            found = false;
-
+    app.del('/user/:login/app/:app_id', function (request, response) {
         response.contentType('json');
-        
+
         //localiza o usuário
         User.findOne({username : request.params.login}, function (error, user) {
             if (error) {
@@ -95,36 +93,37 @@ module.exports = function (app) {
                     response.send({error : 'user not found'});
                 } else {
                     //verifica o token do usuário
-                    user.checkToken(request.param('token', null), function(valid) {
+                    user.checkToken(request.param('token', null), function (valid) {
                         if (!valid) {
                             response.send({error : 'invalid token'});
                         } else {
-                            //busca a autorização de app nos apps autorizados do usuário
-                            for (i = 0; i < user.authorizedApps.length; i++) {
-                                if (user.authorizedApps[i].appId === request.params.app_id) {
-                                    //remove autorização de app
-                                    user.authorizedApps[i].remove();
-                                    user.save(function (error) {
-                                        if (error) {
-                                            response.send({error : error});
-                                        } else {
-                                            response.send({error : ''});
-                                        }
-                                    });
-                                    found = true;
+                            //busca a autorização
+                            user.findAuthorizedApp(request.params.app_id, function (error, app) {
+                                if (error) {
+                                    response.send({error : error});
+                                } else {
+                                    //verifica se a autorização foi encontrada
+                                    if (app === null) {
+                                        response.send({error : 'app not found'});
+                                    } else {
+                                        //remove a autorização
+                                        app.remove(function (error) {
+                                            if (error) {
+                                                response.send({error : error});
+                                            } else {
+                                                response.send({error : ''});
+                                            }
+                                        });
+                                    }
                                 }
-                            }
-                            //caso não tenha sido achado, enviar mensagem de erro
-                            if (!found) {
-                                response.send({error : 'auth not found'});
-                            }
+                            });
                         }
                     });
                 }
             }
         });
     });
-    
+
     /** GET /user/:login/app/:app_id
      *
      * @autor : Rafael Erthal
@@ -138,12 +137,9 @@ module.exports = function (app) {
      * @request : {token}
      * @response : {authorizationDate,  expirationDate}
      */
-    app.get('/user/:login/app/:app_id', function (request,response) {
-        var i,
-            foud = false;
-        
+    app.get('/user/:login/app/:app_id', function (request, response) {
         response.contentType('json');
-        
+
         //localiza o usuário
         User.findOne({username : request.params.login}, function (error, user) {
             if (error) {
@@ -154,29 +150,30 @@ module.exports = function (app) {
                     response.send({error : 'user not found'});
                 } else {
                     //verifica o token do usuário
-                    user.checkToken(request.param('token', null), function(valid) {
+                    user.checkToken(request.param('token', null), function (valid) {
                         if (!valid) {
                             response.send({error : 'invalid token'});
                         } else {
-                            //busca a autorização de app nos apps autorizados do usuário
-                            for (i = 0; i < user.authorizedApps.length; i++) {
-                                if (user.authorizedApps[i].appId === request.params.app_id) {
-                                    //envia dados da autorização
-                                    response.send({error : '', authorizedApp : user.authorizedApps[i]});
-                                    found = true;
+                            //busca a autorização
+                            user.findAuthorizedApp(request.params.app_id, function (error, app) {
+                                if (error) {
+                                    response.send({error : error});
+                                } else {
+                                    //verifica se a autorização foi encontrada
+                                    if (app === null) {
+                                        response.send({error : 'app not found'});
+                                    } else {
+                                        response.send({authorizedApp : app});
+                                    }
                                 }
-                            }
-                            //caso não tenha sido achado, enviar mensagem de erro
-                            if (!found) {
-                                response.send({error : 'auth not found'});
-                            }
+                            });
                         }
                     });
                 }
             }
         });
     });
-    
+
     /** PUT /user/:login/app/:app_id
      *
      * @autor : Rafael Erthal
@@ -190,9 +187,13 @@ module.exports = function (app) {
      * @request : {authorizationDate, expirationDate, token}
      * @response : {confirmation}
      */
-    app.put('/user/:login/app/:app_id', function (request,response) {
+    app.put('/user/:login/app/:app_id', function (request, response) {
+        var i,
+            authorizedApp,
+            found = false;
+
         response.contentType('json');
-        
+
         //localiza o usuário
         User.findOne({username : request.params.login}, function (error, user) {
             if (error) {
@@ -203,38 +204,40 @@ module.exports = function (app) {
                     response.send({error : 'user not found'});
                 } else {
                     //verifica o token do usuário
-                    user.checkToken(request.param('token', null), function(valid) {
+                    user.checkToken(request.param('token', null), function (valid) {
                         if (!valid) {
                             response.send({error : 'invalid token'});
                         } else {
-                            //busca a autorização de app nos apps autorizados do usuário
-                            for (i = 0; i < user.authorizedApps.length; i++) {
-                                if (user.authorizedApps[i].appId === request.params.app_id) {
-                                    //edita dados da autorização
-                                    user.authorizedApps[i].authorizationDate = request.param('authorizationDate', null);
-                                    user.authorizedApps[i].expirationDate = request.param('expirationDate', null);
-                                    //salva dados da autorização
-                                    user.save(function (error) {
-                                        if (error) {
-                                            response.send({error : error});
-                                        } else {
-                                            response.send({error : ''});
-                                        }
-                                    });
-                                    found = true;
+                            //busca a autorização
+                            user.findAuthorizedApp(request.params.app_id, function (error, app) {
+                                if (error) {
+                                    response.send({error : error});
+                                } else {
+                                    //verifica se a autorização foi encontrada
+                                    if (app === null) {
+                                        response.send({error : 'app not found'});
+                                    } else {
+                                        //edita dados da autorização
+                                        app.authorizationDate = request.param('authorizationDate', null);
+                                        app.expirationDate = request.param('expirationDate', null);
+                                        //salva dados da autorização
+                                        app.save(function (error) {
+                                            if (error) {
+                                                response.send({error : error});
+                                            } else {
+                                                response.send({error : ''});
+                                            }
+                                        });
+                                    }
                                 }
-                            }
-                            //caso não tenha sido achado, enviar mensagem de erro
-                            if (!found) {
-                                response.send({error : 'auth not found'});
-                            }
+                            });
                         }
                     });
                 }
             }
         });
     });
-    
+
     /** GET /user/:login/app/:app_id/validate
      *
      * @autor : Rafael Erthal
@@ -248,9 +251,12 @@ module.exports = function (app) {
      * @request : {token}
      * @response : {valid}
      */
-    app.get('/user/:login/app/:app_id/validate', function (request,response) {
+    app.get('/user/:login/app/:app_id/validate', function (request, response) {
+        var i,
+            found = false;
+
         response.contentType('json');
-        
+
         //localiza o usuário
         User.findOne({username : request.params.login}, function (error, user) {
             if (error) {
@@ -260,20 +266,21 @@ module.exports = function (app) {
                 if (user === null) {
                     response.send({error : 'user not found'});
                 } else {
-                    //busca a autorização de app nos apps autorizados do usuário
-                    for (i = 0; i < user.authorizedApps.length; i++) {
-                        if (user.authorizedApps[i].appId === request.params.app_id) {
-                            //valida o token
-                            response.send({valid : user.authorizedApps[i].token === request.param('token', null), error : ''});
+                    //busca a autorização
+                    user.findAuthorizedApp(request.params.app_id, function (error, app) {
+                        if (error) {
+                            response.send({error : error});
+                        } else {
+                            //verifica se a autorização foi encontrada
+                            if (app === null) {
+                                response.send({error : 'app not found'});
+                            } else {
+                                response.send({valid : user.authorizedApps[i].token === request.param('token', null), error : ''});
+                            }
                         }
-                    }
-                    //caso não tenha sido achado, enviar mensagem de erro
-                    if (!found) {
-                        response.send({error : 'auth not found'});
-                    }
+                    });
                 }
             }
         });
     });
-    
 };

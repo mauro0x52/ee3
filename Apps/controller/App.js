@@ -4,13 +4,14 @@
  *
  * @description : Módulo que implementa as funcionalidades de aplicativos
  */
- 
+
 module.exports = function (app) {
-    
+    "use strict";
+
     var Model = require('./../model/Model.js'),
-        Auth  = require('./../Utils.js').auth,
+        auth  = require('./../Utils.js').auth,
         App  = Model.App;
-        
+
     /** POST /app
      *
      * @autor : Rafael Erthal
@@ -26,15 +27,15 @@ module.exports = function (app) {
      */
     app.post('/app', function (request, response) {
         var app;
-        
+
         response.contentType('json');
-        
+
         //valida o token do usuário
-        Auth(request.param('login', null), request.param('token', null), function (valid) {
+        auth(request.param('login', null), request.param('token', null), function (valid) {
             if (valid) {
                 //pega os dados do post e coloca em um novo objeto
                 app = new App({
-                    name    : request.param('name', null), 
+                    name    : request.param('name', null),
                     slug    : request.param('slug', null),
                     creator : request.param('login', null),
                     type    : request.param('type', null)
@@ -66,9 +67,9 @@ module.exports = function (app) {
      * @request : {}
      * @response : {[name,slug,type]}
      */
-    app.get('/apps', function (request,response) {
+    app.get('/apps', function (request, response) {
         response.contentType('json');
-        
+
         //busca todos os apps
         App.find(function (error, apps) {
             if (error) {
@@ -76,9 +77,9 @@ module.exports = function (app) {
             } else {
                 response.send({apps : apps});
             }
-        })
+        });
     });
-     
+
     /** GET /app/:slug
      *
      * @autor : Rafael Erthal
@@ -92,9 +93,9 @@ module.exports = function (app) {
      * @request : {}
      * @response : {[name,slug,type]}
      */
-    app.get('/app/:slug', function (request,response) {
+    app.get('/app/:slug', function (request, response) {
         response.contentType('json');
-        
+
         //busca todos os apps
         App.findOne({slug : request.params.slug}, function (error, app) {
             if (error) {
@@ -107,9 +108,9 @@ module.exports = function (app) {
                     response.send({app : app});
                 }
             }
-        })
+        });
     });
-    
+
     /** DEL /app/:slug
      *
      * @autor : Rafael Erthal
@@ -123,11 +124,11 @@ module.exports = function (app) {
      * @request : {token}
      * @response : {confirmation}
      */
-    app.del('/app/:slug', function (request,response) {
+    app.del('/app/:slug', function (request, response) {
         response.contentType('json');
-        
+
         //valida o token do usuário
-        Auth(request.param('login', null), request.param('token', null), function (valid) {
+        auth(request.param('login', null), request.param('token', null), function (valid) {
             if (valid) {
                 //busca o app
                 App.findOne({slug : request.params.slug}, function (error, app) {
@@ -159,7 +160,7 @@ module.exports = function (app) {
             }
         });
     });
-    
+
     /** PUT /app/:slug
      *
      * @autor : Rafael Erthal
@@ -175,9 +176,9 @@ module.exports = function (app) {
      */
     app.put('/app/:slug', function (request, response) {
         response.contentType('json');
-        
+
         //valida o token do usuário
-        Auth(request.param('login', null), request.param('token', null), function (valid) {
+        auth(request.param('login', null), request.param('token', null), function (valid) {
             if (valid) {
                 //busca o app
                 App.findOne({slug : request.params.slug}, function (error, app) {

@@ -1,6 +1,6 @@
 module.exports = {
     host : {
-        port : 3300,
+        port : 3306,
         url  : 'localhost',
         debuglevel : 1 // 0 sem erros, 1 com erros
     },

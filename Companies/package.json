@@ -1,0 +1,14 @@
+{
+  "name": "Talk",
+  "description": "serviço de talk do empreendemia 3",
+  "version": "0.0.1",
+  "author": "Rafael Almeida Erthal Hermano",
+  "dependencies": {
+    "ejs": "~0.8.0",
+    "express": "~3.0.0rc1",
+    "express-namespace": "~0.1.1",
+    "mongodb": "~1.1.2",
+    "mongoose": "~2.7.3"
+  },
+  "devDependencies": {}
+}

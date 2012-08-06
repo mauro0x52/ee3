@@ -1,0 +1,41 @@
+module.exports = {
+    host : {
+        port : 3307,
+        url  : 'localhost',
+        debuglevel : 0 // 0 sem erros, 1 com erros
+    },
+    services : {
+        auth : {
+            host : 'localhost',
+            port : 3300
+        },
+        files : {
+            host : 'localhost',
+            port : 3301
+        },
+        companies : {
+            host : 'localhost',
+            port : 3302
+        },
+        apps : {
+            host : 'localhost',
+            port : 3303
+        },
+        profiles : {
+            host : 'localhost',
+            port : 3304
+        },
+        talk : {
+            host : 'localhost',
+            port : 3305
+        },
+        location : {
+            host : 'localhost',
+            port : 3306
+        }
+    },
+    security : {
+        token    : 'Digite qualquer hash aleatória',
+        password : 'Digite qualquer hash aleatória'
+    }
+};
