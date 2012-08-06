@@ -1,4 +1,4 @@
-/** Thumbnail
+    /** Thumbnail
  * @author : Rafael Erthal
  * @since : 2012-08
  *

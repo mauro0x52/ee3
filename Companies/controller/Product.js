@@ -26,6 +26,8 @@ module.exports = function (app) {
      * @response : {confirmation}
      */
     app.post('/company/:slug/product', function (request, response) {
+        var product;
+
         response.contentType('json');
 
         //valida o token do usuário
@@ -44,7 +46,23 @@ module.exports = function (app) {
                             if (! company.isOwner(request.param('login', null))) {
                                 response.send({error : 'permission denied'});
                             } else {
-                                //TODO implementar funcionalidades
+                                if (request.param('product')) {
+                                    product.name = request.param('name');
+                                    product.slugs = request.param('slugs');
+                                    product.about = request.param('about');
+                                    product.abstract = request.param('abstract');
+                                    product.links = request.param('links');
+                                    product.thumbnails = request.param('thumbnails');
+                                    company.products.push(product);
+                                    
+                                    company.save (function(error) {
+                                        if (error) {
+                                            response.send({error : error});
+                                        } else {
+                                            response.send({Product : company.products[company.products.length]});
+                                        }
+                                    })
+                                }
                             }
                         }
                     }
@@ -80,7 +98,7 @@ module.exports = function (app) {
                 if (company === null) {
                     response.send({error : 'company not found'});
                 } else {
-                    //TODO implementar funcionalidades
+                    response.send({Products : company.products});
                 }
             }
         });
@@ -111,7 +129,9 @@ module.exports = function (app) {
                 if (company === null) {
                     response.send({error : 'company not found'});
                 } else {
-                    //TODO implementar funcionalidades
+                    company.findProduct (function (error, product){
+                        response.send({Product : product});
+                    });
                 }
             }
         });
@@ -149,7 +169,22 @@ module.exports = function (app) {
                             if (! company.isOwner(request.param('login', null))) {
                                 response.send({error : 'permission denied'});
                             } else {
-                                //TODO implementar funcionalidades
+                                Company.findProduct(request.params.product_slug, function(error, product){
+                                    product.name = request.param('name');
+                                    product.slugs = request.param('slugs');
+                                    product.about = request.param('about');
+                                    product.abstract = request.param('abstract');
+                                    product.links = request.param('links');
+                                    product.thumbnails = request.param('thumbnails');
+                                    
+                                    product.save(function(error){
+                                        if (error) {
+                                            response.send({error : error});
+                                        } else {
+                                            response.send({Product : product});
+                                        }
+                                    });
+                                })
                             }
                         }
                     }
@@ -192,7 +227,13 @@ module.exports = function (app) {
                             if (! company.isOwner(request.param('login', null))) {
                                 response.send({error : 'permission denied'});
                             } else {
-                                //TODO implementar funcionalidades
+                                company.findProduct (request.params.product_slug, function(error){
+                                    if (error) {
+                                        request.send({error});
+                                    } else {
+                                        
+                                    }
+                                });
                             }
                         }
                     }

@@ -26,32 +26,10 @@ module.exports = function (app) {
      * @response : {confirmation}
      */
     app.post('/company', function (request, response) {
-        var company,
-            products,
-            addresses,
-            thumbnails,
-            phones,
-            contacts,
-            links,
-            embeddeds,
-            sectors,
-            members,
-            users,
-            tags,
-            parsProducts = [],
-            parsThumbnails = [],
-            parsPhones = [],
-            parsContacts = [],
-            parsLinks = [],
-            parsAddresses = [],
-            parsEmbeddeds = [],
-            parsSectors = [],
-            parsMembers = [],
-            parsUsers = [],
-            parsTags = [];
-        
+        var company;
+
         response.contentType('json');
-        
+
         //valida o token do usuário
         auth(request.param('login', null), request.param('token', null), function (valid) {
             if (valid) {
