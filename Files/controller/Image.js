@@ -4,24 +4,26 @@
  *
  * @description : Módulo que implementa as funcionalidades de imagens
  */
- 
+
 module.exports = function (app) {
-    
-    var Model = require('./../model/Model.js'),
+    "use strict";
+
+    var
+    // models
+        Model = require('./../model/Model.js'),
         Image  = Model.Image,
-        File = Model.File;
+        File = Model.File,
+    // arquivo de configuracao
+        config  = require('../config.js');
 
-    var config  = require('../config.js');
-
-
-    app.post('/image', function (request,response) {
+    app.post('/image', function (request, response) {
         var
         // modulos
             crypto = require('crypto'),
             path = require('path'),
             dateUtils = require('date-utils'),
         // variaveis
-            tmpFile, imageFile, hash, folder, folderPath, fileNameSplit, fileExt, filePath, url;
+            image, tmpFile, imageFile, hash, folder, folderPath, fileNameSplit, fileExt, filePath, url;
 
         response.contentType('json');
 
@@ -32,7 +34,7 @@ module.exports = function (app) {
         tmpFile = request.files.file;
 
         // extensao do arquivo
-        fileNameSplit = path.extname(request.files.file.name||'').split('.');
+        fileNameSplit = path.extname(request.files.file.name || '').split('.');
         fileExt = fileNameSplit[fileNameSplit.length - 1];
 
         // nome unico para a pasta: ANO + MES + DIA + hash[10]
@@ -48,22 +50,20 @@ module.exports = function (app) {
             file : tmpFile
         });
 
-        image.save(function(error, image, imagePath) {
+        image.save(function (error, image, imagePath) {
             if (error) {
-                response.send({request:{error:error}});
-            }
-            else {
+                response.send({request: {error: error}});
+            } else {
                 // salva informacoes da imagem no bd
                 var file = new File({
                     type : 'image',
                     path : imagePath
                 });
 
-                file.save(function(error, file){
+                file.save(function (error, file) {
                     if (error) {
-                        response.send({request:{error:error}});
-                    }
-                    else {
+                        response.send({request: {error: error}});
+                    } else {
                         response.send({
                             data: file
                         });
@@ -71,12 +71,10 @@ module.exports = function (app) {
                 });
             }
         });
-
     });
 
-
-    app.post('/image/resize', function (request,response) {
-        var 
+    app.post('/image/resize', function (request, response) {
+        var
         // modulos
             crypto = require('crypto'),
         // parametros 
@@ -86,49 +84,46 @@ module.exports = function (app) {
             style = request.param('style', null),
             label = request.param('label', null),
         // variaveis 
-            image, newImage, filePath;
+            image, newImage;
 
         response.contentType('json');
 
         // abre a imagem
         Image.open(filePath, function (error, imageFile) {
             if (error) {
-                response.send({request:{error:error}});
-            }
-            else {
+                response.send({request: {error: error}});
+            } else {
                 // cria uma imagem temporaria resizeada
                 Image.resize(
                     {
-                        style   :   style, 
-                        width   :   width, 
-                        height  :   height, 
+                        style   :   style,
+                        width   :   width,
+                        height  :   height,
                         label   :   label,
                         image   :   imageFile
                     },
-                    function(error, tmpFile, newFilePath){
+                    function (error, tmpFile, newFilePath) {
                         // salva a imagem no filesystem
                         newImage = new Image({
                             path : newFilePath,
                             file : tmpFile
                         });
 
-                        newImage.save(function(error, image) {
+                        newImage.save(function (error, image) {
                             if (error) {
-                                response.send({request:{error:error}});
-                            }
-                            else {
+                                response.send({request: {error: error}});
+                            } else {
                                 // salva informacoes da imagem no bd
                                 var file = new File({
                                     type : 'image',
                                     path : newFilePath
                                 });
 
-                                file.save(function(error, file){
+                                file.save(function (error, file) {
                                     if (error) {
-                                        response.send({request:{error:error}});
-                                    }
-                                    else {
-                                        response.send({data:file});
+                                        response.send({request: {error: error}});
+                                    } else {
+                                        response.send({data: file});
                                     }
                                 });
                             }
@@ -137,7 +132,5 @@ module.exports = function (app) {
                 );
             }
         });
-
     });
-
 };
