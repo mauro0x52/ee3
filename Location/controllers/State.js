@@ -27,15 +27,17 @@ module.exports = function (app) {
      */
     app.get('/country/:slug/states/', function (request, response) {
         var filter = {};
+
         response.contentType('json');
 
+        //Localiza o País informado pelo slug
         Country.findOne({slug : request.params.slug}, function (error, country) {
             if (error) {
                 response.send({error : error});
             } else {
                 if (country) {
                     filter = {countryId : country._id};
-
+                    //Localiza todos os estados do país informado
                     State.find(filter, function (error, states) {
                         if (error) {
                             response.send({error : error});
@@ -68,13 +70,15 @@ module.exports = function (app) {
 
         response.contentType('json');
 
+        //Localiza o País enviado por slug
         Country.findOne({slug : request.params.slugCountry}, function (error, country) {
             if (error) {
                 response.send({error : error});
             } else {
                 if (country) {
+                    //Adiciona os filtros necessários para encontrar o estado
                     filter = {countryId : country._id, slug : request.params.slugState};
-
+                    //Localiza o estado
                     State.findOne(filter, function (error, state) {
                         if (error) {
                             response.send({error : error});

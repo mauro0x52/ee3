@@ -11,9 +11,9 @@ var mongoose = require('mongoose'),
     thumbnailSchema;
 
 thumbnailSchema = new schema({
-    small  : {type : objectId},
-    medium : {type : objectId},
-    large  : {type : objectId}
+    small  : [require('./Image.js').Image],
+    medium : [require('./Image.js').Image],
+    large  : [require('./Image.js').Image]
 });
 
 /*  Exportando o pacote  */

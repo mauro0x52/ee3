@@ -37,7 +37,6 @@ module.exports = function (app) {
                 company = new Company({
                     slug       : request.param("slug"),
                     name       : request.param("name"),
-                    thumbnails : request.param("thumbnails"),
                     members    : request.param("members"),
                     users      : request.param("users"),
                     sectors    : request.param("sectors"),

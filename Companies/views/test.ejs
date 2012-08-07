@@ -51,41 +51,8 @@
                                 <li>token <input type="text" value="3f2b5b78a7e8c77553346d0de8345308" name="token" /></li>
                                 <li>slug <input type="text" name="slug" /></li>
                                 <li>name <input type="text" name="name" /></li>
-                                <!--
-                                <li>thumbnails-small <input type="text" name="thumbnails[0][small]" /></li>
-                                <li>thumbnails-medium <input type="text" name="thumbnails[0][medium]" /></li>
-                                <li>thumbnails-large <input type="text" name="thumbnails[0][large]" /></li>
-                                <li>thumbnails-small 2 <input type="text" name="thumbnails[1][small]" /></li>
-                                <li>thumbnails-medium 2 <input type="text" name="thumbnails[1][medium]" /></li>
-                                <li>thumbnails-large 2 <input type="text" name="thumbnails[1][large]" /></li>
-                                
-                                <li>members-id <input type="text" name="members[0]" /></li>
-                                <li>members-id 2 <input type="text" name="members[1]" /></li>
-                                -->
-                                
                                 <li>users-username (owner)<input type="text" name="users[0]" /></li>
                                 <li>users-username 2 (owner)<input type="text" name="users[1]" /></li>
-                                
-                                <!--
-                                <li>sectors-id <input type="text" name="sectors[0]" /></li>
-                                <li>sectors-id 2 <input type="text" name="sectors[1]" /></li>
-                                
-                                <li>products-name <input type="text" name="products[0][name]" /></li>
-                                <li>products-slug <input type="text" name="products[0][slug]" /></li>
-                                <li>products-thumbnails-small <input type="text" name="products[0][thumbnails][0][small]" /></li>
-                                <li>products-thumbnails-medium <input type="text" name="products[0][thumbnails][0][medium]" /></li>
-                                <li>products-thumbnails-large <input type="text" name="products[0][thumbnails][0][large]" /></li>
-                                <li>products-thumbnails-small 2 <input type="text" name="products[0][thumbnails][1][small]" /></li>
-                                <li>products-thumbnails-medium 2 <input type="text" name="products[0][thumbnails][1][medium]" /></li>
-                                <li>products-thumbnails-large 2 <input type="text" name="products[0][thumbnails][1][large]" /></li>
-                                <li>products-abstract <input type="text" name="products[0][abstract]" /></li>
-                                <li>products-about <input type="text" name="products[0][about]" /></li>
-                                <li>products-links-url <input type="text" name="products[0][links][0][url]" /></li>
-                                <li>products-links-type <input type="text" name="products[0][links][0][type]" /></li>
-                                <li>products-links-url 2 <input type="text" name="products[0][links][1][url]" /></li>
-                                <li>products-links-type 2 <input type="text" name="products[0][links][1][type]" /></li>
-                                <li>products-images <input type="text" name="products[0][images][0]" /></li>
-                                -->
                                 <li>type <input type="text" value="freelancer" name="type" /></li>
                                 <li>profile <input type="text" value="buyer" name="profile" /></li>
                                 <li>active <input type="text" value="1" name="active" /></li>
@@ -143,13 +110,12 @@
                     </li>
                 </ul>
             </li>
-            
             <li>
                 <h2>Testes com Products</h2>
                 <h3>Chamadas API</h3>
                 <ul>
                     <li>
-                        <h4>Lista todos os Products</h4>
+                        <h4>Lista todos os Produtos</h4>
                         <form onsubmit="test($(this).serialize(), '../company/'+$(this).find('input[name=slug]').val()+'/products', 'GET'); return false;">
                             Parâmetros
                             <ul>
@@ -159,7 +125,7 @@
                         </form>
                     </li>
                     <li>
-                        <h4>Cadastra Product</h4>
+                        <h4>Cadastra Produto</h4>
                         <form onsubmit="test($(this).serialize(), '../company/'+$(this).find('input[name=slug]').val()+'/product', 'POST'); return false;">
                             Parâmetros
                             <ul>
@@ -172,45 +138,29 @@
                                 <li>products-slug 2 <input type="text" name="slugs[1]" /></li>
                                 <li>products-abstract <input type="text" name="abstract" /></li>
                                 <li>products-about <input type="text" name="about" /></li>
-                                
-                                <!--
-                                <li>products-thumbnails-small <input type="text" name="thumbnails[0][small]" /></li>
-                                <li>products-thumbnails-medium <input type="text" name="thumbnails[0][medium]" /></li>
-                                <li>products-thumbnails-large <input type="text" name="thumbnails[0][large]" /></li>
-                                <li>products-thumbnails-small 2 <input type="text" name="thumbnails[1][small]" /></li>
-                                <li>products-thumbnails-medium 2 <input type="text" name="thumbnails[1][medium]" /></li>
-                                <li>products-thumbnails-large 2 <input type="text" name="thumbnails[1][large]" /></li>
-                                
-                                <li>products-links-url <input type="text" name="links[0][url]" /></li>
-                                <li>products-links-type <input type="text" name="links[0][type]" /></li>
-                                <li>products-links-url 2 <input type="text" name="links[1][url]" /></li>
-                                <li>products-links-type 2 <input type="text" name="links[1][type]" /></li>
-                                
-                                <li>products-images-file <input type="text" name="images[0][file]" /></li>
-                                <li>products-images-url <input type="text" name="images[0][url]" /></li>
-                                <li>products-images-title <input type="text" name="images[0][title]" /></li>
-                                <li>products-images-legend <input type="text" name="images[0][legend]" /></li>
-                                <li>products-images-file 2 <input type="text" name="images[1][file]" /></li>
-                                <li>products-images-url 2 <input type="text" name="images[1][url]" /></li>
-                                <li>products-images-title 2 <input type="text" name="images[1][title]" /></li>
-                                <li>products-images-legend 2 <input type="text" name="images[1][legend]" /></li>
-                                -->
                             </ul>
                             <input type="submit" value="testar" />
                         </form>
                     </li>
                     <li>
-                        <h4>Listar Products</h4>
-                        <form onsubmit="test($(this).serialize(), '../company/'+$(this).find('input[name=slug]').val()+'/products', 'GET'); return false;">
+                        <h4>Editar Produto</h4>
+                        <form onsubmit="test($(this).serialize(), '../company/'+$(this).find('input[name=slug]').val()+'/product/'+$(this).find('input[name=slugProduct]').val(), 'PUT'); return false;">
                             Parâmetros
                             <ul>
+                                <li>login <input type="text" value="teste" name="login" /></li>
+                                <li>token <input type="text" value="3f2b5b78a7e8c77553346d0de8345308" name="token" /></li>
                                 <li>company-slug <input type="text" name="slug" /></li>
+                                <li>product-slug <input type="text" name="slugProduct" /></li>
+                                
+                                <li>products-name <input type="text" name="name" /></li>
+                                <li>products-abstract <input type="text" name="abstract" /></li>
+                                <li>products-about <input type="text" name="about" /></li>
                             </ul>
                             <input type="submit" value="testar" />
                         </form>
                     </li>
                     <li>
-                        <h4>Listar Products</h4>
+                        <h4>Listar Produto</h4>
                         <form onsubmit="test($(this).serialize(), '../company/'+$(this).find('input[name=slug]').val()+'/product/'+$(this).find('input[name=slugProduct]').val(), 'GET'); return false;">
                             Parâmetros
                             <ul>
@@ -221,7 +171,7 @@
                         </form>
                     </li>
                     <li>
-                        <h4>Excluir Product</h4>
+                        <h4>Excluir Produto</h4>
                         <form onsubmit="test($(this).serialize(), '../company/'+$(this).find('input[name=slug]').val()+'/product/'+$(this).find('input[name=slugProduct]').val(), 'DELETE'); return false;">
                             Parâmetros
                             <ul>
@@ -236,7 +186,140 @@
                 </ul>
             </li>
             <li>
+                <h2>Testes com Address</h2>
+                <h3>Chamadas API</h3>
+                <ul>
+                    <li>
+                        <h4>Lista todos as Imagens</h4>
+                        <form onsubmit="test($(this).serialize(), '../company/'+$(this).find('input[name=slug]').val()+'/products/'+$(this).find('input[name=slugProduct]').val()+'/images', 'GET'); return false;">
+                            Parâmetros
+                            <ul>
+                                <li>login <input type="text" value="teste" name="login" /></li>
+                                <li>token <input type="text" value="3f2b5b78a7e8c77553346d0de8345308" name="token" /></li>
+                                <li>company-slug <input type="text" name="slug" /></li>
+                                <li>product-slug <input type="text" name="slugProduct" /></li>
+                            </ul>
+                            <input type="submit" value="testar" />
+                        </form>
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <h2>Testes com Contact</h2>
+                <h3>Chamadas API</h3>
+                <ul>
+                    <li>
+                        <h4>Lista todos as Imagens</h4>
+                        <form onsubmit="test($(this).serialize(), '../company/'+$(this).find('input[name=slug]').val()+'/products/'+$(this).find('input[name=slugProduct]').val()+'/images', 'GET'); return false;">
+                            Parâmetros
+                            <ul>
+                                <li>login <input type="text" value="teste" name="login" /></li>
+                                <li>token <input type="text" value="3f2b5b78a7e8c77553346d0de8345308" name="token" /></li>
+                                <li>company-slug <input type="text" name="slug" /></li>
+                                <li>product-slug <input type="text" name="slugProduct" /></li>
+                            </ul>
+                            <input type="submit" value="testar" />
+                        </form>
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <h2>Testes com Embedded</h2>
+                <h3>Chamadas API</h3>
+                <ul>
+                    <li>
+                        <h4>Lista todos as Imagens</h4>
+                        <form onsubmit="test($(this).serialize(), '../company/'+$(this).find('input[name=slug]').val()+'/products/'+$(this).find('input[name=slugProduct]').val()+'/images', 'GET'); return false;">
+                            Parâmetros
+                            <ul>
+                                <li>login <input type="text" value="teste" name="login" /></li>
+                                <li>token <input type="text" value="3f2b5b78a7e8c77553346d0de8345308" name="token" /></li>
+                                <li>company-slug <input type="text" name="slug" /></li>
+                                <li>product-slug <input type="text" name="slugProduct" /></li>
+                            </ul>
+                            <input type="submit" value="testar" />
+                        </form>
+                    </li>
+                </ul>
+            </li>
+            <li>
                 <h2>Testes com Images</h2>
+                <h3>Chamadas API</h3>
+                <ul>
+                    <li>
+                        <h4>Lista todos as Imagens</h4>
+                        <form onsubmit="test($(this).serialize(), '../company/'+$(this).find('input[name=slug]').val()+'/products/'+$(this).find('input[name=slugProduct]').val()+'/images', 'GET'); return false;">
+                            Parâmetros
+                            <ul>
+                                <li>login <input type="text" value="teste" name="login" /></li>
+                                <li>token <input type="text" value="3f2b5b78a7e8c77553346d0de8345308" name="token" /></li>
+                                <li>company-slug <input type="text" name="slug" /></li>
+                                <li>product-slug <input type="text" name="slugProduct" /></li>
+                            </ul>
+                            <input type="submit" value="testar" />
+                        </form>
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <h2>Testes com Links</h2>
+                <h3>Chamadas API</h3>
+                <ul>
+                    <li>
+                        <h4>Lista todos as Imagens</h4>
+                        <form onsubmit="test($(this).serialize(), '../company/'+$(this).find('input[name=slug]').val()+'/products/'+$(this).find('input[name=slugProduct]').val()+'/images', 'GET'); return false;">
+                            Parâmetros
+                            <ul>
+                                <li>login <input type="text" value="teste" name="login" /></li>
+                                <li>token <input type="text" value="3f2b5b78a7e8c77553346d0de8345308" name="token" /></li>
+                                <li>company-slug <input type="text" name="slug" /></li>
+                                <li>product-slug <input type="text" name="slugProduct" /></li>
+                            </ul>
+                            <input type="submit" value="testar" />
+                        </form>
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <h2>Testes com Thumbnails</h2>
+                <h3>Chamadas API</h3>
+                <ul>
+                    <li>
+                        <h4>Lista todos as Imagens</h4>
+                        <form onsubmit="test($(this).serialize(), '../company/'+$(this).find('input[name=slug]').val()+'/products/'+$(this).find('input[name=slugProduct]').val()+'/images', 'GET'); return false;">
+                            Parâmetros
+                            <ul>
+                                <li>login <input type="text" value="teste" name="login" /></li>
+                                <li>token <input type="text" value="3f2b5b78a7e8c77553346d0de8345308" name="token" /></li>
+                                <li>company-slug <input type="text" name="slug" /></li>
+                                <li>product-slug <input type="text" name="slugProduct" /></li>
+                            </ul>
+                            <input type="submit" value="testar" />
+                        </form>
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <h2>Testes com Phone</h2>
+                <h3>Chamadas API</h3>
+                <ul>
+                    <li>
+                        <h4>Lista todos as Imagens</h4>
+                        <form onsubmit="test($(this).serialize(), '../company/'+$(this).find('input[name=slug]').val()+'/products/'+$(this).find('input[name=slugProduct]').val()+'/images', 'GET'); return false;">
+                            Parâmetros
+                            <ul>
+                                <li>login <input type="text" value="teste" name="login" /></li>
+                                <li>token <input type="text" value="3f2b5b78a7e8c77553346d0de8345308" name="token" /></li>
+                                <li>company-slug <input type="text" name="slug" /></li>
+                                <li>product-slug <input type="text" name="slugProduct" /></li>
+                            </ul>
+                            <input type="submit" value="testar" />
+                        </form>
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <h2>Testes com Sectores</h2>
                 <h3>Chamadas API</h3>
                 <ul>
                     <li>
