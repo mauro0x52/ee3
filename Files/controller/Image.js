@@ -133,4 +133,43 @@ module.exports = function (app) {
             }
         });
     });
+
+    app.get('/image/*', function (request, response) {
+        var
+        // modulos
+            url = require('url'),
+        // parametros 
+            filePath = request.params[0];
+
+
+        if (!filePath) {
+            response.send({error: 'É preciso definir um caminho'});
+        } else {
+            filePath = url.parse(filePath).pathname;
+            if (!config.aws.s3.enabled) {
+                filePath = filePath.substring(8); // para tirar a pasta /uploads
+            }
+            filePath = '/' + filePath;
+            
+            // tira barras duplicadas
+            while (filePath.indexOf('//') !== -1) {
+                filePath = filePath.replace('//', '/');
+            }
+
+            File.findOne({path: filePath}, function (error, file) {
+                if (error) {
+                    response.send({error: error});
+                } else {
+                    if (!file) {
+                        response.send({error: filePath + " não foi encontrado"});
+                    }
+                    else {
+                        response.send({data: file});
+                    }
+                }
+            });
+        }
+
+    });
+
 };
