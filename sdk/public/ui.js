@@ -1,4 +1,61 @@
 /*global sdk: false, document: false*/
+function Element (type) {
+    var HTMLobject = document.createElement(type);
+
+    this.val = function (value) {
+        if (value) {
+            if (typeof value !== 'string') {
+                throw 'invalid data type';
+            }
+            HTMLobject.innerHTML = value.clear();
+            return this;
+        } else {
+            return HTMLobject.innerHTML;
+        }
+    };
+
+    this.childs = {
+        add : function (childs) {
+            if (!this.embed) {
+                throw 'invalid object inheritance';
+            }
+            HTMLobject.innerHTML = HTMLobject.innerHTML + this.embed(childs);
+            return this;
+        },
+        remove : function (childs) {
+            //TODO implementar
+        },
+        get : function (id) {
+            if (id) {
+                //busca e retorna um especifico
+            } else {
+                //retornar todos
+            }
+        }
+    };
+
+    this.clear = function () {
+        HTMLobject.innerHTML = '';
+    };
+
+    this.update = function (value) {
+        this.clear();
+        this.add(value);
+    };
+
+    this.serialize = function() {
+        var res = {},
+            serialized = HTMLobject.serialize,
+            inputName;
+
+        for(inputName in serialized) {
+            if (serialized.hasOwnProperty(inputName)) {
+                res[inputName] = serialized[inputname].value;
+            }
+        }
+        return res;
+    };
+}
 
 function Menu (container) {
     var menu_element = document.createElement('div'),
