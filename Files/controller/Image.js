@@ -150,7 +150,7 @@ module.exports = function (app) {
                 filePath = filePath.substring(8); // para tirar a pasta /uploads
             }
             filePath = '/' + filePath;
-            
+
             // tira barras duplicadas
             while (filePath.indexOf('//') !== -1) {
                 filePath = filePath.replace('//', '/');
@@ -162,14 +162,12 @@ module.exports = function (app) {
                 } else {
                     if (!file) {
                         response.send({error: filePath + " não foi encontrado"});
-                    }
-                    else {
+                    } else {
                         response.send({data: file});
                     }
                 }
             });
         }
-
     });
 
 };
