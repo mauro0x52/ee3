@@ -241,7 +241,7 @@
                 <ul>
                     <li>
                         <h4>Lista todos as Imagens</h4>
-                        <form onsubmit="test($(this).serialize(), '../company/'+$(this).find('input[name=slug]').val()+'/products', 'GET'); return false;">
+                        <form onsubmit="test($(this).serialize(), '../company/'+$(this).find('input[name=slug]').val()+'/products/'+$(this).find('input[name=slugProduct]').val()+'/images', 'GET'); return false;">
                             Parâmetros
                             <ul>
                                 <li>login <input type="text" value="teste" name="login" /></li>
