@@ -1,7 +1,7 @@
 module.exports = {
     host : {
         port : 3301,
-        url  : 'localhost',       // melhor colocar seu ip
+        url  : 'localhost',       // melhor colocar seu  ip
         debuglevel : 0            // 0 sem erros, 1 com erros
     },
     files : {
