@@ -11,8 +11,8 @@ var mongoose = require('mongoose'),
     contactSchema;
 
 contactSchema = new schema({
-    type : {type : String, required : true, enum : ['twitter', 'msn', 'email', 'skype', 'gtalk']},
-    address  : {type : String, trim : true}
+    type    : {type : String, required : true, enum : ['twitter', 'msn', 'email', 'skype', 'gtalk']},
+    address : {type : String, trim : true}
 });
 
 /*  Exportando o pacote  */

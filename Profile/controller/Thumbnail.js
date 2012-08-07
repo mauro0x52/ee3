@@ -46,7 +46,9 @@ module.exports = function (app) {
                             } else {
                                 //coloca os dados do post em um objeto
                                 profile.thumbnails.push({
-                                     //TODO pensar em lógica
+                                     small : request.param('small'),
+                                     medium : request.param('medium'),
+                                     large : request.param('large')
                                 });
                                 //salva o thumbnail
                                 profile.save(function (error) {
@@ -83,7 +85,7 @@ module.exports = function (app) {
         response.contentType('json');
 
         //busca o perfil
-        Profile.find({slug : request.params.slug}, function (error, profile) {
+        Profile.findOne({slug : request.params.slug}, function (error, profile) {
             if (error) {
                 response.send({error : error});
             } else {
@@ -182,7 +184,11 @@ module.exports = function (app) {
                                             response.send({error : 'thumbnail not found'});
                                         } else {
                                             //altera os dados do thumbnail
-                                            //TODO pensar em lógica
+                                            profile.thumbnails.push({
+                                                 small : request.param('small'),
+                                                 medium : request.param('medium'),
+                                                 large : request.param('large')
+                                            });
                                             //salva as alterações
                                             thumbnail.save(function (error) {
                                                 if (error) {
@@ -204,7 +210,7 @@ module.exports = function (app) {
         });
     });
 
-    /** DEL /company/:slug/thumbnail/:id
+    /** DEL /profile/:slug/contact/:idContact/thumbnail/:id
      *
      * @autor : Rafael Erthal
      * @since : 2012-08
@@ -217,14 +223,14 @@ module.exports = function (app) {
      * @request : {login,token}
      * @response : {confirmation}
      */
-    app.del('/company/:slug/thumbnail/:id', function (request, response) {
+    app.del('/profile/:slug/contact/:idContact/thumbnail/:id', function (request, response) {
         response.contentType('json');
 
         //valida o token do usuário
         auth(request.param('login', null), request.param('token', null), function (valid) {
             if (valid) {
                 //busca o perfil
-                Profile.find({slug : request.params.slug}, function (error, profile) {
+                Profile.findOne({slug : request.params.slug}, function (error, profile) {
                     if (error) {
                         response.send({error : error});
                     } else {

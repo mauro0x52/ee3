@@ -36,7 +36,7 @@
         </style>
     </head>
     <body>
-        <h1>Lista de chamadas da API AUTH</h1>
+        <h1>Lista de chamadas da API PROFILE</h1>
         <ul>
             <li>
                 <h2>Testes com Profile</h2>
@@ -208,6 +208,8 @@
                         <form onsubmit="test($(this).serialize(), '../profile/'+$(this).find('input[name=slug]').val()+'/phone/'+$(this).find('input[name=id]').val(), 'PUT'); return false;">
                             Parâmetros
                             <ul>
+                                <li>login <input type="text" value="teste" name="login" /></li>
+                                <li>token <input type="text" value="3f2b5b78a7e8c77553346d0de8345308" name="token" /></li>
                                 <li>slug Profile <input type="text" value="" name="slug" /></li>
                                 <li>id Phone <input type="text" value="" name="id" /></li>
                                 <li>phone-type
@@ -221,6 +223,363 @@
                                 <li>phone-extension <input type="text" name="extension" /></li>
                                 <li>phone-areacode <input type="text" name="areacode" /></li>
                                 <li>phone-intcode <input type="text" name="intcode" /></li>
+                            </ul>
+                            <input type="submit" value="testar" />
+                        </form>
+                    </li>
+                    <li>
+                        <h4>Excluir Phone</h4>
+                        <form onsubmit="test($(this).serialize(), '../profile/'+$(this).find('input[name=slug]').val()+'/phone/'+$(this).find('input[name=id]').val(), 'DELETE'); return false;">
+                            Parâmetros
+                            <ul>
+                                <li>login <input type="text" value="teste" name="login" /></li>
+                                <li>token <input type="text" value="3f2b5b78a7e8c77553346d0de8345308" name="token" /></li>
+                                <li>slug Profile <input type="text" value="" name="slug" /></li>
+                                <li>id Phone <input type="text" value="" name="id" /></li>
+                            </ul>
+                            <input type="submit" value="testar" />
+                        </form>
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <h2>Testes com Links</h2>
+                <h3>Chamadas API</h3>
+                <ul>
+                    <li>
+                        <h4>Listar Links</h4>
+                        <form onsubmit="test($(this).serialize(), '../profile/'+$(this).find('input[name=slug]').val()+'/links/', 'GET'); return false;">
+                            Parâmetros
+                            <ul>
+                                <li>slug Profile <input type="text" value="" name="slug" /></li>
+                            </ul>
+                            <input type="submit" value="testar" />
+                        </form>
+                    </li>
+                    <li>
+                        <h4>Visualizar Link</h4>
+                        <form onsubmit="test($(this).serialize(), '../profile/'+$(this).find('input[name=slug]').val()+'/link/'+$(this).find('input[name=id]').val(), 'GET'); return false;">
+                            Parâmetros
+                            <ul>
+                                <li>slug Profile <input type="text" value="" name="slug" /></li>
+                                <li>id Link <input type="text" value="" name="id" /></li>
+                            </ul>
+                            <input type="submit" value="testar" />
+                        </form>
+                    </li>
+                    <li>
+                        <h4>Cadastra Link</h4>
+                        <form onsubmit="test($(this).serialize(), '../profile/'+$(this).find('input[name=slug]').val()+'/link/', 'POST'); return false;">
+                            Parâmetros
+                            <ul>
+                                <li>slug Profile <input type="text" value="" name="slug" /></li>
+                                <li>login <input type="text" value="teste" name="login" /></li>
+                                <li>token <input type="text" value="3f2b5b78a7e8c77553346d0de8345308" name="token" /></li>
+                                <li>url <input type="text" value="" name="url" /></li>
+                                <li>link-type
+                                    <select name="type">
+                                        <option value='blog'>Blog</option>
+                                        <option value='youtube'>YouTube</option>
+                                        <option value='facebook'>Facebook</option>
+                                        <option value='vimeo'>Vimeo</option>
+                                        <option value='slidshare'>Slidshare</option>
+                                        <option value='website'>WebSite</option>
+                                    </select>
+                                </li>
+                            </ul>
+                            <input type="submit" value="testar" />
+                        </form>
+                    </li>
+                    <li>
+                        <h4>Editar Link</h4>
+                        <form onsubmit="test($(this).serialize(), '../profile/'+$(this).find('input[name=slug]').val()+'/link/'+$(this).find('input[name=id]').val(), 'PUT'); return false;">
+                            Parâmetros
+                            <ul>
+                                <li>slug Profile <input type="text" value="" name="slug" /></li>
+                                <li>login <input type="text" value="teste" name="login" /></li>
+                                <li>token <input type="text" value="3f2b5b78a7e8c77553346d0de8345308" name="token" /></li>
+                                <li>link id <input type="text" value="" name="id" /></li>
+                                <li>url <input type="text" value="" name="url" /></li>
+                                <li>link-type
+                                    <select name="type">
+                                        <option value='blog'>Blog</option>
+                                        <option value='youtube'>YouTube</option>
+                                        <option value='facebook'>Facebook</option>
+                                        <option value='vimeo'>Vimeo</option>
+                                        <option value='slidshare'>Slidshare</option>
+                                        <option value='website'>WebSite</option>
+                                    </select>
+                                </li>
+                            </ul>
+                            <input type="submit" value="testar" />
+                        </form>
+                    </li>
+                    <li>
+                        <h4>Remove Link</h4>
+                        <form onsubmit="test($(this).serialize(), '../profile/'+$(this).find('input[name=slug]').val()+'/link/'+$(this).find('input[name=id]').val(), 'DELETE'); return false;">
+                            Parâmetros
+                            <ul>
+                                <li>slug Profile <input type="text" value="" name="slug" /></li>
+                                <li>login <input type="text" value="teste" name="login" /></li>
+                                <li>token <input type="text" value="3f2b5b78a7e8c77553346d0de8345308" name="token" /></li>
+                                <li>link id <input type="text" value="" name="id" /></li>
+                            </ul>
+                            <input type="submit" value="testar" />
+                        </form>
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <h2>Testes com Contacts</h2>
+                <h3>Chamadas API</h3>
+                <ul>
+                    <li>
+                        <h4>Listar Contacts</h4>
+                        <form onsubmit="test($(this).serialize(), '../profile/'+$(this).find('input[name=slug]').val()+'/contacts/', 'GET'); return false;">
+                            Parâmetros
+                            <ul>
+                                <li>slug Profile <input type="text" value="" name="slug" /></li>
+                            </ul>
+                            <input type="submit" value="testar" />
+                        </form>
+                    </li>
+                    <li>
+                        <h4>Visualizar Contact</h4>
+                        <form onsubmit="test($(this).serialize(), '../profile/'+$(this).find('input[name=slug]').val()+'/contact/'+$(this).find('input[name=id]').val(), 'GET'); return false;">
+                            Parâmetros
+                            <ul>
+                                <li>slug Profile <input type="text" value="" name="slug" /></li>
+                                <li>id Contact <input type="text" value="" name="id" /></li>
+                            </ul>
+                            <input type="submit" value="testar" />
+                        </form>
+                    </li>
+                    <li>
+                        <h4>Cadastra Contact</h4>
+                        <form onsubmit="test($(this).serialize(), '../profile/'+$(this).find('input[name=slug]').val()+'/link/', 'POST'); return false;">
+                            Parâmetros
+                            <ul>
+                                <li>slug Profile <input type="text" value="" name="slug" /></li>
+                                <li>login <input type="text" value="teste" name="login" /></li>
+                                <li>token <input type="text" value="3f2b5b78a7e8c77553346d0de8345308" name="token" /></li>
+                                <li>address <input type="text" value="" name="address" /></li>
+                                <li>contact type
+                                    <select name="type">
+                                        <option value='twitter'>Twitter</option>
+                                        <option value='msn'>MSN</option>
+                                        <option value='email'>E-mail</option>
+                                        <option value='gtalk'>GTalk</option>
+                                        <option value='skype'>Skype</option>
+                                    </select>
+                                </li>
+                            </ul>
+                            <input type="submit" value="testar" />
+                        </form>
+                    </li>
+                    <li>
+                        <h4>Editar Contact</h4>
+                        <form onsubmit="test($(this).serialize(), '../profile/'+$(this).find('input[name=slug]').val()+'/contact/'+$(this).find('input[name=id]').val(), 'PUT'); return false;">
+                            Parâmetros
+                            <ul>
+                                <li>slug Profile <input type="text" value="" name="slug" /></li>
+                                <li>login <input type="text" value="teste" name="login" /></li>
+                                <li>token <input type="text" value="3f2b5b78a7e8c77553346d0de8345308" name="token" /></li>
+                                <li>id contact <input type="text" value="" name="id" /></li>
+                                <li>address <input type="text" value="" name="address" /></li>
+                                <li>contact type
+                                    <select name="type">
+                                        <option value='twitter'>Twitter</option>
+                                        <option value='msn'>MSN</option>
+                                        <option value='email'>E-mail</option>
+                                        <option value='gtalk'>GTalk</option>
+                                        <option value='skype'>Skype</option>
+                                    </select>
+                                </li>
+                            </ul>
+                            <input type="submit" value="testar" />
+                        </form>
+                    </li>
+                    <li>
+                        <h4>Remove Contact</h4>
+                        <form onsubmit="test($(this).serialize(), '../profile/'+$(this).find('input[name=slug]').val()+'/link/'+$(this).find('input[name=id]').val(), 'DELETE'); return false;">
+                            Parâmetros
+                            <ul>
+                                <li>slug Profile <input type="text" value="" name="slug" /></li>
+                                <li>login <input type="text" value="teste" name="login" /></li>
+                                <li>token <input type="text" value="3f2b5b78a7e8c77553346d0de8345308" name="token" /></li>
+                                <li>link id <input type="text" value="" name="id" /></li>
+                                <li>url <input type="text" value="" name="url" /></li>
+                            </ul>
+                            <input type="submit" value="testar" />
+                        </form>
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <h2>Testes com Thumbnails</h2>
+                <h3>Chamadas API</h3>
+                <ul>
+                    <li>
+                        <h4>Listar Thumbnails</h4>
+                        <form onsubmit="test($(this).serialize(), '../profile/'+$(this).find('input[name=slug]').val()+'/contact/'+$(this).find('input[name=id]').val()+'/thumbnails/', 'GET'); return false;">
+                            Parâmetros
+                            <ul>
+                                <li>slug Profile <input type="text" value="" name="slug" /></li>
+                                <li>id Contact <input type="text" value="" name="id" /></li>
+                            </ul>
+                            <input type="submit" value="testar" />
+                        </form>
+                    </li>
+                    <li>
+                        <h4>Exibir Thumbnail</h4>
+                        <form onsubmit="test($(this).serialize(), '../profile/'+$(this).find('input[name=slug]').val()+'/contact/'+$(this).find('input[name=id]').val()+'/thumbnail/'+$(this).find('input[name=type]').val(), 'GET'); return false;">
+                            Parâmetros
+                            <ul>
+                                <li>slug Profile <input type="text" value="" name="slug" /></li>
+                                <li>id Contact <input type="text" value="" name="id" /></li>
+                                <li>thumbnail type
+                                    <select name="type">
+                                        <option value='small'>Small</option>
+                                        <option value='medium'>Medium</option>
+                                        <option value='large'>Large</option>
+                                    </select>
+                                </li>
+                            </ul>
+                            <input type="submit" value="testar" />
+                        </form>
+                    </li>
+                    <li>
+                        <h4>Cadastrar Thumbnail</h4>
+                        <form onsubmit="test($(this).serialize(), '../profile/'+$(this).find('input[name=slug]').val()+'/contact/'+$(this).find('input[name=id]').val()+'/thumbnail/', 'POST'); return false;">
+                            Parâmetros
+                            <ul>
+                                <li>slug Profile <input type="text" value="" name="slug" /></li>
+                                <li>id Contact <input type="text" value="" name="id" /></li>
+                                <li>login <input type="text" value="teste" name="login" /></li>
+                                <li>token <input type="text" value="3f2b5b78a7e8c77553346d0de8345308" name="token" /></li>
+                                
+                                <li>url-small <input type="text" value="" name="small[image][url]" /></li>
+                                <li>title-small <input type="text" value="" name="small[image][title]" /></li>
+                                <li>legend-small <input type="text" value="" name="small[image][legend]" /></li>
+                                
+                                <li>url-medium <input type="text" value="" name="medium[image][url]" /></li>
+                                <li>title-medium <input type="text" value="" name="medium[image][title]" /></li>
+                                <li>legend-medium <input type="text" value="" name="medium[image][legend]" /></li>
+                                
+                                <li>url-large <input type="text" value="" name="large[image][url]" /></li>
+                                <li>title-large <input type="text" value="" name="large[image][title]" /></li>
+                                <li>legend-large <input type="text" value="" name="large[image][legend]" /></li>
+                            </ul>
+                            <input type="submit" value="testar" />
+                        </form>
+                    </li>
+                    <li>
+                        <h4>Editar Thumbnail</h4>
+                        <form onsubmit="test($(this).serialize(), '../profile/'+$(this).find('input[name=slug]').val()+'/contact/'+$(this).find('input[name=idContact]').val()+'/thumbnail/'+$(this).find('input[name=id]').val(), 'POST'); return false;">
+                            Parâmetros
+                            <ul>
+                                <li>slug Profile <input type="text" value="" name="slug" /></li>
+                                <li>id Contact <input type="text" value="" name="idContact" /></li>
+                                <li>id Thumbnail <input type="text" value="" name="id" /></li>
+                                <li>login <input type="text" value="teste" name="login" /></li>
+                                <li>token <input type="text" value="3f2b5b78a7e8c77553346d0de8345308" name="token" /></li>
+                                
+                                <li>url-small <input type="text" value="" name="small[image][url]" /></li>
+                                <li>title-small <input type="text" value="" name="small[image][title]" /></li>
+                                <li>legend-small <input type="text" value="" name="small[image][legend]" /></li>
+                                
+                                <li>url-medium <input type="text" value="" name="medium[image][url]" /></li>
+                                <li>title-medium <input type="text" value="" name="medium[image][title]" /></li>
+                                <li>legend-medium <input type="text" value="" name="medium[image][legend]" /></li>
+                                
+                                <li>url-large <input type="text" value="" name="large[image][url]" /></li>
+                                <li>title-large <input type="text" value="" name="large[image][title]" /></li>
+                                <li>legend-large <input type="text" value="" name="large[image][legend]" /></li>
+                            </ul>
+                            <input type="submit" value="testar" />
+                        </form>
+                    </li>
+                    <li>
+                        <h4>Remover Thumbnail</h4>
+                        <form onsubmit="test($(this).serialize(), '../profile/'+$(this).find('input[name=slug]').val()+'/contact/'+$(this).find('input[name=idContact]').val()+'/thumbnail/', 'DELETE'); return false;">
+                            Parâmetros
+                            <ul>
+                                <li>slug Profile <input type="text" value="" name="slug" /></li>
+                                <li>id Contact <input type="text" value="" name="idContact" /></li>
+                                <li>id Thumbnail <input type="text" value="" name="id" /></li>
+                                <li>login <input type="text" value="teste" name="login" /></li>
+                                <li>token <input type="text" value="3f2b5b78a7e8c77553346d0de8345308" name="token" /></li>
+                            </ul>
+                            <input type="submit" value="testar" />
+                        </form>
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <h2>Testes com Jobs</h2>
+                <h3>Chamadas API</h3>
+                <ul>
+                    <li>
+                        <h4>Listar Jobs</h4>
+                        <form onsubmit="test($(this).serialize(), '../profile/'+$(this).find('input[name=slug]').val()+'/jobs', 'GET'); return false;">
+                            Parâmetros
+                            <ul>
+                                <li>slug Profile <input type="text" value="" name="slug" /></li>
+                            </ul>
+                            <input type="submit" value="testar" />
+                        </form>
+                    </li>
+                    <li>
+                        <h4>Exibir Job</h4>
+                        <form onsubmit="test($(this).serialize(), '../profile/'+$(this).find('input[name=slug]').val()+'/job/'+$(this).find('input[name=id]').val(), 'GET'); return false;">
+                            Parâmetros
+                            <ul>
+                                <li>slug Profile <input type="text" value="" name="slug" /></li>
+                                <li>id Job <input type="text" value="" name="id" /></li>
+                            </ul>
+                            <input type="submit" value="testar" />
+                        </form>
+                    </li>
+                    <li>
+                        <h4>Cadastrar Job</h4>
+                        <form onsubmit="test($(this).serialize(), '../profile/'+$(this).find('input[name=slug]').val()+'/job/', 'POST'); return false;">
+                            Parâmetros
+                            <ul>
+                                <li>slug Profile <input type="text" value="" name="slug" /></li>
+                                <li>name <input type="text" value="" name="name" /></li>
+                                <li>company id <input type="text" value="" name="company" /></li>
+                                <li>companyName <input type="text" value="" name="companyName" /></li>
+                                <li>description <input type="text" value="" name="description" /></li>
+                                <li>dateStart <input type="text" value="" name="dateStart" /></li>
+                                <li>dateEnd <input type="text" value="" name="dateEnd" /></li>
+                            </ul>
+                            <input type="submit" value="testar" />
+                        </form>
+                    </li>
+                    <li>
+                        <h4>Editar Job</h4>
+                        <form onsubmit="test($(this).serialize(), '../profile/'+$(this).find('input[name=slug]').val()+'/job/'+$(this).find('input[name=id]').val(), 'PUT'); return false;">
+                            Parâmetros
+                            <ul>
+                                <li>slug Profile <input type="text" value="" name="slug" /></li>
+                                <li>Job id <input type="text" value="" name="id" /></li>
+                                <li>name <input type="text" value="" name="name" /></li>
+                                <li>company id <input type="text" value="" name="company" /></li>
+                                <li>companyName <input type="text" value="" name="companyName" /></li>
+                                <li>description <input type="text" value="" name="description" /></li>
+                                <li>dateStart <input type="text" value="" name="dateStart" /></li>
+                                <li>dateEnd <input type="text" value="" name="dateEnd" /></li>
+                            </ul>
+                            <input type="submit" value="testar" />
+                        </form>
+                    </li>
+                    <li>
+                        <h4>Remover Job</h4>
+                        <form onsubmit="test($(this).serialize(), '../profile/'+$(this).find('input[name=slug]').val()+'/job/'+$(this).find('input[name=id]').val(), 'DELETE'); return false;">
+                            Parâmetros
+                            <ul>
+                                <li>slug Profile <input type="text" value="" name="slug" /></li>
+                                <li>Job id <input type="text" value="" name="id" /></li>
                             </ul>
                             <input type="submit" value="testar" />
                         </form>

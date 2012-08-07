@@ -25,7 +25,7 @@ module.exports = function (app) {
      * @allowedUser : Público
      *
      * @request : {filterByName, filterByRegion}
-     * @response : {Name, Slug}
+     * @response : {Name, DDD, Slug}
      */
     app.get('/country/:slugCountry/state/:slugState/cities/', function (request, response) {
         var filter = {},
@@ -42,7 +42,7 @@ module.exports = function (app) {
                 if (country) {
                     filterState.slug = request.params.slugState;
                     filterState.countryId = country._id;
-
+                    //Localiza o Estado
                     State.findOne(filterState, function (error, state) {
                         if (error) {
                             response.send({error : error});
@@ -53,16 +53,16 @@ module.exports = function (app) {
                                 if (request.param('filterByName', null)) {
                                     filter.name = request.param('filterByName', null);
                                 }
-                                //Lógica da busca de cidades por região ou não.
+                                //Verifica se existe uma região para filtrar, se sim executa uma busca no Model Region.
                                 if (request.param('filterByRegion', null)) {
                                     filter.stateId = state._id;
-
+                                    //Localiza a região
                                     Region.findOne({slug : request.param('filterByRegion', null)}, function (error, region) {
                                         var query = City.find(filter);
-
+                                        //Filtro por região
                                         query.where("regionIds");
                                         query.in([region._id]);
-
+                                        //Executa a query no banco a procura das cidades com todo os filtros.
                                         query.exec(function (error, cities) {
                                             if (error) {
                                                 response.send({error : error});
@@ -72,6 +72,7 @@ module.exports = function (app) {
                                         });
                                     });
                                 } else {
+                                    //Executa a query no banco apenas com filtros simples.
                                     City.find(filter, function (error, cities) {
                                         if (error) {
                                             response.send({error : error});
@@ -103,7 +104,7 @@ module.exports = function (app) {
      * @allowedUser : Público
      *
      * @request : {slugCountry,slugState,slugCity}
-     * @response : {Name, Slug}
+     * @response : {Name, DDD, Slug}
      */
     app.get('/country/:slugCountry/state/:slugState/city/:slugCity/', function (request, response) {
         var filter;
@@ -115,14 +116,17 @@ module.exports = function (app) {
                 response.send({error : error});
             } else {
                 if (country) {
+                    //Adiciona os Filtros necessários para localizar o Estado
                     filter = {countryId : country._id, slug : request.params.slugState};
-
+                    //Localiza o Estado
                     State.findOne(filter, function (error, state) {
                         if (error) {
                             response.send({error : error});
                         } else {
                             if (state) {
+                                //Aplica os filtros necessários para localizar a cidade
                                 filter = {stateId : state._id, slug : request.params.slugCity};
+                                //Localiza a Cidade com os filtros informados
                                 City.findOne(filter, function (error, city) {
                                     if (error) {
                                         response.send({error : error});
