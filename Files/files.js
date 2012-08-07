@@ -21,12 +21,12 @@ app.configure(function () {
 
     app.use(express.bodyParser());
     app.use(express.methodOverride());
-    
+
     //caso seja ambiente de produção, esconder erros
-    if(config.host.debuglevel === 0){
+    if (config.host.debuglevel === 0) {
         app.use(express.errorHandler({ dumpExceptions: true }));
     }
-    
+
     app.use(app.router);
 });
 
@@ -35,9 +35,10 @@ require('./controller/Image.js')(app);
 require('./controller/File.js')(app);
 
 /*  Métodos para dev e teste */
-app.get('/ping', function (request,response) {
+app.get('/ping', function (request, response) {
+    "use strict";
     response.send(true);
 });
-   
+
 /*  Ativando o server */
 app.listen(config.host.port);

@@ -4,15 +4,18 @@
  *
  * @description : Módulo que implementa as funcionalidades de arquivos em geral
  */
- 
-module.exports = function (app) {
-    
-    var Model = require('./../model/Model.js'),
-        Image  = Model.Image,
-        File = Model.File;
 
-    var config  = require('../config.js'),
-        express = require('express');
+module.exports = function (app) {
+    "use strict";
+
+    var
+    // modulos
+        config  = require('../config.js'),
+        express = require('express'),
+    // models
+        Model = require('./../model/Model.js'),
+        Image = Model.Image,
+        File = Model.File;
 
     /* Serve as imagens upadas */
     app.use('/uploads', express.static(config.files.folder));

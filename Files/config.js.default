@@ -1,15 +1,28 @@
 module.exports = {
     host : {
         port : 3301,
-        url  : 'localhost',
-        debuglevel : 0 // 0 sem erros, 1 com erros
+        url  : 'localhost',       // melhor colocar seu  ip
+        debuglevel : 0            // 0 sem erros, 1 com erros
+    },
+    files : {
+        temp : '/tmp/ee3ups/',
+        folder : '/',             // exemplo "/home/user/folder/"
+        maxsize : 204800          // 200kB
+    },
+    aws : {
+        key : undefined,
+        secret : undefined,
+        s3 : {
+            enabled : false,
+            bucket : undefined
+        }
     },
     mongodb : {
         port : 27017,
         url : 'localhost',
         username : undefined,
         password : undefined,
-        db : undefined
+        db : 'files'
     },
     services : {
         auth : {

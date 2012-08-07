@@ -21,6 +21,28 @@ productSchema = new Schema({
     images     : [require('./Image.js').Image],
 });
 
+/** pre('save')
+ * @author : Rafael Erthal
+ * @since : 2012-08
+ *
+ * @description : verifica se o slug ja existe
+ */
+productSchema.pre('save', function (next) {
+    "use strict";
+
+    Product.findOne({"slugs" : {$in : this.slugs}, _id : {$ne : this._id}}, function (error, app) {
+        if (error) {
+            next(error);
+        } else {
+            if (app === null) {
+                next();
+            } else {
+                next('slug already exists');
+            }
+        }
+    });
+});
+
 /** FindImage
  * @author : Rafael Erthal
  * @since : 2012-08
