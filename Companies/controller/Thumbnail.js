@@ -26,6 +26,8 @@ module.exports = function (app) {
      * @response : {confirmation}
      */
     app.post('/company/:company_slug/product/:product_slug/thumbnail', function (request, response) {
+        var thumbnail;
+        
         response.contentType('json');
 
         //valida o token do usuário
@@ -53,7 +55,11 @@ module.exports = function (app) {
                                         if (product === null) {
                                             response.send({error : 'product not found'});
                                         } else {
-                                            //TODO implementar funcionalidades
+                                            thumbnail.small = request.param('small');
+                                            thumbnail.medium = request.param('medium');
+                                            thumbnail.large = request.param('large');
+                                            
+                                            product.thumbnails.push(thumbnail);
                                         }
                                     }
                                 });

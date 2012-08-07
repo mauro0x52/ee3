@@ -8,12 +8,13 @@
 var mongoose = require('mongoose'),
     Schema   = mongoose.Schema,
     objectId = Schema.ObjectId,
-    companySchema;
+    companySchema,
+    Company;
 
 companySchema = new Schema({
     slug        : {type : String, lowercase : true , trim : true, required : true, unique : true},
     name        : {type : String, trim : true, required : true},
-    thumbnails  : [require('./Thumbnail.js')],
+    thumbnails  : [require('./Thumbnail.js').Thumbnail],
     members     : [objectId],
     users       : [String],
     sectors     : [objectId],
@@ -30,28 +31,6 @@ companySchema = new Schema({
     contacts    : [require('./Contact.js').Contact],
     links       : [require('./Link.js').Link],
     embeddeds   : [require('./Embedded.js').Embedded]
-});
-
-/** pre('save')
- * @author : Rafael Erthal
- * @since : 2012-08
- *
- * @description : verifica se o slug ja existe
- */
-appSchema.pre('save', function (next) {
-    "use strict";
-
-    App.findOne({slug : this.slug, _id : {$ne : this._id}}, function (error, app) {
-        if (error) {
-            next(error);
-        } else {
-            if (app === null) {
-                next();
-            } else {
-                next('slug already exists');
-            }
-        }
-    });
 });
 
 /** IsOwner
@@ -88,20 +67,25 @@ companySchema.methods.isOwner = function (id) {
  */
 companySchema.methods.findProduct = function (slug, cb) {
     "use strict";
-
+    
     var i,
-        j;
-
+        j,
+        product;
+    
     //varre os produtos da empresa
     for (i = 0; i < this.products.length; i = i + 1) {
         //varre as slugs do produto
         for (j = 0; j < this.products[i].slugs.length; j = j + 1) {
             if (this.products[i].slugs[j] === slug) {
-                cb(undefined, this.products[i]);
+                product = this.products[i];
             }
         }
     }
-    cb('product not found', null);
+    if (product) {
+        cb(undefined, product);
+    } else {
+        cb('product not found', null);
+    }
 };
 
 /** FindContact
@@ -214,4 +198,4 @@ companySchema.methods.findLink = function (id, cb) {
     cb('link not found', null);
 };
 
-exports.Company = mongoose.model('Companies', companySchema);
+Company = exports.Company = mongoose.model('Companies', companySchema);

@@ -13,7 +13,7 @@ var mongoose = require('mongoose'),
 
 productSchema = new Schema({
     name       : {type : String, trim : true, required : true},
-    slugs      : [String],
+    slugs      : [{type : String, trim : true, required : true, unique : true}],
     thumbnails : [require('./Thumbnail.js').Thumbnail],
     abstract   : {type : String},
     about      : {type : String},
@@ -30,7 +30,7 @@ productSchema = new Schema({
 productSchema.pre('save', function (next) {
     "use strict";
 
-    Product.findOne({"slugs.name" : {$in : this.slugs}, _id : {$ne : this._id}}, function (error, app) {
+    Product.findOne({"slugs" : {$in : this.slugs}, _id : {$ne : this._id}}, function (error, app) {
         if (error) {
             next(error);
         } else {
@@ -109,4 +109,4 @@ productSchema.methods.findThumbnail = function (id, cb) {
     cb('thumbnail not found', null);
 };
 
-Product = exports.Produtct = productSchema;
+Product = exports.Product = productSchema;

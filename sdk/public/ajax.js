@@ -1,110 +1,130 @@
-function ajax(params)
-{
-    var app = params.app,
-        success,
-        error,
-        url,
-        call,
-        parseQuery;
+/*global escape: false, sdk: false, XMLHttpRequest: false, XDomainRequest: false, window: false */
 
+/** AJAX
+ *
+ * @autor : Rafael Erthal
+ * @since : 2012-08
+ *
+ * @description : implementa a biblioteca de chamadas assincronas ao servidor
+ */
+function Ajax(app) {
+    "use strict";
+
+    var parseQuery,
+        call;
+
+    /** parseQuery
+     *
+     * @autor : Rafael Erthal
+     * @since : 2012-08
+     *
+     * @description : converte um objeto jSon em query
+     */
     parseQuery = function (obj, label) {
-        "use strict";
+        var query_string = "",
+            key;
 
-        var query_string = "";
-        
-        for (var key in obj) {
-            if (typeof obj[key] !== 'object') {
-                query_string += (label ? label+"." : "") + escape(key) + '=' + escape(obj[key]) + '&';
-            } else {
-                query_string += parseQuery(obj[key], (label ? label + "." : "") + key) + '&';
+        for (key in obj) {
+            if (obj.hasOwnProperty(key)) {
+                if (typeof obj[key] !== 'object') {
+                    query_string += (label ? label + "." : "") + escape(key) + '=' + escape(obj[key]) + '&';
+                } else {
+                    query_string += parseQuery(obj[key], (label ? label + "." : "") + key) + '&';
+                }
             }
         }
         return query_string.slice(0, query_string.length - 1);
     };
 
-    call = function (params) {
+    /** call
+     *
+     * @autor : Rafael Erthal
+     * @since : 2012-08
+     *
+     * @description : realiza chamada CORS
+     */
+    call = function (cb) {
         var invocation;
-
-        success = params.success;
-        error = params.error;
-        url = params.url + "?" + parseQuery(params.data);
 
         try {
             if (window.XDomainRequest) {
-                invocation = new window.XDomainRequest();
-                if (invocation) {
-                    invocation.onload = function () {
-                        if(app.success){
-                            app.success(invocation.responseText);
-                        } else {
-                            success.apply(app, [invocation.responseText]);
-                        }
-                    };
-                    invocation.open(params.method, url, true);
-                    invocation.send();
-                } else {
-                    console.error("Objeto de requisição não pode ser criado");
-                }
+                invocation = new XDomainRequest();
             } else {
                 invocation = new XMLHttpRequest();
-                if (invocation) {
-                    invocation.onreadystatechange = function () {
-                        if (invocation.readyState == 4) {
-                            if (invocation.status == 200) {
-                                if(app.success) {
-                                    app.success(invocation.responseText);
-                                } else {
-                                    success.apply(app, [invocation.responseText]);
-                                }
-                            } else {
-                                console.error("Algo deu errado.");
-                            }
-                        }
-                    };
-                    invocation.open('GET', url, true);
-                    invocation.send();
-                } else {
-                    console.error("Objeto de requisição não pode ser criado");
-                }
             }
-        } catch(e) {
-            console.error(e);
+            if (invocation) {
+                invocation.onload = function () {
+                    if (app.cb) {
+                        app.cb(invocation.responseText);
+                    } else {
+                        cb.apply(app, [invocation.responseText]);
+                    }
+                };
+                invocation.onerror = function (error) {
+                    console.log(error);
+                };
+            } else {
+                console.error('unable to create request object');
+            }
+            return invocation;
+        } catch (error) {
+            console.error(error);
         }
     };
 
-    this.get = function (params) {
-        call({
-            success : params.success,
-            url     : params.url,
-            data    : params.data,
-            method  : 'GET'
-        });
+    /** get
+     *
+     * @autor : Rafael Erthal
+     * @since : 2012-08
+     *
+     * @description : realiza chamada CORS com método GET
+     */
+    this.get = function (path, cb) {
+        var caller = call(cb);
+
+        caller.open('GET', path.url + "?" + parseQuery(path.data), true);
+        caller.send();
     };
 
-    this.post = function (params) {
-        call({
-            success : params.success,
-            url     : params.url,
-            data    : params.data,
-            method  : 'POST'
-        });
+    /** post
+     *
+     * @autor : Rafael Erthal
+     * @since : 2012-08
+     *
+     * @description : realiza chamada CORS com método POST
+     */
+    this.post = function (path, cb) {
+        var caller = call(cb);
+
+        caller.open('POST', path.url + "?" + parseQuery(path.data), true);
+        caller.send();
     };
 
-    this.put = function (params) {
-        call({
-            success : params.success,
-            url     : params.url,
-            data    : params.data,
-            method  : 'PUT'
-        });
+    /** put
+     *
+     * @autor : Rafael Erthal
+     * @since : 2012-08
+     *
+     * @description : realiza chamada CORS com método PUT
+     */
+    this.put = function (path, cb) {
+        var caller = call(cb);
+
+        caller.open('PUT', path.url + "?" + parseQuery(path.data), true);
+        caller.send();
     };
 
-    this.del = function (params) {
-        call({
-            success : params.success,
-            url     : params.url,
-            data    : params.data,
-            method  : 'DELETE'
-        });
+    /** del
+     *
+     * @autor : Rafael Erthal
+     * @since : 2012-08
+     *
+     * @description : realiza chamada CORS com método DELETE
+     */
+    this.del = function (path, cb) {
+        var caller = call(cb);
+
+        caller.open('DELETE', path.url + "?" + parseQuery(path.data), true);
+        caller.send();
     };
-};
+}

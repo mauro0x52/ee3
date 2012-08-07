@@ -136,7 +136,7 @@ module.exports = function (app) {
                             //busca o login externo
                             user.findThirdPartyLogin(request.params.server, function (error, thirdPartyLogin) {
                                 if (error) {
-                                    response.send({error});
+                                    response.send({error: error});
                                 } else {
                                     //verifica se o login externo foi encontrado
                                     if (thirdPartyLogin === null) {
@@ -190,7 +190,7 @@ module.exports = function (app) {
                             //busca o login externo
                             user.findThirdPartyLogin(request.params.server, function (error, thirdPartyLogin) {
                                 if (error) {
-                                    response.send({error});
+                                    response.send({error : error});
                                 } else {
                                     //verifica se o login externo foi encontrado
                                     if (thirdPartyLogin === null) {

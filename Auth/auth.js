@@ -11,7 +11,7 @@ var express = require('express'),
 
 require('express-namespace');
 
-var app = module.exports = express.createServer();
+var app = module.exports = express();
 
 /*  Configurando o server */
 app.configure(function () {
@@ -37,7 +37,7 @@ require('./controller/App.js')(app);
 /*  Métodos para dev e teste */
 app.get('/ping', function (request, response) {
     "use strict";
-
+    
     response.send(true);
 });
 

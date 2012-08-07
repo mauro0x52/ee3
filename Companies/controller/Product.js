@@ -26,7 +26,7 @@ module.exports = function (app) {
      * @response : {confirmation}
      */
     app.post('/company/:slug/product', function (request, response) {
-        var product;
+        var product = [];
 
         response.contentType('json');
 
@@ -34,7 +34,7 @@ module.exports = function (app) {
         auth(request.param('login', null), request.param('token', null), function (valid) {
             if (valid) {
                 //busca a compania
-                Company.find({slug : request.params.slug}, function (error, company) {
+                Company.findOne({slug : request.params.slug}, function (error, company) {
                     if (error) {
                         response.send({error : error});
                     } else {
@@ -46,23 +46,21 @@ module.exports = function (app) {
                             if (! company.isOwner(request.param('login', null))) {
                                 response.send({error : 'permission denied'});
                             } else {
-                                if (request.param('product')) {
-                                    product.name = request.param('name');
-                                    product.slugs = request.param('slugs');
-                                    product.about = request.param('about');
-                                    product.abstract = request.param('abstract');
-                                    product.links = request.param('links');
-                                    product.thumbnails = request.param('thumbnails');
-                                    company.products.push(product);
-                                    
-                                    company.save (function(error) {
-                                        if (error) {
-                                            response.send({error : error});
-                                        } else {
-                                            response.send({Product : company.products[company.products.length]});
-                                        }
-                                    })
-                                }
+                                //Adiciona os campos no objeto products
+                                company.products.push({
+                                    name       : request.param('name', null),
+                                    slugs      : request.param('slugs', null),
+                                    abstract   : request.param('abstract', null),
+                                    about      : request.param('about', null)
+                                });
+                                //salva a Company
+                                company.save (function(error) {
+                                    if (error) {
+                                        response.send({error : error});
+                                    } else {
+                                        response.send({error : ""});
+                                    }
+                                })
                             }
                         }
                     }
@@ -90,7 +88,7 @@ module.exports = function (app) {
         response.contentType('json');
 
         //busca a compania
-        Company.find({slug : request.params.slug}, function (error, company) {
+        Company.findOne({slug : request.params.slug}, function (error, company) {
             if (error) {
                 response.send({error : error});
             } else {
@@ -121,7 +119,7 @@ module.exports = function (app) {
         response.contentType('json');
 
         //busca a compania
-        Company.find({slug : request.params.company_slug}, function (error, company) {
+        Company.findOne({slug : request.params.company_slug}, function (error, company) {
             if (error) {
                 response.send({error : error});
             } else {
@@ -129,7 +127,7 @@ module.exports = function (app) {
                 if (company === null) {
                     response.send({error : 'company not found'});
                 } else {
-                    company.findProduct (function (error, product){
+                    company.findProduct (request.params.product_slug,function (error, product){
                         response.send({Product : product});
                     });
                 }
@@ -157,7 +155,7 @@ module.exports = function (app) {
         auth(request.param('login', null), request.param('token', null), function (valid) {
             if (valid) {
                 //busca a compania
-                Company.find({slug : request.params.company_slug}, function (error, company) {
+                Company.findOne({slug : request.params.company_slug}, function (error, company) {
                     if (error) {
                         response.send({error : error});
                     } else {
@@ -169,13 +167,11 @@ module.exports = function (app) {
                             if (! company.isOwner(request.param('login', null))) {
                                 response.send({error : 'permission denied'});
                             } else {
-                                Company.findProduct(request.params.product_slug, function(error, product){
+                                company.findProduct(request.params.product_slug, function(error, product){
                                     product.name = request.param('name');
                                     product.slugs = request.param('slugs');
-                                    product.about = request.param('about');
                                     product.abstract = request.param('abstract');
-                                    product.links = request.param('links');
-                                    product.thumbnails = request.param('thumbnails');
+                                    product.about = request.param('about');
                                     
                                     product.save(function(error){
                                         if (error) {
@@ -215,7 +211,7 @@ module.exports = function (app) {
         auth(request.param('login', null), request.param('token', null), function (valid) {
             if (valid) {
                 //busca a compania
-                Company.find({slug : request.params.company_slug}, function (error, company) {
+                Company.findOne({slug : request.params.company_slug}, function (error, company) {
                     if (error) {
                         response.send({error : error});
                     } else {
@@ -227,11 +223,17 @@ module.exports = function (app) {
                             if (! company.isOwner(request.param('login', null))) {
                                 response.send({error : 'permission denied'});
                             } else {
-                                company.findProduct (request.params.product_slug, function(error){
+                                company.findProduct (request.params.product_slug, function(error, product){
                                     if (error) {
-                                        request.send({error});
+                                        request.send({error : error});
                                     } else {
-                                        
+                                        product.remove(function(error){
+                                            if (error) {
+                                                response.send({error : error});
+                                            } else {
+                                                response.send({error:''});
+                                            }
+                                        })
                                     }
                                 });
                             }
