@@ -76,12 +76,13 @@ module.exports = function (app) {
                     dateCreated : new Date(),
                     dateUpdated : new Date()
                 });
+                
                 //Salva o objeto no Model de Profile e retorna o objeto para o solicitante
                 profile.save(function (error) {
                     if (error) {
                         response.send({error : error});
                     } else {
-                        response.send({error : ''});
+                        response.send({Profile : profile});
                     }
                 });
             } else {
