@@ -1,50 +1,64 @@
 /*global sdk: false, document: false*/
 
-var Collection = function () {
-    var elements = [],
-        index;
+function Menu (container) {
+    var menu_element = document.createElement('div'),
+        navigation_element = document.createElement('div'),
+        browse_element = document.createElement('div');
+    
+    menu_element.appendChild(navigation_element);
+    menu_element.appendChild(browse_element);
+    container.appendChild(menu_element);
 
-    index = function (id) {
-        var res = null,
-            i;
+    this.navigation = new Collection();
+    this.actions = new Collection();
+}
 
-        for (i = 0; i < elements.length; i = i + 1) {
-            if (elements[i].id === id) {
-                res = elements[i];
-            }
-        }
+function List (container) {
+    var list_element = document.createElement('div'),
+        filter_element = document.createElement('div'),
+        browse_element = document.createElement('div');
 
-        return res;
+    list_element.appendChild(filter_element);
+    list_element.appendChild(browse_element);
+    container.appendChild(list_element);
+
+    this.collapse = function (collapsed) {
+    
     }
+    this.visible = function (visibility) {
+    
+    }
+}
 
-    this.add = function (element) {
-        element.render();
-        elements.push(element);
+function Head (container) {
+    var head_element = document.createElement('div'),
+        toolbar_element = document.createElement('div'),
+        buttons_element = document.createElement('div');
+
+    head_element.appendChild(toolbar_element);
+    head_element.appendChild(buttons_element);
+    container.appendChild(head_element);
+        
+    this.setImage = function (image) {
+        
     };
-
-    this.remove = function (id) {
-        var i;
-
-        i = index(id);
-        if (i) {
-            elements.slice(i,1);
-        }
+    this.setTitle = function (title) {
+    
     };
-
-    this.get = function (id) {
-        var i,
-            res;
-
-        if (id) {
-            i = index(id);
-            if (i) {
-                res = elements[i];
-            }
-        } else {
-            res = elements;
-        }
-        return res;
+    this.setSubtitle = function (subtitle) {
+    
     };
+}
+
+function Tabs (container) {
+}
+
+function Frame (container) {
+    var frame = document.createElement('div');
+    container.appendChild(frame);
+
+    this.head       = new Head(frame);
+    this.tabs       = new Tabs(frame);
 }
 
 /** Ui
@@ -55,33 +69,9 @@ var Collection = function () {
  * @description : implementa a biblioteca de interface com o usuário
  */
 function Ui (app) {
-    this.menu = {
-        navigation : new Collection(),
-        actions : new Collection()
-    };
+    var container = document.getElementById(app.getContainer());
 
-    this.list = {
-        filter : {},
-        browse : {
-            title : {},
-            items : new Collection()
-        },
-        collapse : function (collapsed) {
-
-        },
-        visible : function (visibility) {
-
-        }
-    };
-
-    this.frame = {
-        head : {
-            image : {},
-            title : {},
-            subtitle : {},
-            toolbar : new Collection(),
-            buttons : new Collection()
-        },
-        tabs : new Collection()
-    };
+    this.menu  = new Menu(container);
+    this.list  = new List(container);
+    this.frame = new Frame(container);
 }

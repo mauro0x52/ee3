@@ -107,7 +107,8 @@ module.exports = function (app) {
                                         response.send({error : 'app not found'});
                                     } else {
                                         //remove a autorização
-                                        app.remove(function (error) {
+                                        app.remove();
+                                        user.save(function (error) {
                                             if (error) {
                                                 response.send({error : error});
                                             } else {
