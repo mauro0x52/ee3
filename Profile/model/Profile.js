@@ -42,7 +42,7 @@ profileSchema.pre('save', function (next) {
             if (user === null) {
                 next();
             } else {
-                next('username already exists');
+                next(new Error('username already exists'));
             }
         }
     });
