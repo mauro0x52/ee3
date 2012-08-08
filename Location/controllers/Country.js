@@ -30,18 +30,20 @@ module.exports = function (app) {
             where = {};
 
         response.contentType('json');
-
+        
+        //Aplica filtro por nome caso exista
         if (request.param('filterByName', null)) {
             filter.name = request.param('filterByName', null);
         }
-
+        //Aplica filtro por região caso exista
         if (request.param('filterByRegion', null)) {
+            //Localiza a Região pelo nome
             Region.findOne({slug : request.param('filterByRegion', null)}, function (error, region) {
+                //Cria a query com os dados informados
                 var query = Country.find(filter);
-
                 query.where("regionIds");
                 query.in([region._id]);
-
+                //Localiza o Países com todos os filtros 
                 query.exec(function (error, countries) {
                     if (error) {
                         response.send({error : error});
@@ -51,6 +53,7 @@ module.exports = function (app) {
                 });
             });
         } else {
+            //Localiza os Países com filtros simples
             Country.find(filter, function (error, countries) {
                 if (error) {
                     response.send({error : error});
@@ -76,7 +79,8 @@ module.exports = function (app) {
      */
     app.get('/country/:slug/', function (request, response) {
         response.contentType('json');
-
+        
+        //Localiza o País desejado e retorna os dados informados
         Country.findOne({slug : request.params.slug}, function (error, country) {
             if (error) {
                 response.send({error : error});

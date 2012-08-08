@@ -2,14 +2,14 @@ module.exports = {
     host : {
         port : 3306,
         url  : 'localhost',
-        debuglevel : 1 // 0 sem erros, 1 com erros
+        debuglevel : 0 // 0 sem erros, 1 com erros
     },
     mongodb : {
-        port : 10034,
-        url : 'staff.mongohq.com',
-        username : 'empreendemia',
-        password : 'kawasaki88',
-        db : 'empreendemia'
+        port : 27017,
+        url : 'localhost',
+        username : undefined,
+        password : undefined,
+        db : undefined
     },
     services : {
         auth : {

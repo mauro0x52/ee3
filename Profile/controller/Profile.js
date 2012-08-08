@@ -20,7 +20,7 @@ module.exports = function (app) {
      * @allowedApp : Qualquer APP
      * @allowedUser : Público
      *
-     * @request : {}
+     * @request : {slug}
      * @response : {jobs, slugs, name, surname, thumbnail, about, phones, contacts, links}
      */
     app.get('/profile/:slug', function (request,response) {
@@ -76,16 +76,17 @@ module.exports = function (app) {
                     dateCreated : new Date(),
                     dateUpdated : new Date()
                 });
+                
                 //Salva o objeto no Model de Profile e retorna o objeto para o solicitante
                 profile.save(function (error) {
                     if (error) {
                         response.send({error : error});
                     } else {
-                        response.send({error : ''});
+                        response.send({Profile : profile});
                     }
                 });
             } else {
-                request.send({error : 'invalid token'});
+                response.send({error : 'invalid token'});
             }
         })
     });

@@ -197,7 +197,8 @@ module.exports = function (app) {
                                         response.send({error : 'third party login not found'});
                                     } else {
                                         //remove o login externo
-                                        thirdPartyLogin.remove(function (error) {
+                                        thirdPartyLogin.remove();
+                                        user.save(function (error) {
                                             if (error) {
                                                 response.send({error : error});
                                             } else {

@@ -14,12 +14,12 @@ var crypto = require('crypto'),
     User;
 
 userSchema = new Schema({
-    username         : {type : String, trim : true, required : true},
+    username         : {type : String, trim : true, required : true, unique : true},
     password         : {type : String, required : true},
     token            : {type : String, trim : true},
     status           : {type : String, required : true, enum : ['active', 'inactive']},
-    thirdPartyLogins : [require('./ThirdPartyLogin').ThirdPartyLogin],
-    authorizedApps   : [require('./AuthorizedApp').AuthorizedApp]
+    thirdPartyLogins : [require('./ThirdPartyLogin.js').ThirdPartyLogin],
+    authorizedApps   : [require('./AuthorizedApp.js').AuthorizedApp]
 });
 
 /** pre('save')
@@ -29,19 +29,27 @@ userSchema = new Schema({
  * @description : verifica se o username ainda não foi cadastrado
  */
 userSchema.pre('save', function (next) {
-    "use strict";
+    var i, j;
 
-    User.findOne({username : this.username, _id : {$ne : this._id}}, function (error, user) {
-        if (error) {
-            next(error);
-        } else {
-            if (user === null) {
-                next();
-            } else {
-                next('username already exists');
+    for (i = 0; i < this.thirdPartyLogins.length; i = i + 1) {
+        if (this.thirdPartyLogins[i].isNew) {
+            for (j = 0; j < this.thirdPartyLogins.length; j = j + 1) {
+                if (this.thirdPartyLogins[i].server === this.thirdPartyLogins[j].server && this.thirdPartyLogins[i]._id !== this.thirdPartyLogins[j]._id) {
+                    next(new Error('server already in use'));
+                }
             }
         }
-    });
+    }
+    for (i = 0; i < this.authorizedApps.length; i = i + 1) {
+        if (this.authorizedApps[i].isNew) {
+            for (j = 0; j < this.authorizedApps.length; j = j + 1) {
+                if (this.authorizedApps[i].server === this.authorizedApps[j].server && this.authorizedApps[i]._id !== this.authorizedApps[j]._id) {
+                    next(new Error('app already in authorized'));
+                }
+            }
+        }
+    }
+    next();
 });
 
 /** GenerateToken
@@ -152,12 +160,19 @@ userSchema.methods.changePassword = function (password, cb) {
 userSchema.methods.findAuthorizedApp = function (id, cb) {
     "use strict";
 
+    var i,
+        authorizedApp;
+
     for (i = 0; i < this.authorizedApps.length; i = i + 1) {
         if (this.authorizedApps[i].appId === id) {
-            cb(undefined, this.authorizedApps[i]);
+            authorizedApp = this.authorizedApps[i];
         }
     }
-    cb('app not found', null);
+    if (authorizedApp) {
+        cb(undefined, authorizedApp);
+    } else {
+        cb('app not found', null);
+    }
 };
 
 /** FindThirdPartyLogin
@@ -171,12 +186,19 @@ userSchema.methods.findAuthorizedApp = function (id, cb) {
 userSchema.methods.findThirdPartyLogin = function (server, cb) {
     "use strict";
 
+    var i,
+        thirdPartyLogin;
+
     for (i = 0; i < this.thirdPartyLogins.length; i = i + 1) {
         if (this.thirdPartyLogins[i].server === server) {
-            cb(undefined, this.thirdPartyLogins[i]);
+            thirdPartyLogin = this.thirdPartyLogins[i];            
         }
     }
-    cb('third party login not found', null);
+    if (thirdPartyLogin) {
+        cb(undefined, thirdPartyLogin);
+    } else {
+        cb('third party login not found', null);
+    }
 };
 
 /*  Exportando o pacote  */

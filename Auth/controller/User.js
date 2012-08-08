@@ -238,7 +238,7 @@ module.exports = function (app) {
                             if (error) {
                                 response.send({error : error});
                             } else {
-                                response.send({token : this.token, error : ''});
+                                response.send({token : user.token, error : ''});
                             }
                         });
                     }

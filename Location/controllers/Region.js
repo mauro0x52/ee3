@@ -28,10 +28,12 @@ module.exports = function (app) {
         var filter;
 
         response.contentType('json');
-
+        
+        //Verifica se existe o filtro por nome e adiciona para implementar na query
         if (request.param('filterByName', null)) {
             filter.name = request.param('filterByName', null);
         }
+        //Localiza a região com os filtros, caso exista
         Region.find(filter, function (error, regions) {
             if (error) {
                 response.send({error : error});
@@ -57,6 +59,7 @@ module.exports = function (app) {
     app.get('/region/:slug/', function (request, response) {
         response.contentType('json');
 
+        //Localiza a região informada através do Slug
         Region.findOne({slug : request.params.slug}, function (error, region) {
             if (error) {
                 response.send({error : error});
