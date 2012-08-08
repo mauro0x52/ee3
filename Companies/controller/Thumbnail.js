@@ -10,11 +10,13 @@ module.exports = function (app) {
 
     var Model = require('./../model/Model.js'),
         auth  = require('./../Utils.js').auth,
-        Company = Model.Company;
+        files  = require('./../Utils.js').files,
+        Company = Model.Company,
+        config = require('./../config.js');
 
     /** POST /company/:company_slug/product/:product_slug/thumbnail
      *
-     * @autor : Rafael Erthal
+     * @autor : Rafael Erthal, Mauro Ribeiro
      * @since : 2012-08
      *
      * @description : Cadastrar thumbnail em produto
@@ -27,7 +29,7 @@ module.exports = function (app) {
      */
     app.post('/company/:company_slug/product/:product_slug/thumbnail', function (request, response) {
         var thumbnail;
-        
+
         response.contentType('json');
 
         //valida o token do usuário
@@ -43,7 +45,7 @@ module.exports = function (app) {
                             response.send({error : 'company not found'});
                         } else {
                             //verifica se o usuário é dono da compania
-                            if (! company.isOwner(request.param('login', null))) {
+                            if (!company.isOwner(request.param('login', null))) {
                                 response.send({error : 'permission denied'});
                             } else {
                                 //busca o produto
@@ -55,11 +57,27 @@ module.exports = function (app) {
                                         if (product === null) {
                                             response.send({error : 'product not found'});
                                         } else {
-                                            thumbnail.small = request.param('small');
-                                            thumbnail.medium = request.param('medium');
-                                            thumbnail.large = request.param('large');
-                                            
-                                            product.thumbnails.push(thumbnail);
+                                            // verifica se foi enviado algum arquivo
+                                            if (!request.files || !request.files.file) {
+                                                response.send({error : 'no selected file'});
+                                            } else {
+                                                // faz upload dos thumbnails
+                                                files.image.thumbnail.upload(
+                                                    request.files.file,
+                                                    '/company/' + request.params.company_slug + '/product/' + request.params.product_slug + '/thumbnail',
+                                                    function (error, data) {
+                                                        if (error) {
+                                                            response.send({error : error});
+                                                        } else {
+                                                            product.thumbnail.small.url = data.small.url;
+                                                            product.thumbnail.medium.url = data.medium.url;
+                                                            product.thumbnail.large.url = data.large.url;
+                                                            product.save();
+                                                            response.send(data);
+                                                        }
+                                                    }
+                                                );
+                                            }
                                         }
                                     }
                                 });
@@ -188,7 +206,7 @@ module.exports = function (app) {
                             response.send({error : 'company not found'});
                         } else {
                             //verifica se o usuário é dono da compania
-                            if (! company.isOwner(request.param('login', null))) {
+                            if (!company.isOwner(request.param('login', null))) {
                                 response.send({error : 'permission denied'});
                             } else {
                                 //busca o produto
@@ -301,7 +319,27 @@ module.exports = function (app) {
                             if (! company.isOwner(request.param('login', null))) {
                                 response.send({error : 'permission denied'});
                             } else {
-                                //TODO implementar funcionalidades
+                                // verifica se foi enviado algum arquivo
+                                if (!request.files || !request.files.file) {
+                                    response.send({error : 'no selected file'});
+                                } else {
+                                    // faz upload dos thumbnails
+                                    files.image.thumbnail.upload(
+                                        request.files.file, 
+                                        '/company/' + request.params.company_slug + '/thumbnail', 
+                                        function(error, data) {
+                                            if (error) {
+                                                response.send({ error : error });
+                                            } else {
+                                                company.thumbnail.small.url = data.small.url;
+                                                company.thumbnail.medium.url = data.medium.url;
+                                                company.thumbnail.large.url = data.large.url;
+                                                company.save();
+                                                response.send(data);
+                                            }
+                                        }
+                                    );
+                                }
                             }
                         }
                     }

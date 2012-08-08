@@ -313,85 +313,85 @@ imageSchema.statics.resize = function (params, cb) {
                 // ----------------------------------------
                 // extend = pode cortar a imagem
                 imagemagick.identify(originalFullFilePath, function (err, features) {
-                    if (err) {
-                        console.log(err);
-                    }
-
-                    original_width = features.width;
-                    original_height = features.height;
-                    original_aspect = original_width / original_height;
-
-                    aspect = width / height;
-
-                    resizeImageProperties = {};
-                    resizeImageProperties.srcData = originalImage;
-
-                    if (original_aspect >= aspect) {
-                        // extended + o original eh mais achatado que o desejado
-                        resizeImageProperties.width = width;
-                        imagemagick.resize(resizeImageProperties, function (error, stdout, stderr) {
-                            if (error) {
-                                cb(error, undefined, undefined);
-                            } else {
-                                new File(fullFolderPath).createDirectory(function () {
-                                    fs.writeFile(fullFilePath, stdout, 'binary', function (error) {
-                                        if (error) {
-                                            cb(error, undefined, undefined);
-                                        } else {
-                                            var cropImageProperties = {};
-                                            cropImageProperties.srcPath = fullFilePath;
-                                            cropImageProperties.dstPath = fullFilePath;
-                                            if (width) {
-                                                cropImageProperties.width = width;
-                                            }
-                                            if (height) {
-                                                cropImageProperties.height = height;
-                                            }
-                                            imagemagick.crop(cropImageProperties, function (err, stdout, stderr) {
-                                                if (error) {
-                                                    cb(error, undefined, undefined);
-                                                } else {
-                                                    cb(undefined, new Image({path: fullFilePath}), filePath);
-                                                }
-                                            });
-                                        }
-                                    });
-                                });
-                            }
-                        });
+                    if (error) {
+                        cb(error)
                     } else {
-                        // extended + o original eh mais alto que o desejado
-                        resizeImageProperties.height = height;
-                        imagemagick.resize(resizeImageProperties, function (error, stdout, stderr) {
-                            if (error) {
-                                cb(error, undefined, undefined);
-                            } else {
-                                new File(fullFolderPath).createDirectory(function () {
-                                    fs.writeFile(fullFilePath, stdout, 'binary', function (error) {
-                                        if (error) {
-                                            cb(error, undefined, undefined);
-                                        } else {
-                                            var cropImageProperties = {};
-                                            cropImageProperties.srcPath = fullFilePath;
-                                            cropImageProperties.dstPath = fullFilePath;
-                                            if (width) {
-                                                cropImageProperties.width = width;
-                                            }
-                                            if (height) {
-                                                cropImageProperties.height = height;
-                                            }
-                                            imagemagick.crop(cropImageProperties, function (error, stdout, stderr) {
-                                                if (error) {
-                                                    cb(error, undefined, undefined);
-                                                } else {
-                                                    cb(undefined, new Image({path: fullFilePath}), filePath);
+                        original_width = features.width;
+                        original_height = features.height;
+                        original_aspect = original_width / original_height;
+    
+                        aspect = width / height;
+    
+                        resizeImageProperties = {};
+                        resizeImageProperties.srcData = originalImage;
+    
+                        if (original_aspect >= aspect) {
+                            // extended + o original eh mais achatado que o desejado
+                            resizeImageProperties.width = width;
+                            imagemagick.resize(resizeImageProperties, function (error, stdout, stderr) {
+                                if (error) {
+                                    cb(error, undefined, undefined);
+                                } else {
+                                    new File(fullFolderPath).createDirectory(function () {
+                                        fs.writeFile(fullFilePath, stdout, 'binary', function (error) {
+                                            if (error) {
+                                                cb(error, undefined, undefined);
+                                            } else {
+                                                var cropImageProperties = {};
+                                                cropImageProperties.srcPath = fullFilePath;
+                                                cropImageProperties.dstPath = fullFilePath;
+                                                if (width) {
+                                                    cropImageProperties.width = width;
                                                 }
-                                            });
-                                        }
+                                                if (height) {
+                                                    cropImageProperties.height = height;
+                                                }
+                                                imagemagick.crop(cropImageProperties, function (err, stdout, stderr) {
+                                                    if (error) {
+                                                        cb(error, undefined, undefined);
+                                                    } else {
+                                                        cb(undefined, new Image({path: fullFilePath}), filePath);
+                                                    }
+                                                });
+                                            }
+                                        });
                                     });
-                                });
-                            }
-                        });
+                                }
+                            });
+                        } else {
+                            // extended + o original eh mais alto que o desejado
+                            resizeImageProperties.height = height;
+                            imagemagick.resize(resizeImageProperties, function (error, stdout, stderr) {
+                                if (error) {
+                                    cb(error, undefined, undefined);
+                                } else {
+                                    new File(fullFolderPath).createDirectory(function () {
+                                        fs.writeFile(fullFilePath, stdout, 'binary', function (error) {
+                                            if (error) {
+                                                cb(error, undefined, undefined);
+                                            } else {
+                                                var cropImageProperties = {};
+                                                cropImageProperties.srcPath = fullFilePath;
+                                                cropImageProperties.dstPath = fullFilePath;
+                                                if (width) {
+                                                    cropImageProperties.width = width;
+                                                }
+                                                if (height) {
+                                                    cropImageProperties.height = height;
+                                                }
+                                                imagemagick.crop(cropImageProperties, function (error, stdout, stderr) {
+                                                    if (error) {
+                                                        cb(error, undefined, undefined);
+                                                    } else {
+                                                        cb(undefined, new Image({path: fullFilePath}), filePath);
+                                                    }
+                                                });
+                                            }
+                                        });
+                                    });
+                                }
+                            });
+                        }
                     }
                 });
                 // ----------------------------------------

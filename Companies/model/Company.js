@@ -14,7 +14,7 @@ var mongoose = require('mongoose'),
 companySchema = new Schema({
     slug        : {type : String, lowercase : true , trim : true, required : true, unique : true},
     name        : {type : String, trim : true, required : true},
-    thumbnails  : [require('./Thumbnail.js').Thumbnail],
+    thumbnail   : require('./Thumbnail.js').Thumbnail,
     members     : [objectId],
     users       : [String],
     sectors     : [objectId],
