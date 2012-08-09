@@ -134,7 +134,7 @@ module.exports = function (app) {
                             if (product === null) {
                                 response.send({error : 'product not found'});
                             } else {
-                                //TODO implementar funcionalidades
+                                response.send(product.thumbnail);
                             }
                         }
                     });
