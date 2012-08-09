@@ -9,7 +9,7 @@ module.exports = {
         url : 'localhost',
         username : undefined,
         password : undefined,
-        db : undefined
+        db : 'auth'
     },
     services : {
         auth : {
