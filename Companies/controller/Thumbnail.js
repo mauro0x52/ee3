@@ -27,7 +27,7 @@ module.exports = function (app) {
      * @request : {login,token,file,title,legend}
      * @response : {confirmation}
      */
-    app.post('/company/:company_slug/product/:product_slug/thumbnail', function (request, response) {
+    app.post('/company/:company_slug/product/:product_slug/thumbnail', function postProductThumbnail (request, response) {
         var thumbnail;
 
         response.contentType('json');
@@ -198,7 +198,7 @@ module.exports = function (app) {
         });
     });
 
-    /** PUT /company/:company_slug/product/:product_slug/thumbnail/:type
+    /** PUT /company/:company_slug/product/:product_slug/thumbnail
      *
      * @autor : Rafael Erthal
      * @since : 2012-08
@@ -211,51 +211,13 @@ module.exports = function (app) {
      * @request : {login,token,title,legend}
      * @response : {confirmation}
      */
-    app.put('/company/:company_slug/product/:product_slug/thumbnail/:type', function (request, response) {
-        response.contentType('json');
-
-        //valida o token do usuário
-        auth(request.param('login', null), request.param('token', null), function (valid) {
-            if (valid) {
-                //busca a compania
-                Company.find({slug : request.params.company_slug}, function (error, company) {
-                    if (error) {
-                        response.send({error : error});
-                    } else {
-                        //verifica se a compania foi encontrada
-                        if (company === null) {
-                            response.send({error : 'company not found'});
-                        } else {
-                            //verifica se o usuário é dono da compania
-                            if (!company.isOwner(request.param('login', null))) {
-                                response.send({error : 'permission denied'});
-                            } else {
-                                //busca o produto
-                                company.findProduct(request.params.product_slug, function (error, product) {
-                                    if (error) {
-                                        response.send({error : error});
-                                    } else {
-                                        //verifica se o produto foi encontrado
-                                        if (product === null) {
-                                            response.send({error : 'product not found'});
-                                        } else {
-                                            //TODO implementar funcionalidades
-                                        }
-                                    }
-                                });
-                            }
-                        }
-                    }
-                });
-            } else {
-                response.send({error : 'invalid token'});
-            }
-        });
+    app.put('/company/:company_slug/product/:product_slug/thumbnail', function (request, response) {
+        postProductThumbnail(request, response);
     });
 
-    /** DEL /company/:company_slug/product/:product_slug/thumbnail/:type
+    /** DEL /company/:company_slug/product/:product_slug/thumbnail
      *
-     * @autor : Rafael Erthal
+     * @author : Rafael Erthal, Mauro Ribeiro
      * @since : 2012-08
      *
      * @description : Excluir thumbnail de produto
@@ -294,7 +256,24 @@ module.exports = function (app) {
                                         if (product === null) {
                                             response.send({error : 'product not found'});
                                         } else {
-                                            //TODO implementar funcionalidades
+                                            product.thumbnail.small.file = undefined;
+                                            product.thumbnail.small.url = undefined;
+                                            product.thumbnail.small.title = undefined;
+                                            product.thumbnail.small.legend = undefined;
+                                            product.thumbnail.medium.file = undefined;
+                                            product.thumbnail.medium.url = undefined;
+                                            product.thumbnail.medium.title = undefined;
+                                            product.thumbnail.medium.legend = undefined;
+                                            product.thumbnail.large.file = undefined;
+                                            product.thumbnail.large.url = undefined;
+                                            product.thumbnail.large.title = undefined;
+                                            product.thumbnail.large.legend = undefined;
+                                            product.thumbnail.original.file = undefined;
+                                            product.thumbnail.original.url = undefined;
+                                            product.thumbnail.original.title = undefined;
+                                            product.thumbnail.original.legend = undefined;
+                                            product.save();
+                                            response.send(product.thumbnail);
                                         }
                                     }
                                 });
