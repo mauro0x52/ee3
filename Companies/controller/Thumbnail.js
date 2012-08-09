@@ -16,7 +16,7 @@ module.exports = function (app) {
 
     /** POST /company/:company_slug/product/:product_slug/thumbnail
      *
-     * @autor : Rafael Erthal, Mauro Ribeiro
+     * @author : Rafael Erthal, Mauro Ribeiro
      * @since : 2012-08
      *
      * @description : Cadastrar thumbnail em produto
@@ -106,7 +106,7 @@ module.exports = function (app) {
 
     /** GET /company/:company_slug/product/:product_slug/thumbnails
      *
-     * @autor : Rafael Erthal
+     * @author : Rafael Erthal, Mauro Ribeiro
      * @since : 2012-08
      *
      * @description : Listar thumbnails de produto
@@ -149,7 +149,7 @@ module.exports = function (app) {
 
     /** GET /company/:company_slug/product/:product_slug/thumbnail/:type
      *
-     * @autor : Rafael Erthal
+     * @author : Rafael Erthal, Mauro Ribeiro
      * @since : 2012-08
      *
      * @description : Exibir thumbnail de produto
@@ -181,12 +181,14 @@ module.exports = function (app) {
                             if (product === null) {
                                 response.send({error : 'product not found'});
                             } else {
-                                if (size === 'large') {
-                                    
-                                } else if (size === 'medium') {
-                                    
+                                if (size === 'original') {
+                                    response.send(product.thumbnail.original);
+                                } else if (size === 'large') {
+                                    response.send(product.thumbnail.large);
+                                } else if (size === 'medium')  {
+                                    response.send(product.thumbnail.medium);
                                 } else {
-                                    
+                                    response.send(product.thumbnail.small);
                                 }
                             }
                         }
