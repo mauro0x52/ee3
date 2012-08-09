@@ -14,7 +14,7 @@ var mongoose = require('mongoose'),
 companySchema = new Schema({
     slug        : {type : String, lowercase : true , trim : true, required : true, unique : true},
     name        : {type : String, trim : true, required : true},
-    thumbnail   : require('./Thumbnail.js').Thumbnail,
+    thumbnails  : [require('./Thumbnail.js').Thumbnail],
     members     : [objectId],
     users       : [String],
     sectors     : [objectId],
@@ -32,6 +32,10 @@ companySchema = new Schema({
     links       : [require('./Link.js').Link],
     embeddeds   : [require('./Embedded.js').Embedded]
 });
+
+companySchema.virtual('thumbnail')
+    .set(function (thumbnail) {this.thumbnails[0] = thumbnail})
+    .get(function () {return this.thumbnails[0]});
 
 /** IsOwner
  * @author : Rafael Erthal
