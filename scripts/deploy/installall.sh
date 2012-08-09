@@ -21,13 +21,17 @@ installAll() {
 
     cd $CONFIG_PROJECT_FOLDER
 
+	
+    echo "- Instalando forever"
+    npm install -g forever
+    echo ""
+
     for SERVICE in ${SERVICES_NAMES[@]}
     do
         cd $SERVICE
         echo "- Instalando $SERVICE"
         echo "-- instalando pacotes"
         npm install
-        echo "--- ok"
         echo "-- criando config.js"
         if [ ! -f config.js ];
         then
