@@ -81,6 +81,9 @@ deploy() {
                     echo "-- parando ${SERVICE,,}.js"
                     forever stop ${SERVICE,,}.js
                     echo "--- ok"
+                    echo "-- atualizando modulos usados em ${SERVICE,,}.js"
+                    npm install
+                    echo "--- ok"
                     echo "-- iniciando ${SERVICE,,}.js"
                     forever start ${SERVICE,,}.js
                     echo "--- ok"
