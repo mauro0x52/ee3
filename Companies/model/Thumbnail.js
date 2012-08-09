@@ -11,9 +11,10 @@ var mongoose = require('mongoose'),
     thumbnailSchema;
 
 thumbnailSchema = new Schema({
-    small   : require('./Image.js').Image,
-    medium  : require('./Image.js').Image,
-    large   : require('./Image.js').Image
+    original : require('./Image.js').Image,
+    small    : require('./Image.js').Image,
+    medium   : require('./Image.js').Image,
+    large    : require('./Image.js').Image
 });
 
 exports.Thumbnail = thumbnailSchema;

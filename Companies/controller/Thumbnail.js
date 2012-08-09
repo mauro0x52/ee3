@@ -81,8 +81,12 @@ module.exports = function (app) {
                                                             product.thumbnail.large.url = data.small.url;
                                                             product.thumbnail.large.title = 'thumbnail';
                                                             product.thumbnail.large.legend = '200x200 thumbnail';
+                                                            product.thumbnail.original.file = data.original._id;
+                                                            product.thumbnail.original.url = data.original.url;
+                                                            product.thumbnail.original.title = 'original';
+                                                            product.thumbnail.original.legend = 'original';
                                                             product.save();
-                                                            response.send(data);
+                                                            response.send(product.thumbnail);
                                                         }
                                                     }
                                                 );
@@ -156,7 +160,7 @@ module.exports = function (app) {
      * @request : {}
      * @response : {file,url,title,legend}
      */
-    app.get('/company/:company_slug/product/:product_slug/thumbnail/:type', function (request, response) {
+    app.get('/company/:company_slug/product/:product_slug/thumbnail/:size', function (request, response) {
         response.contentType('json');
 
         //busca a compania
@@ -177,7 +181,13 @@ module.exports = function (app) {
                             if (product === null) {
                                 response.send({error : 'product not found'});
                             } else {
-                                //TODO implementar funcionalidades
+                                if (size === 'large') {
+                                    
+                                } else if (size === 'medium') {
+                                    
+                                } else {
+                                    
+                                }
                             }
                         }
                     });
@@ -352,8 +362,12 @@ module.exports = function (app) {
                                                 company.thumbnail.large.url = data.small.url;
                                                 company.thumbnail.large.title = 'thumbnail';
                                                 company.thumbnail.large.legend = '200x200 thumbnail';
+                                                company.thumbnail.original.file = data.original._id;
+                                                company.thumbnail.original.url = data.original.url;
+                                                company.thumbnail.original.title = 'thumbnail';
+                                                company.thumbnail.original.legend = 'original';
                                                 company.save();
-                                                response.send(data);
+                                                response.send(company.thumbnail);
                                             }
                                         }
                                     );
