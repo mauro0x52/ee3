@@ -1,6 +1,6 @@
 module.exports = {
     host : {
-        port : 3306,
+        port : 38806,
         url  : 'localhost',
         debuglevel : 0 // 0 sem erros, 1 com erros
     },
@@ -14,31 +14,31 @@ module.exports = {
     services : {
         auth : {
             host : 'localhost',
-            port : 3300
+            port : 38800
         },
         files : {
             host : 'localhost',
-            port : 3301
+            port : 38801
         },
         companies : {
             host : 'localhost',
-            port : 3302
+            port : 38802
         },
         apps : {
             host : 'localhost',
-            port : 3303
+            port : 38803
         },
         profiles : {
             host : 'localhost',
-            port : 3304
+            port : 38804
         },
         talk : {
             host : 'localhost',
-            port : 3305
+            port : 38805
         },
         location : {
             host : 'localhost',
-            port : 3306
+            port : 38806
         }
     },
     security : {
