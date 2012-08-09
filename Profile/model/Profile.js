@@ -26,27 +26,27 @@ profileSchema = new schema({
     dateUpdated : {type : Date}
 });
 
-/** pre('save')
+/** IsOwner
  * @author : Rafael Erthal
  * @since : 2012-08
  *
- * @description : verifica se o username ainda não foi cadastrado
+ * @description : Verifica se o usuário é dono da empresa
+ * @param id : username do usuário
+ *
+ * @return : Boolean
  */
-profileSchema.pre('save', function (next) {
+profileSchema.methods.isOwner = function (id) {
     "use strict";
 
-    Profile.findOne({username : this.username, _id : {$ne : this._id}}, function (error, user) {
-        if (error) {
-            next(error);
-        } else {
-            if (user === null) {
-                next();
-            } else {
-                next(new Error('username already exists'));
-            }
-        }
-    });
-});
+    var i,
+        isOwner = false;
 
+    //verifica se o usário é igual o solicitado
+    if (this.username === id) {
+        isOwner = true;
+    }
+    
+    return isOwner;
+};
 /*  Exportando o pacote  */
 Profile = exports.Profile = mongoose.model('Profiles', profileSchema);
