@@ -11,7 +11,7 @@ var mongoose = require('mongoose'),
     imageSchema;
 
 imageSchema = new Schema({
-    file   : {type : String, trim : true, required : true},
+    file   : objectId,
     url    : {type : String, trim : true, required : true},
     title  : {type : String, trim : true},
     legend : {type : String, trim : true}

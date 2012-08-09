@@ -69,9 +69,18 @@ module.exports = function (app) {
                                                         if (error) {
                                                             response.send({error : error});
                                                         } else {
+                                                            product.thumbnail.small.file = data.small._id;
                                                             product.thumbnail.small.url = data.small.url;
+                                                            product.thumbnail.small.title = 'thumbnail';
+                                                            product.thumbnail.small.legend = '50x50 thumbnail';
+                                                            product.thumbnail.medium.file = data.medium._id;
                                                             product.thumbnail.medium.url = data.medium.url;
-                                                            product.thumbnail.large.url = data.large.url;
+                                                            product.thumbnail.medium.title = 'thumbnail';
+                                                            product.thumbnail.medium.legend = '100x100 thumbnail';
+                                                            product.thumbnail.large.file = data.small._id;
+                                                            product.thumbnail.large.url = data.small.url;
+                                                            product.thumbnail.large.title = 'thumbnail';
+                                                            product.thumbnail.large.legend = '200x200 thumbnail';
                                                             product.save();
                                                             response.send(data);
                                                         }
@@ -331,9 +340,18 @@ module.exports = function (app) {
                                             if (error) {
                                                 response.send({ error : error });
                                             } else {
+                                                company.thumbnail.small.file = data.small._id;
                                                 company.thumbnail.small.url = data.small.url;
+                                                company.thumbnail.small.title = 'thumbnail';
+                                                company.thumbnail.small.legend = '50x50 thumbnail';
+                                                company.thumbnail.medium.file = data.medium._id;
                                                 company.thumbnail.medium.url = data.medium.url;
-                                                company.thumbnail.large.url = data.large.url;
+                                                company.thumbnail.medium.title = 'thumbnail';
+                                                company.thumbnail.medium.legend = '100x100 thumbnail';
+                                                company.thumbnail.large.file = data.small._id;
+                                                company.thumbnail.large.url = data.small.url;
+                                                company.thumbnail.large.title = 'thumbnail';
+                                                company.thumbnail.large.legend = '200x200 thumbnail';
                                                 company.save();
                                                 response.send(data);
                                             }
