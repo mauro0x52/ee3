@@ -9,7 +9,7 @@
 # Exemplos de crontab:
 #
 #     A cada 10 minutos
-#     */10 * * * * sh deploy.sh
+#     */10 * * * * cd /path/to/deploy/folder/; bash deploy.sh;
 # ------------------------------------------------------------------------------
 
 # Arquivo de configuracao
