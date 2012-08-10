@@ -10,7 +10,7 @@
     jobSchema;
  
 jobSchema = new schema({
-    name        : {type : String, trim : true},
+    name        : {type : String, required : true, trim : true},
     company     : {type : objectId},
     companyName : {type : String, trim : true},
     description : {type : String},

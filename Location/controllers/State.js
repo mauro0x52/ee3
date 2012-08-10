@@ -22,12 +22,10 @@ module.exports = function (app) {
      * @allowedApp : Qualquer app
      * @allowedUser : Público
      *
-     * @request : {filterByName, filterByRegion}
+     * @request : {}
      * @response : {Name, Slug}
      */
     app.get('/country/:slug/states/', function (request, response) {
-        var filter = {};
-
         response.contentType('json');
 
         //Localiza o País informado pelo slug
@@ -36,17 +34,20 @@ module.exports = function (app) {
                 response.send({error : error});
             } else {
                 if (country) {
-                    filter = {countryId : country._id};
                     //Localiza todos os estados do país informado
-                    State.find(filter, function (error, states) {
-                        if (error) {
-                            response.send({error : error});
-                        } else {
-                            response.send({states : states});
+                    State.find({countryId : country._id}, function (error, states) {
+                        if (states) {
+                            if (error) {
+                                response.send({error : error});
+                            } else {
+                                response.send({States : states});
+                            }
+                        } else { 
+                            response.send({error : "states not found."});
                         }
                     });
                 } else {
-                    response.send({error : "País não encontrado"});
+                    response.send({error : "country not found."});
                 }
             }
         });
@@ -80,14 +81,18 @@ module.exports = function (app) {
                     filter = {countryId : country._id, slug : request.params.slugState};
                     //Localiza o estado
                     State.findOne(filter, function (error, state) {
-                        if (error) {
-                            response.send({error : error});
+                        if (state) {
+                            if (error) {
+                                response.send({error : error});
+                            } else {
+                                response.send({State : state});
+                            }
                         } else {
-                            response.send({states : state});
+                            response.send({error : "state not found."});
                         }
                     });
                 } else {
-                    response.send({error : "País não encontrado"});
+                    response.send({error : "country not found."});
                 }
             }
         });
