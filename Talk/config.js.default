@@ -2,7 +2,7 @@ module.exports = {
     host : {
         port : 38805,
         url  : 'localhost',
-        debuglevel : 0 // 0 sem erros, 1 com erros
+        debuglevel : 1 // 0 sem erros, 1 com erros
     },
     mongodb : {
         port : 27017,
