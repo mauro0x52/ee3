@@ -36,14 +36,10 @@ module.exports = function (app) {
                 if (country) {
                     //Localiza todos os estados do país informado
                     State.find({countryId : country._id}, function (error, states) {
-                        if (states) {
-                            if (error) {
-                                response.send({error : error});
-                            } else {
-                                response.send({States : states});
-                            }
-                        } else { 
-                            response.send({error : "states not found."});
+                        if (error) {
+                            response.send({error : error});
+                        } else {
+                            response.send({States : states});
                         }
                     });
                 } else {
@@ -81,14 +77,14 @@ module.exports = function (app) {
                     filter = {countryId : country._id, slug : request.params.slugState};
                     //Localiza o estado
                     State.findOne(filter, function (error, state) {
-                        if (state) {
-                            if (error) {
-                                response.send({error : error});
-                            } else {
-                                response.send({State : state});
-                            }
+                        if (error) {
+                            response.send({error : error});
                         } else {
-                            response.send({error : "state not found."});
+                            if (state) {
+                                response.send({State : state});
+                            } else {
+                                response.send({error : "state not found."});
+                            }
                         }
                     });
                 } else {

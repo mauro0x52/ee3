@@ -30,6 +30,7 @@ app.configure(function () {
 });
 
 /*  Chamando controllers */
+require('./controllers/Region.js')(app);
 require('./controllers/Country.js')(app);
 require('./controllers/State.js')(app);
 require('./controllers/City.js')(app);

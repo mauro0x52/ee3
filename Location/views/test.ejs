@@ -50,16 +50,6 @@
                         </form>
                     </li>
                     <li>
-                        <h4>Retorna um País por região</h4>
-                        <form onsubmit="test($(this).serialize(), '../country/region/'+$(this).find('input[name=slug]').val(), 'GET'); return false;">
-                            Parâmetros
-                            <ul>
-                                <li>Slug Região <input type="text" name="slug" /></li>
-                            </ul>
-                            <input type="submit" value="testar" />
-                        </form>
-                    </li>
-                    <li>
                         <h4>Retorna um País</h4>
                         <form onsubmit="test($(this).serialize(), '../country/'+$(this).find('input[name=slug]').val(), 'GET'); return false;">
                             Parâmetros
@@ -109,8 +99,6 @@
                             <ul>
                                 <li>Coloque o Slug do País <input type="text" name="slugCountry" /></li>
                                 <li>Coloque o Slug do Estado <input type="text" name="slugState" /></li>
-                                <li>Coloque o Nome da Cidade (opcional) <input type="text" name="filterByName" /></li>
-                                <li>Coloque o Slug da Região (opcional) <input type="text" name="filterByRegion" /></li>
                             </ul>
                             <input type="submit" value="testar" />
                         </form>
@@ -141,8 +129,38 @@
                         </form>
                     </li>
                     <li>
-                        <h4>Retorna todos as regiões</h4>
+                        <h4>Retorna uma região</h4>
                         <form onsubmit="test($(this).serialize(), '../region/'+$(this).find('input[name=slug]').val(), 'GET'); return false;">
+                            Parâmetros
+                            <ul>
+                                <li>slug da Região <input type="text" name="slug" /></li>
+                            </ul>
+                            <input type="submit" value="testar" />
+                        </form>
+                    </li>
+                    <li>
+                        <h4>Retorna todos os Países de uma Região</h4>
+                        <form onsubmit="test($(this).serialize(), '../region/'+$(this).find('input[name=slug]').val()+'/countries', 'GET'); return false;">
+                            Parâmetros
+                            <ul>
+                                <li>slug da Região <input type="text" name="slug" /></li>
+                            </ul>
+                            <input type="submit" value="testar" />
+                        </form>
+                    </li>
+                    <li>
+                        <h4>Retorna todos os Estados de uma Região</h4>
+                        <form onsubmit="test($(this).serialize(), '../region/'+$(this).find('input[name=slug]').val()+'/states', 'GET'); return false;">
+                            Parâmetros
+                            <ul>
+                                <li>slug da Região <input type="text" name="slug" /></li>
+                            </ul>
+                            <input type="submit" value="testar" />
+                        </form>
+                    </li>
+                    <li>
+                        <h4>Retorna todos as Cidades de uma Região</h4>
+                        <form onsubmit="test($(this).serialize(), '../region/'+$(this).find('input[name=slug]').val()+'/cities', 'GET'); return false;">
                             Parâmetros
                             <ul>
                                 <li>slug da Região <input type="text" name="slug" /></li>
