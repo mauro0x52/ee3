@@ -32,7 +32,7 @@ module.exports = function (app) {
         auth(request.param('login', null), request.param('token', null), function (valid) {
             if (valid) {
                 //busca o perfil
-                Profile.find({slug : request.params.slug}, function (error, profile) {
+                Profile.findOne({"slugs" : request.params.slug}, function (error, profile) {
                     if (error) {
                         response.send({error : error});
                     } else {
@@ -87,7 +87,7 @@ module.exports = function (app) {
         response.contentType('json');
 
         //busca o perfil
-        Profile.find({slug : request.params.slug}, function (error, profile) {
+        Profile.findOne({"slugs" : request.params.slug}, function (error, profile) {
             if (error) {
                 response.send({error : error});
             } else {
@@ -118,7 +118,7 @@ module.exports = function (app) {
         response.contentType('json');
 
         //busca o perfil
-        Profile.find({slug : request.params.slug}, function (error, profile) {
+        Profile.findOne({"slugs" : request.params.slug}, function (error, profile) {
             if (error) {
                 response.send({error : error});
             } else {
@@ -164,7 +164,7 @@ module.exports = function (app) {
         auth(request.param('login', null), request.param('token', null), function (valid) {
             if (valid) {
                 //busca o perfil
-                Profile.find({slug : request.params.slug}, function (error, profile) {
+                Profile.findOne({"slugs" : request.params.slug}, function (error, profile) {
                     if (error) {
                         response.send({error : error});
                     } else {
@@ -232,7 +232,7 @@ module.exports = function (app) {
         auth(request.param('login', null), request.param('token', null), function (valid) {
             if (valid) {
                 //busca o perfil
-                Profile.find({slug : request.params.slug}, function (error, profile) {
+                Profile.findOne({"slugs" : request.params.slug}, function (error, profile) {
                     if (error) {
                         response.send({error : error});
                     } else {

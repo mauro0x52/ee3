@@ -12,7 +12,7 @@ var mongoose = require('mongoose'),
 
 linkSchema = new schema({
     type : {type : String, required : true, enum : ['blog', 'youtube', 'facebook', 'vimeo', 'slideshare', 'website']},
-    url  : {type : String, trim : true}
+    url  : {type : String, required : true, trim : true}
 });
 
 /*  Exportando o pacote  */

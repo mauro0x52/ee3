@@ -24,7 +24,7 @@ module.exports = function (app) {
      * @allowedApp : Qualquer app
      * @allowedUser : Público
      *
-     * @request : {filterByName, filterByRegion}
+     * @request : {}
      * @response : {Name, DDD, Slug}
      */
     app.get('/country/:slugCountry/state/:slugState/cities/', function (request, response) {
@@ -49,10 +49,6 @@ module.exports = function (app) {
                         } else {
                             //Com o resultado da validação do estado, faz a busca de todas as cidades.
                             if (state) {
-                                //Verifica se existe um nome para filtrar, se sim adiciona em um vetor a informação.
-                                if (request.param('filterByName', null)) {
-                                    filter.name = request.param('filterByName', null);
-                                }
                                 //Verifica se existe uma região para filtrar, se sim executa uma busca no Model Region.
                                 if (request.param('filterByRegion', null)) {
                                     filter.stateId = state._id;

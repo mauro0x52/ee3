@@ -43,7 +43,7 @@ userSchema.pre('save', function (next) {
     for (i = 0; i < this.authorizedApps.length; i = i + 1) {
         if (this.authorizedApps[i].isNew) {
             for (j = 0; j < this.authorizedApps.length; j = j + 1) {
-                if (this.authorizedApps[i].server === this.authorizedApps[j].server && this.authorizedApps[i]._id !== this.authorizedApps[j]._id) {
+                if (this.authorizedApps[i].appId === this.authorizedApps[j].appId && this.authorizedApps[i]._id !== this.authorizedApps[j]._id) {
                     next(new Error('app already in authorized'));
                 }
             }

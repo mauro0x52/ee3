@@ -223,7 +223,7 @@
                     </li>
                     <li>
                         <h4>Editar detalhes da autorização do usuário no app</h4>
-                        <form onsubmit="test($(this).serialize(), '../user/' + $(this).find('input[name=username]').val() +'/app/' + $(this).find('input[name=app_id]').val(), 'GET'); return false;">
+                        <form onsubmit="test($(this).serialize(), '../user/' + $(this).find('input[name=username]').val() +'/app/' + $(this).find('input[name=app_id]').val(), 'PUT'); return false;">
                             Parâmetros
                             <ul>
                                 <li>username <input type="text" name="username" /></li>
