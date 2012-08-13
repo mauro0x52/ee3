@@ -9,7 +9,10 @@ module.exports = function (app) {
     "use strict";
 
     var Model = require('./../model/Model.js'),
-        Region = Model.Region;
+        Region = Model.Region,
+        Country = Model.Country,
+        State = Model.State,
+        City = Model.City;
 
     /** GET /regions
      *
@@ -21,24 +24,18 @@ module.exports = function (app) {
      * @allowedApp : Qualquer app
      * @allowedUser : Público
      *
-     * @request : {filterByName}
+     * @request : {}
      * @response : {Name, Slug, CountryIds, StateIds, CityIds}
     */
     app.get('/regions/', function (request, response) {
-        var filter;
-
         response.contentType('json');
         
-        //Verifica se existe o filtro por nome e adiciona para implementar na query
-        if (request.param('filterByName', null)) {
-            filter.name = request.param('filterByName', null);
-        }
-        //Localiza a região com os filtros, caso exista
-        Region.find(filter, function (error, regions) {
+        //Localiza todas as regiões
+        Region.find( function (error, regions) {
             if (error) {
                 response.send({error : error});
             } else {
-                response.send({regions : regions});
+                response.send({Regions : regions});
             }
         });
     });
@@ -48,7 +45,7 @@ module.exports = function (app) {
      * @autor : Lucas Kalado
      * @since : 2012-07
      *
-     * @description : Lista o país desejado
+     * @description : Lista a região desejada
      *
      * @allowedApp : Qualquer app
      * @allowedUser : Público
@@ -64,7 +61,134 @@ module.exports = function (app) {
             if (error) {
                 response.send({error : error});
             } else {
-                response.send(region);
+                if (region) {
+                    response.send({Region : region});
+                } else {
+                    response.send({error : "region not found."});
+                }
+            }
+        });
+    });
+    
+    /** GET /region/:slugRegion/countries
+     *
+     * @autor : Lucas Kalado
+     * @since : 2012-07
+     *
+     * @description : Lista todos os países de uma região
+     *
+     * @allowedApp : Qualquer app
+     * @allowedUser : Público
+     *
+     * @request : {slugRegion}
+     * @response : {Name, Acronym, DDI, Slug}
+    */
+    app.get('/region/:slugRegion/countries', function (request, response) {
+        var filter = {},
+            where = {};
+
+        response.contentType('json');
+        
+        //Localiza a Região pelo nome
+        Region.findOne({"slug" : request.params.slugRegion}, function (error, region) {
+            //Verifica se existe a região e retorna erro caso não exista
+            if (region) {
+                //Cria a query com os dados da região para buscar os Países
+                var query = Country.find();
+                query.where("regionIds");
+                query.in([region._id]);
+                //Localiza os Países 
+                query.exec(function (error, countries) {
+                    if (error) {
+                        response.send({error : error});
+                    } else {
+                        response.send({Countries : countries});
+                    }
+                });
+            } else {
+                response.send({error : "region not found."});
+            }
+        });
+    });
+    
+    /** GET /region/:slugRegion/states
+     *
+     * @autor : Lucas Kalado
+     * @since : 2012-07
+     *
+     * @description : Lista todos os estados de uma região
+     *
+     * @allowedApp : Qualquer app
+     * @allowedUser : Público
+     *
+     * @request : {slugRegion}
+     * @response : {Name, Slug}
+    */
+    app.get('/region/:slugRegion/states', function (request, response) {
+        var filter = {},
+            where = {};
+
+        response.contentType('json');
+        
+        //Localiza a Região pelo nome
+        Region.findOne({"slug" : request.params.slugRegion}, function (error, region) {
+            //Verifica se existe a região e retorna erro caso não exista
+            if (region) {
+                //Cria a query com os dados da região para buscar os Estados
+                var query = State.find();
+                query.where("regionIds");
+                query.in([region._id]);
+                //Localiza os Estados 
+                query.exec(function (error, states) {
+                    if (error) {
+                        response.send({error : error});
+                    } else {
+                        response.send({States : states});
+                    }
+                });
+            } else {
+                response.send({error : "region not found."});
+            }
+        });
+    });
+    
+    /** GET /region/:slugRegion/cities
+     *
+     * @autor : Lucas Kalado
+     * @since : 2012-07
+     *
+     * @description : Lista todos as cidades de uma região
+     *
+     * @allowedApp : Qualquer app
+     * @allowedUser : Público
+     *
+     * @request : {slugRegion}
+     * @response : {Name, Slug}
+    */
+    app.get('/region/:slugRegion/cities', function (request, response) {
+        var filter = {},
+            where = {};
+
+        response.contentType('json');
+        
+        //Localiza a Região pelo nome
+        Region.findOne({"slug" : request.params.slugRegion}, function (error, region) {
+            //Verifica se existe a região e retorna erro caso não exista
+            if (region) {
+                //Cria a query com os dados da região para buscar as Cidades
+                var query = City.find();
+                query.where("regionIds");
+                query.in([region._id]);
+                //Localiza as Cidades
+                query.exec(function (error, cities) {
+                    if (error) {
+                        response.send({error : error});
+                    } else {
+                        response.send({Cities : cities});
+                    }
+                });
+            } else {
+                response.send({error : "region not found."});
             }
         });
     });

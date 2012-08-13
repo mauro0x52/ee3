@@ -8,13 +8,13 @@
 var mongoose = require('mongoose'),
     Schema   = mongoose.Schema,
     objectId = Schema.ObjectId,
-    imageSchema;
+    imageStruct;
 
-imageSchema = new Schema({
-    file   : {type : String, trim : true, required : true},
+imageStruct = {
+    file   : objectId,
     url    : {type : String, trim : true, required : true},
     title  : {type : String, trim : true},
     legend : {type : String, trim : true}
-});
+};
 
-exports.Image = imageSchema;
+exports.ImageStruct = imageStruct;

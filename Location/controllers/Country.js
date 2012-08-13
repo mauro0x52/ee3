@@ -26,44 +26,18 @@ module.exports = function (app) {
      * @response : {Name, Acronym, DDI, Slug}
     */
     app.get('/countries/', function (request, response) {
-        var filter = {},
-            where = {};
-
         response.contentType('json');
         
-        //Aplica filtro por nome caso exista
-        if (request.param('filterByName', null)) {
-            filter.name = request.param('filterByName', null);
-        }
-        //Aplica filtro por região caso exista
-        if (request.param('filterByRegion', null)) {
-            //Localiza a Região pelo nome
-            Region.findOne({slug : request.param('filterByRegion', null)}, function (error, region) {
-                //Cria a query com os dados informados
-                var query = Country.find(filter);
-                query.where("regionIds");
-                query.in([region._id]);
-                //Localiza o Países com todos os filtros 
-                query.exec(function (error, countries) {
-                    if (error) {
-                        response.send({error : error});
-                    } else {
-                        response.send({countries : countries});
-                    }
-                });
-            });
-        } else {
-            //Localiza os Países com filtros simples
-            Country.find(filter, function (error, countries) {
-                if (error) {
-                    response.send({error : error});
-                } else {
-                    response.send({countries : countries});
-                }
-            });
-        }
+        //Localiza os Países com filtros simples
+        Country.find(function (error, countries) {
+            if (error) {
+                response.send({error : error});
+            } else {
+                response.send({countries : countries});
+            }
+        });
     });
-
+    
     /** GET /contry/:slug
      *
      * @autor : Lucas Kalado
@@ -85,7 +59,11 @@ module.exports = function (app) {
             if (error) {
                 response.send({error : error});
             } else {
-                response.send(country);
+                if (country) {
+                    response.send(country);
+                } else {
+                    response.send({error : "country not found."});
+                }
             }
         });
     });

@@ -24,7 +24,7 @@ module.exports = function (app) {
      * @allowedApp : Qualquer app
      * @allowedUser : Público
      *
-     * @request : {filterByName, filterByRegion}
+     * @request : {}
      * @response : {Name, DDD, Slug}
      */
     app.get('/country/:slugCountry/state/:slugState/cities/', function (request, response) {
@@ -49,45 +49,23 @@ module.exports = function (app) {
                         } else {
                             //Com o resultado da validação do estado, faz a busca de todas as cidades.
                             if (state) {
-                                //Verifica se existe um nome para filtrar, se sim adiciona em um vetor a informação.
-                                if (request.param('filterByName', null)) {
-                                    filter.name = request.param('filterByName', null);
-                                }
-                                //Verifica se existe uma região para filtrar, se sim executa uma busca no Model Region.
-                                if (request.param('filterByRegion', null)) {
-                                    filter.stateId = state._id;
-                                    //Localiza a região
-                                    Region.findOne({slug : request.param('filterByRegion', null)}, function (error, region) {
-                                        var query = City.find(filter);
-                                        //Filtro por região
-                                        query.where("regionIds");
-                                        query.in([region._id]);
-                                        //Executa a query no banco a procura das cidades com todo os filtros.
-                                        query.exec(function (error, cities) {
-                                            if (error) {
-                                                response.send({error : error});
-                                            } else {
-                                                response.send({cities : cities});
-                                            }
-                                        });
-                                    });
-                                } else {
-                                    //Executa a query no banco apenas com filtros simples.
-                                    City.find(filter, function (error, cities) {
-                                        if (error) {
-                                            response.send({error : error});
-                                        } else {
-                                            response.send({cities : cities});
-                                        }
-                                    });
-                                }
+                                //Aplica o filtro de estado
+                                filter.stateId = state._id;
+                                //Faz a busca das cidades.
+                                City.find(filter, function (error, cities) {
+                                    if (error) {
+                                        response.send({error : error});
+                                    } else {
+                                        response.send({cities : cities});
+                                    }
+                                });
                             } else {
-                                response.send({error : "Estado não encontrado."});
+                                response.send({error : "state not found."});
                             }
                         }
                     });
                 } else {
-                    response.send({error : "País não encontrado."});
+                    response.send({error : "country not found."});
                 }
             }
         });
@@ -131,16 +109,20 @@ module.exports = function (app) {
                                     if (error) {
                                         response.send({error : error});
                                     } else {
-                                        response.send({city : city});
+                                        if (city) {
+                                            response.send({City : city});
+                                        } else {
+                                            response.send({error : "city not found."});
+                                        };
                                     }
                                 });
                             } else {
-                                response.send({error : "Estado não encontrado."});
+                                response.send({error : "state not found."});
                             }
                         }
                     });
                 } else {
-                    response.send({error : "País não encontrado."});
+                    response.send({error : "country not found."});
                 }
             }
         });

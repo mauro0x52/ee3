@@ -27,7 +27,7 @@ module.exports = function (app) {
         response.contentType('json');
         
         //Localiza o Profile
-        Profile.findOne({"slugs.name" : request.params.slug}, function (error, profile) {
+        Profile.findOne({"slugs" : request.params.slug}, function (error, profile) {
             if (error) {
                 response.send({error: error});
             } else {
@@ -63,16 +63,11 @@ module.exports = function (app) {
             if (valid) {
                 //Cria o Objeto Profile para adicionar no Model
                 profile = new Profile({
-                    users       : request.param('login', null),
-                    jobs        : request.param('jobs', null),
+                    username    : request.param('login', null),
                     slugs       : request.param('slugs', null),
                     name        : request.param('name', null),
                     surname     : request.param('surname', null),
-                    thumbnail   : request.param('thumbnails', null),
                     about       : request.param('about', null),
-                    phones      : request.param('phones', null),
-                    contacts    : request.param('contacts', null),
-                    links       : request.param('links', null),
                     dateCreated : new Date(),
                     dateUpdated : new Date()
                 });
@@ -111,7 +106,7 @@ module.exports = function (app) {
         auth(request.param('login'), request.param('token'), function (valid) {
             if (valid) {
                 //Localiza o Profile
-                Profile.findOne({"slugs.name" : request.params.slug}, function (error, profile) {
+                Profile.findOne({"slugs" : request.params.slug}, function (error, profile) {
                     if (error) {
                         response.send({error: error});
                     } else {
@@ -119,16 +114,15 @@ module.exports = function (app) {
                         if (profile === null) {
                             response.send({error : "profile not found"});
                         } else {
-                            this.name = request.param('name', null);
-                            this.slugs = request.param('slugs', null);
-                            this.surname = request.param('surname', null);
-                            this.about = request.param('about', null);
-                            this.dateUpdated = new Date();
-                            this.save(function (error) {
+                            profile.name = request.param('name', null);
+                            profile.surname = request.param('surname', null);
+                            profile.about = request.param('about', null);
+                            profile.dateUpdated = new Date();
+                            profile.save(function (error) {
                                 if (error) {
                                     response.send({error : error});
                                 } else {
-                                    response.send({error : ''});
+                                    response.send({Profile : profile});
                                 }
                             });
                         }
@@ -160,7 +154,7 @@ module.exports = function (app) {
         auth(request.param('login', null), request.param('token', null), function (valid) {
             if (valid) {
                 //busca o profile
-                Profile.findOne({"slugs.name" : request.params.slug}, function (error, profile) {
+                Profile.findOne({"slugs" : request.params.slug}, function (error, profile) {
                     if (error) {
                         response.send({error : error});
                     } else {

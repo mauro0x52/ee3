@@ -22,12 +22,10 @@ module.exports = function (app) {
      * @allowedApp : Qualquer app
      * @allowedUser : Público
      *
-     * @request : {filterByName, filterByRegion}
+     * @request : {}
      * @response : {Name, Slug}
      */
     app.get('/country/:slug/states/', function (request, response) {
-        var filter = {};
-
         response.contentType('json');
 
         //Localiza o País informado pelo slug
@@ -36,17 +34,16 @@ module.exports = function (app) {
                 response.send({error : error});
             } else {
                 if (country) {
-                    filter = {countryId : country._id};
                     //Localiza todos os estados do país informado
-                    State.find(filter, function (error, states) {
+                    State.find({countryId : country._id}, function (error, states) {
                         if (error) {
                             response.send({error : error});
                         } else {
-                            response.send({states : states});
+                            response.send({States : states});
                         }
                     });
                 } else {
-                    response.send({error : "País não encontrado"});
+                    response.send({error : "country not found."});
                 }
             }
         });
@@ -83,11 +80,15 @@ module.exports = function (app) {
                         if (error) {
                             response.send({error : error});
                         } else {
-                            response.send({states : state});
+                            if (state) {
+                                response.send({State : state});
+                            } else {
+                                response.send({error : "state not found."});
+                            }
                         }
                     });
                 } else {
-                    response.send({error : "País não encontrado"});
+                    response.send({error : "country not found."});
                 }
             }
         });

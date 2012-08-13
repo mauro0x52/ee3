@@ -32,7 +32,7 @@ module.exports = function (app) {
         auth(request.param('login', null), request.param('token', null), function (valid) {
             if (valid) {
                 //busca o perfil
-                Profile.find({slug : request.params.slug}, function (error, profile) {
+                Profile.findOne({"slugs" : request.params.slug}, function (error, profile) {
                     if (error) {
                         response.send({error : error});
                     } else {
@@ -46,11 +46,11 @@ module.exports = function (app) {
                             } else {
                                 //coloca os dados do post em um objeto
                                 profile.phones.push({
-                                    type : request.param('type', null),
-                                    number : request.param('number', null),
+                                    type      : request.param('type', null),
+                                    number    : request.param('number', null),
                                     extension : request.param('extension', null),
-                                    areaCode : request.param('areaCode', null),
-                                    intCode : request.param('intCode', null),
+                                    areacode  : request.param('areacode', null),
+                                    intcode   : request.param('intcode', null),
                                 });
                                 //salva o telefone
                                 profile.save(function (error) {
@@ -70,7 +70,7 @@ module.exports = function (app) {
         });
     });
 
-    /** GET /company/:slug/phones
+    /** GET /profile/:slug/phones
      *
      * @autor : Rafael Erthal
      * @since : 2012-08
@@ -87,7 +87,7 @@ module.exports = function (app) {
         response.contentType('json');
 
         //busca o perfil
-        Profile.findOne({slug : request.params.slug}, function (error, profile) {
+        Profile.findOne({"slugs" : request.params.slug}, function (error, profile) {
             if (error) {
                 response.send({error : error});
             } else {
@@ -101,7 +101,7 @@ module.exports = function (app) {
         });
     });
 
-    /** GET /company/:slug/phone/:id
+    /** GET /profile/:slug/phone/:id
      *
      * @autor : Rafael Erthal
      * @since : 2012-08
@@ -114,11 +114,11 @@ module.exports = function (app) {
      * @request : {}
      * @response : {type,number,extension,areaCode,intCode}
      */
-    app.get('/company/:slug/phone/:id', function (request, response) {
+    app.get('/profile/:slug/phone/:id', function (request, response) {
         response.contentType('json');
 
         //busca o perfil
-        Profile.findOne({slug : request.params.slug}, function (error, profile) {
+        Profile.findOne({"slugs" : request.params.slug}, function (error, profile) {
             if (error) {
                 response.send({error : error});
             } else {
@@ -144,7 +144,7 @@ module.exports = function (app) {
         });
     });
 
-    /** PUT /company/:slug/phone/:id
+    /** PUT /profile/:slug/phone/:id
      *
      * @autor : Rafael Erthal
      * @since : 2012-08
@@ -157,14 +157,14 @@ module.exports = function (app) {
      * @request : {login,token,type,number,extension,areaCode,intCode}
      * @response : {confirmation}
      */
-    app.put('/company/:slug/phone/:id', function (request, response) {
+    app.put('/profile/:slug/phone/:id', function (request, response) {
         response.contentType('json');
 
         //valida o token do usuário
         auth(request.param('login', null), request.param('token', null), function (valid) {
             if (valid) {
                 //busca o perfil
-                Profile.findOne({slug : request.params.slug}, function (error, profile) {
+                Profile.findOne({"slugs" : request.params.slug}, function (error, profile) {
                     if (error) {
                         response.send({error : error});
                     } else {
@@ -181,25 +181,20 @@ module.exports = function (app) {
                                     if (error) {
                                         response.send({error : error});
                                     } else {
-                                        //verifica se o telefone foi encontrado
-                                        if (phone === null) {
-                                            response.send({error : 'phone not found'});
-                                        } else {
-                                            //altera os dados do telefone
-                                            phone.type = request.param('type', null);
-                                            phone.number = request.param('number', null);
-                                            phone.extension = request.param('extension', null);
-                                            phone.areaCode = request.param('areaCode', null);
-                                            phone.intCode = request.param('intCode', null);
-                                            //salva as alterações
-                                            phone.save(function (error) {
-                                                if (error) {
-                                                    response.send({error : error});
-                                                } else {
-                                                    response.send({error : ''});
-                                                }
-                                            });
-                                        }
+                                        //altera os dados do telefone
+                                        phone.type = request.param('type', null);
+                                        phone.number = request.param('number', null);
+                                        phone.extension = request.param('extension', null);
+                                        phone.areacode = request.param('areacode', null);
+                                        phone.intcode = request.param('intcode', null);
+                                        //salva as alterações
+                                        phone.save(function (error) {
+                                            if (error) {
+                                                response.send({error : error});
+                                            } else {
+                                                response.send({Phone : phone});
+                                            }
+                                        });
                                     }
                                 });
                             }
@@ -212,7 +207,7 @@ module.exports = function (app) {
         });
     });
 
-    /** DEL /company/:slug/phone/:id
+    /** DEL /profile/:slug/phone/:id
      *
      * @autor : Rafael Erthal
      * @since : 2012-08
@@ -225,14 +220,14 @@ module.exports = function (app) {
      * @request : {login,token}
      * @response : {confirmation}
      */
-    app.del('/company/:slug/phone/:id', function (request, response) {
+    app.del('/profile/:slug/phone/:id', function (request, response) {
         response.contentType('json');
 
         //valida o token do usuário
         auth(request.param('login', null), request.param('token', null), function (valid) {
             if (valid) {
                 //busca o perfil
-                Profile.find({slug : request.params.slug}, function (error, profile) {
+                Profile.findOne({"slugs" : request.params.slug}, function (error, profile) {
                     if (error) {
                         response.send({error : error});
                     } else {

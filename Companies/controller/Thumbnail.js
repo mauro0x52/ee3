@@ -10,11 +10,13 @@ module.exports = function (app) {
 
     var Model = require('./../model/Model.js'),
         auth  = require('./../Utils.js').auth,
-        Company = Model.Company;
+        files  = require('./../Utils.js').files,
+        Company = Model.Company,
+        config = require('./../config.js');
 
     /** POST /company/:company_slug/product/:product_slug/thumbnail
      *
-     * @autor : Rafael Erthal
+     * @author : Rafael Erthal, Mauro Ribeiro
      * @since : 2012-08
      *
      * @description : Cadastrar thumbnail em produto
@@ -25,16 +27,16 @@ module.exports = function (app) {
      * @request : {login,token,file,title,legend}
      * @response : {confirmation}
      */
-    app.post('/company/:company_slug/product/:product_slug/thumbnail', function (request, response) {
+    app.post('/company/:company_slug/product/:product_slug/thumbnail', function postProductThumbnail(request, response) {
         var thumbnail;
-        
+
         response.contentType('json');
 
         //valida o token do usuário
         auth(request.param('login', null), request.param('token', null), function (valid) {
             if (valid) {
                 //busca a compania
-                Company.find({slug : request.params.company_slug}, function (error, company) {
+                Company.findOne({slug : request.params.company_slug}, function (error, company) {
                     if (error) {
                         response.send({error : error});
                     } else {
@@ -43,7 +45,7 @@ module.exports = function (app) {
                             response.send({error : 'company not found'});
                         } else {
                             //verifica se o usuário é dono da compania
-                            if (! company.isOwner(request.param('login', null))) {
+                            if (!company.isOwner(request.param('login', null))) {
                                 response.send({error : 'permission denied'});
                             } else {
                                 //busca o produto
@@ -55,11 +57,56 @@ module.exports = function (app) {
                                         if (product === null) {
                                             response.send({error : 'product not found'});
                                         } else {
-                                            thumbnail.small = request.param('small');
-                                            thumbnail.medium = request.param('medium');
-                                            thumbnail.large = request.param('large');
-                                            
-                                            product.thumbnails.push(thumbnail);
+                                            // verifica se foi enviado algum arquivo
+                                            if (!request.files || !request.files.file) {
+                                                response.send({error : 'no selected file'});
+                                            } else {
+                                                // faz upload dos thumbnails
+                                                files.image.thumbnail.upload(
+                                                    request.files.file,
+                                                    '/company/' + request.params.company_slug + '/product/' + request.params.product_slug + '/thumbnail',
+                                                    function (error, data) {
+                                                        if (error) {
+                                                            response.send({error : error});
+                                                        } else {
+			                                            	product.thumbnail = {
+				                                            	original : {
+				                                            		file : data.original._id,
+				                                            		url : data.original.url,
+				                                            		title : 'thumbnail',
+				                                            		legend : 'original'
+				                                            	},
+				                                            	small : {
+				                                        			file : data.small._id,
+				                                            		url : data.small.url,
+				                                            		title : 'thumbnail',
+				                                            		legend : '50x50 thumbnail'
+				                                            	},
+				                                            	medium : {
+				                                            		file : data.medium._id,
+				                                            		url : data.medium.url,
+				                                            		title : 'thumbnail',
+				                                            		legend : '100x100 thumbnail'
+				                                            	},
+				                                            	large : {
+				                                            		file : data.large._id,
+				                                            		url : data.large.url,
+				                                            		title : 'thumbnail',
+				                                            		legend : '200x200 thumbnail'
+				                                            	}
+				                                            };
+			                                                product.save(function (error) {
+			                                                	if (error) {
+			                                                		response.send({error: error});
+			                                                	}
+			                                                	else {
+			                                                		response.send(product.thumbnail);
+			                                                	}
+			                                                });
+                                                        }
+                                                    }
+                                                );
+                                            }
                                         }
                                     }
                                 });
@@ -75,7 +122,7 @@ module.exports = function (app) {
 
     /** GET /company/:company_slug/product/:product_slug/thumbnails
      *
-     * @autor : Rafael Erthal
+     * @author : Rafael Erthal, Mauro Ribeiro
      * @since : 2012-08
      *
      * @description : Listar thumbnails de produto
@@ -86,11 +133,11 @@ module.exports = function (app) {
      * @request : {}
      * @response : {[file,url,title,legend]}
      */
-    app.get('/company/:company_slug/product/:product_slug/thumbnails', function (request, response) {
+    app.get('/company/:company_slug/product/:product_slug/thumbnail', function (request, response) {
         response.contentType('json');
 
         //busca a compania
-        Company.find({slug : request.params.company_slug}, function (error, company) {
+        Company.findOne({slug : request.params.company_slug}, function (error, company) {
             if (error) {
                 response.send({error : error});
             } else {
@@ -107,7 +154,12 @@ module.exports = function (app) {
                             if (product === null) {
                                 response.send({error : 'product not found'});
                             } else {
-                                //TODO implementar funcionalidades
+                                // se o thumbnail nao esta setado
+                                if (!product.thumbnail || !product.thumbnail.original || !product.thumbnail.original.url) {
+                                    response.send(undefined);
+                                } else {
+                                    response.send(product.thumbnail);
+                                }
                             }
                         }
                     });
@@ -118,7 +170,7 @@ module.exports = function (app) {
 
     /** GET /company/:company_slug/product/:product_slug/thumbnail/:type
      *
-     * @autor : Rafael Erthal
+     * @author : Rafael Erthal, Mauro Ribeiro
      * @since : 2012-08
      *
      * @description : Exibir thumbnail de produto
@@ -129,11 +181,11 @@ module.exports = function (app) {
      * @request : {}
      * @response : {file,url,title,legend}
      */
-    app.get('/company/:company_slug/product/:product_slug/thumbnail/:type', function (request, response) {
+    app.get('/company/:company_slug/product/:product_slug/thumbnail/:size', function (request, response) {
         response.contentType('json');
 
         //busca a compania
-        Company.find({slug : request.params.company_slug}, function (error, company) {
+        Company.findOne({slug : request.params.company_slug}, function (error, company) {
             if (error) {
                 response.send({error : error});
             } else {
@@ -150,7 +202,20 @@ module.exports = function (app) {
                             if (product === null) {
                                 response.send({error : 'product not found'});
                             } else {
-                                //TODO implementar funcionalidades
+                                // se nao tem nenhuma imagem
+                                if (!product.thumbnail || !product.thumbnail.original || !product.thumbnail.original.url) {
+                                    response.send(undefined);
+                                } else {
+                                    if (size === 'original') {
+                                        response.send(product.thumbnail.original);
+                                    } else if (size === 'large') {
+                                        response.send(product.thumbnail.large);
+                                    } else if (size === 'medium')  {
+                                        response.send(product.thumbnail.medium);
+                                    } else {
+                                        response.send(product.thumbnail.small);
+                                    }
+                                }
                             }
                         }
                     });
@@ -159,7 +224,7 @@ module.exports = function (app) {
         });
     });
 
-    /** PUT /company/:company_slug/product/:product_slug/thumbnail/:type
+    /** PUT /company/:company_slug/product/:product_slug/thumbnail
      *
      * @autor : Rafael Erthal
      * @since : 2012-08
@@ -172,51 +237,13 @@ module.exports = function (app) {
      * @request : {login,token,title,legend}
      * @response : {confirmation}
      */
-    app.put('/company/:company_slug/product/:product_slug/thumbnail/:type', function (request, response) {
-        response.contentType('json');
-
-        //valida o token do usuário
-        auth(request.param('login', null), request.param('token', null), function (valid) {
-            if (valid) {
-                //busca a compania
-                Company.find({slug : request.params.company_slug}, function (error, company) {
-                    if (error) {
-                        response.send({error : error});
-                    } else {
-                        //verifica se a compania foi encontrada
-                        if (company === null) {
-                            response.send({error : 'company not found'});
-                        } else {
-                            //verifica se o usuário é dono da compania
-                            if (! company.isOwner(request.param('login', null))) {
-                                response.send({error : 'permission denied'});
-                            } else {
-                                //busca o produto
-                                company.findProduct(request.params.product_slug, function (error, product) {
-                                    if (error) {
-                                        response.send({error : error});
-                                    } else {
-                                        //verifica se o produto foi encontrado
-                                        if (product === null) {
-                                            response.send({error : 'product not found'});
-                                        } else {
-                                            //TODO implementar funcionalidades
-                                        }
-                                    }
-                                });
-                            }
-                        }
-                    }
-                });
-            } else {
-                response.send({error : 'invalid token'});
-            }
-        });
+    app.put('/company/:company_slug/product/:product_slug/thumbnail', function (request, response) {
+        postProductThumbnail(request, response);
     });
 
-    /** DEL /company/:company_slug/product/:product_slug/thumbnail/:type
+    /** DEL /company/:company_slug/product/:product_slug/thumbnail
      *
-     * @autor : Rafael Erthal
+     * @author : Rafael Erthal, Mauro Ribeiro
      * @since : 2012-08
      *
      * @description : Excluir thumbnail de produto
@@ -227,14 +254,14 @@ module.exports = function (app) {
      * @request : {login,token}
      * @response : {confirmation}
      */
-    app.del('/company/:company_slug/product/:product_slug/thumbnail/:type', function (request, response) {
+    app.del('/company/:company_slug/product/:product_slug/thumbnail', function (request, response) {
         response.contentType('json');
 
         //valida o token do usuário
         auth(request.param('login', null), request.param('token', null), function (valid) {
             if (valid) {
                 //busca a compania
-                Company.find({slug : request.params.company_slug}, function (error, company) {
+                Company.findOne({slug : request.params.company_slug}, function (error, company) {
                     if (error) {
                         response.send({error : error});
                     } else {
@@ -255,7 +282,15 @@ module.exports = function (app) {
                                         if (product === null) {
                                             response.send({error : 'product not found'});
                                         } else {
-                                            //TODO implementar funcionalidades
+                                            product.thumbnail = undefined;
+                                            product.save(function (error) {
+                                            	if (error) {
+                                            		response.send({error: error});
+                                            	}
+                                            	else {
+                                            		response.send(undefined);
+                                            	}
+                                            });
                                         }
                                     }
                                 });
@@ -271,7 +306,7 @@ module.exports = function (app) {
 
     /** POST /company/:slug/thumbnail
      *
-     * @autor : Rafael Erthal
+     * @author : Rafael Erthal, Mauro Ribeiro
      * @since : 2012-08
      *
      * @description : Cadastrar thumbnail em empresa
@@ -282,14 +317,14 @@ module.exports = function (app) {
      * @request : {login,token,file,title,legend}
      * @response : {confirmation}
      */
-    app.post('/company/:slug/thumbnail', function (request, response) {
+    app.post('/company/:slug/thumbnail', function postCompanyThumbnail (request, response) {
         response.contentType('json');
 
         //valida o token do usuário
         auth(request.param('login', null), request.param('token', null), function (valid) {
             if (valid) {
                 //busca a compania
-                Company.find({slug : request.params.slug}, function (error, company) {
+                Company.findOne({slug : request.params.slug}, function (error, company) {
                     if (error) {
                         response.send({error : error});
                     } else {
@@ -298,10 +333,59 @@ module.exports = function (app) {
                             response.send({error : 'company not found'});
                         } else {
                             //verifica se o usuário é dono da compania
-                            if (! company.isOwner(request.param('login', null))) {
+                            if (!company.isOwner(request.param('login', null))) {
                                 response.send({error : 'permission denied'});
                             } else {
-                                //TODO implementar funcionalidades
+                                // verifica se foi enviado algum arquivo
+                                if (!request.files || !request.files.file) {
+                                    response.send({error : 'no selected file'});
+                                } else {
+                                    // faz upload dos thumbnails
+                                    files.image.thumbnail.upload(
+                                        request.files.file, 
+                                        '/company/' + request.params.company_slug + '/thumbnail', 
+                                        function(error, data) {
+                                            if (error) {
+                                                response.send({ error : error });
+                                            } else {
+                                            	company.thumbnail = {
+	                                            	original : {
+	                                            		file : data.original._id,
+	                                            		url : data.original.url,
+	                                            		title : 'thumbnail',
+	                                            		legend : 'original'
+	                                            	},
+	                                            	small : {
+	                                        			file : data.small._id,
+	                                            		url : data.small.url,
+	                                            		title : 'thumbnail',
+	                                            		legend : '50x50 thumbnail'
+	                                            	},
+	                                            	medium : {
+	                                            		file : data.medium._id,
+	                                            		url : data.medium.url,
+	                                            		title : 'thumbnail',
+	                                            		legend : '100x100 thumbnail'
+	                                            	},
+	                                            	large : {
+	                                            		file : data.large._id,
+	                                            		url : data.large.url,
+	                                            		title : 'thumbnail',
+	                                            		legend : '200x200 thumbnail'
+	                                            	}
+	                                            };
+                                                company.save(function (error) {
+                                                	if (error) {
+                                                		response.send({error: error});
+                                                	}
+                                                	else {
+                                                		response.send(company.thumbnail);
+                                                	}
+                                                });
+                                            }
+                                        }
+                                    );
+                                }
                             }
                         }
                     }
@@ -312,9 +396,9 @@ module.exports = function (app) {
         });
     });
 
-    /** GET /company/:slug/thumbnails
+    /** GET /company/:slug/thumbnail
      *
-     * @autor : Rafael Erthal
+     * @author : Rafael Erthal
      * @since : 2012-08
      *
      * @description : Listar imagens de empresa
@@ -325,11 +409,11 @@ module.exports = function (app) {
      * @request : {}
      * @response : {[file,url,title,legend]}
      */
-    app.get('/company/:slug/thumbnails', function (request, response) {
+    app.get('/company/:slug/thumbnail', function (request, response) {
         response.contentType('json');
 
         //busca a compania
-        Company.find({slug : request.params.slug}, function (error, company) {
+        Company.findOne({slug : request.params.slug}, function (error, company) {
             if (error) {
                 response.send({error : error});
             } else {
@@ -337,15 +421,20 @@ module.exports = function (app) {
                 if (company === null) {
                     response.send({error : 'company not found'});
                 } else {
-                    //TODO implementar funcionalidades
+                    // se o thumbnail nao esta setado
+                    if (!company.thumbnail || !company.thumbnail.original || !company.thumbnail.original.url) {
+                        response.send(undefined);
+                    } else {
+                        response.send(company.thumbnail);
+                    }
                 }
             }
         });
     });
 
-    /** GET /company/:slug/thumbnail/:type
+    /** GET /company/:slug/thumbnail/:size
      *
-     * @autor : Rafael Erthal
+     * @author : Rafael Erthal
      * @since : 2012-08
      *
      * @description : Exibir thumbnail de empresa
@@ -356,11 +445,11 @@ module.exports = function (app) {
      * @request : {}
      * @response : {file,url,title,legend}
      */
-    app.get('/company/:slug/thumbnail/:type', function (request, response) {
+    app.get('/company/:slug/thumbnail/:size', function (request, response) {
         response.contentType('json');
 
         //busca a compania
-        Company.find({slug : request.params.slug}, function (error, company) {
+        Company.findOne({slug : request.params.slug}, function (error, company) {
             if (error) {
                 response.send({error : error});
             } else {
@@ -368,15 +457,28 @@ module.exports = function (app) {
                 if (company === null) {
                     response.send({error : 'company not found'});
                 } else {
-                    //TODO implementar funcionalidades
+                    // se o thumbnail nao esta setado
+                    if (!company.thumbnail || !company.thumbnail.original || !company.thumbnail.original.url) {
+                        response.send(undefined);
+                    } else {
+                        if (size === 'original') {
+                            response.send(product.thumbnail.original);
+                        } else if (size === 'large') {
+                            response.send(product.thumbnail.large);
+                        } else if (size === 'medium')  {
+                            response.send(product.thumbnail.medium);
+                        } else {
+                            response.send(product.thumbnail.small);
+                        }
+                    }
                 }
             }
         });
     });
 
-    /** PUT /company/:slug/thumbnail/:type
+    /** PUT /company/:slug/thumbnail
      *
-     * @autor : Rafael Erthal
+     * @author : Rafael Erthal, Mauro Ribeiro
      * @since : 2012-08
      *
      * @description : Editar thumbnail de empresa
@@ -388,38 +490,12 @@ module.exports = function (app) {
      * @response : {confirmation}
      */
     app.put('/company/:slug/thumbnail/:type', function (request, response) {
-        response.contentType('json');
-
-        //valida o token do usuário
-        auth(request.param('login', null), request.param('token', null), function (valid) {
-            if (valid) {
-                //busca a compania
-                Company.find({slug : request.params.slug}, function (error, company) {
-                    if (error) {
-                        response.send({error : error});
-                    } else {
-                        //verifica se a compania foi encontrada
-                        if (company === null) {
-                            response.send({error : 'company not found'});
-                        } else {
-                            //verifica se o usuário é dono da compania
-                            if (! company.isOwner(request.param('login', null))) {
-                                response.send({error : 'permission denied'});
-                            } else {
-                                //TODO implementar funcionalidades
-                            }
-                        }
-                    }
-                });
-            } else {
-                response.send({error : 'invalid token'});
-            }
-        });
+        postCompanyThumbnail(request, response);
     });
 
-    /** DEL /company/:slug/thumbnail/:type
+    /** DEL /company/:slug/thumbnail
      *
-     * @autor : Rafael Erthal
+     * @author : Rafael Erthal, Mauro Ribeiro
      * @since : 2012-08
      *
      * @description : Excluir thumbnail de empresa
@@ -430,14 +506,14 @@ module.exports = function (app) {
      * @request : {login,token}
      * @response : {confirmation}
      */
-    app.del('/company/:slug/thumbnail/:type', function (request, response) {
+    app.del('/company/:slug/thumbnail', function (request, response) {
         response.contentType('json');
 
         //valida o token do usuário
         auth(request.param('login', null), request.param('token', null), function (valid) {
             if (valid) {
                 //busca a compania
-                Company.find({slug : request.params.slug}, function (error, company) {
+                Company.findOne({slug : request.params.slug}, function (error, company) {
                     if (error) {
                         response.send({error : error});
                     } else {
@@ -446,10 +522,18 @@ module.exports = function (app) {
                             response.send({error : 'company not found'});
                         } else {
                             //verifica se o usuário é dono da compania
-                            if (! company.isOwner(request.param('login', null))) {
+                            if (!company.isOwner(request.param('login', null))) {
                                 response.send({error : 'permission denied'});
                             } else {
-                                //TODO implementar funcionalidades
+                                company.thumbnail = undefined;
+                                company.save(function (error) {
+                                	if (error) {
+                                		response.send({error: error});
+                                	}
+                                	else {
+                                		response.send(undefined);
+                                	}
+                                });
                             }
                         }
                     }

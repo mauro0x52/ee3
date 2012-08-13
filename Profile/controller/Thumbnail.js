@@ -32,7 +32,7 @@ module.exports = function (app) {
         auth(request.param('login', null), request.param('token', null), function (valid) {
             if (valid) {
                 //busca o perfil
-                Profile.find({slug : request.params.slug}, function (error, profile) {
+                Profile.findOne({"slugs" : request.params.slug}, function (error, profile) {
                     if (error) {
                         response.send({error : error});
                     } else {
@@ -46,9 +46,9 @@ module.exports = function (app) {
                             } else {
                                 //coloca os dados do post em um objeto
                                 profile.thumbnails.push({
-                                     small : request.param('small'),
+                                     small  : request.param('small'),
                                      medium : request.param('medium'),
-                                     large : request.param('large')
+                                     large  : request.param('large')
                                 });
                                 //salva o thumbnail
                                 profile.save(function (error) {
@@ -68,7 +68,7 @@ module.exports = function (app) {
         });
     });
 
-    /** GET /company/:slug/thumbnails
+    /** GET /profile/:slug/thumbnails
      *
      * @autor : Rafael Erthal
      * @since : 2012-08
@@ -85,7 +85,7 @@ module.exports = function (app) {
         response.contentType('json');
 
         //busca o perfil
-        Profile.findOne({slug : request.params.slug}, function (error, profile) {
+        Profile.findOne({"slugs" : request.params.slug}, function (error, profile) {
             if (error) {
                 response.send({error : error});
             } else {
@@ -99,7 +99,7 @@ module.exports = function (app) {
         });
     });
 
-    /** GET /company/:slug/thumbnail/:id
+    /** GET /profile/:slug/thumbnail/:id
      *
      * @autor : Rafael Erthal
      * @since : 2012-08
@@ -116,7 +116,7 @@ module.exports = function (app) {
         response.contentType('json');
 
         //busca o perfil
-        Profile.find({slug : request.params.slug}, function (error, profile) {
+        Profile.findOne({"slugs" : request.params.slug}, function (error, profile) {
             if (error) {
                 response.send({error : error});
             } else {
@@ -142,7 +142,7 @@ module.exports = function (app) {
         });
     });
 
-    /** PUT /company/:slug/thumbnail/:id
+    /** PUT /profile/:slug/thumbnail/:id
      *
      * @autor : Rafael Erthal
      * @since : 2012-08
@@ -155,14 +155,14 @@ module.exports = function (app) {
      * @request : {login,token}
      * @response : {confirmation}
      */
-    app.put('/company/:slug/thumbnail/:id', function (request, response) {
+    app.put('/profile/:slug/thumbnail/:id', function (request, response) {
         response.contentType('json');
 
         //valida o token do usuário
         auth(request.param('login', null), request.param('token', null), function (valid) {
             if (valid) {
                 //busca o perfil
-                Profile.find({slug : request.params.slug}, function (error, profile) {
+                Profile.findOne({"slugs" : request.params.slug}, function (error, profile) {
                     if (error) {
                         response.send({error : error});
                     } else {
@@ -185,9 +185,9 @@ module.exports = function (app) {
                                         } else {
                                             //altera os dados do thumbnail
                                             profile.thumbnails.push({
-                                                 small : request.param('small'),
+                                                 small  : request.param('small'),
                                                  medium : request.param('medium'),
-                                                 large : request.param('large')
+                                                 large  : request.param('large')
                                             });
                                             //salva as alterações
                                             thumbnail.save(function (error) {
@@ -230,7 +230,7 @@ module.exports = function (app) {
         auth(request.param('login', null), request.param('token', null), function (valid) {
             if (valid) {
                 //busca o perfil
-                Profile.findOne({slug : request.params.slug}, function (error, profile) {
+                Profile.findOne({"slugs" : request.params.slug}, function (error, profile) {
                     if (error) {
                         response.send({error : error});
                     } else {

@@ -9,7 +9,7 @@
 # Exemplos de crontab:
 #
 #     A cada 10 minutos
-#     */10 * * * * sh deploy.sh
+#     */10 * * * * cd /path/to/deploy/folder/; bash deploy.sh;
 # ------------------------------------------------------------------------------
 
 # Arquivo de configuracao
@@ -81,11 +81,15 @@ deploy() {
                     echo "-- parando ${SERVICE,,}.js"
                     forever stop ${SERVICE,,}.js
                     echo "--- ok"
+                    echo "-- atualizando modulos usados em ${SERVICE,,}.js"
+                    npm install
+                    echo "--- ok"
                     echo "-- iniciando ${SERVICE,,}.js"
                     forever start ${SERVICE,,}.js
                     echo "--- ok"
                     cd ..
                 fi
+        		(( COUNT++ ))
             done
         else
             echo "- Nenhum servico para atualizar"
