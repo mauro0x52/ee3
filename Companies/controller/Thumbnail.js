@@ -343,7 +343,7 @@ module.exports = function (app) {
                                     // faz upload dos thumbnails
                                     files.image.thumbnail.upload(
                                         request.files.file, 
-                                        '/company/' + request.params.company_slug + '/thumbnail', 
+                                        '/company/' + request.params.slug + '/thumbnail', 
                                         function(error, data) {
                                             if (error) {
                                                 response.send({ error : error });

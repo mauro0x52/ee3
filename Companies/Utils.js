@@ -52,7 +52,7 @@ exports.files = {
             restler.post('http://'+config.services.files.host+':'+config.services.files.port+'/image', {
                 multipart: true,
                 data: {
-                    'path': '/teste/testando',
+                    'path': path,
                     'file': restler.file(tmpFile.path, tmpFile.name, tmpFile.size, null, tmpFile.type)
                 }
             }).on('complete', function(data) {
@@ -84,7 +84,7 @@ exports.files = {
                 restler.post(sendUrl, {
                     multipart: true,
                     data: {
-                        'path': '/teste/testando',
+                        'path': path,
                         'file': restler.file(tmpFile.path, tmpFile.name, tmpFile.size, null, tmpFile.type)
                     }
                 }).on('complete', function(data) {

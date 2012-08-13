@@ -20,6 +20,14 @@
             
             return false;
         }
+                
+        function testFile(form, data, url)
+        {
+			$(form).attr('enctype', "multipart/form-data");
+			$(form).attr('method', 'POST');
+			$(form).attr('action', url);
+			$(form).submit();
+        }
         </script>
         <style>
             body{
@@ -293,6 +301,33 @@
                                 <li>token <input type="text" value="3f2b5b78a7e8c77553346d0de8345308" name="token" /></li>
                                 <li>company-slug <input type="text" name="slug" /></li>
                                 <li>product-slug <input type="text" name="slugProduct" /></li>
+                            </ul>
+                            <input type="submit" value="testar" />
+                        </form>
+                    </li>
+                    <li>
+                        <h4>Envia thumbnail de produto</h4>
+                        <form onsubmit="testFile(this, $(this).serialize(), '../company/'+$(this).find('input[name=slug]').val()+'/products/'+$(this).find('input[name=slugProduct]').val()+'/images'); return false;">
+                            Parâmetros
+                            <ul>
+                                <li>login <input type="text" value="teste" name="login" /></li>
+                                <li>token <input type="text" value="3f2b5b78a7e8c77553346d0de8345308" name="token" /></li>
+                                <li>company-slug <input type="text" name="slug" /></li>
+                                <li>product-slug <input type="text" name="slugProduct" /></li>
+                                <li>file <input type="file" name="file" /></li>
+                            </ul>
+                            <input type="submit" value="testar" />
+                        </form>
+                    </li>
+                    <li>
+                        <h4>Envia thumbnail de empresa</h4>
+                        <form onsubmit="testFile(this, $(this).serialize(), '../company/'+$(this).find('input[name=slug]').val()+'/thumbnail'); return false;">
+                            Parâmetros
+                            <ul>
+                                <li>login <input type="text" value="teste" name="login" /></li>
+                                <li>token <input type="text" value="3f2b5b78a7e8c77553346d0de8345308" name="token" /></li>
+                                <li>company-slug <input type="text" name="slug" /></li>
+                                <li>file <input type="file" name="file" /></li>
                             </ul>
                             <input type="submit" value="testar" />
                         </form>
