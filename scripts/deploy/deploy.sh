@@ -89,6 +89,7 @@ deploy() {
                     echo "--- ok"
                     cd ..
                 fi
+        		(( COUNT++ ))
             done
         else
             echo "- Nenhum servico para atualizar"
