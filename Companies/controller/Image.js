@@ -10,6 +10,7 @@ module.exports = function (app) {
 
     var Model = require('./../model/Model.js'),
         auth  = require('./../Utils.js').auth,
+        files  = require('./../Utils.js').files,
         Company = Model.Company;
 
     /** POST /company/:company_slug/product/:product_slug/image
@@ -32,7 +33,7 @@ module.exports = function (app) {
         auth(request.param('login', null), request.param('token', null), function (valid) {
             if (valid) {
                 //busca a compania
-                Company.find({slug : request.params.company_slug}, function (error, company) {
+                Company.findOne({slug : request.params.company_slug}, function (error, company) {
                     if (error) {
                         response.send({error : error});
                     } else {
@@ -53,21 +54,37 @@ module.exports = function (app) {
                                         if (product === null) {
                                             response.send({error : 'product not found'});
                                         } else {
-                                            //coloca os dados do post em um objeto
-                                            product.images.push({
-                                                url : request.param('url', null),
-                                                file : request.param('file', null),
-                                                title : request.param('title', null),
-                                                legend : request.param('legend', null)
-                                            });
-                                            //salva a imagem
-                                            product.save(function (error) {
-                                                if (error) {
-                                                    response.send({error : error});
-                                                } else {
-                                                    response.send({error : ''});
-                                                }
-                                            });
+                                            // verifica se foi enviado algum arquivo
+                                            if (!request.files || !request.files.file) {
+                                                response.send({error : 'no selected file'});
+                                            } else {
+	                                            // faz upload da imagem
+	                                            files.image.upload(
+	                                                request.files.file,
+	                                                '/company/' + request.params.company_slug + '/product/' + request.params.product_slug + '/images',
+	                                                function (error, data) {
+                                                        if (error) {
+                                                            response.send({error : error});
+                                                        } else {
+				                                            //coloca os dados do post em um objeto
+				                                            product.images.push({
+			                                            		file : data.original._id,
+				                                                url : data.url,
+				                                                title : request.param('title', null),
+				                                                legend : request.param('legend', null)
+				                                            });
+				                                            //salva a imagem
+				                                            product.save(function (error) {
+				                                                if (error) {
+				                                                    response.send({error : error});
+				                                                } else {
+				                                                    response.send(product.images);
+				                                                }
+				                                            });
+			                                            }
+			                                        }
+		                                        );
+	                                        }
                                         }
                                     }
                                 });
