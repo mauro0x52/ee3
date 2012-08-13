@@ -64,15 +64,10 @@ module.exports = function (app) {
                 //Cria o Objeto Profile para adicionar no Model
                 profile = new Profile({
                     username    : request.param('login', null),
-                    jobs        : request.param('jobs', null),
                     slugs       : request.param('slugs', null),
                     name        : request.param('name', null),
                     surname     : request.param('surname', null),
-                    thumbnail   : request.param('thumbnails', null),
                     about       : request.param('about', null),
-                    phones      : request.param('phones', null),
-                    contacts    : request.param('contacts', null),
-                    links       : request.param('links', null),
                     dateCreated : new Date(),
                     dateUpdated : new Date()
                 });

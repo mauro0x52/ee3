@@ -56,14 +56,14 @@ module.exports = function (app) {
         
         //Localiza o País desejado e retorna os dados informados
         Country.findOne({slug : request.params.slug}, function (error, country) {
-            if (country) {
-                if (error) {
-                    response.send({error : error});
-                } else {
-                    response.send(country);
-                }
+            if (error) {
+                response.send({error : error});
             } else {
-                response.send({error : "country not found."});
+                if (country) {
+                    response.send(country);
+                } else {
+                    response.send({error : "country not found."});
+                }
             }
         });
     });
