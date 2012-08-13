@@ -7,7 +7,7 @@
  *
  * @description : implementa a biblioteca de track do usuário
  */
-function Tracker (app) {
+sdk.modules.tracker = function (app) {
     /** global
      *
      * @autor : Rafael Erthal
