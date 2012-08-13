@@ -27,7 +27,7 @@ module.exports = function (app) {
      * @request : {login,token,file,title,legend}
      * @response : {confirmation}
      */
-    app.post('/company/:company_slug/product/:product_slug/thumbnail', function postProductThumbnail (request, response) {
+    app.post('/company/:company_slug/product/:product_slug/thumbnail', function postProductThumbnail(request, response) {
         var thumbnail;
 
         response.contentType('json');
