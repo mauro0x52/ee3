@@ -5,29 +5,13 @@
  * @description : Representação da entidade de Thumbnail
  */
 
-var mongoose = require('mongoose'),
-    Schema   = mongoose.Schema,
-    objectId = Schema.ObjectId,
-    thumbnailSchema;
+var thumbnailStruct;
 
-thumbnailSchema = new Schema({
-    images : [require('./Image.js').Image],
-});
+thumbnailStruct = {
+    original : require('./Image.js').ImageStruct,
+    small : require('./Image.js').ImageStruct,
+    medium : require('./Image.js').ImageStruct,
+    large : require('./Image.js').ImageStruct
+};
 
-thumbnailSchema.virtual('original')
-    .set(function (image) {this.images[0] = image})
-    .get(function () {return this.images[0]});
-
-thumbnailSchema.virtual('small')
-    .set(function (image) {this.images[1] = image})
-    .get(function () {return this.images[1]});
-
-thumbnailSchema.virtual('medium')
-    .set(function (image) {this.images[2] = image})
-    .get(function () {return this.images[2]});
-
-thumbnailSchema.virtual('large')
-    .set(function (image) {this.images[3] = image})
-    .get(function () {return this.images[3]});
-
-exports.Thumbnail = thumbnailSchema;
+exports.ThumbnailStruct = thumbnailStruct;

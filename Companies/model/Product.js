@@ -14,7 +14,7 @@ var mongoose = require('mongoose'),
 productSchema = new Schema({
     name       : {type : String, trim : true, required : true},
     slugs      : [{type : String, trim : true, required : true, unique : true}],
-    thumbnails : [require('./Thumbnail.js').Thumbnail],
+    thumbnail  : require('./Thumbnail.js').ThumbnailStruct,
     abstract   : {type : String},
     about      : {type : String},
     links      : [require('./Link.js').Link],
