@@ -3,7 +3,7 @@
  * @since : 2012-07
  *
  * @description : Representação da entidade de países
- */
+     */
 var crypto = require('crypto'),
     mongoose = require('mongoose'),
     Schema   = mongoose.Schema,
