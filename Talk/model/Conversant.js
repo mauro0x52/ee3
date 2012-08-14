@@ -13,32 +13,10 @@ var Thread = require('./Thread.js').Thread,
     Conversant;
 
 conversantSchema = new Schema({
-    user      : {type : String, trim : true, required : true},
+    user      : {type : String, trim : true, required : true, unique : true},
     label     : {type : String, trim : true, required : true},
     lastCheck : {type : Date, required : true},
     threadIds : [objectId]
-});
-
-/** pre('save')
- * @author : Rafael Erthal
- * @since : 2012-08
- *
- * @description : verifica se o username ainda não foi cadastrado
- */
-conversantSchema.pre('save', function (next) {
-    "use strict";
-
-    Conversant.findOne({user : this.user, _id : {$ne : this._id}}, function (error, user) {
-        if (error) {
-            next(error);
-        } else {
-            if (user === null) {
-                next();
-            } else {
-                next('username already exists');
-            }
-        }
-    });
 });
 
 /** Threads
