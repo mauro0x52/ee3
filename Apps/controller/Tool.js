@@ -30,6 +30,7 @@ module.exports = function (app) {
         var tool;
 
         response.contentType('json');
+        response.header('Access-Control-Allow-Origin', '*');
 
         //valida o token do usuário
         auth(request.param('login', null), request.param('token', null), function (valid) {
@@ -98,6 +99,7 @@ module.exports = function (app) {
      */
     app.get('/app/:slug/version/:number/tools', function (request, response) {
         response.contentType('json');
+        response.header('Access-Control-Allow-Origin', '*');
 
         //busca o app
         App.findOne({slug : request.params.slug}, function (error, app) {
@@ -148,9 +150,10 @@ module.exports = function (app) {
      */
     app.get('/app/:slug/version/:number/tool/:name', function (request, response) {
         response.contentType('json');
+        response.header('Access-Control-Allow-Origin', '*');
 
         //busca o app
-        App.find({slug : request.params.slug}, function (error, app) {
+        App.findOne({slug : request.params.slug}, function (error, app) {
             if (error) {
                 response.send({error : error});
             } else {
@@ -202,6 +205,7 @@ module.exports = function (app) {
      */
     app.del('/app/:slug/version/:number/tool/:name', function (request, response) {
         response.contentType('json');
+        response.header('Access-Control-Allow-Origin', '*');
 
         //valida o token do usuário
         auth(request.param('login', null), request.param('token', null), function (valid) {
@@ -276,6 +280,7 @@ module.exports = function (app) {
      */
     app.put('/app/:slug/version/:number/tool/:name', function (request, response) {
         response.contentType('json');
+        response.header('Access-Control-Allow-Origin', '*');
 
         //valida o token do usuário
         auth(request.param('login', null), request.param('token', null), function (valid) {

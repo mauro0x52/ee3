@@ -7,7 +7,7 @@
  *
  * @description : implementa a biblioteca de chamadas assincronas ao servidor
  */
-function Ajax(app) {
+sdk.modules.ajax = function (app) {
     "use strict";
 
     var parseQuery,
@@ -127,4 +127,4 @@ function Ajax(app) {
         caller.open('DELETE', path.url + "?" + parseQuery(path.data), true);
         caller.send();
     };
-}
+};

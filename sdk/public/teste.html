@@ -1,0 +1,40 @@
+<html>
+    <head>
+        <title>Empreendemia</title>        
+        <style>
+
+            html,body {
+                margin:0;
+                padding:0;
+                height:100%; /* needed for container min-height */
+            }
+
+            div#app_container {
+                position:relative; /* needed for footer positioning*/
+                margin:0 auto; /* center, not in IE5 */
+                width:100%;
+                background:#f0f0f0;
+                
+                height:auto !important; /* real browsers */
+                height:100%; /* IE6: treaded as min-height*/
+        
+                min-height:100%; /* real browsers */
+            }
+
+            div#menu {
+                height:50px;
+                background:red;
+            }
+            
+            div#list {
+                background:green;
+                width:200px;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="app_container"></div>
+        <div id="console"></div>
+        <script src="sdk.js"></script>
+    </body>
+</html>
