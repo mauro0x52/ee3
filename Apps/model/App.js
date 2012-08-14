@@ -19,33 +19,6 @@ appSchema = new Schema({
     type    : {type : String, required : true, enum : ['free', 'payed', 'compulsory']}
 });
 
-/** pre('save')
- * @author : Rafael Erthal
- * @since : 2012-08
- *
- * @description : verifica se o slug ja existe
-
-appSchema.pre('save', function (next) {
-    "use strict";
-    
-    var err;
-    
-    App.findOne({'slug' : this.slug, _id : {$ne : this._id}}, function (error, app) {
-        if (error) {
-            next(error);
-        } else {
-            if (app === null) {
-                next();
-            } else {
-                err = new Error("slug already exists");
-                next(err);
-            }
-        }
-    });
-});
- */
- 
-
 /** Versions
  * @author : Rafael Erthal
  * @since : 2012-07

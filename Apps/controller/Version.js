@@ -258,10 +258,11 @@ module.exports = function (app) {
                                             version.number = request.param('number', null);
                                             //salva as modificações
                                             version.save(function (error) {
+                                                console.log(error);
                                                 if (error) {
                                                     response.send({error : error});
                                                 } else {
-                                                    response.send({error : ''});
+                                                    response.send({Version : version});
                                                 }
                                             });
                                         }

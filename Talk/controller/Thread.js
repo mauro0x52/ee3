@@ -70,7 +70,7 @@ module.exports = function (app) {
                     }
                 });
             } else {
-                response.send({error : 'invalid token'});
+                response.send({error : 'invalid user or token'});
             }
         });
     });

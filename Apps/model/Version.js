@@ -25,27 +25,24 @@ versionSchema = new Schema({
  *
  * @description : verifica se versao ja existe
  */
-versionSchema.pre('save', function (next) {
+versionSchema.pre('save', function (next, done) {
     "use strict";
     
-    
-    if (this._id) {
-    
-    } else {
-    
-    }
+    //Verifica se já existe esta versão para o mesmo APP
     var query = Version.findOne({number : this.number, appId : this.appId});
     query.where("_id");
     query.ne([this._id]);
-    //Localiza as Cidades
+    //Localiza as versões
     query.exec(function (error, version) {
         if (error) {
             next(error);
         } else {
+            //Verifica se existe uma versão igual
             if (version === null) {
                 next();
             } else {
-                next('version already exists');
+                var err = new Error('version already exists');
+                next(err);
             }
         }
     });

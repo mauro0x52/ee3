@@ -168,13 +168,13 @@
                     </li>
                     <li>
                         <h4>Editar versão</h4>
-                        <form onsubmit="test($(this).serialize(), '../app/' + $(this).find('input[name=slug]').val() + '/version/' + $(this).find('input[name=old_number]').val(), 'PUT'); return false;">
+                        <form onsubmit="test($(this).serialize(), '../app/' + $(this).find('input[name=slug]').val() + '/version/' + $(this).find('input[name=oldnumber]').val(), 'PUT'); return false;">
                             Parâmetros
                             <ul>
                                 <li>token <input type="text" name="token" /></li>
                                 <li>username <input type="text" name="login" /></li>
                                 <li>slug <input type="text" name="slug" /></li>
-                                <li>number <input type="text" name="old_number" /></li>
+                                <li>number <input type="text" name="oldnumber" /></li>
                                 <li>new number <input type="text" name="number" /></li>
                             </ul>
                             <input type="submit" value="testar" />
