@@ -33,7 +33,7 @@ module.exports = function (app) {
         //valida o token do usuário
         auth(request.param('login', null), request.param('token', null), function (valid) {
             if (valid) {
-                //pega os dados do post e coloca em um novo objeto
+                //pega os dados do post e coloca em um novo objeto.
                 conversant = new Conversant({
                     user      : request.param('login', null),
                     label     : request.param('label', null),

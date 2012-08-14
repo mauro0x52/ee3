@@ -25,30 +25,40 @@ versionSchema = new Schema({
  *
  * @description : verifica se versao ja existe
  */
-versionSchema.pre('save', function (next) {
+versionSchema.pre('save', function (next, done) {
     "use strict";
     
-    
     if (this._id) {
-    
-    } else {
-    
-    }
-    var query = Version.findOne({number : this.number, appId : this.appId});
-    query.where("_id");
-    query.ne([this._id]);
-    //Localiza as Cidades
-    query.exec(function (error, version) {
-        if (error) {
-            next(error);
-        } else {
-            if (version === null) {
-                next();
+        var query = Version.findOne({number : this.number, appId : this.appId});
+        query.where("_id");
+        query.ne([this._id]);
+        //Localiza as Cidades
+            query.exec(function (error, version) {
+            if (error) {
+                next(error);
             } else {
-                next('version already exists');
+                if (version === null) {
+                    next();
+                } else {
+                    var err = new Error({error : 'version already exists'});
+                    next(err);
+                }
             }
-        }
-    });
+        });
+    } else {
+        var query = Version.findOne({number : this.number, appId : this.appId}, function(error, version) {
+            if (error) {
+                next(error);
+            } else {
+                if (version === null) {
+                    next();
+                } else {
+                    var err = new Error('version already exists');
+                    next(err);
+                }
+            }
+        });
+    }
 });
 
 /** Tools
