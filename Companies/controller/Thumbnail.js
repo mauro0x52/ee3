@@ -64,7 +64,7 @@ module.exports = function (app) {
                                                 // faz upload dos thumbnails
                                                 files.image.thumbnail.upload(
                                                     request.files.file,
-                                                    '/company/' + request.params.company_slug + '/product/' + request.params.product_slug + '/thumbnail',
+                                                    '/companies/' + request.params.company_slug + '/products/' + request.params.product_slug + '/thumbnails',
                                                     function (error, data) {
                                                         if (error) {
                                                             response.send({error : error});
@@ -343,7 +343,7 @@ module.exports = function (app) {
                                     // faz upload dos thumbnails
                                     files.image.thumbnail.upload(
                                         request.files.file, 
-                                        '/company/' + request.params.slug + '/thumbnail', 
+                                        '/companies/' + request.params.slug + '/thumbnails', 
                                         function(error, data) {
                                             if (error) {
                                                 response.send({ error : error });

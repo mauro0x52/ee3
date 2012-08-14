@@ -10,9 +10,11 @@ var should = require("should"),
 	api = require("../Utils.js").api,
 	db = require("../Utils.js").db,
 	rand = require("../Utils.js").rand,
-	token, imageUrl, random, 
+	token, companyImageUrl, productImageUrl random, 
 	userName, companyName, productName, companySlug, productSlug;
-		
+
+object.prototype.should.exist = should.exist; 
+
 random = rand();
 userName = 'testes+' + random + '@empreendemia.com.br';
 companyName = 'Empresa ' + random;
@@ -55,7 +57,7 @@ describe('POST /company/[slug]/thumbnail', function () {
 			function(error, data) {
 				if (error) return done(error);
 				else {
-					should.exist(data.error, 'não retornou erro');
+					should.exist(data && data.error ? true : false, 'não retornou erro');
 					done();
 				}
 			}
@@ -74,7 +76,7 @@ describe('POST /company/[slug]/thumbnail', function () {
 			function(error, data) {
 				if (error) return done(error);
 				else {
-					should.exist(data.error, 'não retornou erro');
+					should.exist(data && data.error ? true : false, 'não retornou erro');
 					done();
 				}
 			}
@@ -93,23 +95,22 @@ describe('POST /company/[slug]/thumbnail', function () {
 			function(error, data) {
 				if (error) return done(error);
 				else {
-					should.not.exist(data.error, 'erro não esperado');
-					should.exist(data.original.url, 'data.original.url esperado');
-					should.exist(data.small.url, 'data.small.url esperado');
-					should.exist(data.medium.url, 'data.medium.url esperado');
-					should.exist(data.large.url, 'data.large.url esperado');
-					should.equal(true, new RegExp('http\:\/\/.+\/company\/.+\/thumbnail\/.+\/original\..+').test(data.original.url));
-					should.equal(true, new RegExp('http\:\/\/.+\/company\/.+\/thumbnail\/.+\/small\..+').test(data.small.url));
-					should.equal(true, new RegExp('http\:\/\/.+\/company\/.+\/thumbnail\/.+\/medium\..+').test(data.medium.url));
-					should.equal(true, new RegExp('http\:\/\/.+\/company\/.+\/thumbnail\/.+\/large\..+').test(data.large.url));
-					imageUrl = data.original.url;
+					should.not.exist(data && data.error ? true : undefined);
+					(data && data.original && data.original.url ? data.original.url : '')
+						.should.match('http\:\/\/.+\/companies\/.+\/thumbnails\/.+\/original\..+', 'não salvou o original corretamente');
+					(data && data.small && data.small.url ? data.small.url : '')
+						.should.match('http\:\/\/.+\/companies\/.+\/thumbnails\/.+\/small\..+', 'não salvou o small corretamente');
+					(data && data.original && data.medium.url ? data.medium.url : '')
+						.should.match('http\:\/\/.+\/companies\/.+\/thumbnails\/.+\/medium\..+', 'não salvou o medium corretamente');
+					(data && data.original && data.large.url ? data.original.url : '')
+						.should.match('http\:\/\/.+\/companies\/.+\/thumbnails\/.+\/large\..+', 'não salvou o large corretamente');
 					done();
 				}
 			}
 		);
 	});
-	
-	it('retorna informações das imagens quando enviar novamente', function(done) {
+
+	it('retorna informações das imagens quando enviar novamente', function (done) {
 		api.file('companies', '/company/' + companySlug + '/thumbnail',
 			{
 				login : userName,
@@ -121,16 +122,16 @@ describe('POST /company/[slug]/thumbnail', function () {
 			function(error, data) {
 				if (error) return done(error);
 				else {
-					should.not.exist(data.error, 'erro não esperado');
-					should.exist(data.original.url, 'data.original.url esperado');
-					should.exist(data.small.url, 'data.small.url esperado');
-					should.exist(data.medium.url, 'data.medium.url esperado');
-					should.exist(data.large.url, 'data.large.url esperado');
-					should.equal(true, new RegExp('http\:\/\/.+\/company\/.+\/thumbnail\/.+\/original\..+').test(data.original.url));
-					should.equal(true, new RegExp('http\:\/\/.+\/company\/.+\/thumbnail\/.+\/small\..+').test(data.small.url));
-					should.equal(true, new RegExp('http\:\/\/.+\/company\/.+\/thumbnail\/.+\/medium\..+').test(data.medium.url));
-					should.equal(true, new RegExp('http\:\/\/.+\/company\/.+\/thumbnail\/.+\/large\..+').test(data.large.url));
-					imageUrl.should.not.equal(data.original.url, 'as urls deveriam ser diferentes');
+					should.not.exist(data && data.error ? true : undefined);
+					(data && data.original && data.original.url ? data.original.url : '')
+						.should.match('http\:\/\/.+\/companies\/.+\/thumbnails\/.+\/original\..+', 'não salvou o original corretamente');
+					(data && data.small && data.small.url ? data.small.url : '')
+						.should.match('http\:\/\/.+\/companies\/.+\/thumbnails\/.+\/small\..+', 'não salvou o small corretamente');
+					(data && data.original && data.medium.url ? data.medium.url : '')
+						.should.match('http\:\/\/.+\/companies\/.+\/thumbnails\/.+\/medium\..+', 'não salvou o medium corretamente');
+					(data && data.original && data.large.url ? data.original.url : '')
+						.should.match('http\:\/\/.+\/companies\/.+\/thumbnails\/.+\/large\..+', 'não salvou o large corretamente');
+					companyImageUrl.should.not.equal(data && data.original && data.large.url ? data.original.url : '', 'as urls deveriam ser diferentes');
 					done();
 				}
 			}
@@ -144,21 +145,78 @@ describe('POST /company/[slug]/thumbnail', function () {
 productName = 'Produto ' + random;
 productSlug = 'produto-' + random;
 
-/*
+
 describe('POST /company/[slug]/product/[slug]/thumbnail', function () {
 	before(function (done) {
 		// cria produto
-		api.post('companies', '/company/testes-corporation/product', {
-			login : 'testes@empreendemia.com.br',
+		api.post('companies', '/company/' + companyName + '/product', {
+			login : userName,
 			token : token,
-			name : 'Produto da Hora'
+			name : productName
 		}, function(error, data) {
 			if (error) return done(error);
 			else done();
 		});
 	});
-	it('retorna erro', function() {
-		
+	it('retorna erro quando nao envia imagem', function (done) {
+		api.file('companies', '/company/' + companySlug + '/product/' + productSlug + '/thumbnail',
+			{
+				login : userName,
+				token : token
+			},
+			{},
+			function(error, data) {
+				if (error) return done(error);
+				else {
+					should.exist(data && data.error ? true : false, 'não retornou erro');
+					done();
+				}
+			}
+		);
+	});
+	it('retorna erro quando enviado token errado', function(done) {
+		api.file('companies', '/company/' + companySlug + '/product/' + productSlug + '/thumbnail',
+			{
+				login : userName,
+				token : 'asd8vc89vc7vcx89fas872gjhibas',
+			},
+			{
+				file : 'vader.jpg'
+			},
+			function(error, data) {
+				if (error) return done(error);
+				else {
+					should.exist(data && data.error ? true : false, 'não retornou erro');
+					done();
+				}
+			}
+		);
+	});
+	it('retorna informações das imagens quando enviar imagem', function(done) {
+		api.file('companies', '/company/' + companySlug + '/product/' + productSlug + '/thumbnail',
+			{
+				login : userName,
+				token : token,
+			},
+			{
+				file : 'vader.jpg'
+			},
+			function(error, data) {
+				if (error) return done(error);
+				else {
+					should.not.exist(data && data.error ? true : undefined);
+					(data && data.original && data.original.url ? data.original.url : '')
+						.should.match('http\:\/\/.+\/companies\/.+\/products\/.+\/thumbnails\/.+\/original\..+', 'não salvou o original corretamente');
+					(data && data.small && data.small.url ? data.small.url : '')
+						.should.match('http\:\/\/.+\/companies\/.+\/products\/.+\/thumbnails\/.+\/small\..+', 'não salvou o small corretamente');
+					(data && data.original && data.medium.url ? data.medium.url : '')
+						.should.match('http\:\/\/.+\/companies\/.+\/products\/.+\/thumbnails\/.+\/medium\..+', 'não salvou o medium corretamente');
+					(data && data.original && data.large.url ? data.original.url : '')
+						.should.match('http\:\/\/.+\/companies\/.+\/products\/.+\/thumbnails\/.+\/large\..+', 'não salvou o large corretamente');
+					productImageUrl = data.original.url;
+					done();
+				}
+			}
+		);
 	});
 });
-*/
