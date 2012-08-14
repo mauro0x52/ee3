@@ -60,7 +60,7 @@ describe('POST /company/[slug]/thumbnail', function () {
 			function(error, data) {
 				if (error) return done(error);
 				else {
-					should.exist(data.error, 'erro esperado');
+					should.exist(data.error, 'não retornou erro');
 					done();
 				}
 			}
@@ -79,7 +79,7 @@ describe('POST /company/[slug]/thumbnail', function () {
 			function(error, data) {
 				if (error) return done(error);
 				else {
-					should.exist(data.error, 'erro esperado');
+					should.exist(data.error, 'não retornou erro');
 					done();
 				}
 			}
@@ -144,7 +144,7 @@ describe('POST /company/[slug]/thumbnail', function () {
 	
 });
 
-
+/*
 describe('POST /company/[slug]/product/[slug]/thumbnail', function () {
 	before(function (done) {
 		// cria produto
@@ -153,7 +153,6 @@ describe('POST /company/[slug]/product/[slug]/thumbnail', function () {
 			token : token,
 			name : 'Produto da Hora'
 		}, function(error, data) {
-			console.log(data);
 			if (error) return done(error);
 			else done();
 		});
@@ -162,5 +161,4 @@ describe('POST /company/[slug]/product/[slug]/thumbnail', function () {
 		
 	});
 });
-
-
+*/
