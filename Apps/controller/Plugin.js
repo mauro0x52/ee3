@@ -78,7 +78,7 @@ module.exports = function (app) {
                     }
                 });
             } else {
-                response.send({error : 'invalid token'});
+                response.send({error : 'invalid user or token'});
             }
         });
     });
@@ -256,7 +256,7 @@ module.exports = function (app) {
                     }
                 });
             } else {
-                response.send({error : 'invalid token'});
+                response.send({error : 'invalid user or token'});
             }
         });
     });
@@ -319,7 +319,7 @@ module.exports = function (app) {
                                                             if (error) {
                                                                 response.send({error : error});
                                                             } else {
-                                                                response.send({error : ''});
+                                                                response.send({Plugin : plugin});
                                                             }
                                                         });
                                                     }
@@ -333,7 +333,7 @@ module.exports = function (app) {
                     }
                 });
             } else {
-                response.send({error : 'invalid token'});
+                response.send({error : 'invalid user or token'});
             }
         });
     });

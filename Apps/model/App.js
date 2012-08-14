@@ -13,10 +13,10 @@ var Version = require('./Version.js').Version,
     App;
 
 appSchema = new Schema({
-    name : {type : String, trim : true, required : true},
-    slug : {type : String, trim : true, required : true},
+    name    : {type : String, trim : true, required : true},
+    slug    : {type : String, trim : true, required : true, unique : true},
     creator : {type : String, trim : true, required : true},
-    type : {type : String, required : true, enum : ['free', 'payed', 'compulsory']}
+    type    : {type : String, required : true, enum : ['free', 'payed', 'compulsory']}
 });
 
 /** pre('save')
@@ -24,22 +24,27 @@ appSchema = new Schema({
  * @since : 2012-08
  *
  * @description : verifica se o slug ja existe
- */
+
 appSchema.pre('save', function (next) {
     "use strict";
-
-    App.findOne({slug : this.slug, _id : {$ne : this._id}}, function (error, app) {
+    
+    var err;
+    
+    App.findOne({'slug' : this.slug, _id : {$ne : this._id}}, function (error, app) {
         if (error) {
             next(error);
         } else {
             if (app === null) {
                 next();
             } else {
-                next('slug already exists');
+                err = new Error("slug already exists");
+                next(err);
             }
         }
     });
 });
+ */
+ 
 
 /** Versions
  * @author : Rafael Erthal

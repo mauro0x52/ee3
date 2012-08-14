@@ -27,8 +27,18 @@ versionSchema = new Schema({
  */
 versionSchema.pre('save', function (next) {
     "use strict";
-
-    Version.findOne({number : this.number, appId : this.appId, _id : {$ne : this._id}}, function (error, version) {
+    
+    
+    if (this._id) {
+    
+    } else {
+    
+    }
+    var query = Version.findOne({number : this.number, appId : this.appId});
+    query.where("_id");
+    query.ne([this._id]);
+    //Localiza as Cidades
+    query.exec(function (error, version) {
         if (error) {
             next(error);
         } else {

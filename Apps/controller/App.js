@@ -45,11 +45,11 @@ module.exports = function (app) {
                     if (error) {
                         response.send({error : error});
                     } else {
-                        response.send({error : ''});
+                        response.send({App : app});
                     }
                 });
             } else {
-                response.send({error : 'invalid token'});
+                    response.send({error : 'invalid user or token'});
             }
         });
     });
@@ -156,7 +156,7 @@ module.exports = function (app) {
                     }
                 });
             } else {
-                response.send({error : 'invalid token'});
+                response.send({error : 'invalid user or token'});
             }
         });
     });
@@ -194,15 +194,21 @@ module.exports = function (app) {
                                 response.send({error : 'permission denied'});
                             } else {
                                 //altera os dados do aplicativo
-                                app.name = request.param('name', null);
-                                app.slug = request.param('slug', null);
-                                app.type = request.param('type', null);
+                                if (request.param('name', null)) {
+                                    app.name = request.param('name', null);
+                                }
+                                if (request.param('slug', null)) {
+                                    app.slug = request.param('slug', null);
+                                }
+                                if (request.param('type', null)) {
+                                    app.type = request.param('type', null);
+                                }
                                 //salva as modificações
                                 app.save(function (error) {
                                     if (error) {
                                         response.send({error : error});
                                     } else {
-                                        response.send({error : ''});
+                                        response.send({App : app});
                                     }
                                 });
                             }
@@ -210,7 +216,7 @@ module.exports = function (app) {
                     }
                 });
             } else {
-                response.send({error : 'invalid token'});
+                response.send({error : 'invalid user or token'});
             }
         });
     });

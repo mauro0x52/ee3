@@ -11,7 +11,7 @@ var express = require('express'),
 
 require('express-namespace');
 
-var app = module.exports = express.createServer();
+var app = module.exports = express();
 
 /*  Configurando o server */
 app.configure(function () {
