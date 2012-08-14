@@ -1,0 +1,81 @@
+module.exports = {
+    services : {
+        auth : {
+            host : 'localhost',
+            port : 38800,
+		    mongodb : {
+		        port : 27017,
+		        url : 'localhost',
+		        username : undefined,
+		        password : undefined,
+		        db : 'auth'
+		    }
+        },
+        files : {
+            host : 'localhost',
+            port : 38801,
+		    mongodb : {
+		        port : 27017,
+		        url : 'localhost',
+		        username : undefined,
+		        password : undefined,
+		        db : 'files'
+		    }
+        },
+        companies : {
+            host : 'localhost',
+            port : 38802,
+		    mongodb : {
+		        port : 27017,
+		        url : 'localhost',
+		        username : undefined,
+		        password : undefined,
+		        db : 'companies'
+		    }
+        },
+        apps : {
+            host : 'localhost',
+            port : 38803,
+		    mongodb : {
+		        port : 27017,
+		        url : 'localhost',
+		        username : undefined,
+		        password : undefined,
+		        db : 'apps'
+		    }
+        },
+        profiles : {
+            host : 'localhost',
+            port : 38804,
+		    mongodb : {
+		        port : 27017,
+		        url : 'localhost',
+		        username : undefined,
+		        password : undefined,
+		        db : 'profiles'
+		    }
+        },
+        talk : {
+            host : 'localhost',
+            port : 38805,
+		    mongodb : {
+		        port : 27017,
+		        url : 'localhost',
+		        username : undefined,
+		        password : undefined,
+		        db : 'talk'
+		    }
+        },
+        location : {
+            host : 'localhost',
+            port : 38806,
+		    mongodb : {
+		        port : 27017,
+		        url : 'localhost',
+		        username : undefined,
+		        password : undefined,
+		        db : 'location'
+		    }
+        }
+    }
+};

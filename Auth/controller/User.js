@@ -47,7 +47,7 @@ module.exports = function (app) {
                         if (error) {
                             response.send({error : error});
                         } else {
-                            response.send({error : '', token : user.token});
+                            response.send({error : undefined, token : user.token});
                         }
                     });
                 }

@@ -1,0 +1,13 @@
+{
+  "name": "Tests",
+  "description": "Kit de testes dos serviços",
+  "version": "0.0.1",
+  "author": "Mauro Ribeiro",
+  "dependencies": {
+    "mocha": "1.3.x",
+    "restler" : "2.0.x",
+    "should" : "1.1.x",
+    "mongodb" : "1.1.x"
+  },
+  "devDependencies": {}
+}
