@@ -8,15 +8,14 @@
 
 var should = require("should"),
 	api = require("../Utils.js").api,
-	db = require("../Utils.js").db;
+	db = require("../Utils.js").db,
+	rand = require("../Utils.js").rand,
+	random, userName;
+		
+random = rand();
+userName = 'testes+' + random + '@empreendemia.com.br';
 
 describe('POST /user', function () {
-	before(function(done) {
-		db.dropCollection('auth', 'users', function (error) {
-			if (error) return done(error);
-			else done();
-		});
-	});
 
 	it('retorna erro se não preencher username', function (done) {
 		api.post('auth', '/user', {
@@ -39,7 +38,7 @@ describe('POST /user', function () {
 	});
 	it('retorna erro se não preencher password', function (done) {
 		api.post('auth', '/user', {
-			username : 'testes@empreendemia.com.br'
+			username : userName
 		}, function(error, data) {
 			should.strictEqual(undefined, error);
 			should.exist(data.error);
@@ -48,7 +47,7 @@ describe('POST /user', function () {
 	});
 	it('retorna erro se preencher password_confirmation incorretamente', function(done) {
 		api.post('auth', '/user', {
-			username : 'testes@empreendemia.com.br',
+			username : userName,
 			password : 'testando',
 			password_confirmation : 'asuidiudhsas'
 		}, function(error, data) {
@@ -59,7 +58,7 @@ describe('POST /user', function () {
 	});
 	it('retorna token se o cadastro for sucesso', function(done) {
 		api.post('auth', '/user', {
-			username : 'testes@empreendemia.com.br',
+			username : userName,
 			password : 'testando',
 			password_confirmation : 'testando'
 		}, function(error, data) {
@@ -71,7 +70,7 @@ describe('POST /user', function () {
 	});
 	it('retorna erro se tenta cadastrar username que já existe', function(done) {
 		api.post('auth', '/user', {
-			username : 'testes@empreendemia.com.br',
+			username : userName,
 			password : 'testando',
 			password_confirmation : 'testando'
 		}, function(error, data) {

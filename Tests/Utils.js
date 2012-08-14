@@ -87,3 +87,18 @@ var db = {
 }
 
 exports.db = db;
+
+var rand = function(type) {
+	var crypto = require('crypto');
+	var string; 
+	var hash = crypto.createHash('md5').update(crypto.randomBytes(10)).digest('hex').substring(0, 4);
+	
+	if (type === 'email') {
+		string = 'testes+' + hash + '@empreendemia.com.br';
+	} else {
+		string = hash;
+	}
+	return string;
+}
+
+exports.rand = rand;

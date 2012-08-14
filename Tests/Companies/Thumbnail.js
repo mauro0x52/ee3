@@ -9,51 +9,46 @@
 var should = require("should"),
 	api = require("../Utils.js").api,
 	db = require("../Utils.js").db,
-	token, imageUrl;
+	rand = require("../Utils.js").rand,
+	token, imageUrl, random, 
+	userName, companyName, productName, companySlug, productSlug;
+		
+random = rand();
+userName = 'testes+' + random + '@empreendemia.com.br';
+companyName = 'Empresa ' + random;
+companySlug = 'empresa-' + random;
 
 describe('POST /company/[slug]/thumbnail', function () {
 	before(function (done) {
-		// apaga dados da tabela users
-		db.dropCollection('auth', 'users', function (error) {
-			if (error) return done(error);
-			else {
-				// limpa dados da tabela companies
-				db.dropCollection('companies', 'companies', function (error) {
-					if (error) return done(error);
-					else {
-						// cria usuario
-						api.post('auth', '/user', {
-							username : 'testes@empreendemia.com.br',
-							password : 'testando',
-							password_confirmation : 'testando'
-						}, function(error, data) {
-							token = data.token;
-							// cria empresa
-							api.post('companies', '/company', {
-								login : 'testes@empreendemia.com.br',
-								token : token,
-								users : ['testes@empreendemia.com.br'],
-								name : 'Testes Corporation',
-								slug : 'testes-corporation',
-								activity : 'consultoria em testes',
-								type : 'company',
-								profile : 'both',
-								active : true
-							}, function(error, data) {
-								if (error) return done(error);
-								else done();
-							});
-						});
-					}
-				});
-			}
+		// cria usuario
+		api.post('auth', '/user', {
+			username : userName,
+			password : 'testando',
+			password_confirmation : 'testando'
+		}, function(error, data) {
+			token = data.token;
+			// cria empresa
+			api.post('companies', '/company', {
+				login : userName,
+				token : token,
+				users : [userName],
+				name : companyName,
+				slug : companySlug,
+				activity : 'consultoria em testes',
+				type : 'company',
+				profile : 'both',
+				active : true
+			}, function(error, data) {
+				if (error) return done(error);
+				else done();
+			});
 		});
 	});
 
 	it('retorna erro quando nao envia imagem', function(done) {
-		api.file('companies', '/company/testes-corporation/thumbnail',
+		api.file('companies', '/company/' + companySlug + '/thumbnail',
 			{
-				login : 'testes@empreendemia.com.br',
+				login : userName,
 				token : token
 			},
 			{},
@@ -68,9 +63,9 @@ describe('POST /company/[slug]/thumbnail', function () {
 	});
 	
 	it('retorna erro quando enviado token errado', function(done) {
-		api.file('companies', '/company/testes-corporation/thumbnail',
+		api.file('companies', '/company/' + companySlug + '/thumbnail',
 			{
-				login : 'testes@empreendemia.com.br',
+				login : userName,
 				token : 'asd8vc89vc7vcx89fas872gjhibas',
 			},
 			{
@@ -87,9 +82,9 @@ describe('POST /company/[slug]/thumbnail', function () {
 	});
 	
 	it('retorna informações das imagens quando enviar imagem', function(done) {
-		api.file('companies', '/company/testes-corporation/thumbnail',
+		api.file('companies', '/company/' + companySlug + '/thumbnail',
 			{
-				login : 'testes@empreendemia.com.br',
+				login : userName,
 				token : token,
 			},
 			{
@@ -115,9 +110,9 @@ describe('POST /company/[slug]/thumbnail', function () {
 	});
 	
 	it('retorna informações das imagens quando enviar novamente', function(done) {
-		api.file('companies', '/company/testes-corporation/thumbnail',
+		api.file('companies', '/company/' + companySlug + '/thumbnail',
 			{
-				login : 'testes@empreendemia.com.br',
+				login : userName,
 				token : token,
 			},
 			{
@@ -143,6 +138,11 @@ describe('POST /company/[slug]/thumbnail', function () {
 	});
 	
 });
+
+
+
+productName = 'Produto ' + random;
+productSlug = 'produto-' + random;
 
 /*
 describe('POST /company/[slug]/product/[slug]/thumbnail', function () {
