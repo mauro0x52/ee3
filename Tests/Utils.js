@@ -7,6 +7,7 @@
  */
 var config = require('./config.js');
 var restler = require('restler');
+var fs = require('fs');
 
 var api = {
 	get : function(service, url, data, cb) {
@@ -14,17 +15,15 @@ var api = {
             data: data
         }).on('complete', function(data) {
 			cb(undefined, data);
-        }).on('error', function(error) {
+        });/*.on('error', function(error) {
         	cb(error);
-        });
+        });*/
 	},
 	post : function(service, url, data, cb) {
         restler.post('http://'+config.services[service].host+':'+config.services[service].port+url, {
             data: data
         }).on('complete', function(data) {
 			cb(undefined, data);
-        }).on('error', function(error) {
-        	cb(error);
         });
 	},
 	put : function(service, url, data, cb) {
@@ -32,28 +31,37 @@ var api = {
             data: data
         }).on('complete', function(data) {
 			cb(undefined, data);
-        }).on('error', function(error) {
+        });/*.on('error', function(error) {
         	cb(error);
-        });
+        });*/
 	},
 	del : function(service, url, data, cb) {
         restler.del('http://'+config.services[service].host+':'+config.services[service].port+url, {
             data: data
         }).on('complete', function(data) {
 			cb(undefined, data);
-        }).on('error', function(error) {
+        });/*.on('error', function(error) {
         	cb(error);
-        });
+        });*/
 	},
-	file : function(service, url, data, file, cb) {
+	file : function(service, url, data, files, cb) {
+				
+		var fs = require('fs'),
+			mime = require('mime');
+
+		for (var i in files){
+			var stat = fs.statSync(__dirname + '/static/' + files[i]);
+			data[i] = restler.file(__dirname + '/static/'+files[i], files[i], stat.size, null, mime.lookup('../static/'+files[i]));
+		}
+		
         restler.post('http://'+config.services[service].host+':'+config.services[service].port+url, {
             multipart: true,
             data: data
         }).on('complete', function(data) {
 			cb(undefined, data);
-        }).on('error', function(error) {
+        });/*.on('error', function(error) {
         	cb(error);
-        });
+        });*/
 	},
 } 
 

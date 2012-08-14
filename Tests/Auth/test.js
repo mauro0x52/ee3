@@ -6,4 +6,6 @@
  * @description : Kit de testes do serviço Auth
  */
 
-require('./User.js');
+describe('User', function() {
+	require('./User.js');
+});

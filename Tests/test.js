@@ -6,5 +6,11 @@
  * @description : Kit de testes dos serviços Empreendemia
  */
 
-require("./Auth/test.js");
-require("./Companies/test.js");
+
+describe('Auth', function() {
+	require("./Auth/test.js");
+})
+
+describe('Companies', function() {
+	require("./Companies/test.js");
+})

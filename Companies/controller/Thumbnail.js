@@ -24,7 +24,7 @@ module.exports = function (app) {
      * @allowedApp : Lista de Empresas
      * @allowedUser : Logado
      *
-     * @request : {login,token,file,title,legend}
+     * @request : {login,token,file}
      * @response : {confirmation}
      */
     app.post('/company/:company_slug/product/:product_slug/thumbnail', function postProductThumbnail(request, response) {
@@ -314,7 +314,7 @@ module.exports = function (app) {
      * @allowedApp : Lista de Empresas
      * @allowedUser : Logado
      *
-     * @request : {login,token,file,title,legend}
+     * @request : {login,token,file}
      * @response : {confirmation}
      */
     app.post('/company/:slug/thumbnail', function postCompanyThumbnail (request, response) {

@@ -12,7 +12,7 @@ var mongoose = require('mongoose'),
 
 imageStruct = {
     file   : objectId,
-    url    : {type : String, trim : true, required : true},
+    url    : {type : String, trim : true},
     title  : {type : String, trim : true},
     legend : {type : String, trim : true}
 };
