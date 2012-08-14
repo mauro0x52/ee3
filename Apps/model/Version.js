@@ -28,37 +28,24 @@ versionSchema = new Schema({
 versionSchema.pre('save', function (next, done) {
     "use strict";
     
-    if (this._id) {
-        var query = Version.findOne({number : this.number, appId : this.appId});
-        query.where("_id");
-        query.ne([this._id]);
-        //Localiza as Cidades
-            query.exec(function (error, version) {
-            if (error) {
-                next(error);
+    //Verifica se já existe esta versão para o mesmo APP
+    var query = Version.findOne({number : this.number, appId : this.appId});
+    query.where("_id");
+    query.ne([this._id]);
+    //Localiza as versões
+    query.exec(function (error, version) {
+        if (error) {
+            next(error);
+        } else {
+            //Verifica se existe uma versão igual
+            if (version === null) {
+                next();
             } else {
-                if (version === null) {
-                    next();
-                } else {
-                    var err = new Error({error : 'version already exists'});
-                    next(err);
-                }
+                var err = new Error('version already exists');
+                next(err);
             }
-        });
-    } else {
-        var query = Version.findOne({number : this.number, appId : this.appId}, function(error, version) {
-            if (error) {
-                next(error);
-            } else {
-                if (version === null) {
-                    next();
-                } else {
-                    var err = new Error('version already exists');
-                    next(err);
-                }
-            }
-        });
-    }
+        }
+    });
 });
 
 /** Tools

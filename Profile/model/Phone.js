@@ -13,8 +13,8 @@ var mongoose = require('mongoose'),
 phoneSchema = new schema({
     type      : {type : String, required : true, enum : ['office', 'home', 'cellphone']},
     number    : {type : String, required : true, trim : true},
+    areacode  : {type : String, required : true, trim : true},
     extension : {type : String, trim : true},
-    areacode  : {type : String, trim : true},
     intcode   : {type : String, trim : true}
 });
 
