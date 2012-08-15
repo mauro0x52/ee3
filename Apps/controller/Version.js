@@ -32,8 +32,8 @@ module.exports = function (app) {
         response.contentType('json');
 
         //valida o token do usuário
-        auth(request.param('login', null), request.param('token', null), function (valid) {
-            if (valid) {
+        auth(request.param('token', null), function (user) {
+            if (user) {
                 //busca o app
                 App.findOne({slug : request.params.slug}, function (error, app) {
                     if (error) {
@@ -168,8 +168,8 @@ module.exports = function (app) {
         response.contentType('json');
 
         //valida o token do usuário
-        auth(request.param('login', null), request.param('token', null), function (valid) {
-            if (valid) {
+        auth(request.param('token', null), function (user) {
+            if (user) {
                 //busca o app
                 App.findOne({slug : request.params.slug}, function (error, app) {
                     if (error) {
@@ -230,8 +230,8 @@ module.exports = function (app) {
         response.contentType('json');
 
         //valida o token do usuário
-        auth(request.param('login', null), request.param('token', null), function (valid) {
-            if (valid) {
+        auth(request.param('token', null), function (user) {
+            if (user) {
                 //busca o app
                 App.findOne({slug : request.params.slug}, function (error, app) {
                     if (error) {

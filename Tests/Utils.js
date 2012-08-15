@@ -15,9 +15,7 @@ var api = {
             data: data
         }).on('complete', function(data, response) {
 			cb(undefined, data, response);
-        });/*.on('error', function(error) {
-        	cb(error);
-        });*/
+        });
 	},
 	post : function(service, url, data, cb) {
         restler.post('http://'+config.services[service].host+':'+config.services[service].port+url, {
@@ -31,18 +29,14 @@ var api = {
             data: data
         }).on('complete', function(data, response) {
 			cb(undefined, data, response);
-        });/*.on('error', function(error) {
-        	cb(error);
-        });*/
+        });
 	},
 	del : function(service, url, data, cb) {
         restler.del('http://'+config.services[service].host+':'+config.services[service].port+url, {
             data: data
         }).on('complete', function(data, response) {
 			cb(undefined, data, response);
-        });/*.on('error', function(error) {
-        	cb(error);
-        });*/
+        });
 	},
 	file : function(service, url, data, files, cb) {
 				

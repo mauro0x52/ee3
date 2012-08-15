@@ -16,11 +16,11 @@ module.exports = {
      * @param token : token do usuário
      * @param cb : callback a ser chamado após validado o token
      */
-    auth : function (login, token, cb) {
+    auth : function (token, cb) {
         var http = require('http'),
             options = {
                 host: 'localhost',
-                path: '/user/' + login + '/validate?token=' + token,
+                path: '/user/validate?token=' + token,
                 port: '3300',
                 method: 'GET'
             };
@@ -34,7 +34,7 @@ module.exports = {
             //ao terminar o recebimentos dos dados, chamar o callback com a resposta se o usuário foi ou não autenticado
             answer.on('end', function () {
                 var response = JSON.parse(str);
-                cb(response.valid);
+                cb(response);
             });
         }).end();
     },

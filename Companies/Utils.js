@@ -16,13 +16,13 @@ var config = require('./config.js');
  * @param token : token do usuário
  * @param cb : callback a ser chamado após validado o token
  */
-exports.auth = function (login, token, cb) {
+exports.auth = function (token, cb) {
     "use strict";
 
     var http = require('http'),
         options = {
             host: config.services.auth.host,
-            path: '/user/' + login + '/validate?token=' + token,
+            path: '/user/validate?token=' + token,
             port: config.services.auth.port,
             method: 'GET'
         };
@@ -36,7 +36,7 @@ exports.auth = function (login, token, cb) {
         //ao terminar o recebimentos dos dados, chamar o callback com a resposta se o usuário foi ou não autenticado
         answer.on('end', function () {
             var response = JSON.parse(str);
-            cb(response.valid);
+            cb(response);
         });
     }).end();
 };

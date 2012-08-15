@@ -31,8 +31,8 @@ module.exports = function (app) {
         response.contentType('json');
 
         //valida o token do usuário
-        auth(request.param('login', null), request.param('token', null), function (valid) {
-            if (valid) {
+        auth(request.param('token', null), function (user) {
+            if (user) {
                 //Cria o Objeto Company para adicionar no Model
                 company = new Company({
                     slug       : request.param("slug"),
@@ -145,8 +145,8 @@ module.exports = function (app) {
         response.contentType('json');
 
         //valida o token do usuário
-        auth(request.param('login', null), request.param('token', null), function (valid) {
-            if (valid) {
+        auth(request.param('token', null), function (user) {
+            if (user) {
                 //busca a compania
                 Company.findOne({slug : request.params.slug}, function (error, company) {
                     if (error) {
@@ -251,8 +251,8 @@ module.exports = function (app) {
         response.contentType('json');
 
         //valida o token do usuário
-        auth(request.param('login', null), request.param('token', null), function (valid) {
-            if (valid) {
+        auth(request.param('token', null), function (user) {
+            if (user) {
                 //busca a compania
                 Company.findOne({slug : request.params.slug}, function (error, company) {
                     if (error) {

@@ -292,7 +292,7 @@ module.exports = function (app) {
         });
     });
 
-    /** GET /user/:login/validate
+    /** GET /users/validate
      *
      * @autor : Rafael Erthal
      * @since : 2012-07
@@ -303,24 +303,21 @@ module.exports = function (app) {
      * @allowedUser : Logado
      *
      * @request : {token}
-     * @response : {confirmation}
+     * @response : {user._id}
      */
-    app.get('/user/:login/validate', function (request, response) {
+    app.get('/users/validate', function (request, response) {
         response.contentType('json');
-
+        
         //localiza o usuário
-        User.findOne({username : request.params.login}, function (error, user) {
+        User.findOne({token : request.param('token', '')}, function (error, user) {
             if (error) {
                 response.send({error : error});
             } else {
                 //verifica se o usuario foi encontrado
                 if (user === null) {
-                    response.send({error : 'user not found'});
+                    response.send({error : 'invalid token'});
                 } else {
-                    //verifica o token do usuário
-                    user.checkToken(request.param('token', null), function (valid) {
-                        response.send({valid : valid, error : ''});
-                    });
+                    response.send({_id: user._id});
                 }
             }
         });

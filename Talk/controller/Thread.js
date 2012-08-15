@@ -32,8 +32,8 @@ module.exports = function (app) {
         response.contentType('json');
 
         //valida o token do usuário
-        auth(request.params.user_id, request.param('token', null), function (valid) {
-            if (valid) {
+        auth(request.param('token'), function (user) {
+            if (user) {
                 //busca o usuário
                 Conversant.findOne({user : request.params.user_id}, function (error, conversant) {
                     if (error) {
@@ -92,8 +92,8 @@ module.exports = function (app) {
         response.contentType('json');
 
         //valida o token do usuário
-        auth(request.params.user_id, request.param('token', null), function (valid) {
-            if (valid) {
+        auth(request.param('token'), function (user) {
+            if (user) {
                 //busca o usuário
                 Conversant.findOne({user : request.params.user_id}, function (error, conversant) {
                     if (error) {
@@ -151,8 +151,8 @@ module.exports = function (app) {
         response.contentType('json');
 
         //valida o token do usuário
-        auth(request.params.user_id, request.param('token', null), function (valid) {
-            if (valid) {
+        auth(request.param('token'), function (user) {
+            if (user) {
                 //busca o usuário
                 Conversant.findOne({user : request.params.user_id}, function (error, conversant) {
                     if (error) {
@@ -196,8 +196,8 @@ module.exports = function (app) {
         response.contentType('json');
 
         //valida o token do usuário
-        auth(request.params.user_id, request.param('token', null), function (valid) {
-            if (valid) {
+        auth(request.param('token'), function (user) {
+            if (user) {
                 //busca o usuário
                 Conversant.findOne({user : request.params.user_id}, function (error, conversant) {
                     if (error) {
@@ -259,8 +259,8 @@ module.exports = function (app) {
         response.contentType('json');
 
         //valida o token do usuário
-        auth(request.params.user_id, request.param('token', null), function (valid) {
-            if (valid) {
+        auth(request.param('token'), function (user) {
+            if (user) {
                 //busca o usuário
                 Conversant.findOne({user : request.params.user_id}, function (error, conversant) {
                     if (error) {
@@ -309,8 +309,8 @@ module.exports = function (app) {
         response.contentType('json');
 
         //valida o token do usuário
-        auth(request.params.user_id, request.param('token', null), function (valid) {
-            if (valid) {
+        auth(request.param('token'), function (user) {
+            if (user) {
                 //busca o usuário
                 Conversant.findOne({user : request.params.user_id}, function (error, conversant) {
                     if (error) {

@@ -59,8 +59,8 @@ module.exports = function (app) {
         response.contentType('json');
 
         //Verifica se o usuário logado é válido
-        auth(request.param('login'), request.param('token'), function (valid) {
-            if (valid) {
+        auth(request.param('token'), function (user) {
+            if (user) {
                 //Cria o Objeto Profile para adicionar no Model
                 profile = new Profile({
                     username    : request.param('login', null),
@@ -103,8 +103,8 @@ module.exports = function (app) {
         response.contentType('json');
         
         //Verifica se o usuário logado é válido
-        auth(request.param('login'), request.param('token'), function (valid) {
-            if (valid) {
+        auth(request.param('token'), function (user) {
+            if (user) {
                 //Localiza o Profile
                 Profile.findOne({"slugs" : request.params.slug}, function (error, profile) {
                     if (error) {
@@ -151,8 +151,8 @@ module.exports = function (app) {
         response.contentType('json');
 
         //valida o token do usuário
-        auth(request.param('login', null), request.param('token', null), function (valid) {
-            if (valid) {
+        auth(request.param('token', null), function (user) {
+            if (user) {
                 //busca o profile
                 Profile.findOne({"slugs" : request.params.slug}, function (error, profile) {
                     if (error) {

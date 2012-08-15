@@ -31,8 +31,8 @@ module.exports = function (app) {
         response.contentType('json');
 
         //valida o token do usuário
-        auth(request.param('login', null), request.param('token', null), function (valid) {
-            if (valid) {
+        auth(request.param('token', null), function (user) {
+            if (user) {
                 //pega os dados do post e coloca em um novo objeto.
                 conversant = new Conversant({
                     user      : request.param('login', null),
@@ -70,8 +70,8 @@ module.exports = function (app) {
         response.contentType('json');
 
         //valida o token do usuário
-        auth(request.params.user, request.param('token', null), function (valid) {
-            if (valid) {
+        auth(request.param('token'), function (user) {
+            if (user) {
                 //busca o usuário
                 Conversant.findOne({user : request.params.user}, function (error, conversant) {
                     if (error) {

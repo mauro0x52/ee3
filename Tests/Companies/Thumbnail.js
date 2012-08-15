@@ -58,7 +58,7 @@ describe('POST /company/[slug]/thumbnail', function () {
 				else {
 					response.should.have.status(200);
 					should.exist(data, 'não retornou dado nenhum');
-					should.exist(data && data.error ? true : undefined, 'não retornou erro');
+					should.exist(data.error, 'não retornou erro');
 					done();
 				}
 			}
@@ -100,7 +100,7 @@ describe('POST /company/[slug]/thumbnail', function () {
 				else {
 					response.should.have.status(200);
 					should.exist(data, 'não retornou dado nenhum');
-					should.not.exist(data && data.error ? true : undefined);
+					should.not.exist(data.error);
 					(data && data.original && data.original.url ? data.original.url : '')
 						.should.match(/^http\:\/\/.+\/companies\/.+\/thumbnails\/.+\/original\..+$/, 'não salvou o original corretamente');
 					(data && data.small && data.small.url ? data.small.url : '')
