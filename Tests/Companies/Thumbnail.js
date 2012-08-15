@@ -32,7 +32,7 @@ describe('POST /company/[slug]/thumbnail', function () {
 			api.post('companies', '/company', {
 				login : userName,
 				token : token,
-				users : [userName],
+				users : [data._id],
 				name : companyName,
 				slug : companySlug,
 				activity : 'consultoria em testes',
@@ -40,6 +40,7 @@ describe('POST /company/[slug]/thumbnail', function () {
 				profile : 'both',
 				active : true
 			}, function(error, data) {
+				console.log(data);
 				if (error) return done(error);
 				else done();
 			});
@@ -56,6 +57,7 @@ describe('POST /company/[slug]/thumbnail', function () {
 			function(error, data, response) {
 				if (error) return done(error);
 				else {
+					should.exist(response, 'serviço de companies está inacessível');
 					response.should.have.status(200);
 					should.exist(data, 'não retornou dado nenhum');
 					should.exist(data.error, 'não retornou erro');
@@ -64,7 +66,7 @@ describe('POST /company/[slug]/thumbnail', function () {
 			}
 		);
 	});
-	
+	/*
 	it('retorna erro quando enviado token errado', function(done) {
 		api.file('companies', '/company/' + companySlug + '/thumbnail',
 			{
@@ -144,9 +146,9 @@ describe('POST /company/[slug]/thumbnail', function () {
 				}
 			}
 		);
-	});
+	});*/
 });
-
+/*
 random = rand();
 userName2 = 'testes+' + random + '@empreendemia.com.br';
 companyName2 = 'Empresa ' + random;
@@ -308,7 +310,7 @@ describe('POST /company/[slug]/product/[slug]/thumbnail', function () {
 	});
 	
 	
-	/*it('retorna informações das imagens quando enviar novamente', function (done) {
+	it('retorna informações das imagens quando enviar novamente', function (done) {
 		api.file('companies', '/company/' + companySlug + '/product/' + productSlug + '/thumbnail',
 			{
 				login : userName,
@@ -334,5 +336,5 @@ describe('POST /company/[slug]/product/[slug]/thumbnail', function () {
 				}
 			}
 		);
-	});*/
-});
+	});
+});*/

@@ -47,7 +47,7 @@ module.exports = function (app) {
                         if (error) {
                             response.send({error : error});
                         } else {
-                            response.send({error : undefined, token : user.token});
+                            response.send({_id : user._id, token : user.token});
                         }
                     });
                 }
@@ -292,7 +292,7 @@ module.exports = function (app) {
         });
     });
 
-    /** GET /users/validate
+    /** GET /user/validate
      *
      * @autor : Rafael Erthal
      * @since : 2012-07
@@ -305,7 +305,7 @@ module.exports = function (app) {
      * @request : {token}
      * @response : {user._id}
      */
-    app.get('/users/validate', function (request, response) {
+    app.get('/user/validate', function (request, response) {
         response.contentType('json');
         
         //localiza o usuário
