@@ -421,6 +421,7 @@ module.exports = function (app) {
                 if (company === null) {
                     response.send({error : 'company not found'});
                 } else {
+                	console.log(company);
                     // se o thumbnail nao esta setado
                     if (!company.thumbnail || !company.thumbnail.original || !company.thumbnail.original.url) {
                         response.send(undefined);

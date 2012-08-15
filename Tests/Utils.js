@@ -13,8 +13,8 @@ var api = {
 	get : function(service, url, data, cb) {
         restler.get('http://'+config.services[service].host+':'+config.services[service].port+url, {
             data: data
-        }).on('complete', function(data) {
-			cb(undefined, data);
+        }).on('complete', function(data, response) {
+			cb(undefined, data, response);
         });/*.on('error', function(error) {
         	cb(error);
         });*/
@@ -22,15 +22,15 @@ var api = {
 	post : function(service, url, data, cb) {
         restler.post('http://'+config.services[service].host+':'+config.services[service].port+url, {
             data: data
-        }).on('complete', function(data) {
-			cb(undefined, data);
+        }).on('complete', function(data, response) {
+			cb(undefined, data, response);
         });
 	},
 	put : function(service, url, data, cb) {
         restler.put('http://'+config.services[service].host+':'+config.services[service].port+url, {
             data: data
-        }).on('complete', function(data) {
-			cb(undefined, data);
+        }).on('complete', function(data, response) {
+			cb(undefined, data, response);
         });/*.on('error', function(error) {
         	cb(error);
         });*/
@@ -38,8 +38,8 @@ var api = {
 	del : function(service, url, data, cb) {
         restler.del('http://'+config.services[service].host+':'+config.services[service].port+url, {
             data: data
-        }).on('complete', function(data) {
-			cb(undefined, data);
+        }).on('complete', function(data, response) {
+			cb(undefined, data, response);
         });/*.on('error', function(error) {
         	cb(error);
         });*/
@@ -57,8 +57,8 @@ var api = {
         restler.post('http://'+config.services[service].host+':'+config.services[service].port+url, {
             multipart: true,
             data: data
-        }).on('complete', function(data) {
-			cb(undefined, data);
+        }).on('complete', function(data, response) {
+			cb(undefined, data, response);
         });/*.on('error', function(error) {
         	cb(error);
         });*/
@@ -91,7 +91,7 @@ exports.db = db;
 var rand = function(type) {
 	var crypto = require('crypto');
 	var string; 
-	var hash = crypto.createHash('md5').update(crypto.randomBytes(10)).digest('hex').substring(0, 4);
+	var hash = crypto.createHash('sha1').update(crypto.randomBytes(10)).digest('hex').substring(0, 5);
 	
 	if (type === 'email') {
 		string = 'testes+' + hash + '@empreendemia.com.br';
