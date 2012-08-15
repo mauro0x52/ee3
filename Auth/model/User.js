@@ -62,7 +62,12 @@ userSchema.pre('save', function (next) {
 userSchema.methods.generateToken = function () {
     "use strict";
 
-    return crypto.createHash('md5', config.security.token).update(this.login + this.password).digest('hex');
+	var token = crypto
+		.createHash('sha256', config.security.token)
+		.update(this.login + this.password + crypto.randomBytes(10))
+		.digest('hex');
+
+    return token;
 };
 
 /** CheckToken
