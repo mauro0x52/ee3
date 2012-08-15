@@ -59,7 +59,7 @@ module.exports = function (app) {
                                             //pega os dados do post e coloca em um objeto
                                             dialog = new Dialog({
                                                 name      : request.param('name', null),
-                                                source    : request.param('code', null),
+                                                source    : request.param('source', null),
                                                 versionId : version._id
                                             });
                                             //salva a nova dialogo
@@ -312,11 +312,11 @@ module.exports = function (app) {
                                                         response.send({error : 'dialog not found'});
                                                     } else {
                                                         //altera os dados da dialogo
-                                                        if (request.param('name', null)) {
+                                                        if (request.param('name', null) || request.param('name', null) !== "") {
                                                             dialog.name = request.param('name', null);
                                                         }
-                                                        if (request.param('code', null)) {
-                                                            dialog.code = request.param('code', null);
+                                                        if (request.param('source', null)) {
+                                                            dialog.source = request.param('source', null);
                                                         }
                                                         //salva modificações
                                                         dialog.save(function (error) {

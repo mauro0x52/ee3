@@ -59,7 +59,7 @@ module.exports = function (app) {
                                             //pega os dados do post e coloca em um objeto
                                             plugin = new Plugin({
                                                 name      : request.param('name', null),
-                                                source    : request.param('code', null),
+                                                source    : request.param('source', null),
                                                 versionId : version._id
                                             });
                                             //salva a nova plugin
@@ -312,11 +312,11 @@ module.exports = function (app) {
                                                         response.send({error : 'plugin not found'});
                                                     } else {
                                                         //altera os dados da plugin
-                                                        if (request.param('name', null)) {
+                                                        if (request.param('name', null) || request.param('name', null) !== "") {
                                                             plugin.name = request.param('name', null);
                                                         }
-                                                        if (request.param('code', null)) {
-                                                            plugin.code = request.param('code', null);
+                                                        if (request.param('source', null)) {
+                                                            plugin.source = request.param('source', null);
                                                         }
                                                         //salva modificações
                                                         plugin.save(function (error) {

@@ -12,7 +12,7 @@ var mongoose = require('mongoose'),
     Dialog;
 
 dialogSchema = new Schema({
-    name      : {type : String, trim : true, required : true},
+    name      : {type : String, trim : true, required : true, unique : true},
     source    : {type : String, required : true},
     versionId : objectId
 });

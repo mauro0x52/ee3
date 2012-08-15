@@ -194,7 +194,7 @@ module.exports = function (app) {
                                 response.send({error : 'permission denied'});
                             } else {
                                 //altera os dados do aplicativo
-                                if (request.param('name', null)) {
+                                if (request.param('name', null) || request.param('name', null) !== "") {
                                     app.name = request.param('name', null);
                                 }
                                 if (request.param('slug', null)) {

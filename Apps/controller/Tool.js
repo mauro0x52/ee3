@@ -60,7 +60,7 @@ module.exports = function (app) {
                                             //pega os dados do post e coloca em um objeto
                                             tool = new Tool({
                                                 name      : request.param('name', null),
-                                                source    : request.param('code', null),
+                                                source    : request.param('source', null),
                                                 versionId : version._id
                                             });
                                             //salva a nova ferramenta
@@ -317,11 +317,11 @@ module.exports = function (app) {
                                                         response.send({error : 'tool not found'});
                                                     } else {
                                                         //altera os dados da ferramenta
-                                                        if (request.param('name', null)) {
+                                                        if (request.param('name', null) || request.param('source', null) !== "") {
                                                             tool.name = request.param('name', null)
                                                         }
-                                                        if (request.param('code', null)) {
-                                                            tool.code = request.param('code', null);
+                                                        if (request.param('source', null)) {
+                                                            tool.source = request.param('source', null);
                                                         }
                                                         //salva modificações
                                                         tool.save(function (error) {

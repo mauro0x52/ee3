@@ -255,7 +255,9 @@ module.exports = function (app) {
                                             response.send({error : 'version not found'});
                                         } else {
                                             //altera os dados da versão
-                                            version.number = request.param('number', null);
+                                            if (request.param('number', null) || request.param('number', null) !== "") {
+                                                version.number = request.param('number', null);
+                                            }
                                             //salva as modificações
                                             version.save(function (error) {
                                                 if (error) {
