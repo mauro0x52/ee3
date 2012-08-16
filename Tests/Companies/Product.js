@@ -10,16 +10,15 @@ var should = require("should"),
 	api = require("../Utils.js").api,
 	db = require("../Utils.js").db,
 	rand = require("../Utils.js").rand,
-	token, company, companyName, companySlug, productSlug,
+	token, company, product,
 	token2, company2, companyName2, companySlug2;
 	
-random = rand();
-userName = 'testes+' + random + '@empreendemia.com.br';
-companyName = 'Empresa ' + random;
-productName = 'Produto ' + random;
 
 describe('POST /company/[slug]/product', function () {
 	before(function (done) {
+		random = rand();
+		userName = 'testes+' + random + '@empreendemia.com.br';
+		
 		// cria usuario
 		api.post('auth', '/user', {
 			username : userName,
@@ -29,23 +28,23 @@ describe('POST /company/[slug]/product', function () {
 			token = data.token;
 			api.post('companies', '/company', {
 				token : token,
-				name : companyName,
+				name : 'Empresa ' + random,
 				activity : 'consultoria em testes',
 				type : 'company',
 				profile : 'both',
 				active : 1
 			}, function(error, data, response) {
-				companySlug = data.slug;
+				company = data;
 				done();
 			});
 		});
 	});
 	
 	it('token inválido', function(done) {
-		api.post('companies', '/company/' + companySlug + '/product',
+		api.post('companies', '/company/' + company.slug + '/product',
 			{
 				token : 'asdoewqoias1p234nioasfpn',
-				name : productName
+				name : 'Produto ' + random
 			},
 			function(error, data, response) {
 				if (error) return done(error);
@@ -59,7 +58,7 @@ describe('POST /company/[slug]/product', function () {
 		);
 	});
 	it('dados obrigatórios não preenchidos', function(done) {
-		api.post('companies', '/company/' + companySlug + '/product',
+		api.post('companies', '/company/' + company.slug + '/product',
 			{
 				token : token
 			},
@@ -75,10 +74,10 @@ describe('POST /company/[slug]/product', function () {
 		);
 	});
 	it('cadastra produto', function(done) {
-		api.post('companies', '/company/' + companySlug + '/product',
+		api.post('companies', '/company/' + company.slug + '/product',
 			{
 				token : token,
-				name : productName
+				name : 'Produto ' + random
 			},
 			function(error, data, response) {
 				if (error) return done(error);
@@ -86,7 +85,7 @@ describe('POST /company/[slug]/product', function () {
 					response.should.have.status(200);
 					should.not.exist(data.error, 'erro inexperado');
 					should.exist(data.slug, 'não gerou slug corretamente');
-					productSlug = data.slug;
+					product = data;
 					done();
 				}
 			}

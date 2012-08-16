@@ -7,7 +7,15 @@
  */
 
 describe('Thumbnail', function() {
-	require("./Companies.js");
+	require("./Company.js");
+});
+describe('Product', function() {
+	require("./Product.js");
+});
+describe('Sector', function() {
+	require("./Sector.js");
+});
+describe('Thumbnail', function() {
 	require("./Thumbnail.js");
 });
 

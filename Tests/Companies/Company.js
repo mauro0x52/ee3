@@ -155,7 +155,7 @@ describe('GET /companies', function () {
 				else { 
 					response.should.have.status(200);
 					should.not.exist(data.error, 'erro inesperado');
-					data.should.have.property('companies').with.lengthOf(18);
+					data.should.have.lengthOf(18);
 					done();
 				}
 			}
@@ -171,7 +171,7 @@ describe('GET /companies', function () {
 				else { 
 					response.should.have.status(200);
 					should.not.exist(data.error, 'erro inesperado');
-					data.should.have.property('companies').with.lengthOf(20);
+					data.should.have.lengthOf(20);
 					done();
 				}
 			}
@@ -213,8 +213,8 @@ describe('GET /company', function () {
 				else { 
 					response.should.have.status(200);
 					should.not.exist(data.error, 'erro inesperado');
-					should.strictEqual(data._id, company._id, 'os ids devem ser iguais');
-					should.strictEqual(data.slug, company.slug, 'os slugs devem ser iguais');
+					data.should.have.property('_id', company._id, 'os ids devem ser iguais');
+					data.should.have.property('slug', company.slug, 'os slugs devem ser iguais');
 					done();
 				}
 			}
@@ -228,8 +228,8 @@ describe('GET /company', function () {
 				else { 
 					response.should.have.status(200);
 					should.not.exist(data.error, 'erro inesperado');
-					should.strictEqual(data._id, company._id, 'os ids devem ser iguais');
-					should.strictEqual(data.slug, company.slug, 'os slugs devem ser iguais');
+					data.should.have.property('_id', company._id, 'os ids devem ser iguais');
+					data.should.have.property('slug', company.slug, 'os slugs devem ser iguais');
 					done();
 				}
 			}

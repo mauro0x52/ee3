@@ -30,69 +30,38 @@ module.exports = function (app) {
 
         response.contentType('json');
         
-        Sector.findRecursively(request.param('levels', null), function (error, sectors) {
+        Sector.find({}, function (error, sectors) {
             if (error) {
                 response.send({error : error});
             } else {
-                response.send({sectors : sectors});
+                response.send(sectors);
             }
         })
     });
 
-    /** GET /sector/{slug}/parent
+
+     /** GET /sector/:id
      *
-     * @autor : Rafael Erthal
+     * @autor : Mauro Ribeiro
      * @since : 2012-08
      *
-     * @description : Pai de um setor setor
+     * @description : Dados de um setor
      *
      * @allowedApp : Qualquer app
      * @allowedUser : Deslogado
      *
-     * @request : {levels}
-     * @response : {name,slug,children[]}
+     * @request : {id}
+     * @response : {sector}
      */
-    app.get('/sector/:slug/parent', function (request,response) {
+    app.get('/sector/:id', function (request,response) {
         response.contentType('json');
 
-        //TODO implementar funcionalidades
-    });
-
-     /** GET /sector/:slug/children
-     *
-     * @autor : Rafael Erthal
-     * @since : 2012-08
-     *
-     * @description : Filhos de um setor setor
-     *
-     * @allowedApp : Qualquer app
-     * @allowedUser : Deslogado
-     *
-     * @request : {levels}
-     * @response : {[{name,slug,children[]}]}
-     */
-    app.get('/sector/:slug/children', function (request,response) {
-        response.contentType('json');
-
-        //TODO implementar funcionalidades
-    });
-
-     /** GET /sector/:slug/path
-     *
-     * @autor : Rafael Erthal
-     * @since : 2012-08
-     *
-     * @description : Caminho completo de um setor
-     *
-     * @allowedApp : Qualquer app
-     * @allowedUser : Deslogado
-     *
-     * @request : {levels}
-     * @response : {path}
-     */
-    app.get('/sector/:slug/path', function (request,response) {
-        response.contentType('json');
-
-        //TODO implementar funcionalidades
+        Sector.findByIdentity(request.params.id, function (error, sector) {
+            if (error) {
+                response.send({error : error});
+            } else {
+                response.send(sector);
+            }
+        })
     });
 };

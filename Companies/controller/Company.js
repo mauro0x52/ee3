@@ -94,7 +94,7 @@ module.exports = function (app) {
 	            if (error) {
 	                response.send({error : error })
 	            } else {
-	                response.send({companies : companies});
+	                response.send(companies);
 	            }
         	}
         )
