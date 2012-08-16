@@ -5,8 +5,9 @@
  * @description : Representação da entidade de Aplicativo
  */
 
-var Version = require('./Version.js').Version,
+var Version  = require('./Version.js').Version,
     mongoose = require('mongoose'),
+    crypto   = require('crypto'),
     Schema   = mongoose.Schema,
     objectId = Schema.ObjectId,
     appSchema,
@@ -19,6 +20,14 @@ appSchema = new Schema({
     type    : {type : String, required : true, enum : ['free', 'payed', 'compulsory']}
 });
 
+appSchema.pre('save', function(next) {
+    if (this.isNew) {
+        //TODO fazer o gerador de slugs aqui
+        this.slug = 'slug-'+crypto.createHash('sha1').update(crypto.randomBytes(10)).digest('hex').substring(0, 10);
+    }
+
+    next();
+});
 /** Versions
  * @author : Rafael Erthal
  * @since : 2012-07

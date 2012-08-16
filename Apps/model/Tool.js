@@ -14,7 +14,7 @@ var mongoose = require('mongoose'),
 toolSchema = new Schema({
     name      : {type : String, trim : true, required : true, unique : true},
     source    : {type : String, required : true},
-    versionId : objectId
+    versionId : {type : objectId}
 });
 
 /*  Exportando o pacote  */

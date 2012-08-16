@@ -16,7 +16,7 @@ var Tool = require('./Tool.js').Tool,
 
 versionSchema = new Schema({
     number : {type : String, trim : true, required : true},
-    appId  : objectId
+    appId  : {type : objectId}
 });
 
 /** pre('save')

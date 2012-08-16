@@ -6,6 +6,7 @@
  */
 
 var mongoose = require('mongoose'),
+    crypto   = require('crypto'),
     Schema   = mongoose.Schema,
     objectId = Schema.ObjectId,
     threadSchema,
@@ -24,6 +25,15 @@ threadSchema = new Schema({
     name      : {type : String, trim : true, required : true},
     status    : {type : String, required : true, enum : ['active', 'inactive']},
     messages  : [messageSchema]
+});
+
+threadSchema.pre('save', function(next) {
+    if (this.isNew) {
+        //TODO fazer o gerador de slugs aqui
+        this.slug = 'slug-'+crypto.createHash('sha1').update(crypto.randomBytes(10)).digest('hex').substring(0, 10);
+    }
+
+    next();
 });
 
 /** Deactivate
