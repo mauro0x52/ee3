@@ -27,7 +27,7 @@ module.exports = function (app) {
      */
     app.post('/company', function (request, response) {
         var company;
-
+        
         response.contentType('json');
 
         //valida o token do usuário
@@ -116,29 +116,37 @@ module.exports = function (app) {
     app.get('/company/:id', function (request, response) {
         response.contentType('json');
 
+		var id = request.params.id,
+			attributes = request.param('attributes', {});
 
-		var id = request.params.id;
-		
-		var findCompany = function (error, company) {
-            if (error) {
-                response.send({error : error});
-            } else {
-                //verifica se a compania foi encontrada
-                if (company === null) {
-                    response.send({error : 'company not found'});
-                } else {
-                    response.send(company);
-                }
-            }
-		}
 
-		if (new RegExp("[0-9 a-f]{24}").test(id)) {
-			// procura por id
-	        Company.find(ObjectId(id), findCompany);
-		} else {
-			// procura por slug
-	        Company.findOne({slug : id}, findCompany);
-		}
+        //valida o token do usuário
+        auth(request.param('token', null), function (user) {
+
+	        Company.findByIdentity(id, function(error, company) {
+	            if (error) {
+	                response.send({error : error});
+	            } else {
+	                //verifica se a compania foi encontrada
+	                if (company === null) {
+	                    response.send({error : 'company not found'});
+	                } else {
+						if (!attributes.products) delete company.products;
+						if (!attributes.addresses || !user) delete company.addresses;
+						if (!attributes.about) delete company.about;
+						if (!attributes.embeddeds) delete company.embeddeds;
+						if (!attributes.phones || !user) delete company.phones;
+						if (!attributes.contacts || !user) delete company.contacts;
+						if (!attributes.links) delete company.links;
+						if (attributes.members) {
+							
+						} 
+	                    response.send(company);
+	                }
+	            }
+	        });
+        });
+
     });
 
     /** PUT /company/:slug
@@ -154,14 +162,14 @@ module.exports = function (app) {
      * @request : {login,token,name,sectors,city,type,profile,tags,activity,abstract,about}
      * @response : {confirmation}
      */
-    app.put('/company/:slug', function (request, response) {
+    app.put('/company/:id', function (request, response) {
         response.contentType('json');
 
         //valida o token do usuário
         auth(request.param('token', null), function (user) {
             if (user) {
                 //busca a compania
-                Company.findOne({slug : request.params.slug}, function (error, company) {
+                Company.findByIdentity(request.params.id, function (error, company) {
                     if (error) {
                         response.send({error : error});
                     } else {
@@ -260,14 +268,14 @@ module.exports = function (app) {
      * @request : {login,token}
      * @response : {confirmation}
      */
-    app.del('/company/:slug', function (request, response) {
+    app.del('/company/:id', function (request, response) {
         response.contentType('json');
 
         //valida o token do usuário
         auth(request.param('token', null), function (user) {
             if (user) {
                 //busca a compania
-                Company.findOne({slug : request.params.slug}, function (error, company) {
+                Company.findByIdentity(request.params.id, function (error, company) {
                     if (error) {
                         response.send({error : error});
                     } else {

@@ -13,7 +13,7 @@ var mongoose = require('mongoose'),
 
 productSchema = new Schema({
     name       : {type : String, trim : true, required : true},
-    slug       : {type : String, trim : true, unique : true},
+    slug       : {type : String, trim : true},
     thumbnail  : require('./Thumbnail.js').ThumbnailStruct,
     abstract   : {type : String},
     about      : {type : String},

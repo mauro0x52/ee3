@@ -89,9 +89,9 @@ describe('POST /user', function () {
 	});
 });
 
-describe('GET /users/validate', function() {
+describe('GET /user/validate', function() {
 	it('retorna id do usuário se o token for valido', function (done) {
-		api.get('auth', '/users/validate', 
+		api.get('auth', '/user/validate', 
 			{
 				token : token
 			},

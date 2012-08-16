@@ -11,14 +11,14 @@ var should = require("should"),
 	db = require("../Utils.js").db,
 	rand = require("../Utils.js").rand,
 	token, companyImageUrl, productImageUrl, random, 
-	userName, companyName, productName, companySlug, productSlug,
-	token2, userName2, companyName2, productName2, companySlug2, productSlug2;
+	userName, companyName, productName, company, product,
+	token2, userName2, companyName2, productName2, company2, product2;
 
 random = rand();
 userName = 'testes+' + random + '@empreendemia.com.br';
 companyName = 'Empresa ' + random;
 
-describe('POST /company/[slug]/thumbnail', function () {
+describe('POST /company/[id]/thumbnail', function () {
 	before(function (done) {
 		// cria usuario
 		api.post('auth', '/user', {
@@ -31,21 +31,20 @@ describe('POST /company/[slug]/thumbnail', function () {
 			api.post('companies', '/company', {
 				token : token,
 				name : companyName,
-				slug : companySlug,
 				activity : 'consultoria em testes',
 				type : 'company',
 				profile : 'both',
 				active : true
 			}, function(error, data) {
-				companySlug = data.slug;
+				company = data;
 				if (error) return done(error);
 				else done();
 			});
 		});
 	});
 
-	it('retorna erro quando nao envia imagem', function(done) {
-		api.file('companies', '/company/' + companySlug + '/thumbnail',
+	it('não envia imagem', function(done) {
+		api.file('companies', '/company/' + company.slug + '/thumbnail',
 			{
 				token : token
 			},
@@ -62,8 +61,8 @@ describe('POST /company/[slug]/thumbnail', function () {
 			}
 		);
 	});
-	it('retorna erro quando enviado token errado', function(done) {
-		api.file('companies', '/company/' + companySlug + '/thumbnail',
+	it('token errado', function(done) {
+		api.file('companies', '/company/' + company.slug  + '/thumbnail',
 			{
 				token : 'asd8vc89vc7vcx89fas872gjhibas'
 			},
@@ -81,8 +80,8 @@ describe('POST /company/[slug]/thumbnail', function () {
 			}
 		);
 	});
-	it('retorna informações das imagens quando enviar imagem', function(done) {
-		api.file('companies', '/company/' + companySlug + '/thumbnail',
+	it('envia imagem', function(done) {
+		api.file('companies', '/company/' + company.slug  + '/thumbnail',
 			{
 				token : token
 			},
@@ -110,8 +109,8 @@ describe('POST /company/[slug]/thumbnail', function () {
 		);
 	});
 
-	it('retorna informações das imagens quando enviar novamente', function (done) {
-		api.file('companies', '/company/' + companySlug + '/thumbnail',
+	it('envia imagem novamente', function (done) {
+		api.file('companies', '/company/' + company.slug  + '/thumbnail',
 			{
 				login : userName,
 				token : token,
@@ -145,7 +144,7 @@ random = rand();
 userName2 = 'testes+' + random + '@empreendemia.com.br';
 companyName2 = 'Empresa ' + random;
 
-describe('GET /company/[slug]/thumbnail', function () {
+describe('GET /company/[id]/thumbnail', function () {
 
 	before(function (done) {
 		// cria usuario
@@ -170,7 +169,7 @@ describe('GET /company/[slug]/thumbnail', function () {
 						active : true
 					},
 					function(error, data) {
-						companySlug2 = data.slug;
+						company2 = data;
 						if (error) return done(error);
 						else done();
 					}
@@ -179,7 +178,7 @@ describe('GET /company/[slug]/thumbnail', function () {
 		);
 	});
 
-	it('retorna erro se não encontrar a empresa', function (done) {
+	it('empresa não existe', function (done) {
 		api.get('companies', '/company/asddasddaoiheoins/thumbnail', {}, function(error, data, response) {
 			response.should.have.status(200);
 			should.exist(data, 'não retornou dado nenhum');
@@ -187,8 +186,8 @@ describe('GET /company/[slug]/thumbnail', function () {
 			done();
 		});
 	});
-	it('retorna informaçoes se a empresa existe e tem thumbnail', function (done) {
-		api.get('companies', '/company/' + companySlug + '/thumbnail', {}, function(error, data, response) {
+	it('empresa com thumbnail', function (done) {
+		api.get('companies', '/company/' + company.slug + '/thumbnail', {}, function(error, data, response) {
 			response.should.have.status(200);
 			should.exist(data, 'não retornou dado nenhum');
 			should.not.exist(data && data.error ? true : undefined, 'retornou erro inexperado');
@@ -203,8 +202,8 @@ describe('GET /company/[slug]/thumbnail', function () {
 			done();
 		});
 	});
-	it('retorna undefined se a empresa existe mas não e tem thumbnail', function (done) {
-		api.get('companies', '/company/' + companySlug2 + '/thumbnail', {}, function(error, data, response) {
+	it('empresa sem thumbnail', function (done) {
+		api.get('companies', '/company/' + company2.slug  + '/thumbnail', {}, function(error, data, response) {
 			response.should.have.status(200);
 			should.not.exist(data, 'deveria retornar undefined')
 			should.not.exist(data && data.error ? true : undefined, 'retornou erro inexperado');
@@ -213,32 +212,29 @@ describe('GET /company/[slug]/thumbnail', function () {
 	});
 });
 
-describe('DEL /company/[slug]/thumbnail', function() {
+describe('DEL /company/[id]/thumbnail', function() {
 	
 });
 
 productName = 'Produto ' + random;
-productSlug = 'produto-' + random;
 
 
-describe('POST /company/[slug]/product/[slug]/thumbnail', function () {
+describe('POST /company/[id]/product/[id]/thumbnail', function () {
 
 	before(function (done) {
 		// cria produto
-		api.post('companies', '/company/' + companySlug + '/product', {
-			login : userName,
+		api.post('companies', '/company/' + company.slug + '/product', {
 			token : token,
-			name : productName,
-			slug : productSlug
+			name : productName
 		}, function(error, data, response) {
+			product = data;
 			if (error) return done(error);
 			else done();
 		});
 	});
-	it('retorna erro quando nao envia imagem', function (done) {
-		api.file('companies', '/company/' + companySlug + '/product/' + productSlug + '/thumbnail',
+	it('não envia imagem', function (done) {
+		api.file('companies', '/company/' + company.slug + '/product/' + product._id + '/thumbnail',
 			{
-				login : userName,
 				token : token
 			},
 			{},
@@ -252,11 +248,10 @@ describe('POST /company/[slug]/product/[slug]/thumbnail', function () {
 			}
 		);
 	});
-	it('retorna erro quando enviado token errado', function(done) {
-		api.file('companies', '/company/' + companySlug + '/product/' + productSlug + '/thumbnail',
+	it('token errado', function(done) {
+		api.file('companies', '/company/' + company.slug + '/product/' + product._id + '/thumbnail',
 			{
-				login : userName,
-				token : 'asd8vc89vc7vcx89fas872gjhibas',
+				token : 'asd8vc89vc7vcx89fas872gjhibas'
 			},
 			{
 				file : 'vader.jpg'
@@ -271,8 +266,8 @@ describe('POST /company/[slug]/product/[slug]/thumbnail', function () {
 			}
 		);
 	});
-	it('retorna informações das imagens quando enviar imagem', function(done) {
-		api.file('companies', '/company/' + companySlug + '/product/' + productSlug + '/thumbnail',
+	it('envia imagem de produto', function(done) {
+		api.file('companies', '/company/' + company.slug + '/product/' + product._id + '/thumbnail',
 			{
 				token : token
 			},
@@ -299,8 +294,8 @@ describe('POST /company/[slug]/product/[slug]/thumbnail', function () {
 			}
 		);
 	});	
-	it('retorna informações das imagens quando enviar novamente', function (done) {
-		api.file('companies', '/company/' + companySlug + '/product/' + productSlug + '/thumbnail',
+	it('envia mesma imagem de produto', function (done) {
+		api.file('companies', '/company/' + company.slug + '/product/' + product._id + '/thumbnail',
 			{
 				token : token
 			},

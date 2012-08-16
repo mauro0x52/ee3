@@ -25,7 +25,7 @@ module.exports = function (app) {
      * @request : {token, name, slug, abstract, about}
      * @response : {product}
      */
-    app.post('/company/:company_slug/product', function (request, response) {
+    app.post('/company/:company_id/product', function (request, response) {
         var product = [];
 
         response.contentType('json');
@@ -34,7 +34,7 @@ module.exports = function (app) {
         auth(request.param('token', null), function (user) {
             if (user) {
                 //busca a compania
-                Company.findOne({slug : request.params.company_slug}, function (error, company) {
+                Company.findByIdentity(request.params.company_id, function (error, company) {
                     if (error) {
                         response.send({error : error});
                     } else {
@@ -83,11 +83,11 @@ module.exports = function (app) {
      * @request : {}
      * @response : {[{name,slug,abstract,about}]}
      */
-    app.get('/company/:slug/products', function (request, response) {
+    app.get('/company/:company_id/products', function (request, response) {
         response.contentType('json');
 
         //busca a compania
-        Company.findOne({slug : request.params.slug}, function (error, company) {
+        Company.findByIdentity(request.params.company_id, function (error, company) {
             if (error) {
                 response.send({error : error});
             } else {
@@ -114,11 +114,11 @@ module.exports = function (app) {
      * @request : {}
      * @response : {name,slug,abstract,about}
      */
-    app.get('/company/:company_slug/product/:product_slug', function (request, response) {
+    app.get('/company/:company_id/product/:product_id', function (request, response) {
         response.contentType('json');
 
         //busca a compania
-        Company.findOne({slug : request.params.company_slug}, function (error, company) {
+        Company.findByIdentity(request.params.company_id, function (error, company) {
             if (error) {
                 response.send({error : error});
             } else {
@@ -126,7 +126,7 @@ module.exports = function (app) {
                 if (company === null) {
                     response.send({error : 'company not found'});
                 } else {
-                    company.findProduct (request.params.product_slug,function (error, product){
+                    company.findProduct (request.params.product_id,function (error, product){
                         response.send({Product : product});
                     });
                 }
@@ -147,14 +147,14 @@ module.exports = function (app) {
      * @request : {token,name,slug,abstract,about}
      * @response : {confirmation}
      */
-    app.put('/company/:company_slug/product/:product_slug', function (request, response) {
+    app.put('/company/:company_id/product/:product_slug', function (request, response) {
         response.contentType('json');
 
         //valida o token do usuário
         auth(request.param('token', null), function (user) {
             if (user) {
                 //busca a compania
-                Company.findOne({slug : request.params.company_slug}, function (error, company) {
+                Company.findByIdentity(request.params.company_id, function (error, company) {
                     if (error) {
                         response.send({error : error});
                     } else {
@@ -203,14 +203,14 @@ module.exports = function (app) {
      * @request : {token}
      * @response : {confirmation}
      */
-    app.del('/company/:company_slug/product/:product_slug', function (request, response) {
+    app.del('/company/:company_id/product/:product_id', function (request, response) {
         response.contentType('json');
 
         //valida o token do usuário
         auth(request.param('token', null), function (user) {
             if (user) {
                 //busca a compania
-                Company.findOne({slug : request.params.company_slug}, function (error, company) {
+                Company.findByIdentity(request.params.company_id, function (error, company) {
                     if (error) {
                         response.send({error : error});
                     } else {
@@ -222,7 +222,7 @@ module.exports = function (app) {
                             if (! company.isOwner(user._id)) {
                                 response.send({error : 'permission denied'});
                             } else {
-                                company.findProduct (request.params.product_slug, function(error, product){
+                                company.findProduct (request.params.product_id, function(error, product){
                                     if (error) {
                                         request.send({error : error});
                                     } else {

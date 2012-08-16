@@ -69,7 +69,8 @@ describe('POST /company', function () {
 			activity : 'consultoria em testes',
 			type : 'company',
 			profile : 'both',
-			active : 1
+			active : 1,
+			about: 'sobre'
 		}, function(error, data, response) {
 			if (error) return done(error);
 			else { 
@@ -88,7 +89,8 @@ describe('POST /company', function () {
 			activity : 'consultoria em testes',
 			type : 'company',
 			profile : 'both',
-			active : 1
+			active : 1,
+			about: 'sobre'
 		}, function(error, data, response) {
 			if (error) return done(error);
 			else { 
@@ -119,7 +121,8 @@ describe('GET /companies', function () {
 					activity : 'consultoria em testes',
 					type : 'company',
 					profile : 'both',
-					active : 1
+					active : 1,
+					about: 'sobre'
 				}, function(error, data, response) {
 					countCompanies++;
 					if (countCompanies == 15) {
@@ -176,8 +179,7 @@ describe('GET /companies', function () {
 	});
 });
 
-
-describe('GET /companies', function () {
+describe('GET /company', function () {
 	before(function (done) {
 		// cria 10 empresas
 		var countCompanies = 0;
@@ -203,14 +205,84 @@ describe('GET /companies', function () {
 			});
 		}
 	});
-	it('lista de empresas', function(done) {
-		api.get('companies', '/companies',
+	it('pega empresa por id', function(done) {
+		api.get('companies', '/company/' + company._id,
 			{},
 			function(error, data, response) {
 				if (error) return done(error);
 				else { 
 					response.should.have.status(200);
 					should.not.exist(data.error, 'erro inesperado');
+					should.strictEqual(data._id, company._id, 'os ids devem ser iguais');
+					should.strictEqual(data.slug, company.slug, 'os slugs devem ser iguais');
+					done();
+				}
+			}
+		);
+	});
+	it('pega empresa por id', function(done) {
+		api.get('companies', '/company/' + company.slug,
+			{},
+			function(error, data, response) {
+				if (error) return done(error);
+				else { 
+					response.should.have.status(200);
+					should.not.exist(data.error, 'erro inesperado');
+					should.strictEqual(data._id, company._id, 'os ids devem ser iguais');
+					should.strictEqual(data.slug, company.slug, 'os slugs devem ser iguais');
+					done();
+				}
+			}
+		);
+	});
+	it('empresa sem setar atributos', function(done) {
+		api.get('companies', '/company/' + company._id,
+			{
+				attributes : {
+					products : false,
+					about : false
+				}
+			},
+			function(error, data, response) {
+				if (error) return done(error);
+				else { 
+					response.should.have.status(200);
+					should.not.exist(data.error, 'erro inesperado');
+					should.not.exist(data.products, 'não deve mostrar produtos');
+					should.not.exist(data.addresses, 'não deve mostrar endereços');
+					should.not.exist(data.about, 'não deve mostrar sobre');
+					should.not.exist(data.embeddeds, 'não deve mostrar embeddeds');
+					should.not.exist(data.phones, 'não deve mostrar telefones');
+					should.not.exist(data.links, 'não deve mostrar links');
+					done();
+				}
+			}
+		);
+	});
+	it('empresa com atributos logado', function(done) {
+		api.get('companies', '/company/' + company._id,
+			{
+				token : token,
+				attributes : {
+					products : true,
+					addresses : true,
+					about : true,
+					embeddeds : true,
+					phones : true,
+					links : true
+				}
+			},
+			function(error, data, response) {
+				if (error) return done(error);
+				else {
+					response.should.have.status(200);
+					should.not.exist(data.error, 'erro inesperado');
+					should.exist(data.about, 'deve mostrar sobre');
+					should.exist(data.products, 'deve mostrar produtos');
+					should.exist(data.addresses, 'deve mostrar endereços');
+					should.exist(data.embeddeds, 'deve mostrar embeddeds');
+					should.exist(data.phones, 'deve mostrar telefones');
+					should.exist(data.links, 'deve mostrar links');
 					done();
 				}
 			}

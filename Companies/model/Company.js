@@ -43,6 +43,28 @@ companySchema.pre('save', function(next) {
 	next();
 });
 
+
+/** FindByIdOrSlug
+ * @author : Mauro Ribeiro
+ * @since : 2012-08
+ *
+ * @description : Procura uma empresa pelo id ou pelo slug
+ * @param id : id ou slug do produto
+ * @param cb : callback a ser chamado
+ */
+companySchema.statics.findByIdentity = function (id, cb) {
+    "use strict";
+
+	if (new RegExp("[0-9 a-f]{24}").test(id)) {
+		// procura por id
+        Company.findById(id, cb);
+	} else {
+		// procura por slug
+        Company.findOne({slug : id}, cb);
+	}
+};
+
+
 /** IsOwner
  * @author : Rafael Erthal
  * @since : 2012-08
@@ -75,24 +97,40 @@ companySchema.methods.isOwner = function (id) {
  * @param slug : slug do produto
  * @param cb : callback a ser chamado após achado o produto
  */
-companySchema.methods.findProduct = function (slug, cb) {
+companySchema.methods.findProduct = function (id, cb) {
     "use strict";
     
     var i,
         j,
         product;
     
-    //varre os produtos da empresa
-    for (i = 0; i < this.products.length; i = i + 1) {
-        if (this.products[i].slug === slug) {
-            product = this.products[i];
-        }
-    }
-    if (product) {
-        cb(undefined, product);
-    } else {
-        cb('product not found', null);
-    }
+
+	if (new RegExp("[0-9 a-f]{24}").test(id)) {
+	    //varre os produtos da empresa
+	    for (i = 0; i < this.products.length; i = i + 1) {
+	        if (this.products[i]._id.toString() === id) {
+	            product = this.products[i];
+	        }
+	    }
+	    if (product) {
+	        cb(undefined, product);
+	    } else {
+	        cb('product not found', null);
+	    }
+	} else {
+	    //varre os produtos da empresa
+	    for (i = 0; i < this.products.length; i = i + 1) {
+	        if (this.products[i].slug === id) {
+	            product = this.products[i];
+	        }
+	    }
+	    if (product) {
+	        cb(undefined, product);
+	    } else {
+	        cb('product not found', null);
+	    }
+	}
+	
 };
 
 /** FindContact

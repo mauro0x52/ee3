@@ -14,7 +14,7 @@ module.exports = function (app) {
         Company = Model.Company,
         config = require('./../config.js');
 
-    /** POST /company/:company_slug/product/:product_slug/thumbnail
+    /** POST /company/:company_id/product/:product_id/thumbnail
      *
      * @author : Rafael Erthal, Mauro Ribeiro
      * @since : 2012-08
@@ -27,7 +27,7 @@ module.exports = function (app) {
      * @request : {token,file}
      * @response : {confirmation}
      */
-    app.post('/company/:company_slug/product/:product_slug/thumbnail', function postProductThumbnail(request, response) {
+    app.post('/company/:company_id/product/:product_id/thumbnail', function postProductThumbnail(request, response) {
         var thumbnail;
 
         response.contentType('json');
@@ -36,7 +36,7 @@ module.exports = function (app) {
         auth(request.param('token', null), function (user) {
             if (user) {
                 //busca a compania
-                Company.findOne({slug : request.params.company_slug}, function (error, company) {
+                Company.findByIdentity(request.params.company_id, function (error, company) {
                     if (error) {
                         response.send({error : error});
                     } else {
@@ -49,7 +49,7 @@ module.exports = function (app) {
                                 response.send({error : 'permission denied'});
                             } else {
                                 //busca o produto
-                                company.findProduct(request.params.product_slug, function (error, product) {
+                                company.findProduct(request.params.product_id, function (error, product) {
                                     if (error) {
                                         response.send({error : error});
                                     } else {
@@ -64,7 +64,7 @@ module.exports = function (app) {
                                                 // faz upload dos thumbnails
                                                 files.image.thumbnail.upload(
                                                     request.files.file,
-                                                    '/companies/' + request.params.company_slug + '/products/' + request.params.product_slug + '/thumbnails',
+                                                    '/companies/' + request.params.company_id + '/products/' + request.params.product_id + '/thumbnails',
                                                     function (error, data) {
                                                         if (error) {
                                                             response.send({error : error});
@@ -120,7 +120,7 @@ module.exports = function (app) {
         });
     });
 
-    /** GET /company/:company_slug/product/:product_slug/thumbnails
+    /** GET /company/:company_id/product/:product_id/thumbnails
      *
      * @author : Rafael Erthal, Mauro Ribeiro
      * @since : 2012-08
@@ -133,11 +133,11 @@ module.exports = function (app) {
      * @request : {}
      * @response : {[file,url,title,legend]}
      */
-    app.get('/company/:company_slug/product/:product_slug/thumbnail', function (request, response) {
+    app.get('/company/:company_id/product/:product_id/thumbnail', function (request, response) {
         response.contentType('json');
 
         //busca a compania
-        Company.findOne({slug : request.params.company_slug}, function (error, company) {
+        Company.findByIdentity(request.params.company_id, function (error, company) {
             if (error) {
                 response.send({error : error});
             } else {
@@ -146,7 +146,7 @@ module.exports = function (app) {
                     response.send({error : 'company not found'});
                 } else {
                     //busca o produto
-                    company.findProduct(request.params.product_slug, function (error, product) {
+                    company.findProduct(request.params.product_id, function (error, product) {
                         if (error) {
                             response.send({error : error});
                         } else {
@@ -168,7 +168,7 @@ module.exports = function (app) {
         });
     });
 
-    /** GET /company/:company_slug/product/:product_slug/thumbnail/:type
+    /** GET /company/:company_id/product/:product_id/thumbnail/:type
      *
      * @author : Rafael Erthal, Mauro Ribeiro
      * @since : 2012-08
@@ -181,11 +181,11 @@ module.exports = function (app) {
      * @request : {}
      * @response : {file,url,title,legend}
      */
-    app.get('/company/:company_slug/product/:product_slug/thumbnail/:size', function (request, response) {
+    app.get('/company/:company_id/product/:product_id/thumbnail/:size', function (request, response) {
         response.contentType('json');
 
         //busca a compania
-        Company.findOne({slug : request.params.company_slug}, function (error, company) {
+        Company.findByIdentity(request.params.company_id, function (error, company) {
             if (error) {
                 response.send({error : error});
             } else {
@@ -194,7 +194,7 @@ module.exports = function (app) {
                     response.send({error : 'company not found'});
                 } else {
                     //busca o produto
-                    company.findProduct(request.params.product_slug, function (error, product) {
+                    company.findProduct(request.params.product_id, function (error, product) {
                         if (error) {
                             response.send({error : error});
                         } else {
@@ -224,7 +224,7 @@ module.exports = function (app) {
         });
     });
 
-    /** PUT /company/:company_slug/product/:product_slug/thumbnail
+    /** PUT /company/:company_id/product/:product_id/thumbnail
      *
      * @autor : Rafael Erthal
      * @since : 2012-08
@@ -237,11 +237,11 @@ module.exports = function (app) {
      * @request : {token,title,legend}
      * @response : {confirmation}
      */
-    app.put('/company/:company_slug/product/:product_slug/thumbnail', function (request, response) {
+    app.put('/company/:company_id/product/:product_id/thumbnail', function (request, response) {
         postProductThumbnail(request, response);
     });
 
-    /** DEL /company/:company_slug/product/:product_slug/thumbnail
+    /** DEL /company/:company_id/product/:product_id/thumbnail
      *
      * @author : Rafael Erthal, Mauro Ribeiro
      * @since : 2012-08
@@ -254,14 +254,14 @@ module.exports = function (app) {
      * @request : {token}
      * @response : {confirmation}
      */
-    app.del('/company/:company_slug/product/:product_slug/thumbnail', function (request, response) {
+    app.del('/company/:company_id/product/:product_id/thumbnail', function (request, response) {
         response.contentType('json');
 
         //valida o token do usuário
         auth(request.param('token', null), function (user) {
             if (user) {
                 //busca a compania
-                Company.findOne({slug : request.params.company_slug}, function (error, company) {
+                Company.findByIdentity(request.params.company_id, function (error, company) {
                     if (error) {
                         response.send({error : error});
                     } else {
@@ -274,7 +274,7 @@ module.exports = function (app) {
                                 response.send({error : 'permission denied'});
                             } else {
                                 //busca o produto
-                                company.findProduct(request.params.product_slug, function (error, product) {
+                                company.findProduct(request.params.product_id, function (error, product) {
                                     if (error) {
                                         response.send({error : error});
                                     } else {
@@ -317,14 +317,14 @@ module.exports = function (app) {
      * @request : {token,file}
      * @response : {confirmation}
      */
-    app.post('/company/:slug/thumbnail', function postCompanyThumbnail (request, response) {
+    app.post('/company/:company_id/thumbnail', function postCompanyThumbnail (request, response) {
         response.contentType('json');
 
         //valida o token do usuário
         auth(request.param('token', null), function (user) {
             if (user) {
                 //busca a compania
-                Company.findOne({slug : request.params.slug}, function (error, company) {
+                Company.findByIdentity(request.params.company_id, function (error, company) {
                     if (error) {
                         response.send({error : error});
                     } else {
@@ -409,11 +409,11 @@ module.exports = function (app) {
      * @request : {}
      * @response : {[file,url,title,legend]}
      */
-    app.get('/company/:slug/thumbnail', function (request, response) {
+    app.get('/company/:company_id/thumbnail', function (request, response) {
         response.contentType('json');
 
         //busca a compania
-        Company.findOne({slug : request.params.slug}, function (error, company) {
+        Company.findByIdentity(request.params.company_id, function (error, company) {
             if (error) {
                 response.send({error : error});
             } else {
@@ -445,11 +445,11 @@ module.exports = function (app) {
      * @request : {}
      * @response : {file,url,title,legend}
      */
-    app.get('/company/:slug/thumbnail/:size', function (request, response) {
+    app.get('/company/:company_id/thumbnail/:size', function (request, response) {
         response.contentType('json');
 
         //busca a compania
-        Company.findOne({slug : request.params.slug}, function (error, company) {
+        Company.findByIdentity(request.params.company_id, function (error, company) {
             if (error) {
                 response.send({error : error});
             } else {
@@ -506,14 +506,14 @@ module.exports = function (app) {
      * @request : {token}
      * @response : {confirmation}
      */
-    app.del('/company/:slug/thumbnail', function (request, response) {
+    app.del('/company/:company_id/thumbnail', function (request, response) {
         response.contentType('json');
 
         //valida o token do usuário
         auth(request.param('token', null), function (user) {
             if (user) {
                 //busca a compania
-                Company.findOne({slug : request.params.slug}, function (error, company) {
+                Company.findByIdentity(request.params.company_id, function (error, company) {
                     if (error) {
                         response.send({error : error});
                     } else {
