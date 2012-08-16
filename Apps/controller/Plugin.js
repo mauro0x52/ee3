@@ -59,7 +59,7 @@ module.exports = function (app) {
                                             //pega os dados do post e coloca em um objeto
                                             plugin = new Plugin({
                                                 name      : request.param('name', null),
-                                                source    : request.param('code', null),
+                                                source    : request.param('source', null),
                                                 versionId : version._id
                                             });
                                             //salva a nova plugin
@@ -100,7 +100,7 @@ module.exports = function (app) {
         response.contentType('json');
 
         //busca o app
-        App.find({slug : request.params.slug}, function (error, app) {
+        App.findOne({slug : request.params.slug}, function (error, app) {
             if (error) {
                 response.send({error : error});
             } else {
@@ -150,7 +150,7 @@ module.exports = function (app) {
         response.contentType('json');
 
         //busca o app
-        App.find({slug : request.params.slug}, function (error, app) {
+        App.findOne({slug : request.params.slug}, function (error, app) {
             if (error) {
                 response.send({error : error});
             } else {
@@ -274,7 +274,7 @@ module.exports = function (app) {
      * @request : {number}
      * @response : {confirmation}
      */
-    app.put('/app/:slug/version/:number/plugin/:name', function (request, response) {
+    app.put('/app/:slug/version/:number/plugin/:oldname', function (request, response) {
         response.contentType('json');
 
         //valida o token do usuário
@@ -303,7 +303,7 @@ module.exports = function (app) {
                                             response.send({error : 'version not found'});
                                         } else {
                                             //busca a plugin
-                                            version.findPlugin(request.params.name, function (error, plugin) {
+                                            version.findPlugin(request.params.oldname, function (error, plugin) {
                                                 if (error) {
                                                     response.send({error : error});
                                                 } else {
@@ -312,8 +312,12 @@ module.exports = function (app) {
                                                         response.send({error : 'plugin not found'});
                                                     } else {
                                                         //altera os dados da plugin
-                                                        plugin.name = request.param('name', null);
-                                                        plugin.code = request.param('code', null);
+                                                        if (request.param('name', null) || request.param('name', null) !== "") {
+                                                            plugin.name = request.param('name', null);
+                                                        }
+                                                        if (request.param('source', null)) {
+                                                            plugin.source = request.param('source', null);
+                                                        }
                                                         //salva modificações
                                                         plugin.save(function (error) {
                                                             if (error) {

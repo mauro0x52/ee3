@@ -32,6 +32,7 @@ app.configure(function () {
 /*  Chamando controllers */
 require('./controller/App.js')(app);
 require('./controller/Version.js')(app);
+require('./controller/Dialog.js')(app);
 require('./controller/Tool.js')(app);
 require('./controller/Plugin.js')(app);
 

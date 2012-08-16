@@ -60,7 +60,7 @@ module.exports = function (app) {
                                             //pega os dados do post e coloca em um objeto
                                             tool = new Tool({
                                                 name      : request.param('name', null),
-                                                source    : request.param('code', null),
+                                                source    : request.param('source', null),
                                                 versionId : version._id
                                             });
                                             //salva a nova ferramenta
@@ -79,7 +79,7 @@ module.exports = function (app) {
                     }
                 });
             } else {
-                response.send({error : 'invalid token'});
+                response.send({error : 'invalid user or token'});
             }
         });
     });
@@ -260,7 +260,7 @@ module.exports = function (app) {
                     }
                 });
             } else {
-                response.send({error : 'invalid token'});
+                response.send({error : 'invalid user or token'});
             }
         });
     });
@@ -278,7 +278,7 @@ module.exports = function (app) {
      * @request : {number}
      * @response : {confirmation}
      */
-    app.put('/app/:slug/version/:number/tool/:name', function (request, response) {
+    app.put('/app/:slug/version/:number/tool/:oldname', function (request, response) {
         response.contentType('json');
         response.header('Access-Control-Allow-Origin', '*');
 
@@ -308,7 +308,7 @@ module.exports = function (app) {
                                             response.send({error : 'version not found'});
                                         } else {
                                             //busca a ferramenta
-                                            version.findTool(request.params.name, function (error, tool) {
+                                            version.findTool(request.params.oldname, function (error, tool) {
                                                 if (error) {
                                                     response.send({error : error});
                                                 } else {
@@ -317,8 +317,12 @@ module.exports = function (app) {
                                                         response.send({error : 'tool not found'});
                                                     } else {
                                                         //altera os dados da ferramenta
-                                                        tool.name = request.param('name', null);
-                                                        tool.code = request.param('code', null);
+                                                        if (request.param('name', null) || request.param('source', null) !== "") {
+                                                            tool.name = request.param('name', null)
+                                                        }
+                                                        if (request.param('source', null)) {
+                                                            tool.source = request.param('source', null);
+                                                        }
                                                         //salva modificações
                                                         tool.save(function (error) {
                                                             if (error) {
@@ -338,7 +342,7 @@ module.exports = function (app) {
                     }
                 });
             } else {
-                response.send({error : 'invalid token'});
+                response.send({error : 'invalid user or token'});
             }
         });
     });

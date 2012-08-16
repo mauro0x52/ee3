@@ -13,13 +13,14 @@ var mongoose = require('mongoose'),
 
 productSchema = new Schema({
     name       : {type : String, trim : true, required : true},
-    slug       : {type : String, trim : true},
+    slug       : {type : String, trim : true, unique : true},
     thumbnail  : require('./Thumbnail.js').ThumbnailStruct,
     abstract   : {type : String},
     about      : {type : String},
     links      : [require('./Link.js').Link],
     images     : [require('./Image.js').Image],
 });
+
 
 /** pre('save')
  * @author : Rafael Erthal
@@ -54,6 +55,7 @@ productSchema.pre('save', function (next) {
 	next();*/
 
 });
+
 
 /** FindImage
  * @author : Rafael Erthal

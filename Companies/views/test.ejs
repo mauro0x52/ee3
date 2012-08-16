@@ -59,11 +59,13 @@
                                 <li>token <input type="text" value="3f2b5b78a7e8c77553346d0de8345308" name="token" /></li>
                                 <li>slug <input type="text" name="slug" /></li>
                                 <li>name <input type="text" name="name" /></li>
-                                <li>users-username (owner)<input type="text" name="users[0]" /></li>
-                                <li>users-username 2 (owner)<input type="text" name="users[1]" /></li>
-                                <li>type <input type="text" value="freelancer" name="type" /></li>
-                                <li>profile <input type="text" value="buyer" name="profile" /></li>
-                                <li>active <input type="text" value="1" name="active" /></li>
+                                <li>type <select name="type">
+                                    <option value=""></option>
+                                    <option value="freelancer">Freelancer</option>
+                                    <option value="company">Company</option>
+                                    <option value="group">Group</option>
+                                </select></li>
+                                <li>active <input type="checkbox" value="1" name="active" /></li>
                                 <li>activity <input type="text" value="teste" name="activity" /></li>
                             </ul>
                             <input type="submit" value="testar" />
@@ -74,8 +76,6 @@
                         <form onsubmit="test($(this).serialize(), '../company/'+$(this).find('input[name=slug]').val(), 'GET'); return false;">
                             Parâmetros
                             <ul>
-                                <li>login <input type="text" value="teste" name="login" /></li>
-                                <li>token <input type="text" value="3f2b5b78a7e8c77553346d0de8345308" name="token" /></li>
                                 <li>slug <input type="text" name="slug" /></li>
                             </ul>
                             <input type="submit" value="testar" />
@@ -96,9 +96,13 @@
                                 <li>token <input type="text" value="3f2b5b78a7e8c77553346d0de8345308" name="token" /></li>
                                 <li>slug <input type="text" name="slug" /></li>
                                 <li>name <input type="text" name="name" /></li>
-                                <li>type <input type="text" value="freelancer" name="type" /></li>
-                                <li>profile <input type="text" value="buyer" name="profile" /></li>
-                                <li>active <input type="text" value="1" name="active" /></li>
+                                <li>type <select name="type">
+                                    <option value=""></option>
+                                    <option value="freelancer">Freelancer</option>
+                                    <option value="company">Company</option>
+                                    <option value="group">Group</option>
+                                </select></li>
+                                <li>active <input type="checkbox" value="1" name="active" /></li>
                                 <li>activity <input type="text" value="teste" name="activity" /></li>
                             </ul>
                             <input type="submit" value="testar" />
@@ -143,7 +147,6 @@
                                 
                                 <li>products-name <input type="text" name="name" /></li>
                                 <li>products-slug <input type="text" name="slugs[0]" /></li>
-                                <li>products-slug 2 <input type="text" name="slugs[1]" /></li>
                                 <li>products-abstract <input type="text" name="abstract" /></li>
                                 <li>products-about <input type="text" name="about" /></li>
                             </ul>
