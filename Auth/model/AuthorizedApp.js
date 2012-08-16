@@ -11,7 +11,7 @@ var mongoose = require('mongoose'),
     authorizedAppSchema;
 
 authorizedAppSchema = new Schema({
-    appId             : {type : String, required : true},
+    appId             : {type : objectId},
     token             : {type : String, trim : true, required : true},
     expirationDate    : {type : Date},
     authorizationDate : {type : Date}

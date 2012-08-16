@@ -12,11 +12,22 @@ var crypto = require('crypto'),
     regionSchema;
 
 regionSchema = new Schema({
-    name      : {type : String, trim : true, required : true},
-    slug      : {type : String, trim : true, required : true},
+    name       : {type : String, trim : true, required : true},
+    slug       : {type : String, trim : true, required : true, unique : true},
     countryIds : [{type: objectId}],
     cityIds    : [{type: objectId}],
     stateIds   : [{type: objectId}]
+});
+
+regionSchema.pre('save', function(next) {
+    var crypto = require('crypto');
+
+    if (this.isNew) {
+        //TODO fazer o gerador de slugs aqui
+        this.slug = 'slug-'+crypto.createHash('sha1').update(crypto.randomBytes(10)).digest('hex').substring(0, 10);
+    }
+
+    next();
 });
 
 /*  Exportando o pacote  */

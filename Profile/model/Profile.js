@@ -6,15 +6,16 @@
  */
  
 var mongoose = require('mongoose'),
+    crypto   = require('crypto'),
     schema   = mongoose.Schema,
     objectId = schema.ObjectId,
     profileSchema,
     Profile;
 
 profileSchema = new schema({
-    username    : {type : String, required : true, trim : true, unique : true},
+    userId      : {type : objectId},
     jobs        : [require('./Job.js').Job],
-    slugs       : [String],
+    slug        : {type : String, required : true, trim : true, unique : true},
     name        : {type : String, required : true, trim : true},
     surname     : {type : String, trim : true},
     thumbnail   : [require('./Thumbnail.js').Thumbnail],
@@ -26,6 +27,14 @@ profileSchema = new schema({
     dateUpdated : {type : Date}
 });
 
+profileSchema.pre('save', function(next) {
+    if (this.isNew) {
+        //TODO fazer o gerador de slugs aqui
+        this.slug = 'slug-'+crypto.createHash('sha1').update(crypto.randomBytes(10)).digest('hex').substring(0, 10);
+    }
+
+    next();
+});
 /** IsOwner
  * @author : Rafael Erthal e Lucas Kalado
  * @since : 2012-08
