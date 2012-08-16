@@ -32,4 +32,4 @@ sdk.modules.tracker = function (app) {
     this.track = function (event, properties) {
 
     }
-}
+};
