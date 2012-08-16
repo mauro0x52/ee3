@@ -159,7 +159,7 @@ sdk.modules.ui = function (app) {
                 }
                 return res;
             },
-    
+
             /** add
              *
              * @autor : Rafael Erthal
@@ -179,7 +179,7 @@ sdk.modules.ui = function (app) {
                     addAttribute(elements);
                 }
             },
-    
+
             /** remove
              *
              * @autor : Rafael Erthal
@@ -581,6 +581,7 @@ sdk.modules.ui = function (app) {
      */
     var Heading = function (params) {
         var element = new Element(params.id, 'h' + params.type);
+
         if (!params.type) {
             throw 'heading type is required';
         }
