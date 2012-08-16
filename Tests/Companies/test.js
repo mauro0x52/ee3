@@ -7,6 +7,7 @@
  */
 
 describe('Thumbnail', function() {
+	require("./Companies.js");
 	require("./Thumbnail.js");
 });
 

@@ -12,7 +12,7 @@ var mongoose = require('mongoose'),
     Company;
 
 companySchema = new Schema({
-    slug        : {type : String, lowercase : true , trim : true, required : true, unique : true},
+    slug        : {type : String, lowercase : true , trim : true, unique : true},
     name        : {type : String, trim : true, required : true},
     thumbnail   : require('./Thumbnail.js').ThumbnailStruct,
     members     : [objectId],
@@ -31,6 +31,17 @@ companySchema = new Schema({
     contacts    : [require('./Contact.js').Contact],
     links       : [require('./Link.js').Link],
     embeddeds   : [require('./Embedded.js').Embedded]
+});
+
+companySchema.pre('save', function(next) {
+	var crypto = require('crypto');
+	
+	if (this.isNew) {
+		//TODO fazer o gerador de slugs aqui
+		this.slug = 'slug-'+crypto.createHash('sha1').update(crypto.randomBytes(10)).digest('hex').substring(0, 10);
+	}
+
+	next();
 });
 
 /** IsOwner
@@ -74,11 +85,8 @@ companySchema.methods.findProduct = function (slug, cb) {
     
     //varre os produtos da empresa
     for (i = 0; i < this.products.length; i = i + 1) {
-        //varre as slugs do produto
-        for (j = 0; j < this.products[i].slugs.length; j = j + 1) {
-            if (this.products[i].slugs[j] === slug) {
-                product = this.products[i];
-            }
+        if (this.products[i].slug === slug) {
+            product = this.products[i];
         }
     }
     if (product) {

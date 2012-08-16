@@ -1,4 +1,4 @@
-/** Testes do Companies.Thumbnail
+/** Testes  Companies.Thumbnail
  *
  * @autor : Mauro Ribeiro
  * @since : 2012-08
@@ -17,7 +17,6 @@ var should = require("should"),
 random = rand();
 userName = 'testes+' + random + '@empreendemia.com.br';
 companyName = 'Empresa ' + random;
-companySlug = 'empresa-' + random;
 
 describe('POST /company/[slug]/thumbnail', function () {
 	before(function (done) {
@@ -30,9 +29,7 @@ describe('POST /company/[slug]/thumbnail', function () {
 			token = data.token;
 			// cria empresa
 			api.post('companies', '/company', {
-				login : userName,
 				token : token,
-				users : [data._id],
 				name : companyName,
 				slug : companySlug,
 				activity : 'consultoria em testes',
@@ -40,7 +37,7 @@ describe('POST /company/[slug]/thumbnail', function () {
 				profile : 'both',
 				active : true
 			}, function(error, data) {
-				console.log(data);
+				companySlug = data.slug;
 				if (error) return done(error);
 				else done();
 			});
@@ -50,7 +47,6 @@ describe('POST /company/[slug]/thumbnail', function () {
 	it('retorna erro quando nao envia imagem', function(done) {
 		api.file('companies', '/company/' + companySlug + '/thumbnail',
 			{
-				login : userName,
 				token : token
 			},
 			{},
@@ -66,12 +62,10 @@ describe('POST /company/[slug]/thumbnail', function () {
 			}
 		);
 	});
-	/*
 	it('retorna erro quando enviado token errado', function(done) {
 		api.file('companies', '/company/' + companySlug + '/thumbnail',
 			{
-				login : userName,
-				token : 'asd8vc89vc7vcx89fas872gjhibas',
+				token : 'asd8vc89vc7vcx89fas872gjhibas'
 			},
 			{
 				file : 'vader.jpg'
@@ -87,12 +81,10 @@ describe('POST /company/[slug]/thumbnail', function () {
 			}
 		);
 	});
-	
 	it('retorna informações das imagens quando enviar imagem', function(done) {
 		api.file('companies', '/company/' + companySlug + '/thumbnail',
 			{
-				login : userName,
-				token : token,
+				token : token
 			},
 			{
 				file : 'vader.jpg'
@@ -146,13 +138,12 @@ describe('POST /company/[slug]/thumbnail', function () {
 				}
 			}
 		);
-	});*/
+	});
 });
-/*
+
 random = rand();
 userName2 = 'testes+' + random + '@empreendemia.com.br';
 companyName2 = 'Empresa ' + random;
-companySlug2 = 'empresa-' + random;
 
 describe('GET /company/[slug]/thumbnail', function () {
 
@@ -173,13 +164,13 @@ describe('GET /company/[slug]/thumbnail', function () {
 						token : token2,
 						users : [userName2],
 						name : companyName2,
-						slug : companySlug2,
 						activity : 'consultoria em testes',
 						type : 'company',
 						profile : 'both',
 						active : true
 					},
 					function(error, data) {
+						companySlug2 = data.slug;
 						if (error) return done(error);
 						else done();
 					}
@@ -187,7 +178,6 @@ describe('GET /company/[slug]/thumbnail', function () {
 			}
 		);
 	});
-
 
 	it('retorna erro se não encontrar a empresa', function (done) {
 		api.get('companies', '/company/asddasddaoiheoins/thumbnail', {}, function(error, data, response) {
@@ -232,12 +222,14 @@ productSlug = 'produto-' + random;
 
 
 describe('POST /company/[slug]/product/[slug]/thumbnail', function () {
+
 	before(function (done) {
 		// cria produto
-		api.post('companies', '/company/' + companyName + '/product', {
+		api.post('companies', '/company/' + companySlug + '/product', {
 			login : userName,
 			token : token,
-			name : productName
+			name : productName,
+			slug : productSlug
 		}, function(error, data, response) {
 			if (error) return done(error);
 			else done();
@@ -254,7 +246,7 @@ describe('POST /company/[slug]/product/[slug]/thumbnail', function () {
 				if (error) return done(error);
 				else {
 					response.should.have.status(200);
-					should.exist(data && data.error ? true : undefined, 'não retornou erro');
+					should.exist(data.error, 'não retornou erro');
 					done();
 				}
 			}
@@ -273,7 +265,7 @@ describe('POST /company/[slug]/product/[slug]/thumbnail', function () {
 				if (error) return done(error);
 				else {
 					response.should.have.status(200);
-					should.exist(data && data.error ? true : undefined, 'não retornou erro');
+					should.exist(data.error, 'não retornou erro');
 					done();
 				}
 			}
@@ -282,8 +274,7 @@ describe('POST /company/[slug]/product/[slug]/thumbnail', function () {
 	it('retorna informações das imagens quando enviar imagem', function(done) {
 		api.file('companies', '/company/' + companySlug + '/product/' + productSlug + '/thumbnail',
 			{
-				login : userName,
-				token : token,
+				token : token
 			},
 			{
 				file : 'vader.jpg'
@@ -293,48 +284,47 @@ describe('POST /company/[slug]/product/[slug]/thumbnail', function () {
 				else {
 					response.should.have.status(200);
 					should.exist(data, 'não retornou dado nenhum');
-					should.not.exist(data && data.error ? true : undefined);
+					should.not.exist(data.error, 'erro indesejado');
 					(data && data.original && data.original.url ? data.original.url : '')
 						.should.match(/^http\:\/\/.+\/companies\/.+\/products\/.+\/thumbnails\/.+\/original\..+$/, 'não salvou o original corretamente');
 					(data && data.small && data.small.url ? data.small.url : '')
 						.should.match(/^http\:\/\/.+\/companies\/.+\/products\/.+\/thumbnails\/.+\/small\..+$/, 'não salvou o small corretamente');
-					(data && data.original && data.medium.url ? data.medium.url : '')
+					(data && data.medium && data.medium.url ? data.medium.url : '')
 						.should.match(/^http\:\/\/.+\/companies\/.+\/products\/.+\/thumbnails\/.+\/medium\..+$/, 'não salvou o medium corretamente');
-					(data && data.original && data.large.url ? data.original.url : '')
+					(data && data.large && data.large.url ? data.large.url : '')
 						.should.match(/^http\:\/\/.+\/companies\/.+\/products\/.+\/thumbnails\/.+\/large\..+$/, 'não salvou o large corretamente');
 					productImageUrl = data.original.url;
 					done();
 				}
 			}
 		);
-	});
-	
-	
+	});	
 	it('retorna informações das imagens quando enviar novamente', function (done) {
 		api.file('companies', '/company/' + companySlug + '/product/' + productSlug + '/thumbnail',
 			{
-				login : userName,
-				token : token,
+				token : token
 			},
 			{
 				file : 'vader.jpg'
 			},
-			function(error, data) {
+			function(error, data, response) {
 				if (error) return done(error);
 				else {
-					should.not.exist(data && data.error ? true : undefined);
+					response.should.have.status(200);
+					should.exist(data, 'não retornou dado nenhum');
+					should.not.exist(data.error, 'erro indesejado');
 					(data && data.original && data.original.url ? data.original.url : '')
-						.should.match('http\:\/\/.+\/companies\/.+\/products\/.+\/thumbnails\/.+\/original\..+', 'não salvou o original corretamente');
+						.should.match(/^http\:\/\/.+\/companies\/.+\/products\/.+\/thumbnails\/.+\/original\..+$/, 'não salvou o original corretamente');
 					(data && data.small && data.small.url ? data.small.url : '')
-						.should.match('http\:\/\/.+\/companies\/.+\/products\/.+\/thumbnails\/.+\/small\..+', 'não salvou o small corretamente');
-					(data && data.original && data.medium.url ? data.medium.url : '')
-						.should.match('http\:\/\/.+\/companies\/.+\/products\/.+\/thumbnails\/.+\/medium\..+', 'não salvou o medium corretamente');
-					(data && data.original && data.large.url ? data.original.url : '')
-						.should.match('http\:\/\/.+\/companies\/.+\/products\/.+\/thumbnails\/.+\/large\..+', 'não salvou o large corretamente');
+						.should.match(/^http\:\/\/.+\/companies\/.+\/products\/.+\/thumbnails\/.+\/small\..+$/, 'não salvou o small corretamente');
+					(data && data.medium && data.medium.url ? data.medium.url : '')
+						.should.match(/^http\:\/\/.+\/companies\/.+\/products\/.+\/thumbnails\/.+\/medium\..+$/, 'não salvou o medium corretamente');
+					(data && data.large && data.large.url ? data.large.url : '')
+						.should.match(/^http\:\/\/.+\/companies\/.+\/products\/.+\/thumbnails\/.+\/large\..+$/, 'não salvou o large corretamente');
 					productImageUrl.should.not.equal(data && data.original && data.large.url ? data.original.url : '', 'as urls deveriam ser diferentes');
 					done();
 				}
 			}
 		);
 	});
-});*/
+});

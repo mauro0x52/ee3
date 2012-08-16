@@ -24,7 +24,7 @@ module.exports = function (app) {
      * @allowedApp : Lista de Empresas
      * @allowedUser : Logado
      *
-     * @request : {login,token,file}
+     * @request : {token,file}
      * @response : {confirmation}
      */
     app.post('/company/:company_slug/product/:product_slug/thumbnail', function postProductThumbnail(request, response) {
@@ -45,7 +45,7 @@ module.exports = function (app) {
                             response.send({error : 'company not found'});
                         } else {
                             //verifica se o usuário é dono da compania
-                            if (!company.isOwner(request.param('login', null))) {
+                            if (!company.isOwner(user._id)) {
                                 response.send({error : 'permission denied'});
                             } else {
                                 //busca o produto
@@ -234,7 +234,7 @@ module.exports = function (app) {
      * @allowedApp : Lista de Empresas
      * @allowedUser : Logado
      *
-     * @request : {login,token,title,legend}
+     * @request : {token,title,legend}
      * @response : {confirmation}
      */
     app.put('/company/:company_slug/product/:product_slug/thumbnail', function (request, response) {
@@ -251,7 +251,7 @@ module.exports = function (app) {
      * @allowedApp : Lista de Empresas
      * @allowedUser : Logado
      *
-     * @request : {login,token}
+     * @request : {token}
      * @response : {confirmation}
      */
     app.del('/company/:company_slug/product/:product_slug/thumbnail', function (request, response) {
@@ -270,7 +270,7 @@ module.exports = function (app) {
                             response.send({error : 'company not found'});
                         } else {
                             //verifica se o usuário é dono da compania
-                            if (! company.isOwner(request.param('login', null))) {
+                            if (! company.isOwner(user._id)) {
                                 response.send({error : 'permission denied'});
                             } else {
                                 //busca o produto
@@ -314,7 +314,7 @@ module.exports = function (app) {
      * @allowedApp : Lista de Empresas
      * @allowedUser : Logado
      *
-     * @request : {login,token,file}
+     * @request : {token,file}
      * @response : {confirmation}
      */
     app.post('/company/:slug/thumbnail', function postCompanyThumbnail (request, response) {
@@ -333,7 +333,7 @@ module.exports = function (app) {
                             response.send({error : 'company not found'});
                         } else {
                             //verifica se o usuário é dono da compania
-                            if (!company.isOwner(request.param('login', null))) {
+                            if (!company.isOwner(user._id)) {
                                 response.send({error : 'permission denied'});
                             } else {
                                 // verifica se foi enviado algum arquivo
@@ -421,7 +421,6 @@ module.exports = function (app) {
                 if (company === null) {
                     response.send({error : 'company not found'});
                 } else {
-                	console.log(company);
                     // se o thumbnail nao esta setado
                     if (!company.thumbnail || !company.thumbnail.original || !company.thumbnail.original.url) {
                         response.send(undefined);
@@ -487,7 +486,7 @@ module.exports = function (app) {
      * @allowedApp : Lista de Empresas
      * @allowedUser : Logado
      *
-     * @request : {login,token,title,legend}
+     * @request : {token, file}
      * @response : {confirmation}
      */
     app.put('/company/:slug/thumbnail/:type', function (request, response) {
@@ -504,7 +503,7 @@ module.exports = function (app) {
      * @allowedApp : Lista de Empresas
      * @allowedUser : Logado
      *
-     * @request : {login,token}
+     * @request : {token}
      * @response : {confirmation}
      */
     app.del('/company/:slug/thumbnail', function (request, response) {
@@ -523,7 +522,7 @@ module.exports = function (app) {
                             response.send({error : 'company not found'});
                         } else {
                             //verifica se o usuário é dono da compania
-                            if (!company.isOwner(request.param('login', null))) {
+                            if (!company.isOwner(user._id)) {
                                 response.send({error : 'permission denied'});
                             } else {
                                 company.thumbnail = undefined;

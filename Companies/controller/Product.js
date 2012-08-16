@@ -22,10 +22,10 @@ module.exports = function (app) {
      * @allowedApp : Lista de Empresas
      * @allowedUser : Logado
      *
-     * @request : {login,token, name, slug, abstract, about}
-     * @response : {confirmation}
+     * @request : {token, name, slug, abstract, about}
+     * @response : {product}
      */
-    app.post('/company/:slug/product', function (request, response) {
+    app.post('/company/:company_slug/product', function (request, response) {
         var product = [];
 
         response.contentType('json');
@@ -34,7 +34,7 @@ module.exports = function (app) {
         auth(request.param('token', null), function (user) {
             if (user) {
                 //busca a compania
-                Company.findOne({slug : request.params.slug}, function (error, company) {
+                Company.findOne({slug : request.params.company_slug}, function (error, company) {
                     if (error) {
                         response.send({error : error});
                     } else {
@@ -43,13 +43,12 @@ module.exports = function (app) {
                             response.send({error : 'company not found'});
                         } else {
                             //verifica se o usuário é dono da compania
-                            if (! company.isOwner(request.param('login', null))) {
+                            if (! company.isOwner(user._id)) {
                                 response.send({error : 'permission denied'});
                             } else {
                                 //Adiciona os campos no objeto products
                                 company.products.push({
                                     name       : request.param('name', null),
-                                    slugs      : request.param('slugs', null),
                                     abstract   : request.param('abstract', null),
                                     about      : request.param('about', null)
                                 });
@@ -58,7 +57,7 @@ module.exports = function (app) {
                                     if (error) {
                                         response.send({error : error});
                                     } else {
-                                        response.send({error : ""});
+                                        response.send(company.products.pop());
                                     }
                                 })
                             }
@@ -145,7 +144,7 @@ module.exports = function (app) {
      * @allowedApp : Lista de Empresas
      * @allowedUser : Logado
      *
-     * @request : {login,token,name,slug,abstract,about}
+     * @request : {token,name,slug,abstract,about}
      * @response : {confirmation}
      */
     app.put('/company/:company_slug/product/:product_slug', function (request, response) {
@@ -164,12 +163,12 @@ module.exports = function (app) {
                             response.send({error : 'company not found'});
                         } else {
                             //verifica se o usuário é dono da compania
-                            if (! company.isOwner(request.param('login', null))) {
+                            if (! company.isOwner(user._id)) {
                                 response.send({error : 'permission denied'});
                             } else {
                                 company.findProduct(request.params.product_slug, function(error, product){
                                     product.name = request.param('name');
-                                    product.slugs = request.param('slugs');
+                                    product.slug = request.param('slug');
                                     product.abstract = request.param('abstract');
                                     product.about = request.param('about');
                                     
@@ -201,7 +200,7 @@ module.exports = function (app) {
      * @allowedApp : Lista de Empresas
      * @allowedUser : Logado
      *
-     * @request : {login,token}
+     * @request : {token}
      * @response : {confirmation}
      */
     app.del('/company/:company_slug/product/:product_slug', function (request, response) {
@@ -220,7 +219,7 @@ module.exports = function (app) {
                             response.send({error : 'company not found'});
                         } else {
                             //verifica se o usuário é dono da compania
-                            if (! company.isOwner(request.param('login', null))) {
+                            if (! company.isOwner(user._id)) {
                                 response.send({error : 'permission denied'});
                             } else {
                                 company.findProduct (request.params.product_slug, function(error, product){

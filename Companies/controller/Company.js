@@ -35,10 +35,9 @@ module.exports = function (app) {
             if (user) {
                 //Cria o Objeto Company para adicionar no Model
                 company = new Company({
-                    slug       : request.param("slug"),
                     name       : request.param("name"),
                     members    : request.param("members"),
-                    users      : request.param("users"),
+                    users      : [user._id],
                     sectors    : request.param("sectors"),
                     products   : request.param("products"),
                     addresses  : request.param("addresses"),
@@ -59,7 +58,7 @@ module.exports = function (app) {
                     if (error) {
                         response.send({error : error});
                     } else {
-                        response.send({company : company});
+                        response.send(company);
                     }
                 });
             } else {
@@ -88,13 +87,17 @@ module.exports = function (app) {
     app.get('/companies', function (request, response) {
         response.contentType('json');
 
-        Company.find(function (error, companies){
-            if (error) {
-                response.send({error : error })
-            } else {
-                response.send({Companies : companies});
-            }
-        })
+        Company.find()
+        .limit(request.param('limit', 10) < 20 ? request.param('limit', 10) : 20)
+        .exec(
+        	function (error, companies){
+	            if (error) {
+	                response.send({error : error })
+	            } else {
+	                response.send({companies : companies});
+	            }
+        	}
+        )
     });
 
     /** GET /company/:slug
@@ -110,11 +113,13 @@ module.exports = function (app) {
      * @request : {attributes :{members,products,addresses,badges,about ,embeddeds,phones,contacts,links}}
      * @response : {slug,name,thumbnails,sectors,city,type,profile,tags,activity,abstract}
      */
-    app.get('/company/:slug', function (request, response) {
+    app.get('/company/:id', function (request, response) {
         response.contentType('json');
 
-        //busca a compania
-        Company.findOne({slug : request.params.slug}, function (error, company) {
+
+		var id = request.params.id;
+		
+		var findCompany = function (error, company) {
             if (error) {
                 response.send({error : error});
             } else {
@@ -122,10 +127,18 @@ module.exports = function (app) {
                 if (company === null) {
                     response.send({error : 'company not found'});
                 } else {
-                    response.send({company : company});
+                    response.send(company);
                 }
             }
-        });
+		}
+
+		if (new RegExp("[0-9 a-f]{24}").test(id)) {
+			// procura por id
+	        Company.find(ObjectId(id), findCompany);
+		} else {
+			// procura por slug
+	        Company.findOne({slug : id}, findCompany);
+		}
     });
 
     /** PUT /company/:slug

@@ -13,7 +13,7 @@ var mongoose = require('mongoose'),
 
 productSchema = new Schema({
     name       : {type : String, trim : true, required : true},
-    slugs      : [{type : String, trim : true, required : true, unique : true}],
+    slug       : {type : String, trim : true},
     thumbnail  : require('./Thumbnail.js').ThumbnailStruct,
     abstract   : {type : String},
     about      : {type : String},
@@ -29,18 +29,30 @@ productSchema = new Schema({
  */
 productSchema.pre('save', function (next) {
     "use strict";
+	var crypto = require('crypto');
+	
+	if (this.isNew) {
+		//TODO fazer o gerador de slugs aqui
+		this.slug = 'slug-'+crypto.createHash('sha1').update(crypto.randomBytes(10)).digest('hex').substring(0, 10);
+	}
 
-    Product.findOne({"slugs" : {$in : this.slugs}, _id : {$ne : this._id}}, function (error, app) {
-        if (error) {
-            next(error);
-        } else {
-            if (app === null) {
-                next();
-            } else {
-                next('slug already exists');
-            }
-        }
-    });
+	next();
+/*
+	var i,
+		j;
+
+	for (i = 0; i < this.parent.products.length; i = i + 1) {
+		if (this.parent.products[i].isNew) {
+			for (j = 0; j < this.parent.products.length; j = j + 1) {
+				if (this.parent.products[i]._id !== this.parent.products[j]._id && this.parent.products[i].slug === this.parent.products[j].slug) {
+					next(new Error('slug already exist'));
+				}
+			}
+		}
+	}
+	
+	next();*/
+
 });
 
 /** FindImage
