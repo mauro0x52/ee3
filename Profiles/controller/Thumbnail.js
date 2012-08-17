@@ -10,9 +10,10 @@ module.exports = function (app) {
 
     var Model = require('./../model/Model.js'),
         auth  = require('./../Utils.js').auth,
+        files  = require('./../Utils.js').files,
         Profile = Model.Profile;
 
-    /** POST /profile/:slug/thumbnail
+    /** POST /profile/:profile_id/thumbnail
      *
      * @autor : Rafael Erthal
      * @since : 2012-08
@@ -25,14 +26,14 @@ module.exports = function (app) {
      * @request : {login,token}
      * @response : {confirmation}
      */
-    app.post('/profile/:slug/thumbnail', function (request, response) {
+    app.post('/profile/:profile_id/thumbnail', function (request, response) {
         response.contentType('json');
 
         //valida o token do usuário
         auth(request.param('token'), function (user) {
             if (user) {
                 //busca o perfil
-                Profile.findOne({"slugs" : request.params.slug}, function (error, profile) {
+                Profile.findByIdentity(profile_id, function (error, profile) {
                     if (error) {
                         response.send({error : error});
                     } else {
@@ -40,24 +41,60 @@ module.exports = function (app) {
                         if (profile === null) {
                             response.send({error : 'profile not found'});
                         } else {
-                            //verifica se o usuário é dono da compania
+                            //verifica se o usuário é dono do perfil
                             if (! profile.isOwner(request.param('login', null))) {
                                 response.send({error : 'permission denied'});
                             } else {
-                                //coloca os dados do post em um objeto
-                                profile.thumbnails.push({
-                                     small  : request.param('small'),
-                                     medium : request.param('medium'),
-                                     large  : request.param('large')
-                                });
-                                //salva o thumbnail
-                                profile.save(function (error) {
-                                    if (error) {
-                                        response.send({error : error});
-                                    } else {
-                                        response.send({error : ''});
-                                    }
-                                });
+                                // verifica se foi enviado algum arquivo
+                                if (!request.files || !request.files.file) {
+                                    response.send({error : 'no selected file'});
+                                } else {
+	                                // faz upload dos thumbnails
+	                                files.image.thumbnail.upload(
+	                                    request.files.file,
+	                                    '/profiles/' + profile.slug + '/thumbnails',
+	                                    function (error, data) {
+	                                        if (error) {
+	                                            response.send({error : error});
+	                                        } else {
+	                                        	product.thumbnail = {
+	                                            	original : {
+	                                            		file : data.original._id,
+	                                            		url : data.original.url,
+	                                            		title : 'thumbnail',
+	                                            		legend : 'original'
+	                                            	},
+	                                            	small : {
+	                                        			file : data.small._id,
+	                                            		url : data.small.url,
+	                                            		title : 'thumbnail',
+	                                            		legend : '50x50 thumbnail'
+	                                            	},
+	                                            	medium : {
+	                                            		file : data.medium._id,
+	                                            		url : data.medium.url,
+	                                            		title : 'thumbnail',
+	                                            		legend : '100x100 thumbnail'
+	                                            	},
+	                                            	large : {
+	                                            		file : data.large._id,
+	                                            		url : data.large.url,
+	                                            		title : 'thumbnail',
+	                                            		legend : '200x200 thumbnail'
+	                                            	}
+	                                            };
+	                                            product.save(function (error) {
+	                                            	if (error) {
+	                                            		response.send({error: error});
+	                                            	}
+	                                            	else {
+	                                            		response.send(product.thumbnail);
+	                                            	}
+	                                            });
+	                                        }
+	                                    }
+	                                );
+	                            }
                             }
                         }
                     }
@@ -68,7 +105,7 @@ module.exports = function (app) {
         });
     });
 
-    /** GET /profile/:slug/thumbnails
+    /** GET /profile/:profile_id/thumbnails
      *
      * @autor : Rafael Erthal
      * @since : 2012-08
@@ -81,11 +118,11 @@ module.exports = function (app) {
      * @request : {}
      * @response : {[{}]}
      */
-    app.get('/profile/:slug/thumbnails', function (request, response) {
+    app.get('/profile/:profile_id/thumbnails', function (request, response) {
         response.contentType('json');
 
         //busca o perfil
-        Profile.findOne({"slugs" : request.params.slug}, function (error, profile) {
+        Profile.findByIdentity(profile_id, function (error, profile) {
             if (error) {
                 response.send({error : error});
             } else {
@@ -99,7 +136,7 @@ module.exports = function (app) {
         });
     });
 
-    /** GET /profile/:slug/thumbnail/:id
+    /** GET /profile/:profile_id/thumbnail/:id
      *
      * @autor : Rafael Erthal
      * @since : 2012-08
@@ -112,11 +149,11 @@ module.exports = function (app) {
      * @request : {}
      * @response : {}
      */
-    app.get('/company/:slug/thumbnail/:id', function (request, response) {
+    app.get('/company/:profile_id/thumbnail/:id', function (request, response) {
         response.contentType('json');
 
         //busca o perfil
-        Profile.findOne({"slugs" : request.params.slug}, function (error, profile) {
+        Profile.findByIdentity(profile_id, function (error, profile) {
             if (error) {
                 response.send({error : error});
             } else {
@@ -142,7 +179,7 @@ module.exports = function (app) {
         });
     });
 
-    /** PUT /profile/:slug/thumbnail/:id
+    /** PUT /profile/:profile_id/thumbnail/:id
      *
      * @autor : Rafael Erthal
      * @since : 2012-08
@@ -155,14 +192,14 @@ module.exports = function (app) {
      * @request : {login,token}
      * @response : {confirmation}
      */
-    app.put('/profile/:slug/thumbnail/:id', function (request, response) {
+    app.put('/profile/:profile_id/thumbnail/:id', function (request, response) {
         response.contentType('json');
 
         //valida o token do usuário
         auth(request.param('token'), function (user) {
             if (user) {
                 //busca o perfil
-                Profile.findOne({"slugs" : request.params.slug}, function (error, profile) {
+                Profile.findByIdentity(profile_id, function (error, profile) {
                     if (error) {
                         response.send({error : error});
                     } else {
@@ -210,7 +247,7 @@ module.exports = function (app) {
         });
     });
 
-    /** DEL /profile/:slug/contact/:idContact/thumbnail/:id
+    /** DEL /profile/:profile_id/contact/:idContact/thumbnail/:id
      *
      * @autor : Rafael Erthal
      * @since : 2012-08
@@ -223,14 +260,14 @@ module.exports = function (app) {
      * @request : {login,token}
      * @response : {confirmation}
      */
-    app.del('/profile/:slug/contact/:idContact/thumbnail/:id', function (request, response) {
+    app.del('/profile/:profile_id/contact/:idContact/thumbnail/:id', function (request, response) {
         response.contentType('json');
 
         //valida o token do usuário
         auth(request.param('token'), function (user) {
             if (user) {
                 //busca o perfil
-                Profile.findOne({"slugs" : request.params.slug}, function (error, profile) {
+                Profile.findByIdentity(profile_id, function (error, profile) {
                     if (error) {
                         response.send({error : error});
                     } else {

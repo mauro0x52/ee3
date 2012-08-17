@@ -6,7 +6,7 @@
  * @description : Kit de testes do serviço Companies
  */
 
-describe('Thumbnail', function() {
+describe('Company', function() {
 	require("./Company.js");
 });
 describe('Product', function() {
