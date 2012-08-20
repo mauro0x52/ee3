@@ -55,9 +55,9 @@ module.exports = function (app) {
                             //salva a autorização
                             user.save(function (error) {
                                 if (error) {
-                                    response.send({error : error});
+                                    response.send({err : error});
                                 } else {
-                                    response.send({error : '', token : token});
+                                    response.send({token : token});
                                 }
                             });
                         }

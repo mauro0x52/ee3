@@ -743,6 +743,73 @@ sdk.modules.ui = function (app) {
         this.inputs.add(params.inputs);
     };
 
+    /** Input
+     *
+     * @autor : Rafael Erthal
+     * @since : 2012-08
+     *
+     * @description : implementa a tag input
+     * @param id : id do objeto a ser criado
+     */
+    var Input = function (params) {
+        var element= new Element(params.id, 'textarea'),
+            label = new Element(undefined, 'label'),
+            input,
+            i;
+
+        label.value(params.label);
+        label.attributes.add({name : 'for', value : params.id});
+
+        if (params.type === 'textarea') {
+            input = new Element(undefined, 'textarea');
+            input.attributes.add({name : 'name', value : params.id});
+            input.value(params.value);
+            element.childs.add(input);
+        } else if (params.type === 'select') {
+            input = new Element(undefined, 'select');
+            input.attributes.add({name : 'name', value : params.id});
+            for (i in params.options) {
+                var option = new Element(undefined, 'option');
+                option.attributes.add({name : 'name', value : i});
+                option.value(params.options[i]);
+                input.childs.add(option);
+            }
+            element.childs.add(input);
+        } else if (params.type === 'radio') {
+            for (i in params.options) {
+                var option = new Element(undefined, 'input');
+                option.attributes.add({name : 'type', value : 'radio'});
+                option.attributes.add({name : 'name', value : params.id});
+                option.attributes.add({name : 'value', value : i});
+                element.childs.add(option);
+                element.value(params.options[i], "after")
+            }
+        } else if (params.type === 'text') {
+            input = new Element(undefined, 'input');
+            option.attributes.add({name : 'type', value : 'text'});
+            input.attributes.add({name : 'name', value : params.id});
+            input.attributes.add({name : 'value', value : params.value});
+            element.childs.add(input);
+        } else if (params.type === 'passowrd') {
+            input = new Element(undefined, 'input');
+            option.attributes.add({name : 'type', value : 'password'});
+            input.attributes.add({name : 'name', value : params.id});
+            input.attributes.add({name : 'value', value : params.value});
+            element.childs.add(input);
+        } else if (params.type === 'checkbox') {
+            input = new Element(undefined, 'input');
+            option.attributes.add({name : 'type', value : 'checkbox'});
+            input.attributes.add({name : 'name', value : params.id});
+            input.attributes.add({name : 'value', value : params.value});
+            element.childs.add(input);
+        } else {
+            throw 'invalid input type'
+        }
+
+        this.add = element.add;
+        this.remove = element.remove;
+    };
+
     /** MenuOption
      *
      * @autor : Rafael Erthal
