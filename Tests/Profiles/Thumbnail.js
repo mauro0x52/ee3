@@ -198,8 +198,7 @@ describe('GET /company/:profile_id/thumbnail', function () {
     });
     it('perfil sem thumbnail', function (done) {
         api.get('profiles', '/profile/' + profile2.slug + '/thumbnail', {}, function(error, data, response) {
-            should.not.exist(data.error, 'retornou erro inexperado');
-            should.not.exist(data.original);
+            should.not.exist(data, 'retorna vazio');
             done();
         });
     });

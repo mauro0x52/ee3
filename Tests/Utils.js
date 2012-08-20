@@ -11,9 +11,9 @@ var fs = require('fs');
 
 var api = {
     get : function(service, url, data, cb) {
-        restler.get('http://'+config.services[service].host+':'+config.services[service].port+url, {
-            data: data
-        }).on('success', function(data, response) {
+        var qs = require('querystring');
+        restler.get('http://'+config.services[service].host+':'+config.services[service].port+url+'?'+qs.stringify(data))
+        .on('success', function(data, response) {
             cb(undefined, data, response);
         }).on('error', function(error) {
             cb(error);
