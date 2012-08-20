@@ -23,7 +23,7 @@ module.exports = {
             options = {
                 host: 'localhost',
                 path: '/user/validate?token=' + token,
-                port: '3300',
+                port: config.services.auth.port,
                 method: 'GET'
             };
         
@@ -36,7 +36,8 @@ module.exports = {
             //ao terminar o recebimentos dos dados, chamar o callback com a resposta se o usuário foi ou não autenticado
             answer.on('end', function () {
                 var response = JSON.parse(str);
-                cb(response);
+                if (response.error) cb(undefined);
+                else cb(response);
             });
         }).end();
     },

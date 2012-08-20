@@ -15,7 +15,7 @@ var mongoose = require('mongoose'),
 profileSchema = new schema({
     userId      : {type : objectId},
     jobs        : [require('./Job.js').Job],
-    slug        : {type : String, required : true, trim : true, unique : true},
+    slug        : {type : String, trim : true, unique : true},
     name        : {type : String, required : true, trim : true},
     surname     : {type : String, trim : true},
     thumbnail   : [require('./Thumbnail.js').Thumbnail],

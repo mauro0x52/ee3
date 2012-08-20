@@ -8,55 +8,71 @@
 
 var should = require("should"),
 	api = require("../Utils.js").api,
-	rand = require("../Utils.js").rand;
+	rand = require("../Utils.js").rand,
+	user, profile;
 
 random = rand();
-userName = 'testes+' + random + '@empreendemia.com.br';
-profileName = 'Empresa ' + random;
+user = {
+	username : 'testes+' + random + '@empreendemia.com.br'
+};
+profile = {
+	name : 'Nome' + random,
+	surname : 'Sobrenome' + random
+};
 
-describe('POST /company/[id]/thumbnail', function () {
+describe('POST /profile/[id]/thumbnail', function () {
 	before(function (done) {
 		// cria usuario
 		api.post('auth', '/user', {
-			username : userName,
+			username : user.username,
 			password : 'testando',
 			password_confirmation : 'testando'
 		}, function(error, data) {
-			token = data.token;
+			user.token = data.token;
 			// cria empresa
-			api.post('companies', '/company', {
-				token : token,
-				name : companyName,
-				activity : 'consultoria em testes',
-				type : 'company',
-				profile : 'both',
-				active : true
+			api.post('profiles', '/profile', {
+				token : user.token,
+				name : profile.name,
+				surname : profile.surname,
+				about : 'sobre'
 			}, function(error, data) {
-				company = data;
+				profile = data;
 				if (error) return done(error);
 				else done();
 			});
 		});
 	});
 
-	it('não envia imagem', function(done) {
-		api.file('companies', '/company/' + company.slug + '/thumbnail',
-			{
-				token : token
-			},
+
+	it('url tem que existir', function(done) {
+		api.post('profiles', '/profile/' + profile.slug + '/thumbnail',
+			{},
 			{},
 			function(error, data, response) {
 				if (error) return done(error);
 				else {
-					should.exist(response, 'serviço de companies está inacessível');
 					response.should.have.status(200);
 					should.exist(data, 'não retornou dado nenhum');
-					should.exist(data.error, 'não retornou erro');
 					done();
 				}
 			}
 		);
 	});
+	it('não envia imagem', function(done) {
+		api.file('profiles', '/profile/' + profile.slug + '/thumbnail',
+			{
+				token : user.token
+			},
+			{},
+			function(error, data, response) {
+				if (error) return done(error);
+				else {
+					should.exist(data.error, 'não retornou erro');
+					done();
+				}
+			}
+		);
+	});/*
 	it('token errado', function(done) {
 		api.file('companies', '/company/' + company.slug  + '/thumbnail',
 			{
@@ -133,9 +149,10 @@ describe('POST /company/[id]/thumbnail', function () {
 				}
 			}
 		);
-	});
+	});*/
 });
 
+/*
 random = rand();
 userName2 = 'testes+' + random + '@empreendemia.com.br';
 companyName2 = 'Empresa ' + random;
@@ -213,7 +230,6 @@ describe('DEL /company/[id]/thumbnail', function() {
 });
 
 productName = 'Produto ' + random;
-
 
 describe('POST /company/[id]/product/[id]/thumbnail', function () {
 
@@ -318,4 +334,4 @@ describe('POST /company/[id]/product/[id]/thumbnail', function () {
 			}
 		);
 	});
-});
+});*/

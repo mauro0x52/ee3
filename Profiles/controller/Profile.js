@@ -57,14 +57,12 @@ module.exports = function (app) {
         var profile;
 
         response.contentType('json');
-
         //Verifica se o usuário logado é válido
         auth(request.param('token'), function (user) {
             if (user) {
                 //Cria o Objeto Profile para adicionar no Model
                 profile = new Profile({
-                    username    : request.param('login', null),
-                    slugs       : request.param('slugs', null),
+                	userId		: user._id,
                     name        : request.param('name', null),
                     surname     : request.param('surname', null),
                     about       : request.param('about', null),
@@ -77,7 +75,7 @@ module.exports = function (app) {
                     if (error) {
                         response.send({error : error});
                     } else {
-                        response.send({Profile : profile});
+                        response.send(profile);
                     }
                 });
             } else {
@@ -122,7 +120,7 @@ module.exports = function (app) {
                                 if (error) {
                                     response.send({error : error});
                                 } else {
-                                    response.send({Profile : profile});
+                                    response.send(profile);
                                 }
                             });
                         }
