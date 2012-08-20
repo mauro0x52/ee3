@@ -13,29 +13,37 @@ var api = {
     get : function(service, url, data, cb) {
         restler.get('http://'+config.services[service].host+':'+config.services[service].port+url, {
             data: data
-        }).on('complete', function(data, response) {
+        }).on('success', function(data, response) {
             cb(undefined, data, response);
+        }).on('error', function(error) {
+            cb(error);
         });
     },
     post : function(service, url, data, cb) {
         restler.post('http://'+config.services[service].host+':'+config.services[service].port+url, {
             data: data
-        }).on('complete', function(data, response) {
+        }).on('success', function(data, response) {
             cb(undefined, data, response);
+        }).on('error', function(error) {
+            cb(error);
         });
     },
     put : function(service, url, data, cb) {
         restler.put('http://'+config.services[service].host+':'+config.services[service].port+url, {
             data: data
-        }).on('complete', function(data, response) {
+        }).on('success', function(data, response) {
             cb(undefined, data, response);
+        }).on('error', function(error) {
+            cb(error);
         });
     },
     del : function(service, url, data, cb) {
         restler.del('http://'+config.services[service].host+':'+config.services[service].port+url, {
             data: data
-        }).on('complete', function(data, response) {
+        }).on('success', function(data, response) {
             cb(undefined, data, response);
+        }).on('error', function(error) {
+            cb(error);
         });
     },
     file : function(service, url, data, files, cb) {
@@ -51,11 +59,11 @@ var api = {
         restler.post('http://'+config.services[service].host+':'+config.services[service].port+url, {
             multipart: true,
             data: data
-        }).on('complete', function(data, response) {
+        }).on('success', function(data, response) {
             cb(undefined, data, response);
-        });/*.on('error', function(error) {
+        }).on('error', function(error) {
             cb(error);
-        });*/
+        });
     }
 }
 

@@ -10,7 +10,7 @@ var should = require("should"),
     api = require("../Utils.js").api,
     db = require("../Utils.js").db,
     rand = require("../Utils.js").rand,
-    token, companyImageUrl, productImageUrl, random, 
+    token, companyImageUrl, productImageUrl, random,
     userName, companyName, productName, company, product,
     token2, userName2, companyName2, productName2, company2, product2;
 
@@ -43,6 +43,20 @@ describe('POST /company/[id]/thumbnail', function () {
         });
     });
 
+
+    it('url existe', function(done) {
+        api.post('companies', '/company/' + company.slug + '/thumbnail',
+            {},
+            function(error, data, response) {
+                if (error) return done(error);
+                else {
+                    should.exist(response, 'serviço de companies está inacessível');
+                    response.should.have.status(200);
+                    done();
+                }
+            }
+        );
+    });
     it('não envia imagem', function(done) {
         api.file('companies', '/company/' + company.slug + '/thumbnail',
             {
@@ -52,8 +66,6 @@ describe('POST /company/[id]/thumbnail', function () {
             function(error, data, response) {
                 if (error) return done(error);
                 else {
-                    should.exist(response, 'serviço de companies está inacessível');
-                    response.should.have.status(200);
                     should.exist(data, 'não retornou dado nenhum');
                     should.exist(data.error, 'não retornou erro');
                     done();
@@ -72,7 +84,6 @@ describe('POST /company/[id]/thumbnail', function () {
             function(error, data, response) {
                 if (error) return done(error);
                 else {
-                    response.should.have.status(200);
                     should.exist(data, 'não retornou dado nenhum');
                     should.exist(data && data.error ? true : undefined, 'não retornou erro');
                     done();
@@ -91,9 +102,8 @@ describe('POST /company/[id]/thumbnail', function () {
             function(error, data, response) {
                 if (error) return done(error);
                 else {
-                    response.should.have.status(200);
                     should.exist(data, 'não retornou dado nenhum');
-                    should.not.exist(data.error);
+                    should.not.exist(data.error, 'não pode retornar erro');
                     (data && data.original && data.original.url ? data.original.url : '')
                         .should.match(/^http\:\/\/.+\/companies\/.+\/thumbnails\/.+\/original\..+$/, 'não salvou o original corretamente');
                     (data && data.small && data.small.url ? data.small.url : '')
@@ -121,7 +131,6 @@ describe('POST /company/[id]/thumbnail', function () {
             function(error, data, response) {
                 if (error) return done(error);
                 else {
-                    response.should.have.status(200);
                     should.exist(data, 'não retornou dado nenhum');
                     should.not.exist(data && data.error ? true : undefined);
                     (data && data.original && data.original.url ? data.original.url : '')
@@ -213,7 +222,7 @@ describe('GET /company/[id]/thumbnail', function () {
 });
 
 describe('DEL /company/[id]/thumbnail', function() {
-    
+
 });
 
 productName = 'Produto ' + random;
@@ -293,7 +302,7 @@ describe('POST /company/[id]/product/[id]/thumbnail', function () {
                 }
             }
         );
-    });    
+    });
     it('envia mesma imagem de produto', function (done) {
         api.file('companies', '/company/' + company.slug + '/product/' + product._id + '/thumbnail',
             {
