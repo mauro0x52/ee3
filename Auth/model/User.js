@@ -52,6 +52,26 @@ userSchema.pre('save', function (next) {
     next();
 });
 
+/** FindByIdOrUsername
+ * @author : Mauro Ribeiro
+ * @since : 2012-08
+ *
+ * @description : Procura um usuário pelo id ou pelo username
+ * @param id : id ou username do produto
+ * @param cb : callback a ser chamado
+ */
+userSchema.statics.findByIdentity = function (id, cb) {
+    "use strict";
+
+    if (new RegExp("[0-9 a-f]{24}").test(id)) {
+        // procura por id
+        User.findById(id, cb);
+    } else {
+        // procura por username
+        User.findOne({username : id}, cb);
+    }
+};
+
 /** GenerateToken
  * @author : Rafael Erthal
  * @since : 2012-07

@@ -28,7 +28,7 @@ module.exports = function (app) {
         response.contentType('json');
 
         //localiza o usuário
-        User.findOne({username : request.params.login}, function (error, user) {
+        User.findByIdentity(request.params.login, function (error, user) {
             if (error) {
                 response.send({error : error});
             } else {
@@ -52,7 +52,7 @@ module.exports = function (app) {
                                 if (error) {
                                     response.send({error : error});
                                 } else {
-                                    response.send({error : ''});
+                                    response.send();
                                 }
                             });
                         }
@@ -79,7 +79,7 @@ module.exports = function (app) {
         response.contentType('json');
 
         //localiza o usuário
-        User.findOne({username : request.params.login}, function (error, user) {
+        User.findByIdentity(request.params.login, function (error, user) {
             if (error) {
                 response.send({error : error});
             } else {
@@ -120,7 +120,7 @@ module.exports = function (app) {
         response.contentType('json');
 
         //localiza o usuário
-        User.findOne({username : request.params.login}, function (error, user) {
+        User.findByIdentity(request.params.login, function (error, user) {
             if (error) {
                 response.send({error : error});
             } else {
@@ -174,7 +174,7 @@ module.exports = function (app) {
         response.contentType('json');
 
         //localiza o usuário
-        User.findOne({username : request.params.login}, function (error, user) {
+        User.findByIdentity(request.params.login, function (error, user) {
             if (error) {
                 response.send({error : error});
             } else {

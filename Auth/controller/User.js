@@ -47,7 +47,7 @@ module.exports = function (app) {
                         if (error) {
                             response.send({error : error});
                         } else {
-                            response.send({_id : user._id, token : user.token});
+                            response.send(user);
                         }
                     });
                 }
@@ -74,7 +74,7 @@ module.exports = function (app) {
         response.contentType('json');
 
         //localiza o usuário
-        User.findOne({username : request.params.login}, function (error, user) {
+        User.findByIdentity(request.params.login, function (error, user) {
             if (error) {
                 response.send({error : error});
             } else {
@@ -92,7 +92,7 @@ module.exports = function (app) {
                                 if (error) {
                                     response.send({error : error});
                                 } else {
-                                    response.send({error : ''});
+                                    response.send();
                                 }
                             });
                         }
@@ -119,7 +119,7 @@ module.exports = function (app) {
         response.contentType('json');
 
         //localiza o usuário
-        User.findOne({username : request.params.login}, function (error, user) {
+        User.findByIdentity(request.params.login, function (error, user) {
             if (error) {
                 response.send({error : error});
             } else {
@@ -137,7 +137,7 @@ module.exports = function (app) {
                                 if (error) {
                                     response.send({error : error});
                                 } else {
-                                    response.send({error : ''});
+                                    response.send();
                                 }
                             });
                         }
@@ -166,7 +166,7 @@ module.exports = function (app) {
         // valida se a senha e a confirmação senha conferem
         if (request.param('newpassword', null) === request.param('newpasswordconfirmation', null)) {
             //localiza o usuário
-            User.findOne({username : request.params.login}, function (error, user) {
+            User.findByIdentity(request.params.login, function (error, user) {
                 if (error) {
                     response.send({error : error});
                 } else {
@@ -189,7 +189,7 @@ module.exports = function (app) {
                                             if (error) {
                                                 response.send({error : error});
                                             } else {
-                                                response.send({token : this.token, error : ''});
+                                                response.send(user);
                                             }
                                         });
                                     }
@@ -221,7 +221,7 @@ module.exports = function (app) {
         response.contentType('json');
 
         //localiza o usuário
-        User.findOne({username : request.params.login}, function (error, user) {
+        User.findByIdentity(request.params.login, function (error, user) {
             if (error) {
                 response.send({error : error});
             } else {
@@ -238,7 +238,7 @@ module.exports = function (app) {
                             if (error) {
                                 response.send({error : error});
                             } else {
-                                response.send({token : user.token, error : ''});
+                                response.send({token : user.token});
                             }
                         });
                     }
@@ -264,7 +264,7 @@ module.exports = function (app) {
         response.contentType('json');
 
         //localiza o usuário
-        User.findOne({username : request.params.login}, function (error, user) {
+        User.findByIdentity(request.params.login, function (error, user) {
             if (error) {
                 response.send({error : error});
             } else {
@@ -282,7 +282,7 @@ module.exports = function (app) {
                                 if (error) {
                                     response.send({error : error});
                                 } else {
-                                    response.send({error : ''});
+                                    response.send();
                                 }
                             });
                         }
@@ -317,7 +317,7 @@ module.exports = function (app) {
                 if (user === null) {
                     response.send({error : 'invalid token'});
                 } else {
-                    response.send({_id: user._id});
+                    response.send(user);
                 }
             }
         });
