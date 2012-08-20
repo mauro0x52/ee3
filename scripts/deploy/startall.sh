@@ -25,7 +25,8 @@ startAll() {
     do
         cd $SERVICE
         echo "- Iniciando $SERVICE"
-        forever start ${SERVICE,,}.js &
+        forever start ${SERVICE,,}.js
+        echo
         cd ..
     done
 }

@@ -7,15 +7,15 @@
  */
 
 describe('Company', function() {
-	require("./Company.js");
+    require("./Company.js");
 });
 describe('Product', function() {
-	require("./Product.js");
+    require("./Product.js");
 });
 describe('Sector', function() {
-	require("./Sector.js");
+    require("./Sector.js");
 });
 describe('Thumbnail', function() {
-	require("./Thumbnail.js");
+    require("./Thumbnail.js");
 });
 

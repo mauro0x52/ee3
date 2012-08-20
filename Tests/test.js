@@ -8,9 +8,9 @@
 
 
 describe('Auth', function() {
-	require("./Auth/test.js");
+    require("./Auth/test.js");
 })
 
 describe('Companies', function() {
-	require("./Companies/test.js");
+    require("./Companies/test.js");
 })

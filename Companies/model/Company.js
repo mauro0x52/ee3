@@ -33,14 +33,14 @@ companySchema = new Schema({
 });
 
 companySchema.pre('save', function(next) {
-	var crypto = require('crypto');
-	
-	if (this.isNew) {
-		//TODO fazer o gerador de slugs aqui
-		this.slug = 'slug-'+crypto.createHash('sha1').update(crypto.randomBytes(10)).digest('hex').substring(0, 10);
-	}
+    var crypto = require('crypto');
+    
+    if (this.isNew) {
+        //TODO fazer o gerador de slugs aqui
+        this.slug = 'slug-'+crypto.createHash('sha1').update(crypto.randomBytes(10)).digest('hex').substring(0, 10);
+    }
 
-	next();
+    next();
 });
 
 
@@ -55,13 +55,13 @@ companySchema.pre('save', function(next) {
 companySchema.statics.findByIdentity = function (id, cb) {
     "use strict";
 
-	if (new RegExp("[0-9 a-f]{24}").test(id)) {
-		// procura por id
+    if (new RegExp("[0-9 a-f]{24}").test(id)) {
+        // procura por id
         Company.findById(id, cb);
-	} else {
-		// procura por slug
+    } else {
+        // procura por slug
         Company.findOne({slug : id}, cb);
-	}
+    }
 };
 
 
@@ -105,32 +105,32 @@ companySchema.methods.findProduct = function (id, cb) {
         product;
     
 
-	if (new RegExp("[0-9 a-f]{24}").test(id)) {
-	    //varre os produtos da empresa
-	    for (i = 0; i < this.products.length; i = i + 1) {
-	        if (this.products[i]._id.toString() === id) {
-	            product = this.products[i];
-	        }
-	    }
-	    if (product) {
-	        cb(undefined, product);
-	    } else {
-	        cb('product not found', null);
-	    }
-	} else {
-	    //varre os produtos da empresa
-	    for (i = 0; i < this.products.length; i = i + 1) {
-	        if (this.products[i].slug === id) {
-	            product = this.products[i];
-	        }
-	    }
-	    if (product) {
-	        cb(undefined, product);
-	    } else {
-	        cb('product not found', null);
-	    }
-	}
-	
+    if (new RegExp("[0-9 a-f]{24}").test(id)) {
+        //varre os produtos da empresa
+        for (i = 0; i < this.products.length; i = i + 1) {
+            if (this.products[i]._id.toString() === id) {
+                product = this.products[i];
+            }
+        }
+        if (product) {
+            cb(undefined, product);
+        } else {
+            cb('product not found', null);
+        }
+    } else {
+        //varre os produtos da empresa
+        for (i = 0; i < this.products.length; i = i + 1) {
+            if (this.products[i].slug === id) {
+                product = this.products[i];
+            }
+        }
+        if (product) {
+            cb(undefined, product);
+        } else {
+            cb('product not found', null);
+        }
+    }
+    
 };
 
 /** FindContact
