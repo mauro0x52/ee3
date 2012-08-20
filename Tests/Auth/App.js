@@ -7,11 +7,11 @@
  */
 
 var should = require("should"),
-	api = require("../Utils.js").api,
-	db = require("../Utils.js").db,
-	rand = require("../Utils.js").rand,
-	token, login, nameApp, tokenApp, appId;
-	
+    api = require("../Utils.js").api,
+    db = require("../Utils.js").db,
+    rand = require("../Utils.js").rand,
+    token, login, nameApp, tokenApp, appId;
+    
 random = rand();
 login = 'testes+' + random + '@empreendemia.com.br';
 nameApp = 'testesApp' + random + '';

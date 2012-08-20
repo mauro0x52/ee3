@@ -25,7 +25,8 @@ stopAll() {
     do
         cd $SERVICE
         echo "- Parando $SERVICE"
-        forever stop ${SERVICE,,}.js &
+        forever stop ${SERVICE,,}.js
+        echo
         cd ..
     done
 }

@@ -90,13 +90,13 @@ module.exports = function (app) {
         Company.find()
         .limit(request.param('limit', 10) < 20 ? request.param('limit', 10) : 20)
         .exec(
-        	function (error, companies){
-	            if (error) {
-	                response.send({error : error })
-	            } else {
-	                response.send(companies);
-	            }
-        	}
+            function (error, companies){
+                if (error) {
+                    response.send({error : error })
+                } else {
+                    response.send(companies);
+                }
+            }
         )
     });
 
@@ -116,35 +116,35 @@ module.exports = function (app) {
     app.get('/company/:id', function (request, response) {
         response.contentType('json');
 
-		var id = request.params.id,
-			attributes = request.param('attributes', {});
+        var id = request.params.id,
+            attributes = request.param('attributes', {});
 
 
         //valida o token do usuário
         auth(request.param('token', null), function (user) {
 
-	        Company.findByIdentity(id, function(error, company) {
-	            if (error) {
-	                response.send({error : error});
-	            } else {
-	                //verifica se a compania foi encontrada
-	                if (company === null) {
-	                    response.send({error : 'company not found'});
-	                } else {
-						if (!attributes.products) delete company.products;
-						if (!attributes.addresses || !user) delete company.addresses;
-						if (!attributes.about) delete company.about;
-						if (!attributes.embeddeds) delete company.embeddeds;
-						if (!attributes.phones || !user) delete company.phones;
-						if (!attributes.contacts || !user) delete company.contacts;
-						if (!attributes.links) delete company.links;
-						if (attributes.members) {
-							
-						} 
-	                    response.send(company);
-	                }
-	            }
-	        });
+            Company.findByIdentity(id, function(error, company) {
+                if (error) {
+                    response.send({error : error});
+                } else {
+                    //verifica se a compania foi encontrada
+                    if (company === null) {
+                        response.send({error : 'company not found'});
+                    } else {
+                        if (!attributes.products) delete company.products;
+                        if (!attributes.addresses || !user) delete company.addresses;
+                        if (!attributes.about) delete company.about;
+                        if (!attributes.embeddeds) delete company.embeddeds;
+                        if (!attributes.phones || !user) delete company.phones;
+                        if (!attributes.contacts || !user) delete company.contacts;
+                        if (!attributes.links) delete company.links;
+                        if (attributes.members) {
+                            
+                        } 
+                        response.send(company);
+                    }
+                }
+            });
         });
 
     });

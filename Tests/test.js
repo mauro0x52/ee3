@@ -7,13 +7,13 @@
  */
 
 describe('Auth', function() {
-	require("./Auth/test.js");
-});
-
-describe('Companies', function() {
-	require("./Companies/test.js");
+    require("./Auth/test.js");
 });
 
 describe('Apps', function() {
-	require("./Apps/test.js");
+    require("./Auth/test.js");
+});
+
+describe('Companies', function() {
+    require("./Companies/test.js");
 });

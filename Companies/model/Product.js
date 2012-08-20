@@ -30,29 +30,29 @@ productSchema = new Schema({
  */
 productSchema.pre('save', function (next) {
     "use strict";
-	var crypto = require('crypto');
-	
-	if (this.isNew) {
-		//TODO fazer o gerador de slugs aqui
-		this.slug = 'slug-'+crypto.createHash('sha1').update(crypto.randomBytes(10)).digest('hex').substring(0, 10);
-	}
+    var crypto = require('crypto');
+    
+    if (this.isNew) {
+        //TODO fazer o gerador de slugs aqui
+        this.slug = 'slug-'+crypto.createHash('sha1').update(crypto.randomBytes(10)).digest('hex').substring(0, 10);
+    }
 
-	next();
+    next();
 /*
-	var i,
-		j;
+    var i,
+        j;
 
-	for (i = 0; i < this.parent.products.length; i = i + 1) {
-		if (this.parent.products[i].isNew) {
-			for (j = 0; j < this.parent.products.length; j = j + 1) {
-				if (this.parent.products[i]._id !== this.parent.products[j]._id && this.parent.products[i].slug === this.parent.products[j].slug) {
-					next(new Error('slug already exist'));
-				}
-			}
-		}
-	}
-	
-	next();*/
+    for (i = 0; i < this.parent.products.length; i = i + 1) {
+        if (this.parent.products[i].isNew) {
+            for (j = 0; j < this.parent.products.length; j = j + 1) {
+                if (this.parent.products[i]._id !== this.parent.products[j]._id && this.parent.products[i].slug === this.parent.products[j].slug) {
+                    next(new Error('slug already exist'));
+                }
+            }
+        }
+    }
+    
+    next();*/
 
 });
 

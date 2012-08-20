@@ -62,7 +62,7 @@ module.exports = function (app) {
             if (user) {
                 //Cria o Objeto Profile para adicionar no Model
                 profile = new Profile({
-                	userId		: user._id,
+                    userId        : user._id,
                     name        : request.param('name', null),
                     surname     : request.param('surname', null),
                     about       : request.param('about', null),

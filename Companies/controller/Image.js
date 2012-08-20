@@ -58,33 +58,33 @@ module.exports = function (app) {
                                             if (!request.files || !request.files.file) {
                                                 response.send({error : 'no selected file'});
                                             } else {
-	                                            // faz upload da imagem
-	                                            files.image.upload(
-	                                                request.files.file,
-	                                                '/company/' + request.params.company_slug + '/product/' + request.params.product_slug + '/images',
-	                                                function (error, data) {
+                                                // faz upload da imagem
+                                                files.image.upload(
+                                                    request.files.file,
+                                                    '/company/' + request.params.company_slug + '/product/' + request.params.product_slug + '/images',
+                                                    function (error, data) {
                                                         if (error) {
                                                             response.send({error : error});
                                                         } else {
-				                                            //coloca os dados do post em um objeto
-				                                            product.images.push({
-			                                            		file : data.original._id,
-				                                                url : data.url,
-				                                                title : request.param('title', null),
-				                                                legend : request.param('legend', null)
-				                                            });
-				                                            //salva a imagem
-				                                            product.save(function (error) {
-				                                                if (error) {
-				                                                    response.send({error : error});
-				                                                } else {
-				                                                    response.send(product.images);
-				                                                }
-				                                            });
-			                                            }
-			                                        }
-		                                        );
-	                                        }
+                                                            //coloca os dados do post em um objeto
+                                                            product.images.push({
+                                                                file : data.original._id,
+                                                                url : data.url,
+                                                                title : request.param('title', null),
+                                                                legend : request.param('legend', null)
+                                                            });
+                                                            //salva a imagem
+                                                            product.save(function (error) {
+                                                                if (error) {
+                                                                    response.send({error : error});
+                                                                } else {
+                                                                    response.send(product.images);
+                                                                }
+                                                            });
+                                                        }
+                                                    }
+                                                );
+                                            }
                                         }
                                     }
                                 });

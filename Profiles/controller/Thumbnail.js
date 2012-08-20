@@ -49,52 +49,52 @@ module.exports = function (app) {
                                 if (!request.files || !request.files.file) {
                                     response.send({error : 'no selected file'});
                                 } else {
-	                                // faz upload dos thumbnails
-	                                files.image.thumbnail.upload(
-	                                    request.files.file,
-	                                    '/profiles/' + profile.slug + '/thumbnails',
-	                                    function (error, data) {
-	                                        if (error) {
-	                                            response.send({error : error});
-	                                        } else {
-	                                        	product.thumbnail = {
-	                                            	original : {
-	                                            		file : data.original._id,
-	                                            		url : data.original.url,
-	                                            		title : 'thumbnail',
-	                                            		legend : 'original'
-	                                            	},
-	                                            	small : {
-	                                        			file : data.small._id,
-	                                            		url : data.small.url,
-	                                            		title : 'thumbnail',
-	                                            		legend : '50x50 thumbnail'
-	                                            	},
-	                                            	medium : {
-	                                            		file : data.medium._id,
-	                                            		url : data.medium.url,
-	                                            		title : 'thumbnail',
-	                                            		legend : '100x100 thumbnail'
-	                                            	},
-	                                            	large : {
-	                                            		file : data.large._id,
-	                                            		url : data.large.url,
-	                                            		title : 'thumbnail',
-	                                            		legend : '200x200 thumbnail'
-	                                            	}
-	                                            };
-	                                            product.save(function (error) {
-	                                            	if (error) {
-	                                            		response.send({error: error});
-	                                            	}
-	                                            	else {
-	                                            		response.send(product.thumbnail);
-	                                            	}
-	                                            });
-	                                        }
-	                                    }
-	                                );
-	                            }
+                                    // faz upload dos thumbnails
+                                    files.image.thumbnail.upload(
+                                        request.files.file,
+                                        '/profiles/' + profile.slug + '/thumbnails',
+                                        function (error, data) {
+                                            if (error) {
+                                                response.send({error : error});
+                                            } else {
+                                                product.thumbnail = {
+                                                    original : {
+                                                        file : data.original._id,
+                                                        url : data.original.url,
+                                                        title : 'thumbnail',
+                                                        legend : 'original'
+                                                    },
+                                                    small : {
+                                                        file : data.small._id,
+                                                        url : data.small.url,
+                                                        title : 'thumbnail',
+                                                        legend : '50x50 thumbnail'
+                                                    },
+                                                    medium : {
+                                                        file : data.medium._id,
+                                                        url : data.medium.url,
+                                                        title : 'thumbnail',
+                                                        legend : '100x100 thumbnail'
+                                                    },
+                                                    large : {
+                                                        file : data.large._id,
+                                                        url : data.large.url,
+                                                        title : 'thumbnail',
+                                                        legend : '200x200 thumbnail'
+                                                    }
+                                                };
+                                                product.save(function (error) {
+                                                    if (error) {
+                                                        response.send({error: error});
+                                                    }
+                                                    else {
+                                                        response.send(product.thumbnail);
+                                                    }
+                                                });
+                                            }
+                                        }
+                                    );
+                                }
                             }
                         }
                     }

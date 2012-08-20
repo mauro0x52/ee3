@@ -7,6 +7,6 @@
  */
 
 describe('User', function() {
-	require('./User.js');
+    require('./User.js');
         require('./App.js');
 });

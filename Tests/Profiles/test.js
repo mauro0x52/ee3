@@ -8,6 +8,6 @@
 
 
 describe('Thumbnail', function() {
-	require("./Thumbnail.js");
+    require("./Thumbnail.js");
 });
 
