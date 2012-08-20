@@ -22,7 +22,7 @@ module.exports = function (app) {
      * @allowedApp : sdk
      * @allowedUser : Logado
      *
-     * @request : {token,name,slug,type}
+     * @request : {token,name,type}
      * @response : {confirmation}
      */
     app.post('/app', function (request, response) {
@@ -36,7 +36,6 @@ module.exports = function (app) {
                 //pega os dados do post e coloca em um novo objeto
                 app = new App({
                     name    : request.param('name', null),
-                    slug    : request.param('slug', null),
                     creator : user._id,
                     type    : request.param('type', null)
                 });
@@ -171,7 +170,7 @@ module.exports = function (app) {
      * @allowedApp : sdk
      * @allowedUser : Logado
      *
-     * @request : {token,name,slug,type}
+     * @request : {token,name,type}
      * @response : {}
      */
     app.put('/app/:slug', function (request, response) {
@@ -196,9 +195,6 @@ module.exports = function (app) {
                                 //altera os dados do aplicativo
                                 if (request.param('name', null) || request.param('name', null) !== "") {
                                     app.name = request.param('name', null);
-                                }
-                                if (request.param('slug', null)) {
-                                    app.slug = request.param('slug', null);
                                 }
                                 if (request.param('type', null)) {
                                     app.type = request.param('type', null);
