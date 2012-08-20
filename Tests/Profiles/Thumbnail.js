@@ -9,19 +9,21 @@
 var should = require("should"),
     api = require("../Utils.js").api,
     rand = require("../Utils.js").rand,
-    user, profile;
+    random,
+    user, profile,
+    user2, profile2;
 
-random = rand();
-user = {
-    username : 'testes+' + random + '@empreendemia.com.br'
-};
-profile = {
-    name : 'Nome' + random,
-    surname : 'Sobrenome' + random
-};
 
 describe('POST /profile/[id]/thumbnail', function () {
     before(function (done) {
+        random = rand();
+        user = {
+            username : 'testes+' + random + '@empreendemia.com.br'
+        };
+        profile = {
+            name : 'Nome' + random,
+            surname : 'Sobrenome' + random
+        };
         // cria usuario
         api.post('auth', '/user', {
             username : user.username,
@@ -43,12 +45,10 @@ describe('POST /profile/[id]/thumbnail', function () {
         });
     });
 
-
     it('url tem que existir', function(done) {
         api.post('profiles', '/profile/' + profile.slug + '/thumbnail',
             {},
-            function(error, data, response) {
-                console.log(data);
+            function (error, data, response) {
                 if (error) return done(error);
                 else {
                     response.should.have.status(200);
@@ -64,7 +64,7 @@ describe('POST /profile/[id]/thumbnail', function () {
                 token : user.token
             },
             {},
-            function(error, data, response) {
+            function (error, data, response) {
                 if (error) return done(error);
                 else {
                     should.exist(data.error, 'não retornou erro');
@@ -89,11 +89,11 @@ describe('POST /profile/[id]/thumbnail', function () {
                 }
             }
         );
-    });/*
+    });
     it('envia imagem', function(done) {
-        api.file('companies', '/company/' + company.slug  + '/thumbnail',
+        api.file('profiles', '/profile/' + profile.slug + '/thumbnail',
             {
-                token : token
+                token : user.token
             },
             {
                 file : 'vader.jpg'
@@ -101,29 +101,25 @@ describe('POST /profile/[id]/thumbnail', function () {
             function(error, data, response) {
                 if (error) return done(error);
                 else {
-                    response.should.have.status(200);
-                    should.exist(data, 'não retornou dado nenhum');
                     should.not.exist(data.error);
                     (data && data.original && data.original.url ? data.original.url : '')
-                        .should.match(/^http\:\/\/.+\/companies\/.+\/thumbnails\/.+\/original\..+$/, 'não salvou o original corretamente');
+                        .should.match(/^http\:\/\/.+\/profiles\/.+\/thumbnails\/.+\/original\..+$/, 'não salvou o original corretamente');
                     (data && data.small && data.small.url ? data.small.url : '')
-                        .should.match(/^http\:\/\/.+\/companies\/.+\/thumbnails\/.+\/small\..+$/, 'não salvou o small corretamente');
+                        .should.match(/^http\:\/\/.+\/profiles\/.+\/thumbnails\/.+\/small\..+$/, 'não salvou o small corretamente');
                     (data && data.medium && data.medium.url ? data.medium.url : '')
-                        .should.match(/^http\:\/\/.+\/companies\/.+\/thumbnails\/.+\/medium\..+$/, 'não salvou o medium corretamente');
+                        .should.match(/^http\:\/\/.+\/profiles\/.+\/thumbnails\/.+\/medium\..+$/, 'não salvou o medium corretamente');
                     (data && data.large && data.large.url ? data.large.url : '')
-                        .should.match(/^http\:\/\/.+\/companies\/.+\/thumbnails\/.+\/large\..+$/, 'não salvou o large corretamente');
-                    companyImageUrl = data.original.url;
+                        .should.match(/^http\:\/\/.+\/profiles\/.+\/thumbnails\/.+\/large\..+$/, 'não salvou o large corretamente');
+                    profile.thumbnail = data;
                     done();
                 }
             }
         );
     });
-
     it('envia imagem novamente', function (done) {
-        api.file('companies', '/company/' + company.slug  + '/thumbnail',
+        api.file('profiles', '/profile/' + profile.slug + '/thumbnail',
             {
-                login : userName,
-                token : token,
+                token : user.token
             },
             {
                 file : 'vader.jpg'
@@ -131,205 +127,84 @@ describe('POST /profile/[id]/thumbnail', function () {
             function(error, data, response) {
                 if (error) return done(error);
                 else {
-                    response.should.have.status(200);
-                    should.exist(data, 'não retornou dado nenhum');
-                    should.not.exist(data && data.error ? true : undefined);
+                    should.not.exist(data.error);
                     (data && data.original && data.original.url ? data.original.url : '')
-                        .should.match(/^http\:\/\/.+\/companies\/.+\/thumbnails\/.+\/original\..+$/, 'não salvou o original corretamente');
-                    (data && data.small && data.small.url ? data.small.url : '')
-                        .should.match(/^http\:\/\/.+\/companies\/.+\/thumbnails\/.+\/small\..+$/, 'não salvou o small corretamente');
-                    (data && data.medium && data.medium.url ? data.medium.url : '')
-                        .should.match(/^http\:\/\/.+\/companies\/.+\/thumbnails\/.+\/medium\..+$/, 'não salvou o medium corretamente');
-                    (data && data.large && data.large.url ? data.large.url : '')
-                        .should.match(/^http\:\/\/.+\/companies\/.+\/thumbnails\/.+\/large\..+$/, 'não salvou o large corretamente');
-                    companyImageUrl.should.not.equal(data && data.original && data.original.url ? data.original.url : '', 'as urls deveriam ser diferentes');
+                        .should.match(/^http\:\/\/.+\/profiles\/.+\/thumbnails\/.+\/original\..+$/, 'não salvou o original corretamente');
+                    profile.thumbnail.should.not.equal(data && data.original && data.original.url ? data.original.url : '', 'as urls deveriam ser diferentes');
+                    profile.thumbnail = data;
                     done();
                 }
             }
         );
-    });*/
+    });
 });
-
-/*
-random = rand();
-userName2 = 'testes+' + random + '@empreendemia.com.br';
-companyName2 = 'Empresa ' + random;
 
 describe('GET /company/[id]/thumbnail', function () {
 
     before(function (done) {
+        random = rand();
+        user2 = {
+            username : 'testes+' + random + '@empreendemia.com.br'
+        };
+        profile2 = {
+            name : 'Nome' + random,
+            surname : 'Sobrenome' + random
+        };
+
         // cria usuario
         api.post('auth', '/user',
             {
-                username : userName2,
+                username : user2.username,
                 password : 'testando',
                 password_confirmation : 'testando'
             },
             function(error, data) {
-                token2 = data.token;
-                // cria empresa
-                api.post('companies', '/company',
-                    {
-                        login : userName2,
-                        token : token2,
-                        users : [userName2],
-                        name : companyName2,
-                        activity : 'consultoria em testes',
-                        type : 'company',
-                        profile : 'both',
-                        active : true
-                    },
-                    function(error, data) {
-                        company2 = data;
-                        if (error) return done(error);
-                        else done();
-                    }
-                );
+                user2.token = data.token;
+                // cria profile
+                api.post('profiles', '/profile', {
+                    token : user2.token,
+                    name : profile2.name,
+                    surname : profile2.surname,
+                    about : 'sobre'
+                }, function(error, data) {
+                    profile2 = data;
+                    if (error) return done(error);
+                    else done();
+                });
             }
         );
     });
 
-    it('empresa não existe', function (done) {
-        api.get('companies', '/company/asddasddaoiheoins/thumbnail', {}, function(error, data, response) {
+    it('url existe', function (done) {
+        api.get('profiles', '/profile/asddasddaoiheoins/thumbnail', {}, function(error, data, response) {
             response.should.have.status(200);
             should.exist(data, 'não retornou dado nenhum');
-            should.exist(data && data.error ? true : undefined, 'não retornou erro');
             done();
         });
     });
-    it('empresa com thumbnail', function (done) {
-        api.get('companies', '/company/' + company.slug + '/thumbnail', {}, function(error, data, response) {
-            response.should.have.status(200);
-            should.exist(data, 'não retornou dado nenhum');
-            should.not.exist(data && data.error ? true : undefined, 'retornou erro inexperado');
-            (data && data.original && data.original.url ? data.original.url : '')
-                .should.match(/^http\:\/\/.+\/companies\/.+\/thumbnails\/.+\/original\..+$/, 'não salvou o original corretamente');
-            (data && data.small && data.small.url ? data.small.url : '')
-                .should.match(/^http\:\/\/.+\/companies\/.+\/thumbnails\/.+\/small\..+$/, 'não salvou o small corretamente');
-            (data && data.medium && data.medium.url ? data.medium.url : '')
-                .should.match(/^http\:\/\/.+\/companies\/.+\/thumbnails\/.+\/medium\..+$/, 'não salvou o medium corretamente');
-            (data && data.large && data.large.url ? data.large.url : '')
-                .should.match(/^http\:\/\/.+\/companies\/.+\/thumbnails\/.+\/large\..+$/, 'não salvou o large corretamente');
+    it('perfil não existe', function (done) {
+        api.get('profiles', '/profile/asddasddaoiheoins/thumbnail', {}, function(error, data, response) {
+            should.exist(data.error, 'não retornou erro');
             done();
         });
     });
-    it('empresa sem thumbnail', function (done) {
-        api.get('companies', '/company/' + company2.slug  + '/thumbnail', {}, function(error, data, response) {
-            response.should.have.status(200);
-            should.not.exist(data, 'deveria retornar undefined')
-            should.not.exist(data && data.error ? true : undefined, 'retornou erro inexperado');
+    it('perfil com thumbnail', function (done) {
+        api.get('profiles', '/profile/' + profile.slug + '/thumbnail', {}, function(error, data, response) {
+           should.not.exist(data.error, 'retornou erro inexperado');
+           (data && data.original && data.original.url ? data.original.url : '')
+               .should.equal(profile.thumbnail.original.url, 'não pegou o thumbnail correto');
+            done();
+        });
+    });
+    it('perfil sem thumbnail', function (done) {
+        api.get('profiles', '/profile/' + profile2.slug + '/thumbnail', {}, function(error, data, response) {
+           should.not.exist(data.error, 'retornou erro inexperado');
+           should.not.exist(data.original);
             done();
         });
     });
 });
 
 describe('DEL /company/[id]/thumbnail', function() {
-    
+
 });
-
-productName = 'Produto ' + random;
-
-describe('POST /company/[id]/product/[id]/thumbnail', function () {
-
-    before(function (done) {
-        // cria produto
-        api.post('companies', '/company/' + company.slug + '/product', {
-            token : token,
-            name : productName
-        }, function(error, data, response) {
-            product = data;
-            if (error) return done(error);
-            else done();
-        });
-    });
-    it('não envia imagem', function (done) {
-        api.file('companies', '/company/' + company.slug + '/product/' + product._id + '/thumbnail',
-            {
-                token : token
-            },
-            {},
-            function(error, data, response) {
-                if (error) return done(error);
-                else {
-                    response.should.have.status(200);
-                    should.exist(data.error, 'não retornou erro');
-                    done();
-                }
-            }
-        );
-    });
-    it('token errado', function(done) {
-        api.file('companies', '/company/' + company.slug + '/product/' + product._id + '/thumbnail',
-            {
-                token : 'asd8vc89vc7vcx89fas872gjhibas'
-            },
-            {
-                file : 'vader.jpg'
-            },
-            function(error, data, response) {
-                if (error) return done(error);
-                else {
-                    response.should.have.status(200);
-                    should.exist(data.error, 'não retornou erro');
-                    done();
-                }
-            }
-        );
-    });
-    it('envia imagem de produto', function(done) {
-        api.file('companies', '/company/' + company.slug + '/product/' + product._id + '/thumbnail',
-            {
-                token : token
-            },
-            {
-                file : 'vader.jpg'
-            },
-            function(error, data, response) {
-                if (error) return done(error);
-                else {
-                    response.should.have.status(200);
-                    should.exist(data, 'não retornou dado nenhum');
-                    should.not.exist(data.error, 'erro indesejado');
-                    (data && data.original && data.original.url ? data.original.url : '')
-                        .should.match(/^http\:\/\/.+\/companies\/.+\/products\/.+\/thumbnails\/.+\/original\..+$/, 'não salvou o original corretamente');
-                    (data && data.small && data.small.url ? data.small.url : '')
-                        .should.match(/^http\:\/\/.+\/companies\/.+\/products\/.+\/thumbnails\/.+\/small\..+$/, 'não salvou o small corretamente');
-                    (data && data.medium && data.medium.url ? data.medium.url : '')
-                        .should.match(/^http\:\/\/.+\/companies\/.+\/products\/.+\/thumbnails\/.+\/medium\..+$/, 'não salvou o medium corretamente');
-                    (data && data.large && data.large.url ? data.large.url : '')
-                        .should.match(/^http\:\/\/.+\/companies\/.+\/products\/.+\/thumbnails\/.+\/large\..+$/, 'não salvou o large corretamente');
-                    productImageUrl = data.original.url;
-                    done();
-                }
-            }
-        );
-    });    
-    it('envia mesma imagem de produto', function (done) {
-        api.file('companies', '/company/' + company.slug + '/product/' + product._id + '/thumbnail',
-            {
-                token : token
-            },
-            {
-                file : 'vader.jpg'
-            },
-            function(error, data, response) {
-                if (error) return done(error);
-                else {
-                    response.should.have.status(200);
-                    should.exist(data, 'não retornou dado nenhum');
-                    should.not.exist(data.error, 'erro indesejado');
-                    (data && data.original && data.original.url ? data.original.url : '')
-                        .should.match(/^http\:\/\/.+\/companies\/.+\/products\/.+\/thumbnails\/.+\/original\..+$/, 'não salvou o original corretamente');
-                    (data && data.small && data.small.url ? data.small.url : '')
-                        .should.match(/^http\:\/\/.+\/companies\/.+\/products\/.+\/thumbnails\/.+\/small\..+$/, 'não salvou o small corretamente');
-                    (data && data.medium && data.medium.url ? data.medium.url : '')
-                        .should.match(/^http\:\/\/.+\/companies\/.+\/products\/.+\/thumbnails\/.+\/medium\..+$/, 'não salvou o medium corretamente');
-                    (data && data.large && data.large.url ? data.large.url : '')
-                        .should.match(/^http\:\/\/.+\/companies\/.+\/products\/.+\/thumbnails\/.+\/large\..+$/, 'não salvou o large corretamente');
-                    productImageUrl.should.not.equal(data && data.original && data.large.url ? data.original.url : '', 'as urls deveriam ser diferentes');
-                    done();
-                }
-            }
-        );
-    });
-});*/
