@@ -31,7 +31,7 @@ module.exports = function (app) {
         response.contentType('json');
 
         //localiza o usuário
-        User.findOne({username : request.params.login}, function (error, user) {
+        User.findByIdentity(request.params.login, function (error, user) {
             if (error) {
                 response.send({error : error});
             } else {
@@ -55,7 +55,7 @@ module.exports = function (app) {
                             //salva a autorização
                             user.save(function (error) {
                                 if (error) {
-                                    response.send({err : error});
+                                    response.send({error : error});
                                 } else {
                                     response.send({token : token});
                                 }
@@ -84,7 +84,7 @@ module.exports = function (app) {
         response.contentType('json');
 
         //localiza o usuário
-        User.findOne({username : request.params.login}, function (error, user) {
+        User.findByIdentity(request.params.login, function (error, user) {
             if (error) {
                 response.send({error : error});
             } else {
@@ -112,7 +112,7 @@ module.exports = function (app) {
                                             if (error) {
                                                 response.send({error : error});
                                             } else {
-                                                response.send({error : ''});
+                                                response.send();
                                             }
                                         });
                                     }
@@ -142,7 +142,7 @@ module.exports = function (app) {
         response.contentType('json');
 
         //localiza o usuário
-        User.findOne({username : request.params.login}, function (error, user) {
+        User.findByIdentity(request.params.login, function (error, user) {
             if (error) {
                 response.send({error : error});
             } else {
@@ -164,7 +164,7 @@ module.exports = function (app) {
                                     if (app === null) {
                                         response.send({error : 'app not found'});
                                     } else {
-                                        response.send({authorizedApp : app});
+                                        response.send(app);
                                     }
                                 }
                             });
@@ -196,7 +196,7 @@ module.exports = function (app) {
         response.contentType('json');
 
         //localiza o usuário
-        User.findOne({username : request.params.login}, function (error, user) {
+        User.findByIdentity(request.params.login, function (error, user) {
             if (error) {
                 response.send({error : error});
             } else {
@@ -226,7 +226,7 @@ module.exports = function (app) {
                                             if (error) {
                                                 response.send({error : error});
                                             } else {
-                                                response.send({App : app});
+                                                response.send(app);
                                             }
                                         });
                                     }
@@ -259,7 +259,7 @@ module.exports = function (app) {
         response.contentType('json');
 
         //localiza o usuário
-        User.findOne({username : request.params.login}, function (error, user) {
+        User.findByIdentity(request.params.login, function (error, user) {
             if (error) {
                 response.send({error : error});
             } else {
@@ -276,7 +276,11 @@ module.exports = function (app) {
                             if (app === null) {
                                 response.send({error : 'app not found'});
                             } else {
-                                response.send({valid : user.authorizedApps[i].token === request.param('token', null), error : ''});
+                                if (user.authorizedApps[i].token === request.param('token', null)) {
+                                    response.send({valid : true});
+                                } else {
+                                    response.send({error : 'token not validate'});
+                                }
                             }
                         }
                     });
