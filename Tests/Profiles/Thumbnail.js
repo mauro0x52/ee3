@@ -14,7 +14,7 @@ var should = require("should"),
     user2, profile2;
 
 
-describe('POST /profile/[id]/thumbnail', function () {
+describe('POST /profile/:profile_id/thumbnail', function () {
     before(function (done) {
         random = rand();
         user = {
@@ -139,7 +139,7 @@ describe('POST /profile/[id]/thumbnail', function () {
     });
 });
 
-describe('GET /company/[id]/thumbnail', function () {
+describe('GET /company/:profile_id/thumbnail', function () {
 
     before(function (done) {
         random = rand();
@@ -205,6 +205,32 @@ describe('GET /company/[id]/thumbnail', function () {
     });
 });
 
-describe('DEL /company/[id]/thumbnail', function() {
-
+describe('GET /profile/:profile_id/thumbnail/:size', function() {
+    it('url existe', function (done) {
+        api.get('profiles', '/profile/asddasddaoiheoins/thumbnail/daoishoihe', {}, function(error, data, response) {
+            response.should.have.status(200);
+            should.exist(data, 'não retornou dado nenhum');
+            done();
+        });
+    });
+    it('perfil não existe', function (done) {
+        api.get('profiles', '/profile/asddasddaoiheoins/thumbnail/daoishoihe', {}, function(error, data, response) {
+            should.exist(data.error, 'tem que retornar erro');
+            done();
+        });
+    });
+    it('pega tamanho medio', function (done) {
+        api.get('profiles', '/profile/' + profile.slug + '/thumbnail/medium', {}, function(error, data, response) {
+            should.not.exist(data.error, 'não pode retornar erro');
+            (profile.thumbnail.medium.url).should.equal(data.url);
+            done();
+        });
+    });
+    it('tamanho qualquer retorna small', function (done) {
+        api.get('profiles', '/profile/' + profile.slug + '/thumbnail/fasfsafsasfafas', {}, function(error, data, response) {
+            should.not.exist(data.error, 'não pode retornar erro');
+            (profile.thumbnail.small.url).should.equal(data.url);
+            done();
+        });
+    });
 });

@@ -136,9 +136,9 @@ module.exports = function (app) {
         });
     });
 
-    /** GET /profile/:profile_id/thumbnail/:id
+    /** GET /profile/:profile_id/thumbnail/:size
      *
-     * @autor : Rafael Erthal
+     * @autor : Rafael Erthal, Mauro Ribeiro
      * @since : 2012-08
      *
      * @description : Exibir thumbnail
@@ -149,11 +149,16 @@ module.exports = function (app) {
      * @request : {}
      * @response : {}
      */
-    app.get('/company/:profile_id/thumbnail/:id', function (request, response) {
+    app.get('/profile/:profile_id/thumbnail/:size', function (request, response) {
         response.contentType('json');
 
+        var size = request.param('size');
+
+        if (size !== 'original' && size !== 'large' && size !== 'medium' && size !== 'small' ) {
+            size = 'small';
+        }
         //busca o perfil
-        Profile.findByIdentity(profile_id, function (error, profile) {
+        Profile.findByIdentity(request.param('profile_id'), function (error, profile) {
             if (error) {
                 response.send({error : error});
             } else {
@@ -161,19 +166,11 @@ module.exports = function (app) {
                 if (profile === null) {
                     response.send({error : 'profile not found'});
                 } else {
-                    //busca thumbnail
-                    profile.findThumbnail(request.params.id, function (error, thumbnail) {
-                        if (error) {
-                            response.send({error : error});
-                        } else {
-                            //verifica se thumbnail foi encontrado
-                            if (thumbnail === null) {
-                                response.send({error : 'thumbnail not found'});
-                            } else {
-                                response.send({thumbnail : thumbnail});
-                            }
-                        }
-                    });
+                    if (profile.thumbnail[size]) {
+                        response.send(profile.thumbnail[size]);
+                    } else {
+                        response.send({error : 'thumbnail ' + size + ' not found'});
+                    }
                 }
             }
         });
