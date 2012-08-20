@@ -324,7 +324,7 @@ module.exports = function (app) {
         auth(request.param('token', null), function (user) {
             if (user) {
                 //busca a compania
-                Company.findByIdentity(request.params.company_id, function (error, company) {
+                Company.findByIdentity(request.param('company_id'), function (error, company) {
                     if (error) {
                         response.send({error : error});
                     } else {
@@ -342,8 +342,8 @@ module.exports = function (app) {
                                 } else {
                                     // faz upload dos thumbnails
                                     files.image.thumbnail.upload(
-                                        request.files.file, 
-                                        '/companies/' + request.params.slug + '/thumbnails', 
+                                        request.files.file,
+                                        '/companies/' + request.params.slug + '/thumbnails',
                                         function(error, data) {
                                             if (error) {
                                                 response.send({ error : error });

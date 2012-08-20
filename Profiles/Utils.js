@@ -59,7 +59,7 @@ exports.files = {
                     'path': path,
                     'file': restler.file(tmpFile.path, tmpFile.name, tmpFile.size, null, tmpFile.type)
                 }
-            }).on('complete', function(data) {
+            }).on('success', function(data) {
                 cb(undefined, data);
             }).on('error', function(error) {
                 cb(error, undefined);
@@ -91,7 +91,7 @@ exports.files = {
                         'path': path,
                         'file': restler.file(tmpFile.path, tmpFile.name, tmpFile.size, null, tmpFile.type)
                     }
-                }).on('complete', function(data) {
+                }).on('success', function(data) {
                     if (data.error) {
                         cb(data.error);
                     } else {
@@ -109,7 +109,7 @@ exports.files = {
                                 'style' : 'extend'
                             }
                         })
-                        .on('complete', function (data) {
+                        .on('success', function (data) {
                             imagesList.small = data;
                             // thumbnail de 100 px
                             restler.post(resizeUrl, {
@@ -121,7 +121,7 @@ exports.files = {
                                     'style' : 'extend'
                                 }
                             })
-                            .on('complete', function (data) {
+                            .on('success', function (data) {
                                 imagesList.medium = data;
                                 // thumbnail de 200 px
                                 restler.post(resizeUrl, {
@@ -133,7 +133,7 @@ exports.files = {
                                         'style' : 'extend'
                                     }
                                 })
-                                .on('complete', function (data) {
+                                .on('success', function (data) {
                                     imagesList.large = data;
                                     cb(undefined, imagesList);
                                 })

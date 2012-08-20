@@ -27,7 +27,7 @@ module.exports = function (app) {
      */
     app.post('/company', function (request, response) {
         var company;
-        
+
         response.contentType('json');
 
         //valida o token do usuário
@@ -117,12 +117,11 @@ module.exports = function (app) {
         response.contentType('json');
 
         var id = request.params.id,
-            attributes = request.param('attributes', {});
-
+            attributes = request.query['attributes'],
+            token = request.query['token'];
 
         //valida o token do usuário
-        auth(request.param('token', null), function (user) {
-
+        auth(token, function (user) {
             Company.findByIdentity(id, function(error, company) {
                 if (error) {
                     response.send({error : error});
@@ -131,16 +130,16 @@ module.exports = function (app) {
                     if (company === null) {
                         response.send({error : 'company not found'});
                     } else {
-                        if (!attributes.products) delete company.products;
-                        if (!attributes.addresses || !user) delete company.addresses;
-                        if (!attributes.about) delete company.about;
-                        if (!attributes.embeddeds) delete company.embeddeds;
-                        if (!attributes.phones || !user) delete company.phones;
-                        if (!attributes.contacts || !user) delete company.contacts;
-                        if (!attributes.links) delete company.links;
-                        if (attributes.members) {
-                            
-                        } 
+                        if (!attributes || attributes.indexOf("products") < 0) company.products = undefined;
+                        if (!attributes || attributes.indexOf("addresses") < 0 || !user) company.addresses = undefined;
+                        if (!attributes || attributes.indexOf("about") < 0) company.about = undefined;
+                        if (!attributes || attributes.indexOf("embeddeds") < 0) company.embeddeds = undefined;
+                        if (!attributes || attributes.indexOf("phones") < 0 || !user) company.phones = undefined;
+                        if (!attributes || attributes.indexOf("contacts") < 0 || !user) company.contacts = undefined;
+                        if (!attributes || attributes.indexOf("links") < 0) company.links = undefined;
+                        if (attributes && attributes.indexOf("members") >= 0) {
+
+                        }
                         response.send(company);
                     }
                 }
@@ -236,7 +235,7 @@ module.exports = function (app) {
                                 if (request.param("embeddeds")) {
                                     company.embeddeds = request.param("embeddeds");
                                 }
-                                
+
                                 //Salva o objeto no Model de Companies e retorna o objeto para o solicitante
                                 company.save(function (error) {
                                     if (error) {

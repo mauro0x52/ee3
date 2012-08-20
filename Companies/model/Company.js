@@ -34,7 +34,7 @@ companySchema = new Schema({
 
 companySchema.pre('save', function(next) {
     var crypto = require('crypto');
-    
+
     if (this.isNew) {
         //TODO fazer o gerador de slugs aqui
         this.slug = 'slug-'+crypto.createHash('sha1').update(crypto.randomBytes(10)).digest('hex').substring(0, 10);
@@ -82,7 +82,7 @@ companySchema.methods.isOwner = function (id) {
 
     //varre os usuário da empresa
     for (i = 0; i < this.users.length; i = i + 1) {
-        if (this.users[i] === id) {
+        if (this.users[i].toString() === id) {
             isOwner = true;
         }
     }
@@ -99,11 +99,11 @@ companySchema.methods.isOwner = function (id) {
  */
 companySchema.methods.findProduct = function (id, cb) {
     "use strict";
-    
+
     var i,
         j,
         product;
-    
+
 
     if (new RegExp("[0-9 a-f]{24}").test(id)) {
         //varre os produtos da empresa
@@ -130,7 +130,7 @@ companySchema.methods.findProduct = function (id, cb) {
             cb('product not found', null);
         }
     }
-    
+
 };
 
 /** FindContact
