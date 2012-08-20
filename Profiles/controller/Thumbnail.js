@@ -26,7 +26,7 @@ module.exports = function (app) {
      * @request : {login,token}
      * @response : {confirmation}
      */
-    app.post('/profile/:profile_id/thumbnail', function (request, response) {
+    app.post('/profile/:profile_id/thumbnail', function postProfileThumbnail(request, response) {
         response.contentType('json');
 
         //valida o token do usuário
@@ -166,19 +166,19 @@ module.exports = function (app) {
                 if (profile === null) {
                     response.send({error : 'profile not found'});
                 } else {
-                    if (profile.thumbnail[size]) {
+                    if (profile.thumbnail[size] && profile.thumbnail[size].url) {
                         response.send(profile.thumbnail[size]);
                     } else {
-                        response.send({error : 'thumbnail ' + size + ' not found'});
+                        response.send(null);
                     }
                 }
             }
         });
     });
 
-    /** PUT /profile/:profile_id/thumbnail/:id
+    /** PUT /profile/:profile_id/thumbnail/
      *
-     * @autor : Rafael Erthal
+     * @autor : Mauro Ribeiro
      * @since : 2012-08
      *
      * @description : Editar thumbnail
@@ -189,59 +189,8 @@ module.exports = function (app) {
      * @request : {login,token}
      * @response : {confirmation}
      */
-    app.put('/profile/:profile_id/thumbnail/:id', function (request, response) {
-        response.contentType('json');
-
-        //valida o token do usuário
-        auth(request.param('token'), function (user) {
-            if (user) {
-                //busca o perfil
-                Profile.findByIdentity(profile_id, function (error, profile) {
-                    if (error) {
-                        response.send({error : error});
-                    } else {
-                        //verifica se o perfil foi encontrada
-                        if (profile === null) {
-                            response.send({error : 'profile not found'});
-                        } else {
-                            //verifica se o usuário é dono do perfil
-                            if (!profile.isOwner(user._id)) {
-                                response.send({error : 'permission denied'});
-                            } else {
-                                //busca o thumbnail
-                                profile.findThumbnail(request.params.id, function (error, thumbnail) {
-                                    if (error) {
-                                        response.send({error : error});
-                                    } else {
-                                        //verifica se o thumbnail foi encontrado
-                                        if (thumbnail === null) {
-                                            response.send({error : 'thumbnail not found'});
-                                        } else {
-                                            //altera os dados do thumbnail
-                                            profile.thumbnails.push({
-                                                 small  : request.param('small'),
-                                                 medium : request.param('medium'),
-                                                 large  : request.param('large')
-                                            });
-                                            //salva as alterações
-                                            thumbnail.save(function (error) {
-                                                if (error) {
-                                                    response.send({error : error});
-                                                } else {
-                                                    response.send({error : ''});
-                                                }
-                                            });
-                                        }
-                                    }
-                                });
-                            }
-                        }
-                    }
-                });
-            } else {
-                response.send({error : 'invalid token'});
-            }
-        });
+    app.put('/profile/:profile_id/thumbnail/', function (request, response) {
+        postProfileThumbnail(request, response);
     });
 
     /** DEL /profile/:profile_id/contact/:idContact/thumbnail/:id
@@ -257,14 +206,14 @@ module.exports = function (app) {
      * @request : {login,token}
      * @response : {confirmation}
      */
-    app.del('/profile/:profile_id/contact/:idContact/thumbnail/:id', function (request, response) {
+    app.del('/profile/:profile_id/thumbnail/', function (request, response) {
         response.contentType('json');
 
         //valida o token do usuário
         auth(request.param('token'), function (user) {
             if (user) {
                 //busca o perfil
-                Profile.findByIdentity(profile_id, function (error, profile) {
+                Profile.findByIdentity(request.param('profile_id'), function (error, profile) {
                     if (error) {
                         response.send({error : error});
                     } else {
@@ -276,24 +225,13 @@ module.exports = function (app) {
                             if (!profile.isOwner(user._id)) {
                                 response.send({error : 'permission denied'});
                             } else {
-                                //busca o thumbnail
-                                profile.findThumbnail(request.params.id, function (error, thumbnail) {
+                                profile.thumbnail = null;
+                                profile.save(function (error) {
                                     if (error) {
-                                        response.send({error : error});
-                                    } else {
-                                        //verifica se thumbnail foi encontrado
-                                        if (thumbnail === null) {
-                                            response.send({error : 'thumbnail not found'});
-                                        } else {
-                                            //remove o thumbnail
-                                            thumbnail.remove(function (error) {
-                                                if (error) {
-                                                    response.send({error : error});
-                                                } else {
-                                                    response.send({error : ''});
-                                                }
-                                            });
-                                        }
+                                        response.send({error: error});
+                                    }
+                                    else {
+                                        response.send(null);
                                     }
                                 });
                             }

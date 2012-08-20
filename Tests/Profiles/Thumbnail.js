@@ -198,8 +198,8 @@ describe('GET /company/:profile_id/thumbnail', function () {
     });
     it('perfil sem thumbnail', function (done) {
         api.get('profiles', '/profile/' + profile2.slug + '/thumbnail', {}, function(error, data, response) {
-           should.not.exist(data.error, 'retornou erro inexperado');
-           should.not.exist(data.original);
+            should.not.exist(data.error, 'retornou erro inexperado');
+            should.not.exist(data.original);
             done();
         });
     });
@@ -232,5 +232,42 @@ describe('GET /profile/:profile_id/thumbnail/:size', function() {
             (profile.thumbnail.small.url).should.equal(data.url);
             done();
         });
+    });
+    it('perfil sem thumbnail', function (done) {
+        api.get('profiles', '/profile/' + profile2.slug + '/thumbnail/medium', {}, function(error, data, response) {
+            should.not.exist(data, 'deve retornar vazio');
+            done();
+        });
+    });
+});
+
+describe('DEL /profile/:profile_id/thumbnail', function() {
+    it('url existe', function (done) {
+        api.del('profiles', '/profile/asddasddaoiheoins/thumbnail', {}, function(error, data, response) {
+            response.should.have.status(200);
+            should.exist(data, 'não retornou dado nenhum');
+            done();
+        });
+    });
+    it('token invalido', function (done) {
+        api.del('profiles', '/profile/' + profile.slug + '/thumbnail',
+            {},
+            function(error, data, response) {
+                should.exist(data.error, 'tem que retornar erro');
+                done();
+            }
+        );
+    });
+    it('remove com sucesso', function (done) {
+        api.del('profiles', '/profile/' + profile.slug + '/thumbnail',
+            { token : user.token },
+            function(error, data, response) {
+                should.not.exist(data, 'retorna vazio');
+                api.get('profiles', '/profile/' + profile.slug + '/thumbnail/fasfsafsasfafas', {}, function(error, data, response) {
+                    should.not.exist(data, 'retorna vazio (get)');
+                    done();
+                });
+            }
+        );
     });
 });
