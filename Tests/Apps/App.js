@@ -1,4 +1,4 @@
-/** Tests Apps.App
+    /** Tests Apps.App
  *
  * @autor : Rafael Almeida Erthal Hermano
  * @since : 2012-08
@@ -10,22 +10,19 @@ var should = require("should"),
     api = require("../Utils.js").api,
     db = require("../Utils.js").db,
     rand = require("../Utils.js").rand,
-    random, userName, appName1, appName2, appName3, slug1, slug2, slug3;
+    random, userName, appName1, appName2, appName3;
 
 random = rand();
 userName = 'testes+' + random + '@empreendemia.com.br';
 
 random = rand();
 appName1 = "Aplicativo " + random;
-slug1 = "aplicativo-" + random;
 
 random = rand();
 appName2 = "Aplicativo " + random;
-slug2 = "aplicativo-" + random;
 
 random = rand();
 appName3 = "Aplicativo " + random;
-slug3 = "aplicativo-" + random;
 
 describe('POST /app', function () {
     var token;
@@ -41,7 +38,7 @@ describe('POST /app', function () {
             done();
         });
     });
-/*
+
     it('url tem que existir', function(done) {
         api.post('apps', '/app', {}, function(error, data, response) {
             if (error) {
@@ -54,33 +51,21 @@ describe('POST /app', function () {
         });
     });
 
-    it('dados obrigatórios não preenchidos', function(done) {
-        api.post('apps', '/app', {
-                token : token
-            }, function(error, data, response) {
-                if (error) {
-                    return done(error);
-                } else { 
-                    should.exist(data.error);
-                    should.not.exist(data.slug);
-                    done();
-                }
-            }
-        );
-    });
-
     it('token errado', function(done) {
         api.post('apps', '/app', {
                 token   : 'tokeninvalido',
                 name    : 'testando serviço de apps',
-                slug    : 'testando-app',
                 type    : 'free'
             }, function(error, data, response) {
                 if (error) {
                     return done(error);
                 } else { 
                     should.exist(data.error);
-                    should.not.exist(data.slug);
+                    data.should.not.have.property('_id');
+                    data.should.not.have.property('slug');
+                    data.should.not.have.property('name');
+                    data.should.not.have.property('type');
+                    data.should.not.have.property('creator');
                     done();
                 }
             }
@@ -97,24 +82,32 @@ describe('POST /app', function () {
                     return done(error);
                 } else { 
                     should.exist(data.error);
-                    should.not.exist(data.slug);
+                    data.should.not.have.property('_id');
+                    data.should.not.have.property('slug');
+                    data.should.not.have.property('name');
+                    data.should.not.have.property('type');
+                    data.should.not.have.property('creator');
                     done();
                 }
             }
         );
     });
 
-    it('slug em branco', function(done) {
+    it('tipo inválido', function(done) {
         api.post('apps', '/app', {
                 token : token,
-                name    : 'testando serviço de apps',
-                type    : 'free'
+                name    : appName1,
+                type    : 'ola'
             }, function(error, data, response) {
                 if (error) {
                     return done(error);
                 } else { 
                     should.exist(data.error);
-                    should.not.exist(data.slug);
+                    data.should.not.have.property('_id');
+                    data.should.not.have.property('slug');
+                    data.should.not.have.property('name');
+                    data.should.not.have.property('type');
+                    data.should.not.have.property('creator');
                     done();
                 }
             }
@@ -125,15 +118,17 @@ describe('POST /app', function () {
         api.post('apps', '/app', {
                 token : token,
                 name    : appName1,
-                slug    : slug1,
                 type    : 'free'
             }, function(error, data, response) {
                 if (error) {
                     return done(error);
                 } else { 
-                    console.log(data);
                     should.not.exist(data.error, 'erro inesperado');
-                    should.exist(data._id, 'id');
+                    data.should.have.property('_id');
+                    data.should.have.property('slug');
+                    data.should.have.property('name');
+                    data.should.have.property('type');
+                    data.should.have.property('creator');
                     done();
                 }
             }
@@ -144,40 +139,404 @@ describe('POST /app', function () {
         api.post('apps', '/app', {
                 token : token,
                 name    : appName2,
-                slug    : slug2,
-                creator : userName,
                 type    : 'payed'
             }, function(error, data, response) {
                 if (error) {
                     return done(error);
                 } else { 
                     should.not.exist(data.error, 'erro inesperado');
-                    should.exist(data._id, 'id');
+                    data.should.have.property('_id');
+                    data.should.have.property('slug');
+                    data.should.have.property('name');
+                    data.should.have.property('type');
+                    data.should.have.property('creator');
                     done();
                 }
             }
         );
     });
-*/
+
     it('cadastrar app compulsório', function(done) {
         api.post('apps', '/app', {
                 token : token,
                 name    : appName3,
-                slug    : slug3,
-                creator : userName,
                 type    : 'compulsory'
             }, function(error, data, response) {
                 if (error) {
                     return done(error);
                 } else { 
                     should.not.exist(data.error, 'erro inesperado');
-                    should.exist(data._id, 'id');
+                    data.should.have.property('_id');
+                    data.should.have.property('slug');
+                    data.should.have.property('name');
+                    data.should.have.property('type');
+                    data.should.have.property('creator');
                     done();
                 }
             }
         );
     });
-    
-    /*
-    Cadastrar app já existente*/
+});
+
+describe('GET /apps', function () {
+    var token;
+
+    before(function (done) {
+        // cria usuario
+        api.post('auth', '/user', {
+            username : 'testes+' + rand() + '@empreendemia.com.br',
+            password : 'testando',
+            password_confirmation : 'testando'
+        }, function(error, data) {
+            var apps = 0;
+            token = data.token;
+            //cria 20 aplicativos
+            for (var i = 0; i < 20; i = i + 1) {
+                api.post('apps', '/app', {
+                    token : data.token,
+                    name  : 'Aplicativo ' + rand(),
+                    type  : 'compulsory'
+                }, function(error, data, response) {
+                    apps++;
+                    if (apps === 20) {
+                        done();
+                    }
+                });
+            }
+        });
+    });
+
+    it('url tem que existir', function(done) {
+        api.get('apps', '/apps', {}, function(error, data, response) {
+            if (error) {
+                return done(error);
+            } else {
+                response.should.have.status(200);
+                should.exist(data, 'não retornou dado nenhum');
+                done();
+            }
+        });
+    });
+
+    it('lista de pelo menos 20 aplicativos', function(done) {
+        api.get('apps', '/apps', {}, function(error, data, response) {
+            if (error) {
+                return done(error);
+            } else {
+                should.not.exist(data.error, 'erro inesperado');
+                data.length.should.be.above(19);
+                for (var i = 0 ; i < data.length; i = i + 1) {
+                    data[i].should.have.property('_id');
+                    data[i].should.have.property('slug');
+                    data[i].should.have.property('name');
+                    data[i].should.have.property('type');
+                    data[i].should.have.property('creator');
+                }
+                done();
+            }
+        });
+    });
+});
+
+describe('GET /app/[slug]', function () {
+    var token,
+        slug;
+
+    before(function (done) {
+        // cria usuario
+        api.post('auth', '/user', {
+            username : 'testes+' + rand() + '@empreendemia.com.br',
+            password : 'testando',
+            password_confirmation : 'testando'
+        }, function(error, data) {
+            token = data.token;
+            //cria um aplicativo
+            api.post('apps', '/app', {
+                token : token,
+                name    : 'Aplicativo ' + rand(),
+                type    : 'payed'
+            }, function(error, data, response) {
+                if (error) {
+                    done(error);
+                } else {
+                    slug = data.slug;
+                    done();
+                }
+            });
+        });
+    });
+
+    it('url tem que existir', function(done) {
+        api.get('apps', '/app/' + slug, {}, function(error, data, response) {
+            if (error) {
+                return done(error);
+            } else {
+                response.should.have.status(200);
+                should.exist(data, 'não retornou dado nenhum');
+                done();
+            }
+        });
+    });
+
+    it('pegando um app existente', function(done) {
+        api.get('apps', '/app/' + slug, {}, function(error, data, response) {
+            if (error) {
+                return done(error);
+            } else {
+                should.not.exist(data.error, 'erro inesperado');
+                data.should.have.property('_id');
+                data.should.have.property('slug');
+                data.should.have.property('name');
+                data.should.have.property('type');
+                data.should.have.property('creator');
+                done();
+            }
+        });
+    });
+
+    it('pegando um app inexistente', function(done) {
+        api.get('apps', '/app/inexistente', {}, function(error, data, response) {
+            if (error) {
+                return done(error);
+            } else {
+                should.exist(data.error);
+                data.should.not.have.property('_id');
+                data.should.not.have.property('slug');
+                data.should.not.have.property('name');
+                data.should.not.have.property('type');
+                data.should.not.have.property('creator');
+                done();
+            }
+        });
+    });
+});
+
+describe('DEL /app/[slug]', function () {
+    var token,
+        slug;
+
+    before(function (done) {
+        // cria usuario
+        api.post('auth', '/user', {
+            username : 'testes+' + rand() + '@empreendemia.com.br',
+            password : 'testando',
+            password_confirmation : 'testando'
+        }, function(error, data) {
+            token = data.token;
+            //cria um aplicativo
+            api.post('apps', '/app', {
+                token : token,
+                name    : 'Aplicativo ' + rand(),
+                type    : 'payed'
+            }, function(error, data, response) {
+                if (error) {
+                    done(error);
+                } else {
+                    slug = data.slug;
+                    done();
+                }
+            });
+        });
+    });
+
+    it('url tem que existir', function(done) {
+        api.del('apps', '/app/' + slug, {}, function(error, data, response) {
+            if (error) {
+                return done(error);
+            } else {
+                response.should.have.status(200);
+                should.exist(data, 'não retornou dado nenhum');
+                done();
+            }
+        });
+    });
+
+    it('token errado', function(done) {
+        api.del('apps', '/app/' + slug, {token : 'invalido'}, function(error, data, response) {
+            if (error) {
+                return done(error);
+            } else { 
+                should.exist(data.error);
+                data.should.not.have.property('_id');
+                data.should.not.have.property('slug');
+                data.should.not.have.property('name');
+                data.should.not.have.property('type');
+                data.should.not.have.property('creator');
+                done();
+            }
+        });
+    });
+
+    it('deletando um app existente', function(done) {
+        api.del('apps', '/app/' + slug, {}, function(error, data, response) {
+            if (error) {
+                return done(error);
+            } else {
+                should.not.exist(data.error, 'erro inesperado');
+                done();
+            }
+        });
+    });
+
+    it('deletando um app inexistente', function(done) {
+        api.del('apps', '/app/inexistente', {}, function(error, data, response) {
+            if (error) {
+                return done(error);
+            } else {
+                should.exist(data.error);
+                data.should.not.have.property('_id');
+                data.should.not.have.property('slug');
+                data.should.not.have.property('name');
+                data.should.not.have.property('type');
+                data.should.not.have.property('creator');
+                done();
+            }
+        });
+    });
+});
+
+describe('PUT /app/[slug]', function () {
+    var token,
+        slug;
+
+    before(function (done) {
+        // cria usuario
+        api.post('auth', '/user', {
+            username : 'testes+' + rand() + '@empreendemia.com.br',
+            password : 'testando',
+            password_confirmation : 'testando'
+        }, function(error, data) {
+            token = data.token;
+            //cria um aplicativo
+            api.post('apps', '/app', {
+                token : token,
+                name    : 'Aplicativo ' + rand(),
+                type    : 'payed'
+            }, function(error, data, response) {
+                if (error) {
+                    done(error);
+                } else {
+                    slug = data.slug;
+                    done();
+                }
+            });
+        });
+    });
+
+    it('url tem que existir', function(done) {
+        api.put('apps', '/app/' + slug, {}, function(error, data, response) {
+            if (error) {
+                return done(error);
+            } else {
+                response.should.have.status(200);
+                should.exist(data, 'não retornou dado nenhum');
+                done();
+            }
+        });
+    });
+
+    it('token errado', function(done) {
+        api.put('apps', '/app/' + slug, {
+                token : 'invalido',
+                name    : 'Aplicativo ' + rand(),
+                type    : 'free'
+            }, function(error, data, response) {
+            if (error) {
+                return done(error);
+            } else { 
+                should.exist(data.error);
+                should.not.exist(data.slug);
+                data.should.not.have.property('_id');
+                data.should.not.have.property('slug');
+                data.should.not.have.property('name');
+                data.should.not.have.property('type');
+                data.should.not.have.property('creator');
+                done();
+            }
+        });
+    });
+
+    it('editando um app existente com nome em branco', function(done) {
+        api.put('apps', '/app/' + slug, {
+            token : token,
+            type    : 'free'
+        }, function(error, data, response) {
+            if (error) {
+                return done(error);
+            } else {
+                should.exist(data.error);
+                data.should.not.have.property('_id');
+                data.should.not.have.property('slug');
+                data.should.not.have.property('name');
+                data.should.not.have.property('type');
+                data.should.not.have.property('creator');
+                done();
+            }
+        });
+    });
+
+    it('editando um app existente com tipo inválido', function(done) {
+        var name = 'Aplicativo ' + rand();
+
+        api.put('apps', '/app/' + slug, {
+            token : token,
+            name    : name,
+            type    : 'ola'
+        }, function(error, data, response) {
+            if (error) {
+                return done(error);
+            } else {
+                should.exist(data.error);
+                data.should.not.have.property('_id');
+                data.should.not.have.property('slug');
+                data.should.not.have.property('name');
+                data.should.not.have.property('type');
+                data.should.not.have.property('creator');
+                done();
+            }
+        });
+    });
+
+    it('editando um app existente', function(done) {
+        var name = 'Aplicativo ' + rand();
+
+        api.put('apps', '/app/' + slug, {
+            token : token,
+            name    : name,
+            type    : 'free'
+        }, function(error, data, response) {
+            if (error) {
+                return done(error);
+            } else {
+                should.not.exist(data.error, 'erro inesperado');
+                should.exist(data);
+                data.should.have.property('_id');
+                data.should.have.property('slug');
+                data.should.have.property('name', name);
+                data.should.have.property('type', 'free');
+                data.should.have.property('creator');
+                done();
+            }
+        });
+    });
+
+    it('pegando um app inexistente', function(done) {
+        api.put('apps', '/app/inexistente', {
+            token : token,
+            name    : 'Aplicativo ' + rand(),
+            type    : 'payed'
+        }, function(error, data, response) {
+            if (error) {
+                return done(error);
+            } else {
+                should.exist(data.error);
+                data.should.not.have.property('_id');
+                data.should.not.have.property('slug');
+                data.should.not.have.property('name');
+                data.should.not.have.property('type');
+                data.should.not.have.property('creator');
+                done();
+            }
+        });
+    });
 });
