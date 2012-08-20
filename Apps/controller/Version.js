@@ -44,7 +44,7 @@ module.exports = function (app) {
                             response.send({error : 'app not found'});
                         } else {
                             //verifica se o usuário é o criador do app
-                            if (request.param('login', null) !== app.creator) {
+                            if (user._id !== app.creator) {
                                 response.send({error : 'permission denied'});
                             } else {
                                 //coloca os dados do post em um objeto
@@ -57,7 +57,7 @@ module.exports = function (app) {
                                     if (error) {
                                         response.send({error : error});
                                     } else {
-                                        response.send({error : ''});
+                                        response.send(version);
                                     }
                                 });
                             }
@@ -100,7 +100,7 @@ module.exports = function (app) {
                         if (error) {
                             response.send({error : error});
                         } else {
-                            response.send({versions : versions});
+                            response.send(versions);
                         }
                     });
                 }
@@ -142,7 +142,7 @@ module.exports = function (app) {
                             if (version === null) {
                                 response.send({error : 'version not foud'});
                             } else {
-                                response.send({version : version});
+                                response.send(version);
                             }
                         }
                     });
@@ -180,7 +180,7 @@ module.exports = function (app) {
                             response.send({error : 'app not found'});
                         } else {
                             //verifica se o usuário é o criador do app
-                            if (request.param('login', null) !== app.creator) {
+                            if (user._id !== app.creator) {
                                 response.send({error : 'permission denied'});
                             } else {
                                 //pega a versão
@@ -197,7 +197,7 @@ module.exports = function (app) {
                                                 if (error) {
                                                     response.send({error : error});
                                                 } else {
-                                                    response.send({error : ''});
+                                                    response.send(null);
                                                 }
                                             });
                                         }
@@ -223,7 +223,7 @@ module.exports = function (app) {
      * @allowedApp : sdk
      * @allowedUser : Logado
      *
-     * @request : {number}
+     * @request : {token, number}
      * @response : {confirmation}
      */
     app.put('/app/:slug/version/:oldnumber', function (request, response) {
@@ -242,7 +242,7 @@ module.exports = function (app) {
                             response.send({error : 'app not found'});
                         } else {
                             //verifica se o usuário é o criador do app
-                            if (request.param('login', null) !== app.creator) {
+                            if (user._id !== app.creator) {
                                 response.send({error : 'permission denied'});
                             } else {
                                 //pega a versão
@@ -263,7 +263,7 @@ module.exports = function (app) {
                                                 if (error) {
                                                     response.send({error : error});
                                                 } else {
-                                                    response.send({Version : version});
+                                                    response.send(version);
                                                 }
                                             });
                                         }

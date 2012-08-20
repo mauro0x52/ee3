@@ -22,7 +22,7 @@ module.exports = function (app) {
      * @allowedApp : sdk
      * @allowedUser : Logado
      *
-     * @request : {login,token,name,slug,type}
+     * @request : {token,name,slug,type}
      * @response : {confirmation}
      */
     app.post('/app', function (request, response) {
@@ -37,7 +37,7 @@ module.exports = function (app) {
                 app = new App({
                     name    : request.param('name', null),
                     slug    : request.param('slug', null),
-                    creator : request.param('login', null),
+                    creator : user._id,
                     type    : request.param('type', null)
                 });
                 //salva novo app
@@ -45,7 +45,7 @@ module.exports = function (app) {
                     if (error) {
                         response.send({error : error});
                     } else {
-                        response.send({App : app});
+                        response.send(app);
                     }
                 });
             } else {
@@ -75,7 +75,7 @@ module.exports = function (app) {
             if (error) {
                 response.send({error : error});
             } else {
-                response.send({apps : apps});
+                response.send(apps);
             }
         });
     });
@@ -105,7 +105,7 @@ module.exports = function (app) {
                 if (app === null) {
                     response.send({error : 'app not found'});
                 } else {
-                    response.send({app : app});
+                    response.send(app);
                 }
             }
         });
@@ -140,7 +140,7 @@ module.exports = function (app) {
                             response.send({error : 'app not found'});
                         } else {
                             //verifica se o usuário é o criador do app
-                            if (request.param('login', null) !== app.creator) {
+                            if (user._id !== app.creator) {
                                 response.send({error : 'permission denied'});
                             } else {
                                 //remove o aplicativo
@@ -148,7 +148,7 @@ module.exports = function (app) {
                                     if (error) {
                                         response.send({error : error});
                                     } else {
-                                        response.send({error : ''});
+                                        response.send(null);
                                     }
                                 });
                             }
@@ -171,7 +171,7 @@ module.exports = function (app) {
      * @allowedApp : sdk
      * @allowedUser : Logado
      *
-     * @request : {}
+     * @request : {token,name,slug,type}
      * @response : {}
      */
     app.put('/app/:slug', function (request, response) {
@@ -190,7 +190,7 @@ module.exports = function (app) {
                             response.send({error : 'app not found'});
                         } else {
                             //verifica se o usuário é o criador do app
-                            if (request.param('login', null) !== app.creator) {
+                            if (user._id !== app.creator) {
                                 response.send({error : 'permission denied'});
                             } else {
                                 //altera os dados do aplicativo
@@ -208,7 +208,7 @@ module.exports = function (app) {
                                     if (error) {
                                         response.send({error : error});
                                     } else {
-                                        response.send({App : app});
+                                        response.send(app);
                                     }
                                 });
                             }

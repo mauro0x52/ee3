@@ -23,7 +23,7 @@ module.exports = function (app) {
      * @allowedApp : sdk
      * @allowedUser : Logado 
      *
-     * @request : {name,code}
+     * @request : {token, name,code}
      * @response : {confirmation}
      */
     app.post('/app/:slug/version/:number/plugin', function (request, response) {
@@ -44,7 +44,7 @@ module.exports = function (app) {
                             response.send({error : 'app not found'});
                         } else {
                             //verifica se o usuário é o criador do app
-                            if (request.param('login', null) !== app.creator) {
+                            if (user._id !== app.creator) {
                                 response.send({error : 'permission denied'});
                             } else {
                                 //busca a versão
@@ -216,7 +216,7 @@ module.exports = function (app) {
                             response.send({error : 'app not found'});
                         } else {
                             //verifica se o usuário é o criador do app
-                            if (request.param('login', null) !== app.creator) {
+                            if (user._id !== app.creator) {
                                 response.send({error : 'permission denied'});
                             } else {
                                 //pega a versão
@@ -271,7 +271,7 @@ module.exports = function (app) {
      * @allowedApp : sdk
      * @allowedUser : Logado
      *
-     * @request : {number}
+     * @request : {token, number, name, source}
      * @response : {confirmation}
      */
     app.put('/app/:slug/version/:number/plugin/:oldname', function (request, response) {
@@ -290,7 +290,7 @@ module.exports = function (app) {
                             response.send({error : 'app not found'});
                         } else {
                             //verifica se o usuário é o criador do app
-                            if (request.param('login', null) !== app.creator) {
+                            if (user._id !== app.creator) {
                                 response.send({error : 'permission denied'});
                             } else {
                                 //pega a versão

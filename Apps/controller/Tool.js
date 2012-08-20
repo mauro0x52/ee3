@@ -23,7 +23,7 @@ module.exports = function (app) {
      * @allowedApp : sdk
      * @allowedUser : Logado 
      *
-     * @request : {name,code}
+     * @request : {name,code,token}
      * @response : {confirmation}
      */
     app.post('/app/:slug/version/:number/tool', function (request, response) {
@@ -45,7 +45,7 @@ module.exports = function (app) {
                             response.send({error : 'app not found'});
                         } else {
                             //verifica se o usuário é o criador do app
-                            if (request.param('login', null) !== app.creator) {
+                            if (user._id !== app.creator) {
                                 response.send({error : 'permission denied'});
                             } else {
                                 //busca a versão
@@ -68,7 +68,7 @@ module.exports = function (app) {
                                                 if (error) {
                                                     response.send({error : error});
                                                 } else {
-                                                    response.send({error : ''});
+                                                    response.send(tool);
                                                 }
                                             });
                                         }
@@ -124,7 +124,7 @@ module.exports = function (app) {
                                     if (error) {
                                         response.send({error : error});
                                     } else {
-                                        response.send({tools : tools});
+                                        response.send(tools);
                                     }
                                 });
                             }
@@ -178,7 +178,7 @@ module.exports = function (app) {
                                         if (tool === null) {
                                             response.send({error : 'tool not found'});
                                         } else {
-                                            response.send({tool : tool});
+                                            response.send(tool);
                                         }
                                     }
                                 });
@@ -220,7 +220,7 @@ module.exports = function (app) {
                             response.send({error : 'app not found'});
                         } else {
                             //verifica se o usuário é o criador do app
-                            if (request.param('login', null) !== app.creator) {
+                            if (user._id !== app.creator) {
                                 response.send({error : 'permission denied'});
                             } else {
                                 //pega a versão
@@ -246,7 +246,7 @@ module.exports = function (app) {
                                                             if (error) {
                                                                 response.send({error : error});
                                                             } else {
-                                                                response.send({error : ''});
+                                                                response.send(null);
                                                             }
                                                         });
                                                     }
@@ -275,7 +275,7 @@ module.exports = function (app) {
      * @allowedApp : sdk
      * @allowedUser : Logado
      *
-     * @request : {number}
+     * @request : {number,token, name,code}
      * @response : {confirmation}
      */
     app.put('/app/:slug/version/:number/tool/:oldname', function (request, response) {
@@ -295,7 +295,7 @@ module.exports = function (app) {
                             response.send({error : 'app not found'});
                         } else {
                             //verifica se o usuário é o criador do app
-                            if (request.param('login', null) !== app.creator) {
+                            if (user._id !== app.creator) {
                                 response.send({error : 'permission denied'});
                             } else {
                                 //pega a versão
@@ -328,7 +328,7 @@ module.exports = function (app) {
                                                             if (error) {
                                                                 response.send({error : error});
                                                             } else {
-                                                                response.send({error : ''});
+                                                                response.send(tool);
                                                             }
                                                         });
                                                     }
