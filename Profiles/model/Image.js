@@ -4,17 +4,17 @@
  *
  * @description : Representação da entidade de Image
  */
- 
+
 var mongoose = require('mongoose'),
-    schema   = mongoose.Schema,
-    objectId = schema.ObjectId,
-    imageSchema;
+    Schema   = mongoose.Schema,
+    objectId = Schema.ObjectId,
+    imageStruct;
 
-imageSchema = new schema({
-    url    : {type : String, trim: true},
-    title  : {type : String, trim: true},
-    legend : {type : String}
-});
+imageStruct = {
+    file   : objectId,
+    url    : {type : String, trim : true},
+    title  : {type : String, trim : true},
+    legend : {type : String, trim : true}
+};
 
-/*  Exportando o pacote  */
-exports.Image = imageSchema;
+exports.ImageStruct = imageStruct;

@@ -4,17 +4,14 @@
  *
  * @description : Representação da entidade de Thumbnail
  */
- 
-var mongoose = require('mongoose'),
-    schema   = mongoose.Schema,
-    objectId = schema.ObjectId,
-    thumbnailSchema;
 
-thumbnailSchema = new schema({
-    small  : [require('./Image.js').Image],
-    medium : [require('./Image.js').Image],
-    large  : [require('./Image.js').Image]
-});
+var thumbnailStruct;
 
-/*  Exportando o pacote  */
-exports.Thumbnail = thumbnailSchema;
+thumbnailStruct = {
+    original : require('./Image.js').ImageStruct,
+    small : require('./Image.js').ImageStruct,
+    medium : require('./Image.js').ImageStruct,
+    large : require('./Image.js').ImageStruct
+};
+
+exports.ThumbnailStruct = thumbnailStruct;

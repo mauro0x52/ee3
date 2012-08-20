@@ -33,7 +33,7 @@ module.exports = function (app) {
         auth(request.param('token'), function (user) {
             if (user) {
                 //busca o perfil
-                Profile.findByIdentity(profile_id, function (error, profile) {
+                Profile.findByIdentity(request.param('profile_id'), function (error, profile) {
                     if (error) {
                         response.send({error : error});
                     } else {
@@ -42,7 +42,7 @@ module.exports = function (app) {
                             response.send({error : 'profile not found'});
                         } else {
                             //verifica se o usuário é dono do perfil
-                            if (! profile.isOwner(request.param('login', null))) {
+                            if (!profile.isOwner(user._id)) {
                                 response.send({error : 'permission denied'});
                             } else {
                                 // verifica se foi enviado algum arquivo
@@ -57,7 +57,7 @@ module.exports = function (app) {
                                             if (error) {
                                                 response.send({error : error});
                                             } else {
-                                                product.thumbnail = {
+                                                profile.thumbnail = {
                                                     original : {
                                                         file : data.original._id,
                                                         url : data.original.url,
@@ -83,12 +83,12 @@ module.exports = function (app) {
                                                         legend : '200x200 thumbnail'
                                                     }
                                                 };
-                                                product.save(function (error) {
+                                                profile.save(function (error) {
                                                     if (error) {
                                                         response.send({error: error});
                                                     }
                                                     else {
-                                                        response.send(product.thumbnail);
+                                                        response.send(profile.thumbnail);
                                                     }
                                                 });
                                             }
@@ -105,12 +105,12 @@ module.exports = function (app) {
         });
     });
 
-    /** GET /profile/:profile_id/thumbnails
+    /** GET /profile/:profile_id/thumbnail
      *
      * @autor : Rafael Erthal
      * @since : 2012-08
      *
-     * @description : Listar thumbnails
+     * @description : Listar thumbnail
      *
      * @allowedApp : Profiles
      * @allowedUser : Deslogado
@@ -118,11 +118,11 @@ module.exports = function (app) {
      * @request : {}
      * @response : {[{}]}
      */
-    app.get('/profile/:profile_id/thumbnails', function (request, response) {
+    app.get('/profile/:profile_id/thumbnail', function (request, response) {
         response.contentType('json');
 
         //busca o perfil
-        Profile.findByIdentity(profile_id, function (error, profile) {
+        Profile.findByIdentity(request.param('profile_id'), function (error, profile) {
             if (error) {
                 response.send({error : error});
             } else {
@@ -130,7 +130,7 @@ module.exports = function (app) {
                 if (profile === null) {
                     response.send({error : 'profile not found'});
                 } else {
-                    response.send({thumbnails : profile.thumbnails});
+                    response.send(profile.thumbnail);
                 }
             }
         });
@@ -167,7 +167,7 @@ module.exports = function (app) {
                             response.send({error : error});
                         } else {
                             //verifica se thumbnail foi encontrado
-                            if ( === null) {
+                            if (thumbnail === null) {
                                 response.send({error : 'thumbnail not found'});
                             } else {
                                 response.send({thumbnail : thumbnail});
@@ -208,7 +208,7 @@ module.exports = function (app) {
                             response.send({error : 'profile not found'});
                         } else {
                             //verifica se o usuário é dono do perfil
-                            if (! profile.isOwner(request.param('login', null))) {
+                            if (!profile.isOwner(user._id)) {
                                 response.send({error : 'permission denied'});
                             } else {
                                 //busca o thumbnail
@@ -276,7 +276,7 @@ module.exports = function (app) {
                             response.send({error : 'profile not found'});
                         } else {
                             //verifica se o usuário é dono do perfil
-                            if (! profile.isOwner(request.param('login', null))) {
+                            if (!profile.isOwner(user._id)) {
                                 response.send({error : 'permission denied'});
                             } else {
                                 //busca o thumbnail

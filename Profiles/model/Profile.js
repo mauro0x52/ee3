@@ -4,7 +4,7 @@
  *
  * @description : Representação da entidade de profile
  */
- 
+
 var mongoose = require('mongoose'),
     crypto   = require('crypto'),
     schema   = mongoose.Schema,
@@ -18,7 +18,7 @@ profileSchema = new schema({
     slug        : {type : String, trim : true, unique : true},
     name        : {type : String, required : true, trim : true},
     surname     : {type : String, trim : true},
-    thumbnail   : [require('./Thumbnail.js').Thumbnail],
+    thumbnail   : require('./Thumbnail.js').ThumbnailStruct,
     about       : {type : String},
     phones      : [require('./Phone.js').Phone],
     contacts    : [require('./Contact.js').Contact],
@@ -49,13 +49,33 @@ profileSchema.methods.isOwner = function (id) {
 
     var i,
         isOwner = false;
-
     //verifica se o usário é igual o solicitado
-    if (this.username === id) {
+    if (this.userId.toString() === id) {
         isOwner = true;
     }
-    
+
     return isOwner;
+};
+
+
+/** FindByIdOrSlug
+ * @author : Mauro Ribeiro
+ * @since : 2012-08
+ *
+ * @description : Procura um profile pelo id ou pelo slug
+ * @param id : id ou slug do profile
+ * @param cb : callback a ser chamado
+ */
+profileSchema.statics.findByIdentity = function (id, cb) {
+    "use strict";
+
+    if (new RegExp("[0-9 a-f]{24}").test(id)) {
+        // procura por id
+        Profile.findById(id, cb);
+    } else {
+        // procura por slug
+        Profile.findOne({slug : id}, cb);
+    }
 };
 
 /** FindPhone
@@ -80,7 +100,7 @@ profileSchema.methods.findPhone = function (id, cb) {
     }
     if (phone) {
         cb(undefined, phone);
-    } else { 
+    } else {
         cb('phone not found', null);
     }
 };
@@ -107,7 +127,7 @@ profileSchema.methods.findLink = function (id, cb) {
     }
     if (link) {
         cb(undefined, link);
-    } else { 
+    } else {
         cb('phone not found', null);
     }
 };
@@ -134,7 +154,7 @@ profileSchema.methods.findJob = function (id, cb) {
     }
     if (job) {
         cb(undefined, job);
-    } else { 
+    } else {
         cb('phone not found', null);
     }
 };
@@ -152,7 +172,7 @@ profileSchema.methods.findContact = function (id, cb) {
 
     var i,
         contact;
-        
+
     //varre os phones do profile
     for (i = 0; i < this.contacts.length; i = i + 1) {
         if (this.contacts[i]._id.toString() === id.toString()) {
@@ -161,7 +181,7 @@ profileSchema.methods.findContact = function (id, cb) {
     }
     if (contact) {
         cb(undefined, contact);
-    } else { 
+    } else {
         cb('phone not found', null);
     }
 };
@@ -179,7 +199,7 @@ profileSchema.methods.findThumbnail = function (id, cb) {
 
     var i,
         thumbnail;
-        
+
     //varre os phones do profile
     for (i = 0; i < this.thumbnails.length; i = i + 1) {
         if (this.thumbnails[i]._id.toString() === id.toString()) {
@@ -188,7 +208,7 @@ profileSchema.methods.findThumbnail = function (id, cb) {
     }
     if (thumbnail) {
         cb(undefined, thumbnail);
-    } else { 
+    } else {
         cb('phone not found', null);
     }
 };
