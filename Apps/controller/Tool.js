@@ -172,7 +172,7 @@ module.exports = function (app) {
                             } else {
                                 version.findTool(request.params.name, function (error, tool) {
                                     if (error) {
-                                        console.log({error : error});
+                                        response.send({error : error});
                                     } else {
                                         //verifica se a ferramente foi encontrada
                                         if (tool === null) {

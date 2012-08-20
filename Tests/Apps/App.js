@@ -9,20 +9,7 @@
 var should = require("should"),
     api = require("../Utils.js").api,
     db = require("../Utils.js").db,
-    rand = require("../Utils.js").rand,
-    random, userName, appName1, appName2, appName3;
-
-random = rand();
-userName = 'testes+' + random + '@empreendemia.com.br';
-
-random = rand();
-appName1 = "Aplicativo " + random;
-
-random = rand();
-appName2 = "Aplicativo " + random;
-
-random = rand();
-appName3 = "Aplicativo " + random;
+    rand = require("../Utils.js").rand;
 
 describe('POST /app', function () {
     var token;
@@ -30,7 +17,7 @@ describe('POST /app', function () {
     before(function (done) {
         // cria usuario
         api.post('auth', '/user', {
-            username : userName,
+            username : 'testes+' + rand() + '@empreendemia.com.br',
             password : 'testando',
             password_confirmation : 'testando'
         }, function(error, data) {
@@ -96,7 +83,7 @@ describe('POST /app', function () {
     it('tipo inválido', function(done) {
         api.post('apps', '/app', {
                 token : token,
-                name    : appName1,
+                name    : "Aplicativo " + rand(),
                 type    : 'ola'
             }, function(error, data, response) {
                 if (error) {
@@ -117,7 +104,7 @@ describe('POST /app', function () {
     it('cadastrar app gratuito', function(done) {
         api.post('apps', '/app', {
                 token : token,
-                name    : appName1,
+                name    : "Aplicativo " + rand(),
                 type    : 'free'
             }, function(error, data, response) {
                 if (error) {
@@ -138,7 +125,7 @@ describe('POST /app', function () {
     it('cadastrar app pago', function(done) {
         api.post('apps', '/app', {
                 token : token,
-                name    : appName2,
+                name    : "Aplicativo " + rand(),
                 type    : 'payed'
             }, function(error, data, response) {
                 if (error) {
@@ -159,7 +146,7 @@ describe('POST /app', function () {
     it('cadastrar app compulsório', function(done) {
         api.post('apps', '/app', {
                 token : token,
-                name    : appName3,
+                name    : "Aplicativo " + rand(),
                 type    : 'compulsory'
             }, function(error, data, response) {
                 if (error) {
@@ -278,23 +265,7 @@ describe('GET /app/[slug]', function () {
         });
     });
 
-    it('pegando um app existente', function(done) {
-        api.get('apps', '/app/' + slug, {}, function(error, data, response) {
-            if (error) {
-                return done(error);
-            } else {
-                should.not.exist(data.error, 'erro inesperado');
-                data.should.have.property('_id');
-                data.should.have.property('slug');
-                data.should.have.property('name');
-                data.should.have.property('type');
-                data.should.have.property('creator');
-                done();
-            }
-        });
-    });
-
-    it('pegando um app inexistente', function(done) {
+    it('app inexistente', function(done) {
         api.get('apps', '/app/inexistente', {}, function(error, data, response) {
             if (error) {
                 return done(error);
@@ -305,6 +276,22 @@ describe('GET /app/[slug]', function () {
                 data.should.not.have.property('name');
                 data.should.not.have.property('type');
                 data.should.not.have.property('creator');
+                done();
+            }
+        });
+    });
+
+    it('app existente', function(done) {
+        api.get('apps', '/app/' + slug, {}, function(error, data, response) {
+            if (error) {
+                return done(error);
+            } else {
+                should.not.exist(data.error, 'erro inesperado');
+                data.should.have.property('_id');
+                data.should.have.property('slug');
+                data.should.have.property('name');
+                data.should.have.property('type');
+                data.should.have.property('creator');
                 done();
             }
         });
@@ -367,18 +354,7 @@ describe('DEL /app/[slug]', function () {
         });
     });
 
-    it('deletando um app existente', function(done) {
-        api.del('apps', '/app/' + slug, {}, function(error, data, response) {
-            if (error) {
-                return done(error);
-            } else {
-                should.not.exist(data.error, 'erro inesperado');
-                done();
-            }
-        });
-    });
-
-    it('deletando um app inexistente', function(done) {
+    it('app inexistente', function(done) {
         api.del('apps', '/app/inexistente', {}, function(error, data, response) {
             if (error) {
                 return done(error);
@@ -389,6 +365,17 @@ describe('DEL /app/[slug]', function () {
                 data.should.not.have.property('name');
                 data.should.not.have.property('type');
                 data.should.not.have.property('creator');
+                done();
+            }
+        });
+    });
+
+    it('app existente', function(done) {
+        api.del('apps', '/app/' + slug, {token : token}, function(error, data, response) {
+            if (error) {
+                return done(error);
+            } else {
+                should.not.exist(data, 'erro inesperado');
                 done();
             }
         });
@@ -456,7 +443,7 @@ describe('PUT /app/[slug]', function () {
         });
     });
 
-    it('editando um app existente com nome em branco', function(done) {
+    it('nome em branco', function(done) {
         api.put('apps', '/app/' + slug, {
             token : token,
             type    : 'free'
@@ -475,7 +462,7 @@ describe('PUT /app/[slug]', function () {
         });
     });
 
-    it('editando um app existente com tipo inválido', function(done) {
+    it('tipo inválido', function(done) {
         var name = 'Aplicativo ' + rand();
 
         api.put('apps', '/app/' + slug, {
@@ -497,7 +484,27 @@ describe('PUT /app/[slug]', function () {
         });
     });
 
-    it('editando um app existente', function(done) {
+    it('app inexistente', function(done) {
+        api.put('apps', '/app/inexistente', {
+            token : token,
+            name    : 'Aplicativo ' + rand(),
+            type    : 'payed'
+        }, function(error, data, response) {
+            if (error) {
+                return done(error);
+            } else {
+                should.exist(data.error);
+                data.should.not.have.property('_id');
+                data.should.not.have.property('slug');
+                data.should.not.have.property('name');
+                data.should.not.have.property('type');
+                data.should.not.have.property('creator');
+                done();
+            }
+        });
+    });
+
+    it('app existente', function(done) {
         var name = 'Aplicativo ' + rand();
 
         api.put('apps', '/app/' + slug, {
@@ -515,26 +522,6 @@ describe('PUT /app/[slug]', function () {
                 data.should.have.property('name', name);
                 data.should.have.property('type', 'free');
                 data.should.have.property('creator');
-                done();
-            }
-        });
-    });
-
-    it('pegando um app inexistente', function(done) {
-        api.put('apps', '/app/inexistente', {
-            token : token,
-            name    : 'Aplicativo ' + rand(),
-            type    : 'payed'
-        }, function(error, data, response) {
-            if (error) {
-                return done(error);
-            } else {
-                should.exist(data.error);
-                data.should.not.have.property('_id');
-                data.should.not.have.property('slug');
-                data.should.not.have.property('name');
-                data.should.not.have.property('type');
-                data.should.not.have.property('creator');
                 done();
             }
         });

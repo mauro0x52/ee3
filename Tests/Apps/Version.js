@@ -9,14 +9,7 @@
 var should = require("should"),
     api = require("../Utils.js").api,
     db = require("../Utils.js").db,
-    rand = require("../Utils.js").rand,
-    random, userName, appName;
-
-random = rand();
-userName = 'testes+' + random + '@empreendemia.com.br';
-
-random = rand();
-appName = "Aplicativo " + random;
+    rand = require("../Utils.js").rand;
 
 describe('POST /app/[slug]/version', function () {
     var token,
@@ -25,14 +18,14 @@ describe('POST /app/[slug]/version', function () {
     before(function (done) {
         // cria usuario
         api.post('auth', '/user', {
-            username : userName,
+            username : 'testes+' + rand() + '@empreendemia.com.br',
             password : 'testando',
             password_confirmation : 'testando'
         }, function(error, data) {
             token = data.token;
             api.post('apps', '/app', {
                 token : token,
-                name  : appName,
+                name  : 'Aplicativo ' + rand(),
                 type  : 'free'
             }, function (error, data) {
                 slug = data.slug;
@@ -53,7 +46,7 @@ describe('POST /app/[slug]/version', function () {
         });
     });
 
-    it('aplicativo inexistente', function(done) {
+    it('app inexistente', function(done) {
         api.post('apps', '/app/inexistente/version', {
                 token : token
             }, function(error, data, response) {
@@ -120,7 +113,7 @@ describe('POST /app/[slug]/version', function () {
     });
 });
 
-describe('GET /apps', function () {
+describe('GET /app/[slug]/versions', function () {
     var token,
         slug,
         versions = 0;
@@ -161,6 +154,17 @@ describe('GET /apps', function () {
             } else {
                 response.should.have.status(200);
                 should.exist(data, 'não retornou dado nenhum');
+                done();
+            }
+        });
+    });
+
+    it('app inexistente', function(done) {
+        api.get('apps', '/app/inexistente/versions', {}, function(error, data, response) {
+            if (error) {
+                return done(error);
+            } else {
+                should.exist(data.error);
                 done();
             }
         });
@@ -224,7 +228,7 @@ describe('GET /app/[slug]/version/[slug]', function () {
         });
     });
 
-    it('pegando versão de um app inexistente', function(done) {
+    it('app inexistente', function(done) {
         api.get('apps', '/app/inexistente/version/' + version, {}, function(error, data, response) {
             if (error) {
                 return done(error);
@@ -237,20 +241,7 @@ describe('GET /app/[slug]/version/[slug]', function () {
         });
     });
 
-    it('pegando versão de um app existente', function(done) {
-        api.get('apps', '/app/' + slug + '/version/' + version, {}, function(error, data, response) {
-            if (error) {
-                return done(error);
-            } else {
-                should.not.exist(data.error, 'erro inesperado');
-                data.should.have.property('_id');
-                data.should.have.property('number');
-                done();
-            }
-        });
-    });
-
-    it('pegando versão inexistente de um app existente', function(done) {
+    it('versão inexistente', function(done) {
         api.get('apps', '/app/' + slug + '/version/inexistente', {}, function(error, data, response) {
             if (error) {
                 return done(error);
@@ -262,9 +253,22 @@ describe('GET /app/[slug]/version/[slug]', function () {
             }
         });
     });
+
+    it('versão existente', function(done) {
+        api.get('apps', '/app/' + slug + '/version/' + version, {}, function(error, data, response) {
+            if (error) {
+                return done(error);
+            } else {
+                should.not.exist(data.error, 'erro inesperado');
+                data.should.have.property('_id');
+                data.should.have.property('number');
+                done();
+            }
+        });
+    });
 });
 
-describe('DEL /app/[slug]', function () {
+describe('DEL /app/[slug]/version/[number]', function () {
     var token,
         slug,
         version;
@@ -319,7 +323,7 @@ describe('DEL /app/[slug]', function () {
         });
     });
 
-    it('pegando versão de um app inexistente', function(done) {
+    it('app inexistente', function(done) {
         api.del('apps', '/app/inexistente/version/' + version, {token : 'invalido'}, function(error, data, response) {
             if (error) {
                 return done(error);
@@ -332,18 +336,7 @@ describe('DEL /app/[slug]', function () {
         });
     });
 
-    it('deletando uma versão existente', function(done) {
-        api.del('apps', '/app/' + slug + '/version/' + version, {}, function(error, data, response) {
-            if (error) {
-                return done(error);
-            } else {
-                should.not.exist(data.error, 'erro inesperado');
-                done();
-            }
-        });
-    });
-
-    it('deletando uma versão inexistente', function(done) {
+    it('versão inexistente', function(done) {
         api.del('apps', '/app/' + slug + '/version/inexistente', {}, function(error, data, response) {
             if (error) {
                 return done(error);
@@ -355,9 +348,20 @@ describe('DEL /app/[slug]', function () {
             }
         });
     });
+
+    it('versão existente', function(done) {
+        api.del('apps', '/app/' + slug + '/version/' + version, {token : token}, function(error, data, response) {
+            if (error) {
+                return done(error);
+            } else {
+                should.not.exist(data, 'erro inesperado');
+                done();
+            }
+        });
+    });
 });
 
-describe('PUT /app/[slug]', function () {
+describe('PUT /app/[slug]/version/[numer]', function () {
     var token,
         slug,
         version;
@@ -416,7 +420,7 @@ describe('PUT /app/[slug]', function () {
         });
     });
 
-    it('editando uma versão existente com numero em branco', function(done) {
+    it('numero em branco', function(done) {
         api.put('apps', '/app/' + slug + '/version/' + version, {
             token : token
         }, function(error, data, response) {
@@ -431,7 +435,7 @@ describe('PUT /app/[slug]', function () {
         });
     });
 
-    it('editando uma versão de um app inexistente', function(done) {
+    it('app inexistente', function(done) {
         api.put('apps', '/app/inexistente/version/' + version, {
             token : token,
             number  : rand()
@@ -447,26 +451,7 @@ describe('PUT /app/[slug]', function () {
         });
     });
 
-    it('editando uma versão existente', function(done) {
-        var version = rand();
-
-        api.put('apps', '/app/' + slug + '/version/' + version, {
-            token : token,
-            number  : version
-        }, function(error, data, response) {
-            if (error) {
-                return done(error);
-            } else {
-                should.not.exist(data.error, 'erro inesperado');
-                should.exist(data);
-                data.should.have.property('_id');
-                data.should.have.property('number', version);
-                done();
-            }
-        });
-    });
-
-    it('pegando uma versão inexistente', function(done) {
+    it('versão inexistente', function(done) {
         api.put('apps', '/app/' + slug + '/version/inexistente', {
             token : token,
             number  : rand()
@@ -477,6 +462,25 @@ describe('PUT /app/[slug]', function () {
                 should.exist(data.error);
                 data.should.not.have.property('_id');
                 data.should.not.have.property('number');
+                done();
+            }
+        });
+    });
+
+    it('versão existente', function(done) {
+        var new_version = rand();
+
+        api.put('apps', '/app/' + slug + '/version/' + version, {
+            token : token,
+            number  : new_version
+        }, function(error, data, response) {
+            if (error) {
+                return done(error);
+            } else {
+                should.not.exist(data.error, 'erro inesperado');
+                should.exist(data);
+                data.should.have.property('_id');
+                data.should.have.property('number', new_version);
                 done();
             }
         });

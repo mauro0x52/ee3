@@ -72,7 +72,7 @@ versionSchema.methods.tools = function (cb) {
 versionSchema.methods.findTool = function (name, cb) {
     "use strict";
 
-    Tool.findOne({versionId : this._id, name : name}, cb);
+    Tool.findOne({versionId : this._id, _id : name}, cb);
 };
 
 /** Plugins
@@ -99,7 +99,8 @@ versionSchema.methods.plugins = function (cb) {
 versionSchema.methods.findPlugin = function (name, cb) {
     "use strict";
 
-    Plugin.findOne({versionId : this._id, name : name}, cb);
+    console.log(name);
+    Plugin.findOne({versionId : this._id, _id : name}, cb);
 };
 
 /** Dialogs
@@ -126,7 +127,7 @@ versionSchema.methods.dialogs = function (cb) {
 versionSchema.methods.findDialog = function (name, cb) {
     "use strict";
 
-    Dialog.findOne({versionId : this._id, name : name}, cb);
+    Dialog.findOne({versionId : this._id, _id : name}, cb);
 };
 
 /*  Exportando o pacote  */
