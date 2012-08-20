@@ -15,7 +15,7 @@ var Version  = require('./Version.js').Version,
 
 appSchema = new Schema({
     name    : {type : String, trim : true, required : true},
-    slug    : {type : String, trim : true, required : true, unique : true},
+    slug    : {type : String, trim : true, unique : true},
     creator : {type : String, trim : true, required : true},
     type    : {type : String, required : true, enum : ['free', 'payed', 'compulsory']}
 });
