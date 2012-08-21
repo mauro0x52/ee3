@@ -11,7 +11,11 @@ describe('Auth', function() {
 });
 
 describe('Apps', function() {
-    require("./Auth/test.js");
+    require("./Apps/test.js");
+});
+
+describe('Talk', function() {
+    require("./Talk/test.js");
 });
 
 describe('Companies', function() {

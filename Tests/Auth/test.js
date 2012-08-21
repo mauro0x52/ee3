@@ -8,6 +8,6 @@
 
 describe('User', function() {
     require('./User.js');
-        require('./App.js');
-        require('./ThirdPartyLogin.js');
+    require('./App.js');
+    require('./ThirdPartyLogin.js');
 });

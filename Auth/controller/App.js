@@ -112,7 +112,7 @@ module.exports = function (app) {
                                             if (error) {
                                                 response.send({error : error});
                                             } else {
-                                                response.send();
+                                                response.send(null);
                                             }
                                         });
                                     }

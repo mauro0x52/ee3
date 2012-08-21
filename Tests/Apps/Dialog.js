@@ -1,4 +1,4 @@
-    /** Tests Apps.Dialog
+/** Tests Apps.Dialog
  *
  * @autor : Rafael Almeida Erthal Hermano
  * @since : 2012-08

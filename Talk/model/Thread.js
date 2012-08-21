@@ -21,7 +21,7 @@ messageSchema = new Schema({
 
 threadSchema = new Schema({
     place     : {type : String, trim : true, required : true},
-    slug      : {type : String, trim : true, required : true},
+    slug      : {type : String, trim : true},
     name      : {type : String, trim : true, required : true},
     status    : {type : String, required : true, enum : ['active', 'inactive']},
     messages  : [messageSchema]

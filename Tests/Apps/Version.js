@@ -1,4 +1,4 @@
-    /** Tests Apps.Version
+/** Tests Apps.Version
  *
  * @autor : Rafael Almeida Erthal Hermano
  * @since : 2012-08
