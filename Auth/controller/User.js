@@ -168,30 +168,25 @@ module.exports = function (app) {
             //localiza o usuário
             User.findByIdentity(request.params.login, function (error, user) {
                 if (error) {
-                    console.log("1");
                     response.send({error : error});
                 } else {
                     //verifica se o usuario foi encontrado
                     if (user === null) {
-                        console.log("2");
                         response.send({error : 'user not found'});
                     } else {
                         //checa token
                         user.checkToken(request.param('token', null), function (valid) {
                             if (!valid) {
-                                console.log("3");
                                 response.send({error : 'invalid token'});
                             } else {
                                 //altera a senha
                                 user.changePassword(request.param('newpassword', null), function (error) {
                                     if (error) {
-                                        console.log("4");
                                         response.send({error : error});
                                     } else {
                                         //reloga o usuário
                                         user.login(function (error) {
                                             if (error) {
-                                                console.log("5");
                                                 response.send({error : error});
                                             } else {
                                                 response.send(user);
