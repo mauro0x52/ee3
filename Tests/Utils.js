@@ -11,90 +11,45 @@ var fs = require('fs');
 
 var api = {
     get : function(service, url, data, cb) {
-        var qs = require('querystring'),
-            called = false;
+        var qs = require('querystring');
         restler.get('http://'+config.services[service].host+':'+config.services[service].port+url+'?'+qs.stringify(data))
         .on('success', function(data, response) {
-            if (!called) {
-                called = true;
-                cb(undefined, data, response);
-            } else {
-                console.log("testeGetSuccess");
-            }
+            cb(undefined, data, response);
          }).on('error', function(error) {
-            if (!called) {
-                called = true;
-                cb(error);
-            } else {
-                console.log("testeGetError");
-            }
+            cb(error);
         });
     },
     post : function(service, url, data, cb) {
-        var called = false;
         restler.post('http://'+config.services[service].host+':'+config.services[service].port+url, {
             data: data
         }).on('success', function(data, response) {
-            if (!called) {
-                called = true;
-                cb(undefined, data, response);
-            } else {
-                console.log("testePostSuccess");
-            }
+            cb(undefined, data, response);
         }).on('error', function(error) {
-            if (!called) {
-                called = true;
-                cb(error);
-            } else {
-                console.log("testePostError");
-            }
+            cb(error);
         });
     },
     put : function(service, url, data, cb) {
-        var called = false;
         restler.put('http://'+config.services[service].host+':'+config.services[service].port+url, {
             data: data
         }).on('success', function(data, response) {
-            if (!called) {
-                called = true;
-                cb(undefined, data, response);
-            } else {
-                console.log("testePutSuccess");
-            }
+            cb(undefined, data, response);
         }).on('error', function(error) {
-            if (!called) {
-                called = true;
-                cb(error);
-            } else {
-                console.log("testePutErro");
-            }
+            cb(error);
         });
     },
     del : function(service, url, data, cb) {
-        var called = false;
         restler.del('http://'+config.services[service].host+':'+config.services[service].port+url, {
             data: data
         }).on('success', function(data, response) {
-            if (!called) {
-                called = true;
-                cb(undefined, data, response);
-            } else {
-                console.log("testeDelSuccess");
-            }
+            cb(undefined, data, response);
         }).on('error', function(error) {
-            if (!called) {
-                called = true;
-                cb(error);
-            } else {
-                console.log("testeDelErro");
-            }
+            cb(error);
         });
     },
     file : function(service, url, data, files, cb) {
 
         var fs = require('fs'),
-            mime = require('mime'),
-            called = false;
+            mime = require('mime');
 
         for (var i in files){
             var stat = fs.statSync(__dirname + '/static/' + files[i]);
@@ -105,19 +60,9 @@ var api = {
             multipart: true,
             data: data
         }).on('success', function(data, response) {
-            if (!called) {
-                called = true;
-                cb(undefined, data, response);
-            } else {
-                console.log("testeFileSuccess");
-            }
+            cb(undefined, data, response);
         }).on('error', function(error) {
-            if (!called) {
-                called = true;
-                cb(error);
-            } else {
-                console.log("testeFileError");
-            }
+            cb(error);
         });
     }
 }

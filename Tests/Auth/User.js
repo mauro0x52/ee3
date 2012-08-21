@@ -237,12 +237,12 @@ describe('PUT /user/[login]/password-recovery', function () {
             token : token
         }, function(error, data, response) {
             should.not.exist(data.error, "não era para retornar erro");
-            should.exist(data.token, "não retornou o token");
-            should.exist(data.username, "não retornou o username");
-            should.exist(data.password, "não retornou o password");
-            should.exist(data.status, "não retornou o status");
-            should.exist(data.thirdPartyLogins, "não retornou o thirdPartyLogins");
-            should.exist(data.authorizedApps, "não retornou o authorizedApps");
+            data.should.have.proprety('token');
+            data.should.have.proprety('username');
+            data.should.have.proprety('password');
+            data.should.have.proprety('status');
+            data.should.have.proprety('thirdPartyLogins');
+            data.should.have.proprety('authorizedApps');
             done();
         });
     });
@@ -392,7 +392,7 @@ describe('PUT /user/[login]/logout', function() {
     });
     it('página não encontrada', function (done) {
         api.put('auth', '/user/'+userId+'/logout', {
-            password : "testando"
+            token : token
         },
         function(error, data, response) {
             response.should.have.status(200);
@@ -402,7 +402,7 @@ describe('PUT /user/[login]/logout', function() {
     });
     it('deslogado com sucesso', function (done) {
         api.put('auth', '/user/'+userId+'/logout', {
-            password : "testando"
+            token : token
         },
         function(error, data, response) {
             should.not.exist(data, "não era para retornar nehum dado");
@@ -412,10 +412,30 @@ describe('PUT /user/[login]/logout', function() {
     });
     it('usuário não existe', function (done) {
         api.put('auth', '/user/'+userId+'asd123asd123/logout', {
-            password : "testando"
+            token : token
         },
         function(error, data, response) {
-            should.exist(data.error, "era para retornar erro");
+            should.exist(data, "era para retornar erro");
+            done();
+        }
+        );
+    });
+    it('token errado', function (done) {
+        api.put('auth', '/user/'+userId+'asd123asd123/logout', {
+            token : token+"asd123"
+        },
+        function(error, data, response) {
+            should.exist(data, "era para retornar erro");
+            done();
+        }
+        );
+    });
+    it('token em branco', function (done) {
+        api.put('auth', '/user/'+userId+'asd123asd123/logout', {
+            //token : token+"asd123"
+        },
+        function(error, data, response) {
+            should.exist(data, "era para retornar erro");
             done();
         }
         );
