@@ -7,21 +7,21 @@
  */
 
 describe('App', function() {
-	require("./App.js");
+    require("./App.js");
 });
 
 describe('Version', function() {
-	require("./Version.js");
+    require("./Version.js");
 });
 
 describe('Tool', function() {
-	require("./Tool.js");
+    require("./Tool.js");
 });
 
 describe('Dialog', function() {
-	require("./Dialog.js");
+    require("./Dialog.js");
 });
 
 describe('Plugin', function() {
-	require("./Plugin.js");
+    require("./Plugin.js");
 });

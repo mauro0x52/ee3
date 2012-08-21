@@ -22,7 +22,7 @@ module.exports = function (app) {
      * @allowedApp : WWW
      * @allowedUser : Público
      *
-     * @request : {login,token,label}
+     * @request : {token,label}
      * @response : {confirmation}
      */
     app.post('/conversant', function (request, response) {
@@ -35,7 +35,7 @@ module.exports = function (app) {
             if (user) {
                 //pega os dados do post e coloca em um novo objeto.
                 conversant = new Conversant({
-                    user      : request.param('login', null),
+                    user      : user._id,
                     label     : request.param('label', null),
                     lastCheck : new Date()
                 });
@@ -44,7 +44,7 @@ module.exports = function (app) {
                     if (error) {
                         response.send({error : error});
                     } else {
-                        response.send({error : ''});
+                        response.send(conversant);
                     }
                 });
             } else {
@@ -73,7 +73,7 @@ module.exports = function (app) {
         auth(request.param('token'), function (user) {
             if (user) {
                 //busca o usuário
-                Conversant.findOne({user : request.params.user}, function (error, conversant) {
+                Conversant.findOne({user : user._id}, function (error, conversant) {
                     if (error) {
                         response.send({error : error});
                     } else {
@@ -88,7 +88,7 @@ module.exports = function (app) {
                                 if (error) {
                                     response.send({error : error});
                                 } else {
-                                    response.send({error : ''});
+                                    response.send(conversant);
                                 }
                             });
                         }

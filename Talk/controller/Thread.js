@@ -1,4 +1,4 @@
-/** Conversant
+/** Thread
  * @author : Rafael Almeida Erthal Hermano
  * @since : 2012-07
  *
@@ -13,7 +13,7 @@ module.exports = function (app) {
         Conversant  = Model.Conversant,
         Thread  = Model.Thread;
 
-    /** POST /conversant/:user_id/thread
+    /** POST /thread
      *
      * @autor : Rafael Erthal
      * @since : 2012-07
@@ -23,10 +23,10 @@ module.exports = function (app) {
      * @allowedApp : Qualquer app
      * @allowedUser : Logado
      *
-     * @request : {place,name,slug,token}
+     * @request : {place,name,token}
      * @response : {confirmation}
      */
-    app.post('/conversant/:user_id/thread', function (request, response) {
+    app.post('/thread', function (request, response) {
         var thread;
 
         response.contentType('json');
@@ -35,7 +35,7 @@ module.exports = function (app) {
         auth(request.param('token'), function (user) {
             if (user) {
                 //busca o usuário
-                Conversant.findOne({user : request.params.user_id}, function (error, conversant) {
+                Conversant.findOne({user : user._id}, function (error, conversant) {
                     if (error) {
                         response.send({error : error});
                     } else {
@@ -46,7 +46,6 @@ module.exports = function (app) {
                             //pega os dados do post e coloca em um objeto
                             thread = new Thread({
                                 place     : request.param('place', null),
-                                slug      : request.param('slug', null),
                                 name      : request.param('name', null),
                                 status    : 'active'
                             });
@@ -61,7 +60,7 @@ module.exports = function (app) {
                                         if (error) {
                                             response.send({error : error});
                                         } else {
-                                            response.send({error : ''});
+                                            response.send(thread);
                                         }
                                     });
                                 }
@@ -75,7 +74,7 @@ module.exports = function (app) {
         });
     });
 
-    /** PUT /conversant/:user_id/thread/:slug
+    /** PUT /thread/:slug
      *
      * @autor : Rafael Erthal
      * @since : 2012-07
@@ -88,14 +87,14 @@ module.exports = function (app) {
      * @request : {token}
      * @response : {confirmation}
      */
-    app.put('/conversant/:user_id/thread/:slug', function (request, response) {
+    app.put('/thread/:slug', function (request, response) {
         response.contentType('json');
 
         //valida o token do usuário
         auth(request.param('token'), function (user) {
             if (user) {
                 //busca o usuário
-                Conversant.findOne({user : request.params.user_id}, function (error, conversant) {
+                Conversant.findOne({user : user._id}, function (error, conversant) {
                     if (error) {
                         response.send({error : error});
                     } else {
@@ -119,7 +118,7 @@ module.exports = function (app) {
                                             if (error) {
                                                 response.send({error : error});
                                             } else {
-                                                response.send({error : ''});
+                                                response.send(thread);
                                             }
                                         });
                                     }
@@ -134,7 +133,7 @@ module.exports = function (app) {
         });
     });
 
-    /** GET /conversant/:user_id/threads
+    /** GET /threads
      *
      * @autor : Rafael Erthal
      * @since : 2012-07
@@ -145,16 +144,16 @@ module.exports = function (app) {
      * @allowedUser : Logado
      *
      * @request : {token}
-     * @response : {confirmation}
+     * @response : {threads}
      */
-    app.get('/conversant/:user_id/threads', function (request, response) {
+    app.get('/threads', function (request, response) {
         response.contentType('json');
 
         //valida o token do usuário
         auth(request.param('token'), function (user) {
             if (user) {
                 //busca o usuário
-                Conversant.findOne({user : request.params.user_id}, function (error, conversant) {
+                Conversant.findOne({user : user._id}, function (error, conversant) {
                     if (error) {
                         response.send({error : error});
                     } else {
@@ -167,7 +166,7 @@ module.exports = function (app) {
                                 if (error) {
                                     response.send({error : error});
                                 } else {
-                                    response.send({threads : threads});
+                                    response.send(threads);
                                 }
                             });
                         }
@@ -179,7 +178,7 @@ module.exports = function (app) {
         });
     });
 
-    /** POST /conversant/:user_id/thread/:slug/message
+    /** POST /thread/:slug/message
      *
      * @autor : Rafael Erthal
      * @since : 2012-07
@@ -192,14 +191,14 @@ module.exports = function (app) {
      * @request : {message,token}
      * @response : {confirmation}
      */
-    app.post('/conversant/:user_id/thread/:slug/message', function (request, response) {
+    app.post('/thread/:slug/message', function (request, response) {
         response.contentType('json');
 
         //valida o token do usuário
         auth(request.param('token'), function (user) {
             if (user) {
                 //busca o usuário
-                Conversant.findOne({user : request.params.user_id}, function (error, conversant) {
+                Conversant.findOne({user : user._id}, function (error, conversant) {
                     if (error) {
                         response.send({error : error});
                     } else {
@@ -227,7 +226,7 @@ module.exports = function (app) {
                                             if (error) {
                                                 response.send({error : error});
                                             } else {
-                                                response.send({error : ''});
+                                                response.send(thread);
                                             }
                                         });
                                     }
@@ -242,7 +241,7 @@ module.exports = function (app) {
         });
     });
 
-    /** GET /conversant/:user_id/thread/:slug/messages
+    /** GET /thread/:slug/messages
      *
      * @autor : Rafael Erthal
      * @since : 2012-07
@@ -255,14 +254,14 @@ module.exports = function (app) {
      * @request : {token}
      * @response : {confirmation}
      */
-    app.get('/conversant/:user_id/thread/:slug/messages', function (request, response) {
+    app.get('/thread/:slug/messages', function (request, response) {
         response.contentType('json');
 
         //valida o token do usuário
         auth(request.param('token'), function (user) {
             if (user) {
                 //busca o usuário
-                Conversant.findOne({user : request.params.user_id}, function (error, conversant) {
+                Conversant.findOne({user : user._id}, function (error, conversant) {
                     if (error) {
                         response.send({error : error});
                     } else {
@@ -279,7 +278,7 @@ module.exports = function (app) {
                                     if (thread === null) {
                                         response.send({error : 'thread not found'});
                                     } else {
-                                        response.send({messages : thread.messages});
+                                        response.send(thread.messages);
                                     }
                                 }
                             });
@@ -292,7 +291,7 @@ module.exports = function (app) {
         });
     });
 
-    /** GET /conversant/:user_id/thread/:slug/unread-messages
+    /** GET /thread/:slug/unread-messages
      *
      * @autor : Rafael Erthal
      * @since : 2012-07
@@ -305,14 +304,14 @@ module.exports = function (app) {
      * @request : {token}
      * @response : {confirmation}
      */
-    app.get('/conversant/:user_id/thread/:slug/unread-messages', function (request, response) {
+    app.get('/thread/:slug/unread-messages', function (request, response) {
         response.contentType('json');
 
         //valida o token do usuário
         auth(request.param('token'), function (user) {
             if (user) {
                 //busca o usuário
-                Conversant.findOne({user : request.params.user_id}, function (error, conversant) {
+                Conversant.findOne({user : user._id}, function (error, conversant) {
                     if (error) {
                         response.send({error : error});
                     } else {
@@ -337,7 +336,7 @@ module.exports = function (app) {
                                             } else {
                                                 //busca as mensagens não lidas pelo usuário na thread
                                                 thread.unreadMessages(conversant, function (messages) {
-                                                    response.send({messages : messages});
+                                                    response.send(messages);
                                                 });
                                             }
                                         });

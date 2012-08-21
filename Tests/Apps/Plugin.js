@@ -1,4 +1,4 @@
-    /** Tests Apps.Plugin
+/** Tests Apps.Plugin
  *
  * @autor : Rafael Almeida Erthal Hermano
  * @since : 2012-08
