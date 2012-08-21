@@ -51,7 +51,9 @@ module.exports = function (app) {
                     phones     : request.param("phones"),
                     contacts   : request.param("contacts"),
                     links      : request.param("links"),
-                    embeddeds  : request.param("embeddeds")
+                    embeddeds  : request.param("embeddeds"),
+                    dateCreated : new Date(),
+                    dateUpdated : new Date()
                 });
                 //Salva o objeto no Model de Companies e retorna o objeto para o solicitante
                 company.save(function (error) {
@@ -87,17 +89,61 @@ module.exports = function (app) {
     app.get('/companies', function (request, response) {
         response.contentType('json');
 
-        Company.find()
-        .limit(request.param('limit', 10) < 20 ? request.param('limit', 10) : 20)
-        .exec(
+        var limit, from, to, order, sortprop, findCompany;
+
+        // limit : padrao = 10, max = 20, min = 1
+        limit = parseInt(request.query['limit']) > 0 ? parseInt(request.query['limit']) : 10;
+        limit = limit < 20 ? limit : 20;
+
+        // from : padrao = 0, min = 0
+        from = limit * (parseInt(request.query['page']) - 1);
+        from = from >= 0 ? from : 0;
+
+        // order :
+        order = request.query['order'] ? request.query['order'] : ['dateCreated DESC'];
+        order = typeof order === 'string' ? [order] : order;
+
+        findCompany = Company.find()
+            .skip(from)
+            .limit(limit);
+
+        for (var i in order) {
+            sortprop = order[i].split(' ')[0];
+            findCompany.sort(sortprop, (order[i].toLowerCase().indexOf('asc') ? 'ascending' : 'descending'));
+        }
+
+        findCompany.exec(
             function (error, companies){
+                console.log(companies);
                 if (error) {
                     response.send({error : error })
                 } else {
                     response.send(companies);
                 }
             }
-        )
+        );
+    });
+
+    /** GET /companies/count
+     *
+     * @autor : Mauro Ribeiro
+     * @since : 2012-08
+     *
+     * @description : Conta empresas
+     *
+     * @allowedApp : Qualquer App
+     * @allowedUser : Deslogado
+     *
+     * @request : {
+                   limit, page, filterBySectors{sectors, levels, operator},
+                   filterByCities, filterByStates,filterByCountries, order,
+                   attributes :{members,products,addresses,badges,about ,embeddeds,phones,contacts,links}
+                  }
+     * @response : {[{limit,pages,total}]}
+     */
+    app.get('/companies/count', function (request, response) {
+        response.contentType('json');
+
     });
 
     /** GET /company/:slug
@@ -235,6 +281,8 @@ module.exports = function (app) {
                                 if (request.param("embeddeds")) {
                                     company.embeddeds = request.param("embeddeds");
                                 }
+
+                                company.dateUpdated = new Date();
 
                                 //Salva o objeto no Model de Companies e retorna o objeto para o solicitante
                                 company.save(function (error) {

@@ -29,7 +29,9 @@ companySchema = new Schema({
     phones      : [require('./Phone.js').Phone],
     contacts    : [require('./Contact.js').Contact],
     links       : [require('./Link.js').Link],
-    embeddeds   : [require('./Embedded.js').Embedded]
+    embeddeds   : [require('./Embedded.js').Embedded],
+    dateCreated : {type : Date},
+    dateUpdated : {type : Date}
 });
 
 companySchema.pre('save', function(next) {

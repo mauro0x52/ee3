@@ -31,13 +31,22 @@ describe('POST /company', function () {
         });
     });
 
+
+    it('url existe', function(done) {
+        api.post('companies', '/company', {}, function(error, data, response) {
+            if (error) return done(error);
+            else {
+                response.should.have.status(200);
+                done();
+            }
+        });
+    });
     it('dados obrigatórios não preenchidos', function(done) {
         api.post('companies', '/company', {
             token : token
         }, function(error, data, response) {
             if (error) return done(error);
             else {
-                response.should.have.status(200);
                 should.exist(data.error);
                 should.not.exist(data.slug);
                 done();
@@ -55,7 +64,6 @@ describe('POST /company', function () {
         }, function(error, data, response) {
             if (error) return done(error);
             else {
-                response.should.have.status(200);
                 should.exist(data.error);
                 should.not.exist(data.slug);
                 done();
@@ -74,7 +82,6 @@ describe('POST /company', function () {
         }, function(error, data, response) {
             if (error) return done(error);
             else {
-                response.should.have.status(200);
                 should.exist(data.slug, 'nao gerou slug corretamente');
                 should.not.exist(data.error, 'erro inesperado');
                 company = data;
@@ -94,7 +101,6 @@ describe('POST /company', function () {
         }, function(error, data, response) {
             if (error) return done(error);
             else {
-                response.should.have.status(200);
                 should.exist(data.slug, 'nao gerou slug corretamente');
                 should.not.exist(data.error, 'erro inesperado');
                 (company.slug ? company.slug : '').should.not.equal(data.slug, 'slugs repetidos');
@@ -133,6 +139,7 @@ describe('GET /companies', function () {
             });
         }
     });
+
     it('lista de empresas', function(done) {
         api.get('companies', '/companies',
             {},
@@ -141,6 +148,7 @@ describe('GET /companies', function () {
                 else {
                     response.should.have.status(200);
                     should.not.exist(data.error, 'erro inesperado');
+                    data.should.have.lengthOf(10);
                     done();
                 }
             }
@@ -154,8 +162,6 @@ describe('GET /companies', function () {
             function(error, data, response) {
                 if (error) return done(error);
                 else {
-                    response.should.have.status(200);
-                    should.not.exist(data.error, 'erro inesperado');
                     data.should.have.lengthOf(18);
                     done();
                 }
@@ -170,10 +176,28 @@ describe('GET /companies', function () {
             function(error, data, response) {
                 if (error) return done(error);
                 else {
-                    response.should.have.status(200);
-                    should.not.exist(data.error, 'erro inesperado');
                     data.should.have.lengthOf(20);
                     done();
+                }
+            }
+        );
+    });
+    it('paginação', function(done) {
+        api.get('companies', '/companies', {limit : 4, page : 1}, function(error, data, response) {
+                if (error) return done(error);
+                else {
+                    var companies = data;
+                    api.get('companies', '/companies', {limit : 2, page : 2}, function(error, data, response) {
+                            if (error) return done(error);
+                            else {
+                                JSON.stringify(companies)
+                                    .should.include(JSON.stringify(data[0]), 'resultado menor tem que está dentro do resultado maior');
+                                JSON.stringify(companies)
+                                    .should.include(JSON.stringify(data[1]), 'resultado menor tem que está dentro do resultado maior');
+                                done();
+                            }
+                        }
+                    );
                 }
             }
         );
