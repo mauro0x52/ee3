@@ -19,17 +19,19 @@ describe('POST /user', function () {
         api.post('auth', '/user', {
             username : userName,
             password : 'testando',
-            password_confirmation : 'testando'
+            password_confirmation : 'testando',
+            satus : 'active'
         }, function(error, data) {
             token = data.token;
             userId = data._id;
             done();
         });
     });
-    it('página não encontrada', function (done) {
+    it('página /user não encontrada', function (done) {
         api.post('auth', '/user', {
             password : 'testando',
-            password_confirmation : 'testando'
+            password_confirmation : 'testando',
+            status : 'active'
         }, function (error, data, response) {
             response.should.have.status(200);
             done();
@@ -38,26 +40,18 @@ describe('POST /user', function () {
     it('retorna erro se não preencher username', function (done) {
         api.post('auth', '/user', {
             password : 'testando',
-            password_confirmation : 'testando'
+            password_confirmation : 'testando',
+            status : 'active'
         }, function (error, data, response) {
-            should.exist(data.error, 'deveria retornar erro');
-            done();
-        });
-    });
-    it('retorna erro se não preencher username incorretamente', function (done) {
-        api.post('auth', '/user', {
-            username : 'testes'
-        }, function(error, data, response) {
-            should.exist(data, 'não retornou dado nenhum');
             should.exist(data.error, 'deveria retornar erro');
             done();
         });
     });
     it('retorna erro se não preencher password', function (done) {
         api.post('auth', '/user', {
-            username : userName
+            username : userName,
+            status : 'active'
         }, function(error, data, response) {
-            should.exist(data, 'não retornou dado nenhum');
             should.exist(data.error, 'deveria retornar erro');
             done();
         });
@@ -66,9 +60,9 @@ describe('POST /user', function () {
         api.post('auth', '/user', {
             username : userName,
             password : 'testando',
-            password_confirmation : 'asuidiudhsas'
+            password_confirmation : 'asuidiudhsas',
+            status : 'active'
         }, function(error, data, response) {
-            should.exist(data, 'não retornou dado nenhum');
             should.exist(data.error, 'deveria retornar erro');
             done();
         });
@@ -77,12 +71,17 @@ describe('POST /user', function () {
         api.post('auth', '/user', {
             username : userName+"123",
             password : 'testando',
-            password_confirmation : 'testando'
+            password_confirmation : 'testando',
+            status : 'active'
         }, function(error, data, response) {
             should.exist(data, 'não retornou dado nenhum');
             should.not.exist(data.error, "precisava retornar error");
             should.exist(data.token, "não retornou o token");
-            token = data.token;
+            should.exist(data.username, "não retornou o username");
+            should.exist(data.password, "não retornou o password");
+            should.exist(data.status, "não retornou o status");
+            should.exist(data.thirdPartyLogins, "não retornou o thirdPartyLogins");
+            should.exist(data.authorizedApps, "não retornou o authorizedApps");
             done();
         });
     });
@@ -90,7 +89,8 @@ describe('POST /user', function () {
         api.post('auth', '/user', {
             username : userName,
             password : 'testando',
-            password_confirmation : 'testando'
+            password_confirmation : 'testando',
+            status : 'active'
         }, function(error, data, response) {
             should.exist(data, 'não retornou dado nenhum');
             should.exist(data.error, 'precisa retornar erro');
@@ -102,12 +102,12 @@ describe('POST /user', function () {
 describe('PUT /user/[login]/deactivate', function () {
     before(function (done) {
         random = rand();
-        userName = 'testes+' + random + '@empreendemia.com.br';
-        // cria um usuario
+        userName = 'testes+' + random + '@empreendemia.com.br'; // cria um usuario
         api.post('auth', '/user', {
             username : userName,
             password : 'testando',
-            password_confirmation : 'testando'
+            password_confirmation : 'testando',
+            satus : 'active'
         }, function(error, data) {
             token = data.token;
             userId = data._id;
@@ -126,7 +126,8 @@ describe('PUT /user/[login]/deactivate', function () {
         api.put('auth', '/user/'+userId+"/deactivate", {
             token : token
         }, function (error, data, response) {
-            should.not.exist(data.error, 'não deveria retornar erro');
+            //console.log(data.error);
+            should.not.exist(data, 'erro inexperado');
             done();
         });
     });
@@ -134,7 +135,7 @@ describe('PUT /user/[login]/deactivate', function () {
         api.put('auth', '/user/'+userId+"/deactivate", {
             //token : token
         }, function (error, data, response) {
-            should.exist(data.error, 'deveria retornar erro');
+            should.exist(data, 'deveria retornar erro');
             done();
         });
     });
@@ -142,7 +143,7 @@ describe('PUT /user/[login]/deactivate', function () {
         api.put('auth', '/user/'+userId+"/deactivate", {
             token : token+"asdasdasdas"
         }, function (error, data, response) {
-            should.exist(data.error, 'deveria retornar erro');
+            should.exist(data, 'deveria retornar erro');
             done();
         });
     });
@@ -151,12 +152,12 @@ describe('PUT /user/[login]/deactivate', function () {
 describe('PUT /user/[login]/activate', function () {
     before(function (done) {
         random = rand();
-        userName = 'testes+' + random + '@empreendemia.com.br';
-        // cria um usuario
+        userName = 'testes+' + random + '@empreendemia.com.br'; // cria um usuario
         api.post('auth', '/user', {
             username : userName,
             password : 'testando',
-            password_confirmation : 'testando'
+            password_confirmation : 'testando',
+            satus : 'active'
         }, function(error, data) {
             token = data.token;
             userId = data._id;
@@ -171,11 +172,11 @@ describe('PUT /user/[login]/activate', function () {
             done();
         });
     });
-    it('desativada com sucesso', function (done) {
+    it('ativada com sucesso', function (done) {
         api.put('auth', '/user/'+userId+"/activate", {
             token : token
         }, function (error, data, response) {
-            should.not.exist(data.error, 'não deveria retornar erro');
+            should.not.exist(data, 'não deveria retornar erro');
             done();
         });
     });
@@ -183,7 +184,7 @@ describe('PUT /user/[login]/activate', function () {
         api.put('auth', '/user/'+userId+"/activate", {
             //token : token
         }, function (error, data, response) {
-            should.exist(data.error, 'deveria retornar erro');
+            should.exist(data, 'deveria retornar erro');
             done();
         });
     });
@@ -191,7 +192,7 @@ describe('PUT /user/[login]/activate', function () {
         api.put('auth', '/user/'+userId+"/activate", {
             token : token+"asdasdasdas"
         }, function (error, data, response) {
-            should.exist(data.error, 'deveria retornar erro');
+            should.exist(data, 'deveria retornar erro');
             done();
         });
     });
@@ -199,7 +200,7 @@ describe('PUT /user/[login]/activate', function () {
         api.put('auth', '/user/'+userId+"223das123asd/activate", {
             token : token
         }, function (error, data, response) {
-            should.exist(data.error, 'deveria retornar erro');
+            should.exist(data, 'deveria retornar erro');
             done();
         });
     });
@@ -213,7 +214,8 @@ describe('PUT /user/[login]/password-recovery', function () {
         api.post('auth', '/user', {
             username : userName,
             password : 'testando',
-            password_confirmation : 'testando'
+            password_confirmation : 'testando',
+            satus : 'active'
         }, function(error, data) {
             token = data.token;
             userId = data._id;
@@ -230,13 +232,17 @@ describe('PUT /user/[login]/password-recovery', function () {
     });
     it('trocar de senha com sucesso', function(done) {
         api.put('auth', '/user/'+userId+"/password-recovery", {
-            username : userName,
             newpassword : 'testando',
             newpasswordconfirmation : 'testando',
             token : token
         }, function(error, data, response) {
-            should.exist(data, 'não retornou dado nenhum');
             should.not.exist(data.error, "não era para retornar erro");
+            should.exist(data.token, "não retornou o token");
+            should.exist(data.username, "não retornou o username");
+            should.exist(data.password, "não retornou o password");
+            should.exist(data.status, "não retornou o status");
+            should.exist(data.thirdPartyLogins, "não retornou o thirdPartyLogins");
+            should.exist(data.authorizedApps, "não retornou o authorizedApps");
             done();
         });
     });
@@ -304,7 +310,8 @@ describe('PUT /user/[login]/login', function() {
         api.post('auth', '/user', {
             username : userName,
             password : 'testando',
-            password_confirmation : 'testando'
+            password_confirmation : 'testando',
+            satus : 'active'
         }, function(error, data) {
             token = data.token;
             userId = data._id;
@@ -375,7 +382,8 @@ describe('PUT /user/[login]/logout', function() {
         api.post('auth', '/user', {
             username : userName,
             password : 'testando',
-            password_confirmation : 'testando'
+            password_confirmation : 'testando',
+            satus : 'active'
         }, function(error, data) {
             token = data.token;
             userId = data._id;
@@ -397,7 +405,7 @@ describe('PUT /user/[login]/logout', function() {
             password : "testando"
         },
         function(error, data, response) {
-            should.not.exist(data.error, "não era para retornar erro");
+            should.not.exist(data, "não era para retornar nehum dado");
             done();
         }
         );
@@ -422,7 +430,8 @@ describe('GET /user/validate', function() {
         api.post('auth', '/user', {
             username : userName,
             password : 'testando',
-            password_confirmation : 'testando'
+            password_confirmation : 'testando',
+            satus : 'active'
         }, function(error, data) {
             token = data.token;
             userId = data._id;
