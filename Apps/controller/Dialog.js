@@ -67,7 +67,7 @@ module.exports = function (app) {
                                                 if (error) {
                                                     response.send({error : error});
                                                 } else {
-                                                    response.send({error : ''});
+                                                    response.send(dialog);
                                                 }
                                             });
                                         }
@@ -122,7 +122,7 @@ module.exports = function (app) {
                                     if (error) {
                                         response.send({error : error});
                                     } else {
-                                        response.send({dialogs : dialogs});
+                                        response.send(dialogs);
                                     }
                                 });
                             }
@@ -169,13 +169,13 @@ module.exports = function (app) {
                             } else {
                                 version.findDialog(request.params.name, function (error, dialog) {
                                     if (error) {
-                                        console.log({error : error});
+                                        response.send({error : error});
                                     } else {
                                         //verifica se a ferramente foi encontrada
                                         if (dialog === null) {
                                             response.send({error : 'dialog not found'});
                                         } else {
-                                            response.send({dialog : dialog});
+                                            response.send(dialog);
                                         }
                                     }
                                 });
@@ -242,7 +242,7 @@ module.exports = function (app) {
                                                             if (error) {
                                                                 response.send({error : error});
                                                             } else {
-                                                                response.send({error : ''});
+                                                                response.send(null);
                                                             }
                                                         });
                                                     }
@@ -323,7 +323,7 @@ module.exports = function (app) {
                                                             if (error) {
                                                                 response.send({error : error});
                                                             } else {
-                                                                response.send({error : ''});
+                                                                response.send(dialog);
                                                             }
                                                         });
                                                     }
