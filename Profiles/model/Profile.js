@@ -13,7 +13,7 @@ var mongoose = require('mongoose'),
     Profile;
 
 profileSchema = new schema({
-    userId      : {type : objectId},
+    user      : {type : objectId},
     jobs        : [require('./Job.js').Job],
     slug        : {type : String, trim : true, unique : true},
     name        : {type : String, required : true, trim : true},
@@ -50,7 +50,7 @@ profileSchema.methods.isOwner = function (id) {
     var i,
         isOwner = false;
     //verifica se o usário é igual o solicitado
-    if (this.userId.toString() === id) {
+    if (this.user.toString() === id) {
         isOwner = true;
     }
 

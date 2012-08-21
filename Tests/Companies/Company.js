@@ -28,9 +28,6 @@ describe('POST /company', function () {
             password_confirmation : 'testando'
         }, function(error, data) {
             token = data.token;
-//            api.get('locations', '/country/brasil/state/sao-paulo/city/campinas', {}, function (error, data, response) {
-//                city = data;
-//            });
             done();
         });
     });

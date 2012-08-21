@@ -25,7 +25,7 @@ module.exports = function (app) {
      */
     app.get('/profile/:slug', function (request,response) {
         response.contentType('json');
-        
+
         //Localiza o Profile
         Profile.findOne({"slugs" : request.params.slug}, function (error, profile) {
             if (error) {
@@ -62,14 +62,14 @@ module.exports = function (app) {
             if (user) {
                 //Cria o Objeto Profile para adicionar no Model
                 profile = new Profile({
-                    userId        : user._id,
+                    user        : user._id,
                     name        : request.param('name', null),
                     surname     : request.param('surname', null),
                     about       : request.param('about', null),
                     dateCreated : new Date(),
                     dateUpdated : new Date()
                 });
-                
+
                 //Salva o objeto no Model de Profile e retorna o objeto para o solicitante
                 profile.save(function (error) {
                     if (error) {
@@ -99,7 +99,7 @@ module.exports = function (app) {
      */
     app.put('/profile/:slug', function (request,response) {
         response.contentType('json');
-        
+
         //Verifica se o usuário logado é válido
         auth(request.param('token'), function (user) {
             if (user) {
