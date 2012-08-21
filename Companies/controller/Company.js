@@ -80,7 +80,7 @@ module.exports = function (app) {
      * @allowedUser : Deslogado
      *
      * @request : {
-                   limit, page, filterBySectors{sectors, levels, operator},
+                   limit, page, filterBySectors, filterBySectorsOperator},
                    filterByCities, filterByStates,filterByCountries, order,
                    attributes :{members,products,addresses,badges,about ,embeddeds,phones,contacts,links}
                   }
@@ -89,32 +89,55 @@ module.exports = function (app) {
     app.get('/companies', function (request, response) {
         response.contentType('json');
 
-        var limit, from, to, order, sortprop, findCompany;
+        var ObjectId = require('mongoose').Types.ObjectId,
+            query, limit, from, to, order, findCompany,
+            filterBySectors, filterBySectorsOperator, sectorsList,
+            filterByCities, citiesList;
+
+
+        findCompany = Company.find();
 
         // limit : padrao = 10, max = 20, min = 1
         limit = parseInt(request.query['limit']) > 0 ? parseInt(request.query['limit']) : 10;
         limit = limit < 20 ? limit : 20;
+        findCompany.limit(limit);
 
         // from : padrao = 0, min = 0
         from = limit * (parseInt(request.query['page']) - 1);
         from = from >= 0 ? from : 0;
+        findCompany.skip(from);
 
-        // order :
-        order = request.query['order'] ? request.query['order'] : ['dateCreated DESC'];
-        order = typeof order === 'string' ? [order] : order;
-
-        findCompany = Company.find()
-            .skip(from)
-            .limit(limit);
-
-        for (var i in order) {
-            sortprop = order[i].split(' ')[0];
-            findCompany.sort(sortprop, (order[i].toLowerCase().indexOf('asc') ? 'ascending' : 'descending'));
+        // order : padrao = dateCreated descending
+        order = request.query['order'] ? request.query['order'] : ['dateCreated',-1];
+        for (var i = 0; i < order.length; i = i+2) {
+            findCompany.sort(order[i],parseInt(order[i+1]));
         }
+
+        // filterBySectors
+        filterBySectors = request.query['filterBySectors'];
+        filterBySectorsOperator = request.query['filterBySectorsOperator'] ? request.query['filterBySectorsOperator'].toLowerCase() : 'and';
+
+        if (filterBySectors) {
+            sectorsList = typeof filterBySectors === 'string' ? [filterBySectors] : filterBySectors;
+            for (var i in sectorsList) {
+                sectorsList[i] = parseInt(sectorsList[i])
+            }
+            if (filterBySectorsOperator === 'and') {
+                findCompany.where('sectors').all(sectorsList);
+            } else {
+                findCompany.where('sectors').in(sectorsList);
+            }
+        }
+        // filterByCities
+        filterByCities = request.query['filterByCities'];
+        if (filterByCities) {
+            citiesList = typeof filterByCities === 'string' ? [filterByCities] : filterByCities;
+            findCompany.where('cities').in(citiesList);
+        }
+
 
         findCompany.exec(
             function (error, companies){
-                console.log(companies);
                 if (error) {
                     response.send({error : error })
                 } else {

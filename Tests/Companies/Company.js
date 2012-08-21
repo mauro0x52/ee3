@@ -11,7 +11,8 @@ var should = require("should"),
     db = require("../Utils.js").db,
     rand = require("../Utils.js").rand,
     token, company, companyName, companySlug,
-    token2, company2, companyName2, companySlug2;
+    token2, company2, companyName2, companySlug2,
+    city;
 
 random = rand();
 userName = 'testes+' + random + '@empreendemia.com.br';
@@ -27,6 +28,9 @@ describe('POST /company', function () {
             password_confirmation : 'testando'
         }, function(error, data) {
             token = data.token;
+//            api.get('locations', '/country/brasil/state/sao-paulo/city/campinas', {}, function (error, data, response) {
+//                city = data;
+//            });
             done();
         });
     });
@@ -126,6 +130,7 @@ describe('GET /companies', function () {
                     token : data.token,
                     name : 'Empresa b'+rand(),
                     activity : 'consultoria em testes',
+                    sectors : [1+Math.floor((Math.random()*2)), 3 + Math.floor((Math.random()*2))],
                     type : 'company',
                     profile : 'both',
                     active : 1,
@@ -162,6 +167,7 @@ describe('GET /companies', function () {
             function(error, data, response) {
                 if (error) return done(error);
                 else {
+                    should.not.exist(data.error, 'erro inesperado');
                     data.should.have.lengthOf(18);
                     done();
                 }
@@ -176,6 +182,7 @@ describe('GET /companies', function () {
             function(error, data, response) {
                 if (error) return done(error);
                 else {
+                    should.not.exist(data.error, 'erro inesperado');
                     data.should.have.lengthOf(20);
                     done();
                 }
@@ -186,10 +193,12 @@ describe('GET /companies', function () {
         api.get('companies', '/companies', {limit : 4, page : 1}, function(error, data, response) {
                 if (error) return done(error);
                 else {
+                    should.not.exist(data.error);
                     var companies = data;
                     api.get('companies', '/companies', {limit : 2, page : 2}, function(error, data, response) {
                             if (error) return done(error);
                             else {
+                                should.not.exist(data.error, 'erro inesperado');
                                 JSON.stringify(companies)
                                     .should.include(JSON.stringify(data[0]), 'resultado menor tem que está dentro do resultado maior');
                                 JSON.stringify(companies)
@@ -201,6 +210,125 @@ describe('GET /companies', function () {
                 }
             }
         );
+    });
+    it('ordenação padrão (dateCreated descending)', function(done) {
+        api.get('companies', '/companies',
+            {},
+            function(error, data, response) {
+                if (error) return done(error);
+                else {
+                    should.not.exist(data.error, 'erro inesperado');
+                    data.length.should.be.above(2);
+                    for (var i = 1; i < data.length; i++) {
+                        data[i-1].dateCreated.should.be.above(data[i].dateCreated, 'não ordenou');
+                    }
+                    done();
+                }
+            }
+        );
+    });
+    it('ordenação por slug', function(done) {
+        api.get('companies', '/companies',
+            {
+                order: ['slug', -1]
+            },
+            function(error, data, response) {
+                if (error) return done(error);
+                else {
+                    should.not.exist(data.error, 'erro inesperado');
+                    data.length.should.be.above(2);
+                    for (var i = 1; i < data.length; i++) {
+                        data[i-1].slug.should.be.above(data[i].slug, 'não ordenou');
+                    }
+                    done();
+                }
+            }
+        );
+    });
+    it('ordenação por atividade e depois slug', function(done) {
+        api.get('companies', '/companies',
+            {
+                order: ['activity', -1, 'slug', -1]
+            },
+            function(error, data, response) {
+                if (error) return done(error);
+                else {
+                    should.not.exist(data.error, 'erro inesperado');
+                    data.length.should.be.above(2);
+                    for (var i = 1; i < data.length; i++) {
+                        data[i-1].slug.should.be.above(data[i].slug, 'não ordenou');
+                    }
+                    done();
+                }
+            }
+        );
+    });
+    it('filtrar por setor', function(done) {
+        api.get('companies', '/companies',
+            {
+                filterBySectors : 1,
+                limit : 20
+            },
+            function(error, data, response) {
+                if (error) return done(error);
+                else {
+                    should.not.exist(data.error, 'erro inesperado');
+                    data.length.should.be.above(2);
+                    for (var i = 1; i < data.length; i++) {
+                        data[i].sectors.should.include(1, 'não filtrou por setor');
+                    }
+                    done();
+                }
+            }
+        );
+    });
+    it('filtrar por vários setores (AND)', function(done) {
+        api.get('companies', '/companies',
+            {
+                filterBySectors : [1, 3],
+                limit : 20
+            },
+            function(error, data, response) {
+                if (error) return done(error);
+                else {
+                    should.not.exist(data.error, 'erro inesperado');
+                    data.length.should.be.above(2);
+                    for (var i = 1; i < data.length; i++) {
+                        data[i].sectors.should.include(1, 'não filtrou por setor');
+                        data[i].sectors.should.include(3, 'não filtrou por setor');
+                    }
+                    done();
+                }
+            }
+        );
+    });
+    it('filtrar por vários setores (OR)', function(done) {
+        api.get('companies', '/companies',
+            {
+                filterBySectors : [1, 3],
+                filterBySectorsOperator : 'or',
+                limit : 20
+            },
+            function(error, data, response) {
+                if (error) return done(error);
+                else {
+                    should.not.exist(data.error, 'erro inesperado');
+                    data.length.should.be.above(2);
+                    var validate = true;
+                    for (var i = 1; i < data.length; i++) {
+                        if (data[i].sectors.indexOf(1) < 0 && data[i].sectors.indexOf(3) < 0) {
+                            validate = false;
+                        }
+                        validate.should.be.ok;
+                    }
+                    done();
+                }
+            }
+        );
+    });
+    it('filtrar por cidade', function(done) {
+    });
+    it('filtrar por cidades', function(done) {
     });
 });
 

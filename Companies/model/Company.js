@@ -17,7 +17,7 @@ companySchema = new Schema({
     thumbnail   : require('./Thumbnail.js').ThumbnailStruct,
     members     : [objectId],
     users       : [objectId],
-    sectors     : [objectId],
+    sectors     : [Number],
     products    : [require('./Product.js').Product],
     addresses   : [require('./Address.js').Address],
     type        : {type : String, enum : ['freelancer', 'company', 'group'], required : true},
