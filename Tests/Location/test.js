@@ -7,5 +7,5 @@
  */
 
 describe('Location', function() {
-    require("./Conversant.js");
+    require("./City.js");
 });
