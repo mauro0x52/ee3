@@ -18,4 +18,7 @@ describe('Sector', function() {
 describe('Thumbnail', function() {
     require("./Thumbnail.js");
 });
+describe('Address', function() {
+    require("./Address.js");
+});
 
