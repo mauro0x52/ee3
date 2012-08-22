@@ -28,5 +28,32 @@ stateSchema.pre('save', function(next) {
 
     next();
 });
+
+/** FindByIdOrUsername
+ * @author : Lucas Kalado
+ * @since : 2012-08
+ *
+ * @description : Procura um States pelo id ou pelo slug
+ * @param id : id ou slug do estado
+ * @param countryId : id do país que fez a solicitação
+ * @param cb : callback a ser chamado
+ */
+stateSchema.statics.findByIdentity = function (id, countryId, cb) {
+    "use strict";
+    var filterState;
+    
+    if (new RegExp("[0-9 a-f]{24}").test(id)) {
+        // procura por id
+        filterState._id = id;
+        filterState.countryId = countryId;
+        City.findOne(filterState, cb);
+    } else {
+        // procura por username
+        filterState.slug = id;
+        filterState.countryId = countryId;
+        City.findOne(filterState, cb);
+    }
+};
+
 /*  Exportando o pacote  */
 exports.State = mongoose.model('States', stateSchema);

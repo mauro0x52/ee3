@@ -11,17 +11,19 @@ var fs = require('fs');
 
 var api = {
     get : function(service, url, data, cb) {
-        var qs = require('querystring');
-        new restler.get('http://'+config.services[service].host+':'+config.services[service].port+url+'?'+qs.stringify(data))
-        .on('success', function(data, response) {
-            cb(undefined, data, response);
-         }).on('error', function(error) {
-            cb(error);
+        data = data ? data : {};
+        restler.json('http://'+config.services[service].host+':'+config.services[service].port + url,
+            data
+        ).on('success', function(data, response) {
+           cb(undefined, data, response);
+        }).on('error', function(error) {
+           cb(error);
         });
     },
     post : function(service, url, data, cb) {
-        new restler.post('http://'+config.services[service].host+':'+config.services[service].port+url, {
-            data: data
+        restler.post('http://'+config.services[service].host+':'+config.services[service].port + url,{
+            data: JSON.stringify(data),
+            headers : { 'Content-Type' : 'application/json' }
         }).on('success', function(data, response) {
             cb(undefined, data, response);
         }).on('error', function(error) {
@@ -29,8 +31,9 @@ var api = {
         });
     },
     put : function(service, url, data, cb) {
-        new restler.put('http://'+config.services[service].host+':'+config.services[service].port+url, {
-            data: data
+        restler.put('http://'+config.services[service].host+':'+config.services[service].port+url, {
+            data: data,
+            headers : { 'Content-Type' : 'application/json' }
         }).on('success', function(data, response) {
             cb(undefined, data, response);
         }).on('error', function(error) {
@@ -38,8 +41,9 @@ var api = {
         });
     },
     del : function(service, url, data, cb) {
-        new restler.del('http://'+config.services[service].host+':'+config.services[service].port+url, {
-            data: data
+        restler.del('http://'+config.services[service].host+':'+config.services[service].port+url, {
+            data: data,
+            headers : { 'Content-Type' : 'application/json' }
         }).on('success', function(data, response) {
             cb(undefined, data, response);
         }).on('error', function(error) {
@@ -56,7 +60,7 @@ var api = {
             data[i] = restler.file(__dirname + '/static/'+files[i], files[i], stat.size, null, mime.lookup('../static/'+files[i]));
         }
 
-        new restler.post('http://'+config.services[service].host+':'+config.services[service].port+url, {
+        restler.post('http://'+config.services[service].host+':'+config.services[service].port+url, {
             multipart: true,
             data: data
         }).on('success', function(data, response) {

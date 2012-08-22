@@ -42,7 +42,7 @@ module.exports = function (app) {
                 if (error) {
                     response.send({error : error});
                 } else {
-                    //loga o usuário no sistema                    
+                    //loga o usuário no sistema
                     user.login(function (error) {
                         if (error) {
                             response.send({error : error});
@@ -262,7 +262,7 @@ module.exports = function (app) {
      */
     app.put('/user/:login/logout', function (request, response) {
         response.contentType('json');
-            
+
         //localiza o usuário
         User.findByIdentity(request.params.login, function (error, user) {
             if (error) {
@@ -307,7 +307,7 @@ module.exports = function (app) {
      */
     app.get('/user/validate', function (request, response) {
         response.contentType('json');
-        
+
         //localiza o usuário
         User.findOne({token : request.param('token', '')}, function (error, user) {
             if (error) {
