@@ -171,7 +171,7 @@ module.exports = function (app) {
                                     product.slug = request.param('slug');
                                     product.abstract = request.param('abstract');
                                     product.about = request.param('about');
-                                    
+
                                     product.save(function(error){
                                         if (error) {
                                             response.send({error : error});

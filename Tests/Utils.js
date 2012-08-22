@@ -16,8 +16,10 @@ var api = {
             data
         ).on('success', function(data, response) {
            cb(undefined, data, response);
-        }).on('error', function(error) {
-           cb(error);
+        }).on('fail', function(data, response) {
+            cb(error, undefined, response);
+        }).on('error', function(error, response) {
+            cb(undefined, data, response);
         });
     },
     post : function(service, url, data, cb) {
@@ -25,9 +27,11 @@ var api = {
             data: JSON.stringify(data),
             headers : { 'Content-Type' : 'application/json' }
         }).on('success', function(data, response) {
+           cb(undefined, data, response);
+        }).on('fail', function(data, response) {
+            cb(error, undefined, response);
+        }).on('error', function(error, response) {
             cb(undefined, data, response);
-        }).on('error', function(error) {
-            cb(error);
         });
     },
     put : function(service, url, data, cb) {
@@ -35,9 +39,11 @@ var api = {
             data: data,
             headers : { 'Content-Type' : 'application/json' }
         }).on('success', function(data, response) {
+           cb(undefined, data, response);
+        }).on('fail', function(data, response) {
+            cb(error, undefined, response);
+        }).on('error', function(error, response) {
             cb(undefined, data, response);
-        }).on('error', function(error) {
-            cb(error);
         });
     },
     del : function(service, url, data, cb) {
@@ -45,9 +51,11 @@ var api = {
             data: data,
             headers : { 'Content-Type' : 'application/json' }
         }).on('success', function(data, response) {
+           cb(undefined, data, response);
+        }).on('fail', function(data, response) {
+            cb(error, undefined, response);
+        }).on('error', function(error, response) {
             cb(undefined, data, response);
-        }).on('error', function(error) {
-            cb(error);
         });
     },
     file : function(service, url, data, files, cb) {
@@ -64,9 +72,11 @@ var api = {
             multipart: true,
             data: data
         }).on('success', function(data, response) {
+           cb(undefined, data, response);
+        }).on('fail', function(data, response) {
+            cb(error, undefined, response);
+        }).on('error', function(error, response) {
             cb(undefined, data, response);
-        }).on('error', function(error) {
-            cb(error);
         });
     }
 }

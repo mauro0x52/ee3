@@ -261,9 +261,9 @@ describe('DEL /profile/:profile_id/thumbnail', function() {
         api.del('profiles', '/profile/' + profile.slug + '/thumbnail',
             { token : user.token },
             function(error, data, response) {
-                should.not.exist(data, 'retorna vazio');
+                should.not.exist(data, 'deve retornar vazio');
                 api.get('profiles', '/profile/' + profile.slug + '/thumbnail/fasfsafsasfafas', {}, function(error, data, response) {
-                    should.not.exist(data, 'retorna vazio (get)');
+                    should.not.exist(data, 'deve retorna vazio (get)');
                     done();
                 });
             }

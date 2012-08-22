@@ -95,7 +95,7 @@ module.exports = function (app) {
                                                                     legend : '200x200 thumbnail'
                                                                 }
                                                             };
-                                                            product.save(function (error) {
+                                                            product.parent.save(function (error) {
                                                                 if (error) {
                                                                     response.send({error: error});
                                                                 }
@@ -206,11 +206,11 @@ module.exports = function (app) {
                                 if (!product.thumbnail || !product.thumbnail.original || !product.thumbnail.original.url) {
                                     response.send(undefined);
                                 } else {
-                                    if (size === 'original') {
+                                    if (request.params.size === 'original') {
                                         response.send(product.thumbnail.original);
-                                    } else if (size === 'large') {
+                                    } else if (request.params.size === 'large') {
                                         response.send(product.thumbnail.large);
-                                    } else if (size === 'medium')  {
+                                    } else if (request.params.size === 'medium')  {
                                         response.send(product.thumbnail.medium);
                                     } else {
                                         response.send(product.thumbnail.small);
@@ -283,7 +283,7 @@ module.exports = function (app) {
                                             response.send({error : 'product not found'});
                                         } else {
                                             product.thumbnail = undefined;
-                                            product.save(function (error) {
+                                            product.parent.save(function (error) {
                                                 if (error) {
                                                     response.send({error: error});
                                                 }
@@ -461,14 +461,14 @@ module.exports = function (app) {
                     if (!company.thumbnail || !company.thumbnail.original || !company.thumbnail.original.url) {
                         response.send(undefined);
                     } else {
-                        if (size === 'original') {
-                            response.send(product.thumbnail.original);
-                        } else if (size === 'large') {
-                            response.send(product.thumbnail.large);
-                        } else if (size === 'medium')  {
-                            response.send(product.thumbnail.medium);
+                        if (request.params.size === 'original') {
+                            response.send(company.thumbnail.original);
+                        } else if (request.params.size === 'large') {
+                            response.send(company.thumbnail.large);
+                        } else if (request.params.size === 'medium')  {
+                            response.send(company.thumbnail.medium);
                         } else {
-                            response.send(product.thumbnail.small);
+                            response.send(company.thumbnail.small);
                         }
                     }
                 }
