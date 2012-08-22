@@ -498,3 +498,38 @@ describe('GET /company/:company_id/product/:product_id/thumbnail/:size', functio
         });
     });
 });
+
+
+describe('DEL /company/:company_id/product/:product_id/thumbnail', function() {
+    it('url existe', function (done) {
+        api.del('companies', '/company/dasdsadsa/product/asdsdasadsad/thumbnail', {}, function(error, data, response) {
+            if (error) return done(error);
+            response.should.have.status(200);
+            should.exist(data, 'não retornou dado nenhum');
+            done();
+        });
+    });
+    it('token invalido', function (done) {
+        api.del('companies', '/company/'+company.slug+'/product/'+product.slug+'/thumbnail',
+            {},
+            function(error, data, response) {
+                if (error) return done(error);
+                should.exist(data.error, 'tem que retornar erro');
+                done();
+            }
+        );
+    });
+    it('remove com sucesso', function (done) {
+        api.del('companies', '/company/'+company.slug+'/product/'+product.slug+'/thumbnail',
+            { token : user.token },
+            function(error, data, response) {
+                if (error) return done(error);
+                should.not.exist(data, 'deve retornar vazio');
+                api.get('companies', '/company/'+company.slug+'/product/'+product.slug+'/thumbnail/fasfsafsasfafas', {}, function(error, data, response) {
+                    should.not.exist(data, 'deve retornar vazio (get)');
+                    done();
+                });
+            }
+        );
+    });
+});

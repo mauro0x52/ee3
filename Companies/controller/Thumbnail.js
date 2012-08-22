@@ -283,7 +283,7 @@ module.exports = function (app) {
                                             response.send({error : 'product not found'});
                                         } else {
                                             product.thumbnail = undefined;
-                                            product.save(function (error) {
+                                            product.parent.save(function (error) {
                                                 if (error) {
                                                     response.send({error: error});
                                                 }
