@@ -17,9 +17,9 @@ var api = {
         ).on('success', function(data, response) {
            cb(undefined, data, response);
         }).on('fail', function(data, response) {
-            cb(error, undefined, response);
-        }).on('error', function(error, response) {
             cb(undefined, data, response);
+        }).on('error', function(error, response) {
+            cb(error, undefined, response);
         });
     },
     post : function(service, url, data, cb) {
@@ -29,9 +29,9 @@ var api = {
         }).on('success', function(data, response) {
            cb(undefined, data, response);
         }).on('fail', function(data, response) {
-            cb(error, undefined, response);
-        }).on('error', function(error, response) {
             cb(undefined, data, response);
+        }).on('error', function(error, response) {
+            cb(error, undefined, response);
         });
     },
     put : function(service, url, data, cb) {
@@ -41,9 +41,9 @@ var api = {
         }).on('success', function(data, response) {
            cb(undefined, data, response);
         }).on('fail', function(data, response) {
-            cb(error, undefined, response);
-        }).on('error', function(error, response) {
             cb(undefined, data, response);
+        }).on('error', function(error, response) {
+            cb(error, undefined, response);
         });
     },
     del : function(service, url, data, cb) {
@@ -53,9 +53,9 @@ var api = {
         }).on('success', function(data, response) {
            cb(undefined, data, response);
         }).on('fail', function(data, response) {
-            cb(error, undefined, response);
-        }).on('error', function(error, response) {
             cb(undefined, data, response);
+        }).on('error', function(error, response) {
+            cb(error, undefined, response);
         });
     },
     file : function(service, url, data, files, cb) {
@@ -74,9 +74,9 @@ var api = {
         }).on('success', function(data, response) {
            cb(undefined, data, response);
         }).on('fail', function(data, response) {
-            cb(error, undefined, response);
-        }).on('error', function(error, response) {
             cb(undefined, data, response);
+        }).on('error', function(error, response) {
+            cb(error, undefined, response);
         });
     }
 }
