@@ -14,6 +14,10 @@ describe('Apps', function() {
     require("./Apps/test.js");
 });
 
+describe('Files', function() {
+    require("./Files/test.js");
+});
+
 describe('Talk', function() {
     require("./Talk/test.js");
 });
