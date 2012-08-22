@@ -27,51 +27,58 @@ module.exports = function (app) {
 
         response.contentType('json');
 
-        if (!path) {
-            response.send({error: 'É preciso definir um path!'});
+        folderPath = request.param('path');
+
+        if (!folderPath) {
+            response.send({error: 'path not defined'});
         } else {
             // caminho escolhido
             folderPath = request.param('path', null);
 
-            // arquivo da imagem temporaria
-            tmpFile = request.files.file;
+            if (!request.files && !request.files.file) {
+                response.send({error: 'no selected file'});
+            } else {
+                // arquivo da imagem temporaria
+                tmpFile = request.files.file;
 
-            // extensao do arquivo
-            fileNameSplit = path.extname(request.files.file.name || '').split('.');
-            fileExt = fileNameSplit[fileNameSplit.length - 1];
+                // extensao do arquivo
+                fileNameSplit = path.extname(request.files.file.name || '').split('.');
+                fileExt = fileNameSplit[fileNameSplit.length - 1];
 
-            // nome unico para a pasta: ANO + MES + DIA + hash[10]
-            hash = crypto.createHash('md5').update(crypto.randomBytes(10)).digest('hex').substring(0, 10);
-            folder = Date.today().toFormat('YYYYMMDD') + hash;
+                // nome unico para a pasta: ANO + MES + DIA + hash[10]
+                hash = crypto.createHash('md5').update(crypto.randomBytes(10)).digest('hex').substring(0, 10);
+                folder = Date.today().toFormat('YYYYMMDD') + hash;
 
-            // caminho do arquivo    
-            filePath = folderPath + '/' + folder + '/original.' + fileExt;
+                // caminho do arquivo
+                filePath = folderPath + '/' + folder + '/original.' + fileExt;
 
-            // salva a imagem no filesystem
-            image = new Image({
-                path : filePath,
-                file : tmpFile
-            });
+                // salva a imagem no filesystem
+                image = new Image({
+                    path : filePath,
+                    file : tmpFile
+                });
 
-            image.save(function (error, image, imagePath) {
-                if (error) {
-                    response.send({error: error});
-                } else {
-                    // salva informacoes da imagem no bd
-                    var file = new File({
-                        type : 'image',
-                        path : imagePath
-                    });
+                image.save(function (error, image, imagePath) {
+                    if (error) {
+                        response.send({error: error});
+                    } else {
+                        // salva informacoes da imagem no bd
+                        var file = new File({
+                            type : 'image',
+                            path : imagePath
+                        });
 
-                    file.save(function (error, file) {
-                        if (error) {
-                            response.send({error: error});
-                        } else {
-                            response.send(file);
-                        }
-                    });
-                }
-            });
+                        file.save(function (error, file) {
+                            if (error) {
+                                response.send({error: error});
+                            } else {
+                                response.send(file);
+                            }
+                        });
+                    }
+                });
+            }
+
         }
 
     });
@@ -80,64 +87,68 @@ module.exports = function (app) {
         var
         // modulos
             crypto = require('crypto'),
-        // parametros 
+        // parametros
             filePath = request.param('path', null),
             width = request.param('width', null),
             height = request.param('height', null),
             style = request.param('style', null),
             label = request.param('label', null),
-        // variaveis 
+        // variaveis
             image, newImage;
 
         response.contentType('json');
 
         if (!filePath) {
-            response.send({error: 'É preciso definir um path!'});
+            response.send({error: 'no path defined'});
         } else {
-            // abre a imagem
-            Image.open(filePath, function (error, imageFile) {
-                if (error) {
-                    response.send({error: error});
-                } else {
-                    // cria uma imagem temporaria resizeada
-                    Image.resize(
-                        {
-                            style   :   style,
-                            width   :   width,
-                            height  :   height,
-                            label   :   label,
-                            image   :   imageFile
-                        },
-                        function (error, tmpFile, newFilePath) {
-                            // salva a imagem no filesystem
-                            newImage = new Image({
-                                path : newFilePath,
-                                file : tmpFile
-                            });
+            if (!width && !height) {
+                response.send({error : 'no dimensions defined'})
+            } else {
+                // abre a imagem
+                Image.open(filePath, function (error, imageFile) {
+                    if (error) {
+                        response.send({error: error});
+                    } else {
+                        // cria uma imagem temporaria resizeada
+                        Image.resize(
+                            {
+                                style   :   style,
+                                width   :   width,
+                                height  :   height,
+                                label   :   label,
+                                image   :   imageFile
+                            },
+                            function (error, tmpFile, newFilePath) {
+                                // salva a imagem no filesystem
+                                newImage = new Image({
+                                    path : newFilePath,
+                                    file : tmpFile
+                                });
 
-                            newImage.save(function (error, image) {
-                                if (error) {
-                                    response.send({error: error});
-                                } else {
-                                    // salva informacoes da imagem no bd
-                                    var file = new File({
-                                        type : 'image',
-                                        path : newFilePath
-                                    });
+                                newImage.save(function (error, image) {
+                                    if (error) {
+                                        response.send({error: error});
+                                    } else {
+                                        // salva informacoes da imagem no bd
+                                        var file = new File({
+                                            type : 'image',
+                                            path : newFilePath
+                                        });
 
-                                    file.save(function (error, file) {
-                                        if (error) {
-                                            response.send({error: error});
-                                        } else {
-                                            response.send(file);
-                                        }
-                                    });
-                                }
-                            });
-                        }
-                    );
-                }
-            });
+                                        file.save(function (error, file) {
+                                            if (error) {
+                                                response.send({error: error});
+                                            } else {
+                                                response.send(file);
+                                            }
+                                        });
+                                    }
+                                });
+                            }
+                        );
+                    }
+                });
+            }
         }
     });
 
@@ -145,7 +156,7 @@ module.exports = function (app) {
         var
         // modulos
             url = require('url'),
-        // parametros 
+        // parametros
             filePath = request.params[0];
 
 
