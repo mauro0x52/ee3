@@ -21,4 +21,7 @@ describe('Thumbnail', function() {
 describe('Address', function() {
     require("./Address.js");
 });
+describe('Phone', function() {
+    require("./Phone.js");
+});
 
