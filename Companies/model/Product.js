@@ -31,7 +31,7 @@ productSchema = new Schema({
 productSchema.pre('save', function (next) {
     "use strict";
     var crypto = require('crypto');
-    
+
     if (this.isNew) {
         //TODO fazer o gerador de slugs aqui
         this.slug = 'slug-'+crypto.createHash('sha1').update(crypto.randomBytes(10)).digest('hex').substring(0, 10);
@@ -51,7 +51,7 @@ productSchema.pre('save', function (next) {
             }
         }
     }
-    
+
     next();*/
 
 });
