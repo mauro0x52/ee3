@@ -9,24 +9,9 @@
 var should = require("should"),
     api = require("../Utils.js").api,
     db = require("../Utils.js").db,
-    rand = require("../Utils.js").rand,
-    random, userName, userId, token;
+    rand = require("../Utils.js").rand;
 
 describe('POST /user', function () {
-    before(function (done) {
-        random = rand();
-        userName = 'testes+' + random + '@empreendemia.com.br'; // cria um usuario
-        api.post('auth', '/user', {
-            username : userName,
-            password : 'testando',
-            password_confirmation : 'testando',
-            satus : 'active'
-        }, function(error, data) {
-            token = data.token;
-            userId = data._id;
-            done();
-        });
-    });
     it('página /user não encontrada', function (done) {
         api.post('auth', '/user', {
             password : 'testando',
@@ -37,39 +22,52 @@ describe('POST /user', function () {
             done();
         });
     });
+
     it('retorna erro se não preencher username', function (done) {
         api.post('auth', '/user', {
             password : 'testando',
             password_confirmation : 'testando',
             status : 'active'
         }, function (error, data, response) {
-            should.exist(data.error, 'deveria retornar erro');
-            done();
+            if (error) {
+                done(error);
+            } else {
+                should.exist(data.error, 'deveria retornar erro');
+                done();
+            }
         });
     });
     it('retorna erro se não preencher password', function (done) {
         api.post('auth', '/user', {
-            username : userName,
+            username : 'testes+' + rand() + '@empreendemia.com.br',
             status : 'active'
         }, function(error, data, response) {
-            should.exist(data.error, 'deveria retornar erro');
-            done();
+            if (error) {
+                done(error);
+            } else {
+                should.exist(data.error, 'deveria retornar erro');
+                done();
+            }
         });
     });
     it('retorna erro se preencher password_confirmation incorretamente', function(done) {
         api.post('auth', '/user', {
-            username : userName,
+            username : 'testes+' + rand() + '@empreendemia.com.br',
             password : 'testando',
             password_confirmation : 'asuidiudhsas',
             status : 'active'
         }, function(error, data, response) {
-            should.exist(data.error, 'deveria retornar erro');
-            done();
+            if (error) {
+                done(error);
+            } else {
+                should.exist(data.error, 'deveria retornar erro');
+                done();
+            }
         });
     });
     it('retorna token se o cadastro for sucesso', function(done) {
         api.post('auth', '/user', {
-            username : userName+"123",
+            username : 'testes+' + rand() + '@empreendemia.com.br',
             password : 'testando',
             password_confirmation : 'testando',
             status : 'active'
@@ -86,25 +84,34 @@ describe('POST /user', function () {
         });
     });
     it('retorna erro se tenta cadastrar username que já existe', function(done) {
+        var username = 'testes+' + rand() + '@empreendemia.com.br';
         api.post('auth', '/user', {
-            username : userName,
+            username : username,
             password : 'testando',
             password_confirmation : 'testando',
             status : 'active'
         }, function(error, data, response) {
-            should.exist(data, 'não retornou dado nenhum');
-            should.exist(data.error, 'precisa retornar erro');
-            done();
+            api.post('auth', '/user', {
+                username : username,
+                password : 'testando',
+                password_confirmation : 'testando',
+                status : 'active'
+            }, function (error, data, response) {
+                should.exist(data, 'não retornou dado nenhum');
+                should.exist(data.error, 'precisa retornar erro');
+                done();
+            });
         });
     });
 });
 
 describe('PUT /user/[login]/deactivate', function () {
+    var token,
+        userId;
+
     before(function (done) {
-        random = rand();
-        userName = 'testes+' + random + '@empreendemia.com.br'; // cria um usuario
         api.post('auth', '/user', {
-            username : userName,
+            username : 'testes+' + rand() + '@empreendemia.com.br',
             password : 'testando',
             password_confirmation : 'testando',
             satus : 'active'
@@ -150,11 +157,13 @@ describe('PUT /user/[login]/deactivate', function () {
 });
 
 describe('PUT /user/[login]/activate', function () {
+    var token,
+        userId;
+
     before(function (done) {
-        random = rand();
-        userName = 'testes+' + random + '@empreendemia.com.br'; // cria um usuario
+        // cria um usuario
         api.post('auth', '/user', {
-            username : userName,
+            username : 'testes+' + rand() + '@empreendemia.com.br',
             password : 'testando',
             password_confirmation : 'testando',
             satus : 'active'
@@ -207,12 +216,13 @@ describe('PUT /user/[login]/activate', function () {
 });
 
 describe('PUT /user/[login]/password-recovery', function () {
+    var token,
+        userId;
+
     before(function (done) {
-        random = rand();
-        userName = 'testes+' + random + '@empreendemia.com.br';
         // cria um usuario
         api.post('auth', '/user', {
-            username : userName,
+            username : 'testes+' + rand() + '@empreendemia.com.br',
             password : 'testando',
             password_confirmation : 'testando',
             satus : 'active'
@@ -236,29 +246,35 @@ describe('PUT /user/[login]/password-recovery', function () {
             newpasswordconfirmation : 'testando',
             token : token
         }, function(error, data, response) {
-            should.not.exist(data.error, "não era para retornar erro");
-            data.should.have.proprety('token');
-            data.should.have.proprety('username');
-            data.should.have.proprety('password');
-            data.should.have.proprety('status');
-            data.should.have.proprety('thirdPartyLogins');
-            data.should.have.proprety('authorizedApps');
-            done();
+            if (error) {
+                done(error);
+            } else {
+                should.not.exist(data.error, "não era para retornar erro");
+                data.should.have.property('token');
+                data.should.have.property('username');
+                data.should.have.property('password');
+                data.should.have.property('status');
+                data.should.have.property('thirdPartyLogins');
+                data.should.have.property('authorizedApps');
+                done();
+            }
         });
     });
     it('token em branco', function(done) {
         api.put('auth', '/user/'+userId+"/password-recovery", {
-            username : userName,
             newpassword : 'testando',
             newpasswordconfirmation : 'testando',
         }, function(error, data, response) {
-            should.exist(data.error, "era para retornar erro");
-            done();
+            if (error) {
+                done(error);
+            } else {
+                should.exist(data.error, "era para retornar erro");
+                done();
+            }
         });
     });
     it('usuário não cadastrado', function(done) {
         api.put('auth', '/user/'+userId+"123asd123asd123/password-recovery", {
-            username : userName,
             newpassword : 'testando',
             newpasswordconfirmation : 'testando',
             token : token
@@ -269,7 +285,6 @@ describe('PUT /user/[login]/password-recovery', function () {
     });
     it('token errado', function(done) {
         api.put('auth', '/user/'+userId+"/password-recovery", {
-            username : userName,
             newpassword : 'testando',
             newpasswordconfirmation : 'testando',
             token : token+"asdad123123asd"
@@ -280,7 +295,6 @@ describe('PUT /user/[login]/password-recovery', function () {
     });
     it('Senhas não batem', function(done) {
         api.put('auth', '/user/'+userId+"/password-recovery", {
-            username : userName,
             newpassword : 'testando',
             newpasswordconfirmation : 'testando123123123123',
             token : token
@@ -291,7 +305,6 @@ describe('PUT /user/[login]/password-recovery', function () {
     });
     it('Senhas em branco', function(done) {
         api.put('auth', '/user/'+userId+"/password-recovery", {
-            username : userName,
             newpassword : '',
             newpasswordconfirmation : '',
             token : token
@@ -303,12 +316,13 @@ describe('PUT /user/[login]/password-recovery', function () {
 });
 
 describe('PUT /user/[login]/login', function() {
+    var token,
+        userId;
+
     before(function (done) {
-        random = rand();
-        userName = 'testes+' + random + '@empreendemia.com.br';
         // cria um usuario
         api.post('auth', '/user', {
-            username : userName,
+            username : 'testes+' + rand() + '@empreendemia.com.br',
             password : 'testando',
             password_confirmation : 'testando',
             satus : 'active'
@@ -319,7 +333,7 @@ describe('PUT /user/[login]/login', function() {
         });
     });
     it('página não encontrada', function (done) {
-        api.put('auth', '/user/'+userName+'/login', {
+        api.put('auth', '/user/'+userId+'/login', {
             password : "testando"
         },
         function(error, data, response) {
@@ -329,7 +343,7 @@ describe('PUT /user/[login]/login', function() {
         );
     });
     it('autenticado com sucesso', function (done) {
-        api.put('auth', '/user/'+userName+'/login', {
+        api.put('auth', '/user/'+userId+'/login', {
             password : "testando"
         },
         function(error, data, response) {
@@ -340,7 +354,7 @@ describe('PUT /user/[login]/login', function() {
         );
     });
     it('usuário não existe', function (done) {
-        api.put('auth', '/user/'+userName+'asd123asd123/login', {
+        api.put('auth', '/user/'+userId+'asd123asd123/login', {
             password : "testando"
         },
         function(error, data, response) {
@@ -351,7 +365,7 @@ describe('PUT /user/[login]/login', function() {
         );
     });
     it('senha em branco', function (done) {
-        api.put('auth', '/user/'+userName+'/login', {
+        api.put('auth', '/user/'+userId+'/login', {
             password : ""
         },
         function(error, data, response) {
@@ -362,7 +376,7 @@ describe('PUT /user/[login]/login', function() {
         );
     });
     it('senha errada', function (done) {
-        api.put('auth', '/user/'+userName+'/login', {
+        api.put('auth', '/user/'+userId+'/login', {
             password : "1234567"
         },
         function(error, data, response) {
@@ -375,12 +389,13 @@ describe('PUT /user/[login]/login', function() {
 });
 
 describe('PUT /user/[login]/logout', function() {
+    var token,
+        userId;
+
     before(function (done) {
-        random = rand();
-        userName = 'testes+' + random + '@empreendemia.com.br';
         // cria um usuario
         api.post('auth', '/user', {
-            username : userName,
+            username : 'testes+' + rand() + '@empreendemia.com.br',
             password : 'testando',
             password_confirmation : 'testando',
             satus : 'active'
@@ -443,12 +458,13 @@ describe('PUT /user/[login]/logout', function() {
 });
 
 describe('GET /user/validate', function() {
+    var token,
+        userId;
+
     before(function (done) {
-        random = rand();
-        userName = 'testes+' + random + '@empreendemia.com.br';
         // cria um usuario
         api.post('auth', '/user', {
-            username : userName,
+            username : 'testes+' + rand() + '@empreendemia.com.br',
             password : 'testando',
             password_confirmation : 'testando',
             satus : 'active'

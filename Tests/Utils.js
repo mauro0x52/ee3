@@ -12,7 +12,7 @@ var fs = require('fs');
 var api = {
     get : function(service, url, data, cb) {
         var qs = require('querystring');
-        restler.get('http://'+config.services[service].host+':'+config.services[service].port+url+'?'+qs.stringify(data))
+        new restler.get('http://'+config.services[service].host+':'+config.services[service].port+url+'?'+qs.stringify(data))
         .on('success', function(data, response) {
             cb(undefined, data, response);
          }).on('error', function(error) {
@@ -20,7 +20,7 @@ var api = {
         });
     },
     post : function(service, url, data, cb) {
-        restler.post('http://'+config.services[service].host+':'+config.services[service].port+url, {
+        new restler.post('http://'+config.services[service].host+':'+config.services[service].port+url, {
             data: data
         }).on('success', function(data, response) {
             cb(undefined, data, response);
@@ -29,7 +29,7 @@ var api = {
         });
     },
     put : function(service, url, data, cb) {
-        restler.put('http://'+config.services[service].host+':'+config.services[service].port+url, {
+        new restler.put('http://'+config.services[service].host+':'+config.services[service].port+url, {
             data: data
         }).on('success', function(data, response) {
             cb(undefined, data, response);
@@ -38,7 +38,7 @@ var api = {
         });
     },
     del : function(service, url, data, cb) {
-        restler.del('http://'+config.services[service].host+':'+config.services[service].port+url, {
+        new restler.del('http://'+config.services[service].host+':'+config.services[service].port+url, {
             data: data
         }).on('success', function(data, response) {
             cb(undefined, data, response);
@@ -56,7 +56,7 @@ var api = {
             data[i] = restler.file(__dirname + '/static/'+files[i], files[i], stat.size, null, mime.lookup('../static/'+files[i]));
         }
 
-        restler.post('http://'+config.services[service].host+':'+config.services[service].port+url, {
+        new restler.post('http://'+config.services[service].host+':'+config.services[service].port+url, {
             multipart: true,
             data: data
         }).on('success', function(data, response) {

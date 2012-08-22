@@ -100,7 +100,7 @@ userSchema.methods.generateToken = function () {
 userSchema.methods.checkToken = function (token, cb) {
     "use strict";
 
-    cb(token === this.generateToken());
+    cb(token === this.token);
 };
 
 /** Activate
@@ -189,7 +189,7 @@ userSchema.methods.findAuthorizedApp = function (id, cb) {
         authorizedApp;
 
     for (i = 0; i < this.authorizedApps.length; i = i + 1) {
-        if (this.authorizedApps[i].appId === id) {
+        if (this.authorizedApps[i].appId.toString() === id.toString()) {
             authorizedApp = this.authorizedApps[i];
         }
     }
@@ -205,17 +205,17 @@ userSchema.methods.findAuthorizedApp = function (id, cb) {
  * @since : 2012-08
  *
  * @description : busca um login externo do usuário
- * @param id : server do login externo
+ * @param id : id do login externo
  * @param cb : callback a ser chamado após localizado o login externo
  */
-userSchema.methods.findThirdPartyLogin = function (server, cb) {
+userSchema.methods.findThirdPartyLogin = function (id, cb) {
     "use strict";
 
     var i,
         thirdPartyLogin;
 
     for (i = 0; i < this.thirdPartyLogins.length; i = i + 1) {
-        if (this.thirdPartyLogins[i].server === server) {
+        if (this.thirdPartyLogins[i]._id.toString() === id.toString()) {
             thirdPartyLogin = this.thirdPartyLogins[i];            
         }
     }

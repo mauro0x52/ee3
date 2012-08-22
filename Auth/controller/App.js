@@ -57,7 +57,7 @@ module.exports = function (app) {
                                 if (error) {
                                     response.send({error : error});
                                 } else {
-                                    response.send({token : token});
+                                    response.send(user);
                                 }
                             });
                         }
@@ -80,7 +80,7 @@ module.exports = function (app) {
      * @request : {token}
      * @response : {confirmation}
      */
-    app.del('/user/:login/app/:app_id', function (request, response) {
+    app.del('/user/:login/app/:id', function (request, response) {
         response.contentType('json');
 
         //localiza o usuário
@@ -98,7 +98,7 @@ module.exports = function (app) {
                             response.send({error : 'invalid token'});
                         } else {
                             //busca a autorização
-                            user.findAuthorizedApp(request.params.app_id, function (error, app) {
+                            user.findAuthorizedApp(request.params.id, function (error, app) {
                                 if (error) {
                                     response.send({error : error});
                                 } else {
@@ -138,7 +138,7 @@ module.exports = function (app) {
      * @request : {token}
      * @response : {authorizationDate,  expirationDate}
      */
-    app.get('/user/:login/app/:app_id', function (request, response) {
+    app.get('/user/:login/app/:id', function (request, response) {
         response.contentType('json');
 
         //localiza o usuário
@@ -156,7 +156,7 @@ module.exports = function (app) {
                             response.send({error : 'invalid token'});
                         } else {
                             //busca a autorização
-                            user.findAuthorizedApp(request.params.app_id, function (error, app) {
+                            user.findAuthorizedApp(request.params.id, function (error, app) {
                                 if (error) {
                                     response.send({error : error});
                                 } else {
@@ -188,7 +188,7 @@ module.exports = function (app) {
      * @request : {authorizationDate, expirationDate, token}
      * @response : {confirmation}
      */
-    app.put('/user/:login/app/:app_id', function (request, response) {
+    app.put('/user/:login/app/:id', function (request, response) {
         var i,
             authorizedApp,
             found = false;
@@ -210,7 +210,7 @@ module.exports = function (app) {
                             response.send({error : 'invalid token'});
                         } else {
                             //busca a autorização
-                            user.findAuthorizedApp(request.params.app_id, function (error, app) {
+                            user.findAuthorizedApp(request.params.id, function (error, app) {
                                 if (error) {
                                     response.send({error : error});
                                 } else {
@@ -252,7 +252,7 @@ module.exports = function (app) {
      * @request : {token}
      * @response : {valid}
      */
-    app.get('/user/:login/app/:app_id/validate', function (request, response) {
+    app.get('/user/:login/app/:id/validate', function (request, response) {
         var i,
             found = false;
 
@@ -268,7 +268,7 @@ module.exports = function (app) {
                     response.send({error : 'user not found'});
                 } else {
                     //busca a autorização
-                    user.findAuthorizedApp(request.params.app_id, function (error, app) {
+                    user.findAuthorizedApp(request.params.id, function (error, app) {
                         if (error) {
                             response.send({error : error});
                         } else {

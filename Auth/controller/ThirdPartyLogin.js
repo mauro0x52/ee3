@@ -52,7 +52,7 @@ module.exports = function (app) {
                                 if (error) {
                                     response.send({error : error});
                                 } else {
-                                    response.send(null);
+                                    response.send(user);
                                 }
                             });
                         }
@@ -92,7 +92,7 @@ module.exports = function (app) {
                         if (!valid) {
                             response.send({error : 'invalid token'});
                         } else {
-                            response.send({thirdPartyLogins : user.thirdPartyLogins});
+                            response.send(user.thirdPartyLogins);
                         }
                     });
                 }
@@ -113,10 +113,7 @@ module.exports = function (app) {
      * @request : {token}
      * @response : {server}
      */
-    app.get('/user/:login/third-party-login/:server', function (request, response) {
-        var i,
-            found = false;
-
+    app.get('/user/:login/third-party-login/:id', function (request, response) {
         response.contentType('json');
 
         //localiza o usuário
@@ -134,7 +131,7 @@ module.exports = function (app) {
                             response.send({error : 'invalid token'});
                         } else {
                             //busca o login externo
-                            user.findThirdPartyLogin(request.params.server, function (error, thirdPartyLogin) {
+                            user.findThirdPartyLogin(request.params.id, function (error, thirdPartyLogin) {
                                 if (error) {
                                     response.send({error: error});
                                 } else {
@@ -142,7 +139,7 @@ module.exports = function (app) {
                                     if (thirdPartyLogin === null) {
                                         response.send({error : 'third party login not found'});
                                     } else {
-                                        response.send({thirdPartyLogin : thirdPartyLogin});
+                                        response.send(thirdPartyLogin);
                                     }
                                 }
                             });
@@ -166,7 +163,7 @@ module.exports = function (app) {
      * @request : {token}
      * @response : {confirmation}
      */
-    app.del('/user/:login/third-party-login/:server', function (request, response) {
+    app.del('/user/:login/third-party-login/:id', function (request, response) {
         var i,
             thirdPartyLogin,
             found = false;
@@ -188,7 +185,7 @@ module.exports = function (app) {
                             response.send({error : 'invalid token'});
                         } else {
                             //busca o login externo
-                            user.findThirdPartyLogin(request.params.server, function (error, thirdPartyLogin) {
+                            user.findThirdPartyLogin(request.params.id, function (error, thirdPartyLogin) {
                                 if (error) {
                                     response.send({error : error});
                                 } else {

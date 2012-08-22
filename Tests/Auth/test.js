@@ -10,7 +10,7 @@ describe('User', function() {
     require('./User.js');
 });
 
-describe('App', function() {
+describe('AuthorizedApp', function() {
     require('./App.js');
 });
 
