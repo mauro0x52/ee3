@@ -17,7 +17,9 @@ var api = {
         ).on('success', function(data, response) {
            cb(undefined, data, response);
         }).on('error', function(error) {
-           cb(error);
+            cb(error, undefined, response);
+        }).on('fail', function(error) {
+            cb(undefined, data, response);
         });
     },
     post : function(service, url, data, cb) {
@@ -27,7 +29,9 @@ var api = {
         }).on('success', function(data, response) {
             cb(undefined, data, response);
         }).on('error', function(error) {
-            cb(error);
+            cb(error, undefined, response);
+        }).on('fail', function(error) {
+            cb(undefined, data, response);
         });
     },
     put : function(service, url, data, cb) {
@@ -37,7 +41,9 @@ var api = {
         }).on('success', function(data, response) {
             cb(undefined, data, response);
         }).on('error', function(error) {
-            cb(error);
+            cb(error, undefined, response);
+        }).on('fail', function(data, response) {
+            cb(undefined, data, response);
         });
     },
     del : function(service, url, data, cb) {
@@ -47,7 +53,9 @@ var api = {
         }).on('success', function(data, response) {
             cb(undefined, data, response);
         }).on('error', function(error) {
-            cb(error);
+            cb(error, undefined, response);
+        }).on('fail', function(data, response) {
+            cb(undefined, data, response);
         });
     },
     file : function(service, url, data, files, cb) {
@@ -66,7 +74,9 @@ var api = {
         }).on('success', function(data, response) {
             cb(undefined, data, response);
         }).on('error', function(error) {
-            cb(error);
+            cb(error, undefined, response);
+        }).on('fail', function(data, response) {
+            cb(undefined, data, response);
         });
     }
 }
