@@ -34,16 +34,14 @@ module.exports = function (app) {
         response.contentType('json');
 
         //Valida o slug do país
-        Country.findOne({slug : request.params.slugCountry}, function (error, country) {
+        Country.findByIdentity(request.params.slugCountry, function (error, country) {
             if (error) {
                 response.send({error : error});
             } else {
                 //Com o resultado da validação do país, valida o slug do estado.
                 if (country) {
-                    filterState.slug = request.params.slugState;
-                    filterState.countryId = country._id;
                     //Localiza o Estado
-                    State.findOne(filterState, function (error, state) {
+                    State.findByIdentity(request.params.slugState, country._id, function (error, state) {
                         if (error) {
                             response.send({error : error});
                         } else {
