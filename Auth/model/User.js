@@ -216,7 +216,7 @@ userSchema.methods.findThirdPartyLogin = function (server, cb) {
 
     for (i = 0; i < this.thirdPartyLogins.length; i = i + 1) {
         if (this.thirdPartyLogins[i].server === server) {
-            thirdPartyLogin = this.thirdPartyLogins[i];            
+            thirdPartyLogin = this.thirdPartyLogins[i];
         }
     }
     if (thirdPartyLogin) {

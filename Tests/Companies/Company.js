@@ -79,10 +79,11 @@ describe('POST /company', function () {
             type : 'company',
             profile : 'both',
             active : 1,
+            addresses : [{street:'nome da rua',number:294,complement:'complemento',city:'000000000000000000000001',headQuarters:true}, {street:'nome da rua',number:294,complement:'complemento',city:'000000000000000000000002',headQuarters:true}],
             about: 'sobre'
         }, function(error, data, response) {
             if (error) return done(error);
-            else {
+            else {;
                 should.exist(data.slug, 'nao gerou slug corretamente');
                 should.not.exist(data.error, 'erro inesperado');
                 company = data;
@@ -98,7 +99,8 @@ describe('POST /company', function () {
             type : 'company',
             profile : 'both',
             active : 1,
-            about: 'sobre'
+            about: 'sobre',
+            addresses : [{street:'nome da rua',number:294,complement:'complemento',city:'000000000000000000000001',headQuarters:true}, {street:'nome da rua',number:294,complement:'complemento',city:'000000000000000000000002',headQuarters:true}]
         }, function(error, data, response) {
             if (error) return done(error);
             else {
@@ -127,11 +129,12 @@ describe('GET /companies', function () {
                     token : data.token,
                     name : 'Empresa b'+rand(),
                     activity : 'consultoria em testes',
-                    sectors : [1+Math.floor((Math.random()*2)), 3 + Math.floor((Math.random()*2))],
+                    sectors : ['00000000000000000000000'+(1+Math.floor((Math.random()*2))), '00000000000000000000000'+(3 + Math.floor((Math.random()*2)))],
                     type : 'company',
                     profile : 'both',
                     active : 1,
-                    about: 'sobre'
+                    about: 'sobre',
+                    addresses : [{street:'nome da rua',number:294,complement:'complemento',city:'000000000000000000000000',headQuarters:true}, {street:'nome da rua',number:294,complement:'complemento',city:'000000000000000000000002',headQuarters:true}]
                 }, function(error, data, response) {
                     countCompanies++;
                     if (countCompanies == 15) {
@@ -144,8 +147,9 @@ describe('GET /companies', function () {
 
     it('lista de empresas', function(done) {
         api.get('companies', '/companies',
-            {},
+            null,
             function(error, data, response) {
+
                 if (error) return done(error);
                 else {
                     response.should.have.status(200);
@@ -227,7 +231,7 @@ describe('GET /companies', function () {
     it('ordenação por slug', function(done) {
         api.get('companies', '/companies',
             {
-                order: ['slug', -1]
+                order: {'slug': -1}
             },
             function(error, data, response) {
                 if (error) return done(error);
@@ -245,7 +249,7 @@ describe('GET /companies', function () {
     it('ordenação por atividade e depois slug', function(done) {
         api.get('companies', '/companies',
             {
-                order: ['activity', -1, 'slug', -1]
+                order: [{'activity': -1}, {'slug': -1}]
             },
             function(error, data, response) {
                 if (error) return done(error);
@@ -263,7 +267,7 @@ describe('GET /companies', function () {
     it('filtrar por setor', function(done) {
         api.get('companies', '/companies',
             {
-                filterBySectors : 1,
+                filterBySectors : {sectors:['000000000000000000000001']},
                 limit : 20
             },
             function(error, data, response) {
@@ -271,8 +275,8 @@ describe('GET /companies', function () {
                 else {
                     should.not.exist(data.error, 'erro inesperado');
                     data.length.should.be.above(2);
-                    for (var i = 1; i < data.length; i++) {
-                        data[i].sectors.should.include(1, 'não filtrou por setor');
+                    for (var i = 0; i < data.length; i++) {
+                        data[i].sectors.should.include('000000000000000000000001', 'não filtrou por setor');
                     }
                     done();
                 }
@@ -282,7 +286,7 @@ describe('GET /companies', function () {
     it('filtrar por vários setores (AND)', function(done) {
         api.get('companies', '/companies',
             {
-                filterBySectors : [1, 3],
+                filterBySectors : {sectors : ['000000000000000000000001', '000000000000000000000003']},
                 limit : 20
             },
             function(error, data, response) {
@@ -290,9 +294,9 @@ describe('GET /companies', function () {
                 else {
                     should.not.exist(data.error, 'erro inesperado');
                     data.length.should.be.above(2);
-                    for (var i = 1; i < data.length; i++) {
-                        data[i].sectors.should.include(1, 'não filtrou por setor');
-                        data[i].sectors.should.include(3, 'não filtrou por setor');
+                    for (var i = 0; i < data.length; i++) {
+                        data[i].sectors.should.include('000000000000000000000001', 'não filtrou por setor');
+                        data[i].sectors.should.include('000000000000000000000003', 'não filtrou por setor');
                     }
                     done();
                 }
@@ -302,8 +306,7 @@ describe('GET /companies', function () {
     it('filtrar por vários setores (OR)', function(done) {
         api.get('companies', '/companies',
             {
-                filterBySectors : [1, 3],
-                filterBySectorsOperator : 'or',
+                filterBySectors : {sectors : ['000000000000000000000001', '000000000000000000000003'], operator : 'or'},
                 limit : 20
             },
             function(error, data, response) {
@@ -312,8 +315,8 @@ describe('GET /companies', function () {
                     should.not.exist(data.error, 'erro inesperado');
                     data.length.should.be.above(2);
                     var validate = true;
-                    for (var i = 1; i < data.length; i++) {
-                        if (data[i].sectors.indexOf(1) < 0 && data[i].sectors.indexOf(3) < 0) {
+                    for (var i = 0; i < data.length; i++) {
+                        if (data[i].sectors.indexOf('000000000000000000000001') < 0 && data[i].sectors.indexOf('000000000000000000000003') < 0) {
                             validate = false;
                         }
                         validate.should.be.ok;
@@ -324,12 +327,128 @@ describe('GET /companies', function () {
         );
     });
     it('filtrar por cidade', function(done) {
+        api.get('companies', '/companies',
+            {
+                filterByCities : {cities:['000000000000000000000001']},
+                limit : 20
+            },
+            function(error, data, response) {
+                if (error) return done(error);
+                else {
+                    should.not.exist(data.error, 'erro inesperado');
+                    data.length.should.be.above(1);
+                    for (var i = 0; i < data.length; i++) {
+                        data[i].should.have.property('addresses');
+
+                        var localvalidate = false;
+                        for (var j = 0; j < data[i].addresses.length; j++) {
+                            if (data[i].addresses[j].city === '000000000000000000000001') {
+                                localvalidate = true;
+                            }
+                        }
+                        localvalidate.should.be.ok;
+                    }
+                    done();
+                }
+            }
+        );
     });
-    it('filtrar por cidades', function(done) {
+    it('filtrar por cidades (or)', function(done) {
+        api.get('companies', '/companies',
+            {
+                filterByCities : {cities:['000000000000000000000001','000000000000000000000002'], operator:'or'},
+                limit : 20
+            },
+            function(error, data, response) {
+                if (error) return done(error);
+                else {
+                    should.not.exist(data.error, 'erro inesperado');
+                    data.length.should.be.above(1);
+                    for (var i = 0; i < data.length; i++) {
+                        data[i].should.have.property('addresses');
+                        var foundOne = false;
+                        var foundTwo = false;
+                        for (var j = 0; j < data[i].addresses.length; j++) {
+                            if (data[i].addresses[j].city === '000000000000000000000001') {
+                                foundOne = true;
+                            } else if (data[i].addresses[j].city === '000000000000000000000002') {
+                                foundTwo = true;
+                            }
+                        }
+                        (foundOne || foundTwo).should.be.ok;
+                    }
+                    done();
+                }
+            }
+        );
+    });
+    it('filtrar por cidades (and)', function(done) {
+        api.get('companies', '/companies',
+            {
+                filterByCities : {cities:['000000000000000000000001','000000000000000000000002'], operator:'and'},
+                limit : 20
+            },
+            function(error, data, response) {
+                if (error) return done(error);
+                else {
+                    should.not.exist(data.error, 'erro inesperado');
+                    data.length.should.be.above(1);
+                    for (var i = 0; i < data.length; i++) {
+                        data[i].should.have.property('addresses');
+                        var foundOne = false;
+                        var foundTwo = false;
+                        for (var j = 0; j < data[i].addresses.length; j++) {
+                            if (data[i].addresses[j].city === '000000000000000000000001') {
+                                foundOne = true;
+                            } else if (data[i].addresses[j].city === '000000000000000000000002') {
+                                foundTwo = true;
+                            }
+                        }
+                        (foundOne && foundTwo).should.be.ok;
+                    }
+                    done();
+                }
+            }
+        );
+    });
+    it('filtrar por setores (and) e cidades (or)', function(done) {
+        api.get('companies', '/companies',
+            {
+                filterBySectors : {sectors : ['000000000000000000000001', '000000000000000000000003'], operator : 'and'},
+                filterByCities : {cities : ['000000000000000000000001','000000000000000000000002'], operator:'or'},
+                limit : 20
+            },
+            function(error, data, response) {
+                if (error) return done(error);
+                else {
+                    should.not.exist(data.error, 'erro inesperado');
+                    data.length.should.be.above(1);
+
+                    for (var i = 0; i < data.length; i++) {
+                        data[i].should.have.property('sectors');
+                        data[i].sectors.should.include('000000000000000000000001', 'não filtrou por setor');
+                        data[i].sectors.should.include('000000000000000000000003', 'não filtrou por setor');
+
+                        data[i].should.have.property('addresses');
+                        var foundCityOne = false;
+                        var foundCityTwo = false;
+                        for (var j = 0; j < data[i].addresses.length; j++) {
+                            if (data[i].addresses[j].city === '000000000000000000000001') {
+                                foundCityOne = true;
+                            } else if (data[i].addresses[j].city === '000000000000000000000002') {
+                                foundCityTwo = true;
+                            }
+                        }
+                        (foundCityOne || foundCityTwo).should.be.ok;
+                    }
+                    done();
+                }
+            }
+        );
     });
 });
 
-describe('GET /company', function () {
+describe('GET /company/:company_id', function () {
     before(function (done) {
         done();
     });
@@ -388,17 +507,14 @@ describe('GET /company', function () {
     });
     it('empresa sem setar atributos', function(done) {
         api.get('companies', '/company/' + company._id,
-            {
-                attributes : {
-                    products : false,
-                    about : false
-                }
-            },
+            {},
             function(error, data, response) {
                 if (error) return done(error);
                 else {
                     should.not.exist(data.products, 'não deve mostrar produtos');
-                    should.not.exist(data.addresses, 'não deve mostrar endereços');
+                    data.should.have.property('addresses').with.not.property('street');
+                    data.should.have.property('addresses').with.not.property('number');
+                    data.should.have.property('addresses').with.not.property('complement');
                     should.not.exist(data.about, 'não deve mostrar sobre');
                     should.not.exist(data.embeddeds, 'não deve mostrar embeddeds');
                     should.not.exist(data.phones, 'não deve mostrar telefones');
@@ -412,15 +528,15 @@ describe('GET /company', function () {
         api.get('companies', '/company/' + company._id,
             {
                 token : token,
-                attributes : [
-                    'products',
-                    'addresses',
-                    'phones',
-                    'about',
-                    'embeddeds',
-                    'phones',
-                    'links'
-                ]
+                attributes : {
+                    products : true,
+                    addresses : true,
+                    phones : true,
+                    about : true,
+                    embeddeds : true,
+                    phones : true,
+                    links : true
+                }
             },
             function(error, data, response) {
                 if (error) return done(error);
@@ -437,20 +553,22 @@ describe('GET /company', function () {
             }
         );
     });
-    it('empresa com telefone deslogado', function(done) {
+    it('empresa com atributos deslogado', function(done) {
         api.get('companies', '/company/' + company._id,
             {
-                attributes : [
-                    'addresses',
-                    'phones',
-                    'contacts'
-                ]
+                attributes : {
+                    addresses : true,
+                    phones : true,
+                    contacts : true
+                }
             },
             function(error, data, response) {
                 if (error) return done(error);
                 else {
                     should.not.exist(data.error, 'erro inesperado');
-                    should.not.exist(data.addresses, 'não deve mostrar endereços');
+                    data.should.have.property('addresses').with.not.property('street');
+                    data.should.have.property('addresses').with.not.property('number');
+                    data.should.have.property('addresses').with.not.property('complement');
                     should.not.exist(data.phones, 'não deve mostrar telefones');
                     should.not.exist(data.contacts, 'não deve mostrar contatos');
                     done();

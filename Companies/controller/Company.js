@@ -80,9 +80,9 @@ module.exports = function (app) {
      * @allowedUser : Deslogado
      *
      * @request : {
-                   limit, page, filterBySectors, filterBySectorsOperator},
-                   filterByCities, filterByStates,filterByCountries, order,
-                   attributes :{members,products,addresses,badges,about ,embeddeds,phones,contacts,links}
+                   limit, page, filterBySectors:{sectors, operator},
+                   filterByCities:{sectors, operator}, order,
+                   attributes :{members,products,addresses,about,embeddeds,phones,contacts,links}
                   }
      * @response : {[{slug,name,thumbnails,sectors,city,type,profile,tags,activity,abstract}]}
      */
@@ -98,41 +98,45 @@ module.exports = function (app) {
         findCompany = Company.find();
 
         // limit : padrao = 10, max = 20, min = 1
-        limit = parseInt(request.query['limit']) > 0 ? parseInt(request.query['limit']) : 10;
-        limit = limit < 20 ? limit : 20;
+        limit = request.param('limit', 10) < 20 ? request.param('limit', 10) : 20;
         findCompany.limit(limit);
 
         // from : padrao = 0, min = 0
-        from = limit * (parseInt(request.query['page']) - 1);
+        from = limit * (request.param('page', 1) - 1);
         from = from >= 0 ? from : 0;
         findCompany.skip(from);
 
         // order : padrao = dateCreated descending
-        order = request.query['order'] ? request.query['order'] : ['dateCreated',-1];
-        for (var i = 0; i < order.length; i = i+2) {
-            findCompany.sort(order[i],parseInt(order[i+1]));
+        order = request.param('order', [{dateCreated:-1}]);
+        if (!(order instanceof Array)) order = [order];
+
+        for (var i = 0; i < order.length; i++) {
+            for (var name in order[i]) {
+                findCompany.sort(name,order[i][name]);
+            }
         }
 
         // filterBySectors
-        filterBySectors = request.query['filterBySectors'];
-        filterBySectorsOperator = request.query['filterBySectorsOperator'] ? request.query['filterBySectorsOperator'].toLowerCase() : 'and';
+        filterBySectors = request.param('filterBySectors');
 
-        if (filterBySectors) {
-            sectorsList = typeof filterBySectors === 'string' ? [filterBySectors] : filterBySectors;
-            for (var i in sectorsList) {
-                sectorsList[i] = parseInt(sectorsList[i])
-            }
-            if (filterBySectorsOperator === 'and') {
-                findCompany.where('sectors').all(sectorsList);
-            } else {
+        if (filterBySectors && filterBySectors.sectors) {
+            sectorsList = typeof filterBySectors.sectors === 'string' ? [filterBySectors.sectors] : filterBySectors.sectors;
+            if (filterBySectors.operator === 'or') {
                 findCompany.where('sectors').in(sectorsList);
+            } else {
+                findCompany.where('sectors').all(sectorsList);
             }
         }
         // filterByCities
-        filterByCities = request.query['filterByCities'];
-        if (filterByCities) {
-            citiesList = typeof filterByCities === 'string' ? [filterByCities] : filterByCities;
-            findCompany.where('cities').in(citiesList);
+        filterByCities = request.param('filterByCities');
+
+        if (filterByCities && filterByCities.cities) {
+            citiesList = typeof filterByCities.cities === 'string' ? [filterByCities.cities] : filterByCities.cities;
+            if (filterByCities.operator === 'or') {
+                findCompany.where('addresses.city').in(citiesList);
+            } else {
+                findCompany.where('addresses.city').all(citiesList);
+            }
         }
 
 
@@ -186,8 +190,8 @@ module.exports = function (app) {
         response.contentType('json');
 
         var id = request.params.id,
-            attributes = request.query['attributes'],
-            token = request.query['token'];
+            attributes = request.param('attributes', {}),
+            token = request.param('token');
 
         //valida o token do usuário
         auth(token, function (user) {
@@ -199,14 +203,20 @@ module.exports = function (app) {
                     if (company === null) {
                         response.send({error : 'company not found'});
                     } else {
-                        if (!attributes || attributes.indexOf("products") < 0) company.products = undefined;
-                        if (!attributes || attributes.indexOf("addresses") < 0 || !user) company.addresses = undefined;
-                        if (!attributes || attributes.indexOf("about") < 0) company.about = undefined;
-                        if (!attributes || attributes.indexOf("embeddeds") < 0) company.embeddeds = undefined;
-                        if (!attributes || attributes.indexOf("phones") < 0 || !user) company.phones = undefined;
-                        if (!attributes || attributes.indexOf("contacts") < 0 || !user) company.contacts = undefined;
-                        if (!attributes || attributes.indexOf("links") < 0) company.links = undefined;
-                        if (attributes && attributes.indexOf("members") >= 0) {
+                        if (!attributes.products) company.products = undefined;
+                        if (!attributes.addresses || !user) {
+                            for (var i in company.addresses) {
+                                company.addresses[i].street = undefined;
+                                company.addresses[i].number = undefined;
+                                company.addresses[i].complement = undefined;
+                            }
+                        }
+                        if (!attributes.about) company.about = undefined;
+                        if (!attributes.embeddeds) company.embeddeds = undefined;
+                        if (!attributes.phones || !user) company.phones = undefined;
+                        if (!attributes.contacts || !user) company.contacts = undefined;
+                        if (!attributes.links) company.links = undefined;
+                        if (attributes.members) {
 
                         }
                         response.send(company);
