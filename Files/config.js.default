@@ -6,7 +6,7 @@ module.exports = {
     },
     files : {
         temp : '/tmp/ee3ups/',
-        folder : '/',             // exemplo "/home/user/folder/"
+        folder : '/home/user',    // exemplo "/home/user/folder/"
         maxsize : 102400          // 102400kB
     },
     aws : {
