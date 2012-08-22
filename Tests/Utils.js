@@ -16,9 +16,9 @@ var api = {
             data
         ).on('success', function(data, response) {
            cb(undefined, data, response);
-        }).on('error', function(error) {
+        }).on('fail', function(data, response) {
             cb(error, undefined, response);
-        }).on('fail', function(error) {
+        }).on('error', function(error, response) {
             cb(undefined, data, response);
         });
     },
@@ -27,10 +27,10 @@ var api = {
             data: JSON.stringify(data),
             headers : { 'Content-Type' : 'application/json' }
         }).on('success', function(data, response) {
-            cb(undefined, data, response);
-        }).on('error', function(error) {
+           cb(undefined, data, response);
+        }).on('fail', function(data, response) {
             cb(error, undefined, response);
-        }).on('fail', function(error) {
+        }).on('error', function(error, response) {
             cb(undefined, data, response);
         });
     },
@@ -39,10 +39,10 @@ var api = {
             data: data,
             headers : { 'Content-Type' : 'application/json' }
         }).on('success', function(data, response) {
-            cb(undefined, data, response);
-        }).on('error', function(error) {
-            cb(error, undefined, response);
+           cb(undefined, data, response);
         }).on('fail', function(data, response) {
+            cb(error, undefined, response);
+        }).on('error', function(error, response) {
             cb(undefined, data, response);
         });
     },
@@ -51,10 +51,10 @@ var api = {
             data: data,
             headers : { 'Content-Type' : 'application/json' }
         }).on('success', function(data, response) {
-            cb(undefined, data, response);
-        }).on('error', function(error) {
-            cb(error, undefined, response);
+           cb(undefined, data, response);
         }).on('fail', function(data, response) {
+            cb(error, undefined, response);
+        }).on('error', function(error, response) {
             cb(undefined, data, response);
         });
     },
@@ -72,10 +72,10 @@ var api = {
             multipart: true,
             data: data
         }).on('success', function(data, response) {
-            cb(undefined, data, response);
-        }).on('error', function(error) {
-            cb(error, undefined, response);
+           cb(undefined, data, response);
         }).on('fail', function(data, response) {
+            cb(error, undefined, response);
+        }).on('error', function(error, response) {
             cb(undefined, data, response);
         });
     }
