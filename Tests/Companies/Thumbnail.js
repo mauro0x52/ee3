@@ -12,7 +12,8 @@ var should = require("should"),
     rand = require("../Utils.js").rand,
     token, companyImageUrl, productImageUrl, random,
     userName, companyName, productName, company, product,
-    token2, userName2, companyName2, productName2, company2, product2;
+    token2, userName2, companyName2, productName2, company2, product2,
+    user3, company3;
 
 random = rand();
 userName = 'testes+' + random + '@empreendemia.com.br';
@@ -221,8 +222,64 @@ describe('GET /company/[id]/thumbnail', function () {
     });
 });
 
+
+random = rand();
+user3 = {username:'testes+' + random + '@empreendemia.com.br'};
+company3 = {name:'Empresa ' + random};
+
 describe('DEL /company/[id]/thumbnail', function() {
 
+    before(function (done) {
+        // cria usuario
+        api.post('auth', '/user', {
+            username : user3.username,
+            password : 'testando',
+            password_confirmation : 'testando'
+        }, function(error, data) {
+            user3.token = data.token;
+            // cria empresa
+            api.post('companies', '/company', {
+                token : user3.token,
+                name : company3.name,
+                activity : 'consultoria em testes',
+                type : 'company',
+                profile : 'both',
+                active : true
+            }, function(error, data) {
+                company3 = data;
+                if (error) return done(error);
+                else done();
+            });
+        });
+    });
+    it('url existe', function (done) {
+        api.del('companies', '/company/asddasddaoiheoins/thumbnail', {}, function(error, data, response) {
+            response.should.have.status(200);
+            should.exist(data, 'não retornou dado nenhum');
+            done();
+        });
+    });
+    it('token invalido', function (done) {
+        api.del('companies', '/company/' + company3.slug + '/thumbnail',
+            {},
+            function(error, data, response) {
+                should.exist(data.error, 'tem que retornar erro');
+                done();
+            }
+        );
+    });
+    it('remove com sucesso', function (done) {
+        api.del('companies', '/company/' + company3.slug + '/thumbnail',
+            { token : user3.token },
+            function(error, data, response) {
+                should.not.exist(data, 'retorna vazio');
+                api.get('companies', '/company/' + company3.slug + '/thumbnail', {}, function(error, data, response) {
+                    should.not.exist(data, 'retorna vazio (get)');
+                    done();
+                });
+            }
+        );
+    });
 });
 
 productName = 'Produto ' + random;
