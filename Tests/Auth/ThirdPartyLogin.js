@@ -130,10 +130,8 @@ describe('POST /user/[id]/third-party-login', function () {
             } else {
                 should.not.exist(data.error, 'não deveria retornar erro');
                 data.should.have.property('_id');
-                data.should.have.property('status');
-                data.should.have.property('username');
-                data.should.have.property('thirdPartyLogins');
-                data.thirdPartyLogins.length.should.be.above(0);
+                data.should.have.property('server');
+                data.should.have.property('token');
                 done();
             }
         });
@@ -247,7 +245,7 @@ describe('GET /user/[id]/third-party-login', function () {
                 id : 'Id ' + rand(),
                 external_token : 'Token ' + rand()
             }, function (error, data, response) {
-                third = data.thirdPartyLogins[0]._id;
+                third = data._id;
                 done()
             });
         });
@@ -346,7 +344,7 @@ describe('DEL /user/[id]/third-party-login', function () {
                 id : 'Id ' + rand(),
                 external_token : 'Token ' + rand()
             }, function (error, data, response) {
-                third = data.thirdPartyLogins[0]._id;
+                third = data._id;
                 done()
             });
         });
