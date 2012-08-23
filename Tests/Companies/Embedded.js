@@ -159,12 +159,15 @@ describe('POST /company/[slug]/embedded', function () {
     });
 
     it('cadastra Embedded', function(done) {
+        var embed = 'Embedded ' + rand(),
+            url = 'Url ' + rand(),
+            type = 'Youtube';
         api.post('companies', '/company/' + company + '/embedded', {
                 token   : token,
-                embed     : 'Embedded ' + rand(),
+                embed     : embed,
                 link      : {   
-                    url  : 'Url ' + rand(),
-                    type : 'Youtube'
+                    url  : url,
+                    type : type
                 }
             }, function(error, data, response) {
                 if (error) {
@@ -172,6 +175,10 @@ describe('POST /company/[slug]/embedded', function () {
                 } else { 
                     should.exist(data);
                     should.not.exist(data.error);
+                    data.should.have.property('_id');
+                    data.should.have.property('embed', embed);
+                    data.should.have.property('link').property('url', url);
+                    data.should.have.property('link').property('type', type);
                     done();
                 }
             }
@@ -298,7 +305,7 @@ describe('GET /company/[slug]/embedded/[id]', function () {
                         type : 'Youtube'
                     }
                 }, function(error, data, response) {
-                    embedded = data.embeddeds[0]._id
+                    embedded = data._id
                     done();
                 });
             });
@@ -376,7 +383,7 @@ describe('DEL /company/[slug]/embedded/[id]', function () {
                         type : 'Youtube'
                     }
                 }, function(error, data, response) {
-                    embedded = data.embeddeds[0]._id
+                    embedded = data._id
                     done();
                 });
             });
@@ -462,7 +469,7 @@ describe('PUT /company/[slug]/embedded/[id]', function () {
                         type : 'Youtube'
                     }
                 }, function(error, data, response) {
-                    embedded = data.embeddeds[0]._id
+                    embedded = data._id
                     done();
                 });
             });
@@ -535,18 +542,24 @@ describe('PUT /company/[slug]/embedded/[id]', function () {
     });
     
     it('edita Embedded', function(done) {
+        var embed = 'Embedded ' + rand(),
+            url = 'Url ' + rand(),
+            type = 'Youtube';
         api.put('companies', '/company/' + company + '/embedded/' + embedded, {
             token   : token,
-            embed     : 'Embedded ' + rand(),
+            embed     : embed,
             link      : {   
-                url  : 'Url ' + rand(),
-                type : 'Youtube'
+                url  : url,
+                type : type
             }
         }, function(error, data, response) {
             if (error) {
                 return done(error);
             } else {
                 should.not.exist(data.error);
+                data.should.have.property('_id');
+                data.should.have.property('embed', embed);
+                data.should.have.property('link').property('type', type);
                 done();
             }
         });

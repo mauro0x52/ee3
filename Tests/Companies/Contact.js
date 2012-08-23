@@ -129,16 +129,21 @@ describe('POST /company/[slug]/contact', function () {
     });
 
     it('cadastra contato', function(done) {
+        var address = 'Number ' + rand(),
+            type = 'Twitter';
         api.post('companies', '/company/' + company + '/contact', {
                 token   : token,
-                address   : 'Number ' + rand(),
-                type      : 'Twitter'
+                address   : address,
+                type      : type
             }, function(error, data, response) {
                 if (error) {
                     return done(error);
                 } else { 
                     should.exist(data);
                     should.not.exist(data.error);
+                    data.should.have.property('_id');
+                    data.should.have.property('address', address);
+                    data.should.have.property('type', type);
                     done();
                 }
             }
@@ -258,7 +263,7 @@ describe('GET /company/[slug]/contact/[id]', function () {
                     address   : 'Number ' + rand(),
                     type      : 'Twitter'
                 }, function(error, data, response) {
-                    contact = data.contacts[0]._id
+                    contact = data._id
                     done();
                 });
             });
@@ -333,7 +338,7 @@ describe('DEL /company/[slug]/contact/[id]', function () {
                     address   : 'Number ' + rand(),
                     type      : 'Twitter'
                 }, function(error, data, response) {
-                    contact = data.contacts[0]._id
+                    contact = data._id
                     done();
                 });
             });
@@ -416,7 +421,7 @@ describe('PUT /company/[slug]/contact/[id]', function () {
                     address   : 'Number ' + rand(),
                     type      : 'Twitter'
                 }, function(error, data, response) {
-                    contact = data.contacts[0]._id
+                    contact = data._id
                     done();
                 });
             });
@@ -509,15 +514,20 @@ describe('PUT /company/[slug]/contact/[id]', function () {
     });
 
     it('edita contato', function(done) {
+        var address = 'Number ' + rand(),
+            type = 'Twitter';
         api.put('companies', '/company/' + company + '/contact/' + contact, {
             token : token,
-            address   : 'Number ' + rand(),
-            type      : 'Twitter'
+            address   : address,
+            type      : type
         }, function(error, data, response) {
             if (error) {
                 return done(error);
             } else {
                 should.not.exist(data.error);
+                data.should.have.property('_id');
+                data.should.have.property('address', address);
+                data.should.have.property('type', type);
                 done();
             }
         });

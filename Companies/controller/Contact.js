@@ -54,7 +54,7 @@ module.exports = function (app) {
                                     if (error) {
                                         response.send({error : error});
                                     } else {
-                                        response.send(company);
+                                        response.send(company.contacts.pop());
                                     }
                                 });
                             }

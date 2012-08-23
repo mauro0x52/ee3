@@ -26,8 +26,6 @@ module.exports = function (app) {
      * @response : {product}
      */
     app.post('/company/:company_id/product', function (request, response) {
-        var product = [];
-
         response.contentType('json');
 
         //valida o token do usuário

@@ -129,16 +129,20 @@ describe('POST /company/[slug]/link', function () {
     });
 
     it('cadastra link', function(done) {
+        var url = 'Url ' + rand(),
+            type = 'Youtube';
         api.post('companies', '/company/' + company + '/link', {
                 token   : token,
-                url     : 'Url ' + rand(),
-                type    : 'Youtube'
+                url     : url,
+                type    : type
             }, function(error, data, response) {
                 if (error) {
                     return done(error);
                 } else { 
-                    should.exist(data);
                     should.not.exist(data.error);
+                    data.should.have.property('_id');
+                    data.should.have.property('url', url);
+                    data.should.have.property('type', type);
                     done();
                 }
             }
@@ -258,7 +262,7 @@ describe('GET /company/[slug]/link/[id]', function () {
                     url     : 'Url ' + rand(),
                     type    : 'Youtube'
                 }, function(error, data, response) {
-                    link = data.links[0]._id
+                    link = data._id
                     done();
                 });
             });
@@ -333,7 +337,7 @@ describe('DEL /company/[slug]/link/[id]', function () {
                     url     : 'Url ' + rand(),
                     type    : 'Youtube'
                 }, function(error, data, response) {
-                    link = data.links[0]._id
+                    link = data._id
                     done();
                 });
             });
@@ -416,7 +420,7 @@ describe('PUT /company/[slug]/link/[id]', function () {
                     url     : 'Url ' + rand(),
                     type    : 'Youtube'
                 }, function(error, data, response) {
-                    link = data.links[0]._id
+                    link = data._id
                     done();
                 });
             });
@@ -494,15 +498,20 @@ describe('PUT /company/[slug]/link/[id]', function () {
     });
     
     it('edita link', function(done) {
+        var url  = 'Url ' + rand(),
+            type = 'Youtube';
         api.put('companies', '/company/' + company + '/link/' + link, {
             token : token,
-            url     : 'Url ' + rand(),
-            type    : 'Youtube'
+            url     : url,
+            type    : type
         }, function(error, data, response) {
             if (error) {
                 return done(error);
             } else {
                 should.not.exist(data.error);
+                data.should.have.property('_id');
+                data.should.have.property('url', url);
+                data.should.have.property('type', type);
                 done();
             }
         });

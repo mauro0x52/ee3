@@ -194,19 +194,30 @@ describe('POST /company/[slug]/phone', function () {
     });
 
     it('cadastra telefone', function(done) {
+        var number    = 'Number ' + rand(),
+            extension = 'extension ' + rand(),
+            areaCode  = 'areaCode ' + rand(),
+            intCode   = 'intCode ' + rand(),
+            type      = 'home';
         api.post('companies', '/company/' + company + '/phone', {
                 token   : token,
-                number    : 'Number ' + rand(),
-                extension : 'extension ' + rand(),
-                areaCode  : 'areaCode ' + rand(),
-                intCode   : 'intCode ' + rand(),
-                type      : 'home'
+                number    : number,
+                extension : extension,
+                areaCode  : areaCode,
+                intCode   : intCode,
+                type      : type
             }, function(error, data, response) {
                 if (error) {
                     return done(error);
                 } else { 
                     should.exist(data);
                     should.not.exist(data.error);
+                    data.should.have.property('_id');
+                    data.should.have.property('number', number);
+                    data.should.have.property('extension', extension);
+                    data.should.have.property('areaCode', areaCode);
+                    data.should.have.property('intCode', intCode);
+                    data.should.have.property('type', type);
                     done();
                 }
             }
@@ -335,7 +346,7 @@ describe('GET /company/[slug]/phone/[id]', function () {
                     intCode   : 'intCode ' + rand(),
                     type      : 'home'
                 }, function(error, data, response) {
-                    phone = data.phones[0]._id
+                    phone = data._id
                     done();
                 });
             });
@@ -416,7 +427,7 @@ describe('DEL /company/[slug]/phone/[id]', function () {
                     intCode   : 'intCode ' + rand(),
                     type      : 'home'
                 }, function(error, data, response) {
-                    phone = data.phones[0]._id
+                    phone = data._id
                     done();
                 });
             });
@@ -502,7 +513,7 @@ describe('PUT /company/[slug]/phone/[id]', function () {
                     intCode   : 'intCode ' + rand(),
                     type      : 'home'
                 }, function(error, data, response) {
-                    phone = data.phones[0]._id
+                    phone = data._id
                     done();
                 });
             });
@@ -643,18 +654,29 @@ describe('PUT /company/[slug]/phone/[id]', function () {
     });
     
     it('edita telefone', function(done) {
+        var number    = 'Number ' + rand(),
+            extension = 'extension ' + rand(),
+            areaCode  = 'areaCode ' + rand(),
+            intCode   = 'intCode ' + rand(),
+            type      = 'home';
         api.put('companies', '/company/' + company + '/phone/' + phone, {
-            token : token,
-            number    : 'Number ' + rand(),
-            extension : 'extension ' + rand(),
-            areaCode  : 'areaCode ' + rand(),
-            intCode   : 'intCode ' + rand(),
-            type      : 'home'
+            token   : token,
+            number    : number,
+            extension : extension,
+            areaCode  : areaCode,
+            intCode   : intCode,
+            type      : type
         }, function(error, data, response) {
             if (error) {
                 return done(error);
             } else {
                 should.not.exist(data.error);
+                data.should.have.property('_id');
+                data.should.have.property('number', number);
+                data.should.have.property('extension', extension);
+                data.should.have.property('areaCode', areaCode);
+                data.should.have.property('intCode', intCode);
+                data.should.have.property('type', type);
                 done();
             }
         });

@@ -78,7 +78,7 @@ module.exports = function (app) {
                                                                 if (error) {
                                                                     response.send({error : error});
                                                                 } else {
-                                                                    response.send(product.images);
+                                                                    response.send(product.images.pop());
                                                                 }
                                                             });
                                                         }

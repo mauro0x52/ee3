@@ -28,8 +28,6 @@ module.exports = function (app) {
      * @response : {confirmation}
      */
     app.post('/company/:company_id/product/:product_id/thumbnail', function postProductThumbnail(request, response) {
-        var thumbnail;
-
         response.contentType('json');
 
         //valida o token do usuário

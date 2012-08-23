@@ -176,12 +176,17 @@ describe('POST /company/[slug]/address', function () {
     });
 
     it('cadastra endereço', function(done) {
+        var street = "Rua " + rand(),
+            number = "Numero " + rand(),
+            complement = "Complemento " + rand(),
+            city = "Cidade " + rand();
+                
         api.post('companies', '/company/' + company + '/address', {
                 token   : token,
-                street : "Rua " + rand(),
-                number : "Numero " + rand(),
-                complement : "Complemento " + rand(),
-                city : "Cidade " + rand(),
+                street : street,
+                number : number,
+                complement : complement,
+                city : city,
                 headQuarters : true
             }, function(error, data, response) {
                 if (error) {
@@ -189,6 +194,11 @@ describe('POST /company/[slug]/address', function () {
                 } else { 
                     should.exist(data);
                     should.not.exist(data.error);
+                    data.should.have.property('_id');
+                    data.should.have.property('street', street);
+                    data.should.have.property('number', number);
+                    data.should.have.property('complement', complement);
+                    data.should.have.property('city', city);
                     done();
                 }
             }
@@ -317,7 +327,7 @@ describe('GET /company/[slug]/address/[id]', function () {
                     city : "Cidade " + rand(),
                     headQuarters : true
                 }, function(error, data, response) {
-                    address = data.addresses[0]._id
+                    address = data._id
                     done();
                 });
             });
@@ -398,7 +408,7 @@ describe('DEL /company/[slug]/address/[id]', function () {
                     city : "Cidade " + rand(),
                     headQuarters : true
                 }, function(error, data, response) {
-                    address = data.addresses[0]._id
+                    address = data._id
                     done();
                 });
             });
@@ -484,7 +494,7 @@ describe('PUT /company/[slug]/address/[id]', function () {
                     city : "Cidade " + rand(),
                     headQuarters : true
                 }, function(error, data, response) {
-                    address = data.addresses[0]._id
+                    address = data._id
                     done();
                 });
             });
@@ -625,18 +635,27 @@ describe('PUT /company/[slug]/address/[id]', function () {
     });
     
     it('edita endereço', function(done) {
+        var street = "Rua " + rand(),
+            number = "Numero " + rand(),
+            complement = "Complemento " + rand(),
+            city = "Cidade " + rand();
         api.put('companies', '/company/' + company + '/address/' + address, {
-            token : token,
-            street : "Rua " + rand(),
-            number : "Numero " + rand(),
-            complement : "Complemento " + rand(),
-            city : "Cidade " + rand(),
+            token   : token,
+            street : street,
+            number : number,
+            complement : complement,
+            city : city,
             headQuarters : true
         }, function(error, data, response) {
             if (error) {
                 return done(error);
             } else {
                 should.not.exist(data.error);
+                data.should.have.property('_id');
+                data.should.have.property('street', street);
+                data.should.have.property('number', number);
+                data.should.have.property('complement', complement);
+                data.should.have.property('city', city);
                 done();
             }
         });
