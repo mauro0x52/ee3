@@ -411,7 +411,7 @@ describe('GET /companies', function () {
             }
         );
     });
-    it('filtrar por setores (and) e cidades (or)', function(done) {
+    it('filtrar por setores (and) e cidades (or) com paginação', function(done) {
         api.get('companies', '/companies',
             {
                 filterBySectors : {sectors : ['000000000000000000000001', '000000000000000000000003'], operator : 'and'},
@@ -441,7 +441,26 @@ describe('GET /companies', function () {
                         }
                         (foundCityOne || foundCityTwo).should.be.ok;
                     }
-                    done();
+                    var companies = data;
+                    api.get('companies', '/companies',
+                        {
+                            filterBySectors : {sectors : ['000000000000000000000001', '000000000000000000000003'], operator : 'and'},
+                            filterByCities : {cities : ['000000000000000000000001','000000000000000000000002'], operator:'or'},
+                            limit : 2,
+                            page : 2
+                        },
+                        function(error, data, response) {
+                            if (error) return done(error);
+                            else {
+                                should.not.exist(data.error, 'erro inesperado');
+                                JSON.stringify(companies)
+                                    .should.include(JSON.stringify(data[0]), 'resultado menor tem que está dentro do resultado maior');
+                                JSON.stringify(companies)
+                                    .should.include(JSON.stringify(data[1]), 'resultado menor tem que está dentro do resultado maior');
+                                done();
+                            }
+                        }
+                    );
                 }
             }
         );
@@ -465,7 +484,6 @@ describe('GET /company/:company_id', function () {
             }
         );
     });
-
     it('empresa que não existe', function(done) {
         api.get('companies', '/company/awoineaiionsndoinsdoisa',
             {},
@@ -478,7 +496,6 @@ describe('GET /company/:company_id', function () {
             }
         );
     });
-
     it('pega empresa por id', function(done) {
         api.get('companies', '/company/' + company._id,
             {},
