@@ -29,31 +29,28 @@ productSchema = new Schema({
  * @description : verifica se o slug ja existe
  */
 productSchema.pre('save', function (next) {
-    "use strict";
-    var crypto = require('crypto');
+    var crypto = require('crypto'),
+        slug, foundSlug,
+        charFrom = 'àáâãäåçèéêëìíîïñðóòôõöøùúûüýÿ',
+        charTo   = 'aaaaaaceeeeiiiinooooooouuuuyy',
+        i;
 
-    if (this.isNew) {
-        //TODO fazer o gerador de slugs aqui
-        this.slug = 'slug-'+crypto.createHash('sha1').update(crypto.randomBytes(10)).digest('hex').substring(0, 10);
+    this.name = this.name.replace(/^\s+|\s+$/g, '');
+
+    slug = this.name;
+    slug = slug.replace(/^\s+|\s+$/g, '').replace(/\s+/g, '-').toLowerCase();
+    // remove acentos
+    for (var i = 0; i < charFrom.length; i++) {
+        slug = slug.replace(new RegExp(charFrom.charAt(i), 'g'), charTo.charAt(i))
     }
-
-    next();
-/*
-    var i,
-        j;
-
+    this.slug = slug.replace(/[^a-z,0-9,\-]/g, '');
+    
     for (i = 0; i < this.parent.products.length; i = i + 1) {
-        if (this.parent.products[i].isNew) {
-            for (j = 0; j < this.parent.products.length; j = j + 1) {
-                if (this.parent.products[i]._id !== this.parent.products[j]._id && this.parent.products[i].slug === this.parent.products[j].slug) {
-                    next(new Error('slug already exist'));
-                }
-            }
+        if (this.parent.products[i]._id !== this._id && this.parent.products[i].slug === this.slug) {
+            this.slug = this.slug + '-' + crypto.createHash('sha1').update(crypto.randomBytes(10)).digest('hex').substring(0, 2);
         }
     }
-
-    next();*/
-
+    next();
 });
 
 

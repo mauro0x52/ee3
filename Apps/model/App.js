@@ -21,12 +21,35 @@ appSchema = new Schema({
 });
 
 appSchema.pre('save', function(next) {
-    if (this.isNew) {
-        //TODO fazer o gerador de slugs aqui
-        this.slug = 'slug-'+crypto.createHash('sha1').update(crypto.randomBytes(10)).digest('hex').substring(0, 10);
-    }
+    var crypto = require('crypto'),
+        slug, foundSlug,
+        charFrom = 'àáâãäåçèéêëìíîïñðóòôõöøùúûüýÿ',
+        charTo   = 'aaaaaaceeeeiiiinooooooouuuuyy',
+        app = this;
 
-    next();
+    this.name = this.name.replace(/^\s+|\s+$/g, '');
+
+    slug = this.name;
+    slug = slug.replace(/^\s+|\s+$/g, '').replace(/\s+/g, '-').toLowerCase();
+    // remove acentos
+    for (var i = 0; i < charFrom.length; i++) {
+        slug = slug.replace(new RegExp(charFrom.charAt(i), 'g'), charTo.charAt(i))
+    }
+    slug = slug.replace(/[^a-z,0-9,\-]/g, '');
+
+    App.find({slug : slug, _id : {$ne : this._id}}, function (error, data) {
+        if (error) next(error);
+        else {
+            if (data.length === 0) {
+                app.slug = slug;
+            }
+            else {
+                app.slug = slug + '-' + crypto.createHash('sha1').update(crypto.randomBytes(10)).digest('hex').substring(0, 2);
+            }
+            next();
+        }
+
+    });
 });
 /** Versions
  * @author : Rafael Erthal
