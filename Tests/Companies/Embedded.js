@@ -1,9 +1,9 @@
-/** Tests Companies.phone
+/** Tests Companies.embedded
  *
  * @autor : Rafael Almeida Erthal Hermano
  * @since : 2012-08
  *
- * @description : Kit de testes do controller phone do serviço Companies
+ * @description : Kit de testes do controller embedded do serviço Companies
  */
 
 var should = require("should"),
@@ -11,7 +11,7 @@ var should = require("should"),
     db = require("../Utils.js").db,
     rand = require("../Utils.js").rand;
 
-describe('POST /company/[slug]/phone', function () {
+describe('POST /company/[slug]/embedded', function () {
     var token,
         slug,
         version,
@@ -41,7 +41,7 @@ describe('POST /company/[slug]/phone', function () {
     });
 
     it('url tem que existir', function(done) {
-        api.post('companies', '/company/' + company + '/phone', {}, function(error, data, response) {
+        api.post('companies', '/company/' + company + '/embedded', {}, function(error, data, response) {
             if (error) {
                 return done(error);
             } else {
@@ -53,7 +53,7 @@ describe('POST /company/[slug]/phone', function () {
     });
 
     it('empresa inexistente', function(done) {
-        api.post('companies', '/company/inexistente/phone', {
+        api.post('companies', '/company/inexistente/embedded', {
                 token : token
             }, function(error, data, response) {
                 if (error) {
@@ -67,13 +67,13 @@ describe('POST /company/[slug]/phone', function () {
     });
 
     it('token errado', function(done) {
-        api.post('companies', '/company/' + company + '/phone', {
+        api.post('companies', '/company/' + company + '/embedded', {
                 token     : 'tokeninvalido',
-                number    : 'Number ' + rand(),
-                extension : 'extension ' + rand(),
-                areaCode  : 'areaCode ' + rand(),
-                intCode   : 'intCode ' + rand(),
-                type      : 'home'
+                embed     : 'Embedded ' + rand(),
+                link      : {   
+                    url  : 'Url ' + rand(),
+                    type : 'Type ' + rand()
+                }
             }, function(error, data, response) {
                 if (error) {
                     return done(error);
@@ -85,13 +85,13 @@ describe('POST /company/[slug]/phone', function () {
         );
     });
 
-    it('number em branco', function(done) {
-        api.post('companies', '/company/' + company + '/phone', {
+    it('embed em branco', function(done) {
+        api.post('companies', '/company/' + company + '/embedded', {
                 token   : token,
-                extension : 'extension ' + rand(),
-                areaCode  : 'areaCode ' + rand(),
-                intCode   : 'intCode ' + rand(),
-                type      : 'home'
+                link      : {   
+                    url  : 'Url ' + rand(),
+                    type : 'Type ' + rand()
+                }
             }, function(error, data, response) {
                 if (error) {
                     return done(error);
@@ -103,49 +103,13 @@ describe('POST /company/[slug]/phone', function () {
         );
     });
 
-    it('extension em branco', function(done) {
-        api.post('companies', '/company/' + company + '/phone', {
+    it('url em branco', function(done) {
+        api.post('companies', '/company/' + company + '/embedded', {
                 token   : token,
-                number    : 'Number ' + rand(),
-                areaCode  : 'areaCode ' + rand(),
-                intCode   : 'intCode ' + rand(),
-                type      : 'home'
-            }, function(error, data, response) {
-                if (error) {
-                    return done(error);
-                } else { 
-                    should.exist(data.error);
-                    done();
+                embed     : 'Embedded ' + rand(),
+                link      : {   
+                    type : 'Type ' + rand()
                 }
-            }
-        );
-    });
-
-    it('areaCode em branco', function(done) {
-        api.post('companies', '/company/' + company + '/phone', {
-                token   : token,
-                number    : 'Number ' + rand(),
-                extension : 'extension ' + rand(),
-                intCode   : 'intCode ' + rand(),
-                type      : 'home'
-            }, function(error, data, response) {
-                if (error) {
-                    return done(error);
-                } else { 
-                    should.exist(data.error);
-                    done();
-                }
-            }
-        );
-    });
-
-    it('intCode em branco', function(done) {
-        api.post('companies', '/company/' + company + '/phone', {
-                token   : token,
-                number    : 'Number ' + rand(),
-                extension : 'extension ' + rand(),
-                areaCode  : 'areaCode ' + rand(),
-                type      : 'home'
             }, function(error, data, response) {
                 if (error) {
                     return done(error);
@@ -158,12 +122,12 @@ describe('POST /company/[slug]/phone', function () {
     });
 
     it('type em branco', function(done) {
-        api.post('companies', '/company/' + company + '/phone', {
+        api.post('companies', '/company/' + company + '/embedded', {
                 token   : token,
-                number    : 'Number ' + rand(),
-                extension : 'extension ' + rand(),
-                areaCode  : 'areaCode ' + rand(),
-                intCode   : 'intCode ' + rand(),
+                embed     : 'Embedded ' + rand(),
+                link      : {   
+                    url  : 'Url ' + rand()
+                }
             }, function(error, data, response) {
                 if (error) {
                     return done(error);
@@ -175,13 +139,14 @@ describe('POST /company/[slug]/phone', function () {
         );
     });
 
-    it('type inválido', function(done) {
-        api.post('companies', '/company/' + company + '/phone', {
+    it('tipo inválido', function(done) {
+        api.post('companies', '/company/' + company + '/embedded', {
                 token   : token,
-                number    : 'Number ' + rand(),
-                extension : 'extension ' + rand(),
-                areaCode  : 'areaCode ' + rand(),
-                type      : rand()
+                embed     : 'Embedded ' + rand(),
+                link      : {   
+                    url  : 'Url ' + rand(),
+                    type : rand()
+                }
             }, function(error, data, response) {
                 if (error) {
                     return done(error);
@@ -193,19 +158,17 @@ describe('POST /company/[slug]/phone', function () {
         );
     });
 
-    it('cadastra telefone', function(done) {
-        var number    = 'Number ' + rand(),
-            extension = 'extension ' + rand(),
-            areaCode  = 'areaCode ' + rand(),
-            intCode   = 'intCode ' + rand(),
-            type      = 'home';
-        api.post('companies', '/company/' + company + '/phone', {
+    it('cadastra Embedded', function(done) {
+        var embed = 'Embedded ' + rand(),
+            url = 'Url ' + rand(),
+            type = 'Youtube';
+        api.post('companies', '/company/' + company + '/embedded', {
                 token   : token,
-                number    : number,
-                extension : extension,
-                areaCode  : areaCode,
-                intCode   : intCode,
-                type      : type
+                embed     : embed,
+                link      : {   
+                    url  : url,
+                    type : type
+                }
             }, function(error, data, response) {
                 if (error) {
                     return done(error);
@@ -213,11 +176,9 @@ describe('POST /company/[slug]/phone', function () {
                     should.exist(data);
                     should.not.exist(data.error);
                     data.should.have.property('_id');
-                    data.should.have.property('number', number);
-                    data.should.have.property('extension', extension);
-                    data.should.have.property('areaCode', areaCode);
-                    data.should.have.property('intCode', intCode);
-                    data.should.have.property('type', type);
+                    data.should.have.property('embed', embed);
+                    data.should.have.property('link').property('url', url);
+                    data.should.have.property('link').property('type', type);
                     done();
                 }
             }
@@ -225,12 +186,12 @@ describe('POST /company/[slug]/phone', function () {
     });
 });
 
-describe('GET /company/[slug]/phonees', function () {
+describe('GET /company/[slug]/embeddedes', function () {
     var token,
         slug,
         version,
         company,
-        phonees = 0;
+        embeddedes = 0;
 
     before(function (done) {
         // cria usuario
@@ -251,16 +212,16 @@ describe('GET /company/[slug]/phonees', function () {
             }, function(error, data, response) {
                 company = data.slug;
                 for (var i = 0; i < 20; i = i + 1) {
-                    api.post('companies', '/company/' + company + '/phone', {
+                    api.post('companies', '/company/' + company + '/embedded', {
                         token   : token,
-                        number    : 'Number ' + rand(),
-                        extension : 'extension ' + rand(),
-                        areaCode  : 'areaCode ' + rand(),
-                        intCode   : 'intCode ' + rand(),
-                        type      : 'home'
+                        embed     : 'Embedded ' + rand(),
+                        link      : {   
+                            url  : 'Url ' + rand(),
+                            type : 'Youtube'
+                        }
                     }, function(error, data, response) {
-                        phonees++;
-                        if (phonees === 20) {
+                        embeddedes++;
+                        if (embeddedes === 20) {
                             done();
                         }
                     });
@@ -270,7 +231,7 @@ describe('GET /company/[slug]/phonees', function () {
     });
     
     it('url tem que existir', function(done) {
-        api.get('companies', '/company/' + company + '/phones', {}, function(error, data, response) {
+        api.get('companies', '/company/' + company + '/embeddeds', {}, function(error, data, response) {
             if (error) {
                 return done(error);
             } else {
@@ -280,9 +241,9 @@ describe('GET /company/[slug]/phonees', function () {
             }
         });
     });
-    
+
     it('empresa inexistente', function(done) {
-        api.get('companies', '/company/inexistente/phones', {}, function(error, data, response) {
+        api.get('companies', '/company/inexistente/embeddeds', {}, function(error, data, response) {
             if (error) {
                 return done(error);
             } else {
@@ -292,8 +253,8 @@ describe('GET /company/[slug]/phonees', function () {
         });
     });
     
-    it('listar telefones', function(done) {
-        api.get('companies', '/company/' + company + '/phones', {}, function(error, data, response) {
+    it('listar Embeddeds', function(done) {
+        api.get('companies', '/company/' + company + '/embeddeds', {}, function(error, data, response) {
             if (error) {
                 return done(error);
             } else {
@@ -301,11 +262,9 @@ describe('GET /company/[slug]/phonees', function () {
                 data.length.should.be.above(19);
                 for (var i = 0 ; i < data.length; i = i + 1) {
                     data[i].should.have.property('_id');
-                    data[i].should.have.property('number');
-                    data[i].should.have.property('extension');
-                    data[i].should.have.property('areaCode');
-                    data[i].should.have.property('intCode');
-                    data[i].should.have.property('type');
+                    data[i].should.have.property('embed');
+                    data[i].should.have.property('link').property('url');
+                    data[i].should.have.property('link').property('type');
                 }
                 done();
             }
@@ -313,12 +272,12 @@ describe('GET /company/[slug]/phonees', function () {
     });
 });
 
-describe('GET /company/[slug]/phone/[id]', function () {
+describe('GET /company/[slug]/embedded/[id]', function () {
     var token,
         slug,
         version,
         company,
-        phone;
+        embedded;
 
     before(function (done) {
         // cria usuario
@@ -338,15 +297,15 @@ describe('GET /company/[slug]/phone/[id]', function () {
                 about: 'sobre'
             }, function(error, data, response) {
                 company = data.slug;
-                api.post('companies', '/company/' + company + '/phone', {
+                api.post('companies', '/company/' + company + '/embedded', {
                     token   : token,
-                    number    : 'Number ' + rand(),
-                    extension : 'extension ' + rand(),
-                    areaCode  : 'areaCode ' + rand(),
-                    intCode   : 'intCode ' + rand(),
-                    type      : 'home'
+                    embed     : 'Embedded ' + rand(),
+                    link      : {   
+                        url  : 'Url ' + rand(),
+                        type : 'Youtube'
+                    }
                 }, function(error, data, response) {
-                    phone = data._id
+                    embedded = data._id
                     done();
                 });
             });
@@ -354,7 +313,7 @@ describe('GET /company/[slug]/phone/[id]', function () {
     });
     
     it('url tem que existir', function(done) {
-        api.get('companies', '/company/' + company + '/phone/' + phone, {}, function(error, data, response) {
+        api.get('companies', '/company/' + company + '/embedded/' + embedded, {}, function(error, data, response) {
             if (error) {
                 return done(error);
             } else {
@@ -366,7 +325,7 @@ describe('GET /company/[slug]/phone/[id]', function () {
     });
     
     it('empresa inexistente', function(done) {
-        api.get('companies', '/company/inexistente/phone/' + phone, {}, function(error, data, response) {
+        api.get('companies', '/company/inexistente/embedded/' + embedded, {}, function(error, data, response) {
             if (error) {
                 return done(error);
             } else {
@@ -376,30 +335,27 @@ describe('GET /company/[slug]/phone/[id]', function () {
         });
     });
     
-    it('exibir telefone', function(done) {
-        api.get('companies', '/company/' + company + '/phone/' + phone, {}, function(error, data, response) {
+    it('exibir Embedded', function(done) {
+        api.get('companies', '/company/' + company + '/embedded/' + embedded, {}, function(error, data, response) {
             if (error) {
                 return done(error);
             } else {
                 should.not.exist(data.error, 'erro inesperado');    
                 data.should.have.property('_id');
-                data.should.have.property('number');
-                data.should.have.property('extension');
-                data.should.have.property('areaCode');
-                data.should.have.property('intCode');
-                data.should.have.property('type');
+                data.should.have.property('link').property('url');
+                data.should.have.property('link').property('type');
                 done();
             }
         });
     });
 });
 
-describe('DEL /company/[slug]/phone/[id]', function () {
+describe('DEL /company/[slug]/embedded/[id]', function () {
     var token,
         slug,
         version,
         company,
-        phone;
+        embedded;
 
     before(function (done) {
         // cria usuario
@@ -419,15 +375,15 @@ describe('DEL /company/[slug]/phone/[id]', function () {
                 about: 'sobre'
             }, function(error, data, response) {
                 company = data.slug;
-                api.post('companies', '/company/' + company + '/phone', {
+                api.post('companies', '/company/' + company + '/embedded', {
                     token   : token,
-                    number    : 'Number ' + rand(),
-                    extension : 'extension ' + rand(),
-                    areaCode  : 'areaCode ' + rand(),
-                    intCode   : 'intCode ' + rand(),
-                    type      : 'home'
+                    embed     : 'Embedded ' + rand(),
+                    link      : {   
+                        url  : 'Url ' + rand(),
+                        type : 'Youtube'
+                    }
                 }, function(error, data, response) {
-                    phone = data._id
+                    embedded = data._id
                     done();
                 });
             });
@@ -435,7 +391,7 @@ describe('DEL /company/[slug]/phone/[id]', function () {
     });
     
     it('url tem que existir', function(done) {
-        api.del('companies', '/company/' + company + '/phone/' + phone, {}, function(error, data, response) {
+        api.del('companies', '/company/' + company + '/embedded/' + embedded, {}, function(error, data, response) {
             if (error) {
                 return done(error);
             } else {
@@ -447,7 +403,7 @@ describe('DEL /company/[slug]/phone/[id]', function () {
     });
     
     it('token inválido', function(done) {
-        api.del('companies', '/company/' + company + '/phone/' + phone, {token : 'invalido'}, function(error, data, response) {
+        api.del('companies', '/company/' + company + '/embedded/' + embedded, {token : 'invalido'}, function(error, data, response) {
             if (error) {
                 return done(error);
             } else {
@@ -458,7 +414,7 @@ describe('DEL /company/[slug]/phone/[id]', function () {
     });
     
     it('empresa inexistente', function(done) {
-        api.del('companies', '/company/inexistente/phone/' + phone, {token : token}, function(error, data, response) {
+        api.del('companies', '/company/inexistente/embedded/' + embedded, {token : token}, function(error, data, response) {
             if (error) {
                 return done(error);
             } else {
@@ -468,8 +424,8 @@ describe('DEL /company/[slug]/phone/[id]', function () {
         });
     });
     
-    it('remove telefone', function(done) {
-        api.del('companies', '/company/' + company + '/phone/' + phone, {token : token}, function(error, data, response) {
+    it('remove Embedded', function(done) {
+        api.del('companies', '/company/' + company + '/embedded/' + embedded, {token : token}, function(error, data, response) {
             if (error) {
                 return done(error);
             } else {
@@ -480,12 +436,12 @@ describe('DEL /company/[slug]/phone/[id]', function () {
     });
 });
 
-describe('PUT /company/[slug]/phone/[id]', function () {
+describe('PUT /company/[slug]/embedded/[id]', function () {
     var token,
         slug,
         version,
         company,
-        phone;
+        embedded;
 
     before(function (done) {
         // cria usuario
@@ -505,15 +461,15 @@ describe('PUT /company/[slug]/phone/[id]', function () {
                 about: 'sobre'
             }, function(error, data, response) {
                 company = data.slug;
-                api.post('companies', '/company/' + company + '/phone', {
+                api.post('companies', '/company/' + company + '/embedded', {
                     token   : token,
-                    number    : 'Number ' + rand(),
-                    extension : 'extension ' + rand(),
-                    areaCode  : 'areaCode ' + rand(),
-                    intCode   : 'intCode ' + rand(),
-                    type      : 'home'
+                    embed     : 'Embedded ' + rand(),
+                    link      : {   
+                        url  : 'Url ' + rand(),
+                        type : 'Youtube'
+                    }
                 }, function(error, data, response) {
-                    phone = data._id
+                    embedded = data._id
                     done();
                 });
             });
@@ -521,7 +477,7 @@ describe('PUT /company/[slug]/phone/[id]', function () {
     });
     
     it('url tem que existir', function(done) {
-        api.put('companies', '/company/' + company + '/phone/' + phone, {}, function(error, data, response) {
+        api.put('companies', '/company/' + company + '/embedded/' + embedded, {}, function(error, data, response) {
             if (error) {
                 return done(error);
             } else {
@@ -533,13 +489,13 @@ describe('PUT /company/[slug]/phone/[id]', function () {
     });
     
     it('token inválido', function(done) {
-        api.put('companies', '/company/' + company + '/phone/' + phone, {
+        api.put('companies', '/company/' + company + '/embedded/' + embedded, {
             token : 'invalido',
-            street : "Rua " + rand(),
-            number : "Numero " + rand(),
-            complement : "Complemento " + rand(),
-            city : "Cidade " + rand(),
-            headQuarters : true
+            embed     : 'Embedded ' + rand(),
+            link      : {   
+                url  : 'Url ' + rand(),
+                type : 'Youtube'
+            }
         }, function(error, data, response) {
             if (error) {
                 return done(error);
@@ -551,132 +507,59 @@ describe('PUT /company/[slug]/phone/[id]', function () {
     });
     
     it('empresa inexistente', function(done) {
-        api.put('companies', '/company/inexistente/phone/' + phone, {
-            token : token,
-            street : "Rua " + rand(),
-            number : "Numero " + rand(),
-            complement : "Complemento " + rand(),
-            city : "Cidade " + rand(),
-            headQuarters : true
-        }, function(error, data, response) {
-            if (error) {
-                return done(error);
-            } else {
-                should.exist(data.error);
-                done();
-            }
-        });
-    });
-    
-    it('number em branco', function(done) {
-        api.put('companies', '/company/' + company + '/phone/' + phone, {
-            token : token,
-            extension : 'extension ' + rand(),
-            areaCode  : 'areaCode ' + rand(),
-            intCode   : 'intCode ' + rand(),
-            type      : 'home'
-        }, function(error, data, response) {
-            if (error) {
-                return done(error);
-            } else {
-                should.exist(data.error);
-                done();
-            }
-        });
-    });
-    
-    it('extension em branco', function(done) {
-        api.put('companies', '/company/' + company + '/phone/' + phone, {
-            token : token,
-            number    : 'Number ' + rand(),
-            areaCode  : 'areaCode ' + rand(),
-            intCode   : 'intCode ' + rand(),
-            type      : 'home'
-        }, function(error, data, response) {
-            if (error) {
-                return done(error);
-            } else {
-                should.exist(data.error);
-                done();
-            }
-        });
-    });
-    
-    it('areaCode em branco', function(done) {
-        api.put('companies', '/company/' + company + '/phone/' + phone, {
-            token : token,
-            number    : 'Number ' + rand(),
-            extension : 'extension ' + rand(),
-            intCode   : 'intCode ' + rand(),
-            type      : 'home'
-        }, function(error, data, response) {
-            if (error) {
-                return done(error);
-            } else {
-                should.exist(data.error);
-                done();
-            }
-        });
-    });
-    
-    it('intCode em branco', function(done) {
-        api.put('companies', '/company/' + company + '/phone/' + phone, {
-            token : token,
-            number    : 'Number ' + rand(),
-            extension : 'extension ' + rand(),
-            areaCode  : 'areaCode ' + rand(),
-            type      : 'home'
-        }, function(error, data, response) {
-            if (error) {
-                return done(error);
-            } else {
-                should.exist(data.error);
-                done();
-            }
-        });
-    });
-    
-    it('type em branco', function(done) {
-        api.put('companies', '/company/' + company + '/phone/' + phone, {
-            token : token,
-            number    : 'Number ' + rand(),
-            extension : 'extension ' + rand(),
-            areaCode  : 'areaCode ' + rand(),
-            intCode   : 'intCode ' + rand()
-        }, function(error, data, response) {
-            if (error) {
-                return done(error);
-            } else {
-                should.exist(data.error);
-                done();
-            }
-        });
-    });
-    
-    it('edita telefone', function(done) {
-        var number    = 'Number ' + rand(),
-            extension = 'extension ' + rand(),
-            areaCode  = 'areaCode ' + rand(),
-            intCode   = 'intCode ' + rand(),
-            type      = 'home';
-        api.put('companies', '/company/' + company + '/phone/' + phone, {
+        api.put('companies', '/company/inexistente/embedded/' + embedded, {
             token   : token,
-            number    : number,
-            extension : extension,
-            areaCode  : areaCode,
-            intCode   : intCode,
-            type      : type
+            embed     : 'Embedded ' + rand(),
+            link      : {   
+                url  : 'Url ' + rand(),
+                type : 'Youtube'
+            }
+        }, function(error, data, response) {
+            if (error) {
+                return done(error);
+            } else {
+                should.exist(data.error);
+                done();
+            }
+        });
+    });
+    
+    it('embed em branco', function(done) {
+        api.put('companies', '/company/' + company + '/embedded/' + embedded, {
+            token   : token,
+            link      : {   
+                url  : 'Url ' + rand(),
+                type : 'Youtube'
+            }
+        }, function(error, data, response) {
+            if (error) {
+                return done(error);
+            } else {
+                should.exist(data.error);
+                done();
+            }
+        });
+    });
+    
+    it('edita Embedded', function(done) {
+        var embed = 'Embedded ' + rand(),
+            url = 'Url ' + rand(),
+            type = 'Youtube';
+        api.put('companies', '/company/' + company + '/embedded/' + embedded, {
+            token   : token,
+            embed     : embed,
+            link      : {   
+                url  : url,
+                type : type
+            }
         }, function(error, data, response) {
             if (error) {
                 return done(error);
             } else {
                 should.not.exist(data.error);
                 data.should.have.property('_id');
-                data.should.have.property('number', number);
-                data.should.have.property('extension', extension);
-                data.should.have.property('areaCode', areaCode);
-                data.should.have.property('intCode', intCode);
-                data.should.have.property('type', type);
+                data.should.have.property('embed', embed);
+                data.should.have.property('link').property('type', type);
                 done();
             }
         });

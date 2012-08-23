@@ -32,7 +32,7 @@ module.exports = function (app) {
         auth(request.param('token', null), function (user) {
             if (user) {
                 //busca a compania
-                Company.find({slug : request.params.slug}, function (error, company) {
+                Company.findOne({slug : request.params.slug}, function (error, company) {
                     if (error) {
                         response.send({error : error});
                     } else {
@@ -41,11 +41,11 @@ module.exports = function (app) {
                             response.send({error : 'company not found'});
                         } else {
                             //verifica se o usuário é dono da compania
-                            if (! company.isOwner(request.param('login', null))) {
+                            if (! company.isOwner(user._id)) {
                                 response.send({error : 'permission denied'});
                             } else {
                                 //coloca os dados do post em um objeto
-                                company.embededds.push({
+                                company.embeddeds.push({
                                     link  : request.param('link', null),
                                     embed : request.param('embed', null)
                                 });
@@ -54,7 +54,7 @@ module.exports = function (app) {
                                     if (error) {
                                         response.send({error : error});
                                     } else {
-                                        response.send({error : ''});
+                                        response.send(company.embeddeds.pop());
                                     }
                                 });
                             }
@@ -80,11 +80,11 @@ module.exports = function (app) {
      * @request : {}
      * @response : {[{type,street,link,embed}]}
      */
-    app.get('/company/:slug/embedded', function (request, response) {
+    app.get('/company/:slug/embeddeds', function (request, response) {
         response.contentType('json');
 
         //busca a compania
-        Company.find({slug : request.params.slug}, function (error, company) {
+        Company.findOne({slug : request.params.slug}, function (error, company) {
             if (error) {
                 response.send({error : error});
             } else {
@@ -92,7 +92,7 @@ module.exports = function (app) {
                 if (company === null) {
                     response.send({error : 'company not found'});
                 } else {
-                    response.send({addresses : company.embbededs});
+                    response.send(company.embeddeds);
                 }
             }
         });
@@ -115,7 +115,7 @@ module.exports = function (app) {
         response.contentType('json');
 
         //busca a compania
-        Company.find({slug : request.params.slug}, function (error, company) {
+        Company.findOne({slug : request.params.slug}, function (error, company) {
             if (error) {
                 response.send({error : error});
             } else {
@@ -129,10 +129,10 @@ module.exports = function (app) {
                             response.send({error : error});
                         } else {
                             //verifica se o embedded foi encontrado
-                            if (contact === null) {
+                            if (embedded === null) {
                                 response.send({error : 'embedded not found'});
                             } else {
-                                response.send({embedded : embedded});
+                                response.send(embedded);
                             }
                         }
                     });
@@ -161,7 +161,7 @@ module.exports = function (app) {
         auth(request.param('token', null), function (user) {
             if (user) {
                 //busca a compania
-                Company.find({slug : request.params.slug}, function (error, company) {
+                Company.findOne({slug : request.params.slug}, function (error, company) {
                     if (error) {
                         response.send({error : error});
                     } else {
@@ -170,7 +170,7 @@ module.exports = function (app) {
                             response.send({error : 'company not found'});
                         } else {
                             //verifica se o usuário é dono da compania
-                            if (! company.isOwner(request.param('login', null))) {
+                            if (! company.isOwner(user._id)) {
                                 response.send({error : 'permission denied'});
                             } else {
                                 //busca o embedded
@@ -190,7 +190,7 @@ module.exports = function (app) {
                                                 if (error) {
                                                     response.send({error : error});
                                                 } else {
-                                                    response.send({error : ''});
+                                                    response.send(embedded);
                                                 }
                                             });
                                         }
@@ -226,7 +226,7 @@ module.exports = function (app) {
         auth(request.param('token', null), function (user) {
             if (user) {
                 //busca a compania
-                Company.find({slug : request.params.slug}, function (error, company) {
+                Company.findOne({slug : request.params.slug}, function (error, company) {
                     if (error) {
                         response.send({error : error});
                     } else {
@@ -235,7 +235,7 @@ module.exports = function (app) {
                             response.send({error : 'company not found'});
                         } else {
                             //verifica se o usuário é dono da compania
-                            if (! company.isOwner(request.param('login', null))) {
+                            if (! company.isOwner(user._id)) {
                                 response.send({error : 'permission denied'});
                             } else {
                                 //busca o embedded
@@ -252,7 +252,7 @@ module.exports = function (app) {
                                                 if (error) {
                                                     response.send({error : error});
                                                 } else {
-                                                    response.send({error : ''});
+                                                    response.send(null);
                                                 }
                                             });
                                         }

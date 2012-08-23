@@ -167,15 +167,20 @@ companySchema.methods.findProduct = function (id, cb) {
 companySchema.methods.findContact = function (id, cb) {
     "use strict";
 
-    var i;
+    var i,
+        contact;
 
     //varre os contatos da empresa
     for (i = 0; i < this.contacts.length; i = i + 1) {
         if (this.contacts[i]._id.toString() === id.toString()) {
-            cb(undefined, this.contacts[i])
+            contact = this.contacts[i];
         }
     }
-    cb('contact not found', null);
+    if (contact) {
+        cb(undefined, contact);
+    } else {
+        cb('contact not found', null);
+    }
 };
 
 /** FindEmbedded
@@ -189,15 +194,20 @@ companySchema.methods.findContact = function (id, cb) {
 companySchema.methods.findEmbedded = function (id, cb) {
     "use strict";
 
-    var i;
+    var i,
+        embed;
 
     //varre os embeddeds da empresa
     for (i = 0; i < this.embeddeds.length; i = i + 1) {
         if (this.embeddeds[i]._id.toString() === id.toString()) {
-            cb(undefined, this.embeddeds[i])
+            embed = this.embeddeds[i];
         }
     }
-    cb('embedded not found', null);
+    if (embed) {
+        cb(undefined, embed);
+    } else {
+        cb('embedded not found', null);
+    }
 };
 
 /** FindAddress
@@ -265,15 +275,20 @@ companySchema.methods.findPhone = function (id, cb) {
 companySchema.methods.findLink = function (id, cb) {
     "use strict";
 
-    var i;
+    var i,
+        link;
 
     //varre os links da empresa
     for (i = 0; i < this.links.length; i = i + 1) {
         if (this.links[i]._id.toString() === id.toString()) {
-            cb(undefined, this.links[i])
+            link = this.links[i];
         }
     }
-    cb('link not found', null);
+    if (link) {
+        cb(undefined, link);
+    } else {
+        cb('link not found', null);
+    }
 };
 
 Company = exports.Company = mongoose.model('Companies', companySchema);

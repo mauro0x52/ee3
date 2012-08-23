@@ -8,11 +8,14 @@
 var mongoose = require('mongoose'),
     Schema   = mongoose.Schema,
     objectId = Schema.ObjectId,
-    linkSchema;
+    linkSchema, linkStruct;
 
-linkSchema = new Schema({
+linkStruct = {
     url  : {type : String, trim : true, required : true},
     type : {type : String, trim : true, required : true, enum : ['Youtube', 'Facebook', 'Vimeo', 'Slideshare', 'Blog', 'Website']}
-});
+};
+
+linkSchema = new Schema(linkStruct);
 
 exports.Link = linkSchema;
+exports.LinkStruct = linkStruct;
