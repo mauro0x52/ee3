@@ -47,6 +47,20 @@ fileSchema.pre('save', function (next) {
     next();
 });
 
+fileSchema.statics.findByIdentity = function (id, cb) {
+    "use strict";
+
+    if (new RegExp("[0-9 a-f]{24}").test(id)) {
+        // procura por id
+        this.findById(id, cb);
+    } else if (id.indexOf('http://') >= 0) {
+        // procura por url
+        this.findOne({url : id}, cb);
+    } else {
+        // procura por path
+        this.findOne({path : id}, cb);
+    }
+}
 
 /*  Exportando o pacote  */
 exports.File = mongoose.model('Files', fileSchema);

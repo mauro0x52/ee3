@@ -99,7 +99,7 @@ exports.files = {
                         // thumbnail de 50 px
                         restler.post(resizeUrl, {
                             data: {
-                                'path' : originalPath,
+                                'file' : originalPath,
                                 'width' : 50,
                                 'height' : 50,
                                 'label' : 'small',
@@ -111,7 +111,7 @@ exports.files = {
                             // thumbnail de 100 px
                             restler.post(resizeUrl, {
                                 data: {
-                                    'path' : originalPath,
+                                    'file' : originalPath,
                                     'width' : 100,
                                     'height' : 100,
                                     'label' : 'medium',
@@ -123,7 +123,7 @@ exports.files = {
                                 // thumbnail de 200 px
                                 restler.post(resizeUrl, {
                                     data: {
-                                        'path' : originalPath,
+                                        'file' : originalPath,
                                         'width' : 200,
                                         'height' : 200,
                                         'label' : 'large',
