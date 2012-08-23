@@ -3,7 +3,7 @@
  * @author : Mauro Ribeiro
  * @since : 2012-07
  *
- * @description : Servico de manipulacao de imagens, upload e organizacao de  
+ * @description : Servico de manipulacao de imagens, upload e organizacao de
  * arquivos
  */
 
@@ -13,7 +13,7 @@ var imagemagick = require('imagemagick'),
 
 require('express-namespace');
 
-var app = module.exports = express.createServer();
+var app = express();
 
 /*  Configurando o server */
 app.configure(function () {

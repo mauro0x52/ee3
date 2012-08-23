@@ -35,7 +35,7 @@ module.exports = function (app) {
             // caminho escolhido
             folderPath = request.param('path', null);
 
-            if (!request.files && !request.files.file) {
+            if (!request.files || !request.files.file) {
                 response.send({error: 'no selected file'});
             } else {
                 // arquivo da imagem temporaria
@@ -88,7 +88,7 @@ module.exports = function (app) {
         // modulos
             crypto = require('crypto'),
         // parametros
-            filePath = request.param('path', null),
+            fileId = request.param('file', null),
             width = request.param('width', null),
             height = request.param('height', null),
             style = request.param('style', null),
@@ -98,55 +98,58 @@ module.exports = function (app) {
 
         response.contentType('json');
 
-        if (!filePath) {
-            response.send({error: 'no path defined'});
+        if (!fileId) {
+            response.send({error: 'no file defined'});
         } else {
             if (!width && !height) {
                 response.send({error : 'no dimensions defined'})
             } else {
-                // abre a imagem
-                Image.open(filePath, function (error, imageFile) {
-                    if (error) {
-                        response.send({error: error});
-                    } else {
-                        // cria uma imagem temporaria resizeada
-                        Image.resize(
-                            {
-                                style   :   style,
-                                width   :   width,
-                                height  :   height,
-                                label   :   label,
-                                image   :   imageFile
-                            },
-                            function (error, tmpFile, newFilePath) {
-                                // salva a imagem no filesystem
-                                newImage = new Image({
-                                    path : newFilePath,
-                                    file : tmpFile
-                                });
+                // le dados da imagem
+                File.findByIdentity(fileId, function (error, file) {
+                    // abre a imagem
+                    Image.open(file.path, function (error, imageFile) {
+                        if (error) {
+                            response.send({error: error});
+                        } else {
+                            // cria uma imagem temporaria resizeada
+                            Image.resize(
+                                {
+                                    style   :   style,
+                                    width   :   width,
+                                    height  :   height,
+                                    label   :   label,
+                                    image   :   imageFile
+                                },
+                                function (error, tmpFile, newFilePath) {
+                                    // salva a imagem no filesystem
+                                    newImage = new Image({
+                                        path : newFilePath,
+                                        file : tmpFile
+                                    });
 
-                                newImage.save(function (error, image) {
-                                    if (error) {
-                                        response.send({error: error});
-                                    } else {
-                                        // salva informacoes da imagem no bd
-                                        var file = new File({
-                                            type : 'image',
-                                            path : newFilePath
-                                        });
+                                    newImage.save(function (error, image) {
+                                        if (error) {
+                                            response.send({error: error});
+                                        } else {
+                                            // salva informacoes da imagem no bd
+                                            var file = new File({
+                                                type : 'image',
+                                                path : newFilePath
+                                            });
 
-                                        file.save(function (error, file) {
-                                            if (error) {
-                                                response.send({error: error});
-                                            } else {
-                                                response.send(file);
-                                            }
-                                        });
-                                    }
-                                });
-                            }
-                        );
-                    }
+                                            file.save(function (error, file) {
+                                                if (error) {
+                                                    response.send({error: error});
+                                                } else {
+                                                    response.send(file);
+                                                }
+                                            });
+                                        }
+                                    });
+                                }
+                            );
+                        }
+                    });
                 });
             }
         }
@@ -157,29 +160,18 @@ module.exports = function (app) {
         // modulos
             url = require('url'),
         // parametros
-            filePath = request.params[0];
+            fileId = request.params[0];
 
 
-        if (!filePath) {
+        if (!fileId) {
             response.send({error: 'É preciso definir um path!'});
         } else {
-            filePath = url.parse(filePath).pathname;
-            if (!config.aws.s3.enabled) {
-                filePath = filePath.substring(8); // para tirar a pasta /uploads
-            }
-            filePath = '/' + filePath;
-
-            // tira barras duplicadas
-            while (filePath.indexOf('//') !== -1) {
-                filePath = filePath.replace('//', '/');
-            }
-
-            File.findOne({path: filePath}, function (error, file) {
+            File.findByIdentity(fileId, function (error, file) {
                 if (error) {
                     response.send(error);
                 } else {
                     if (!file) {
-                        response.send({error: filePath + " não foi encontrado"});
+                        response.send({error: fileId + " não foi encontrado"});
                     } else {
                         response.send(file);
                     }

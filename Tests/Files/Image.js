@@ -23,7 +23,7 @@ describe('POST /image', function() {
         api.file('files', '/image',
             {},
             {
-                file : 'vader.jpg'
+                path : 'vader.jpg'
             },
             function(error, data, response) {
                 if (error) done(error);
@@ -113,7 +113,7 @@ describe('POST /image/resize', function() {
     it('não define dimensões', function(done) {
         api.post('files', '/image/resize',
             {
-                path : image.path
+                file : image.path
             },
             function(error, data, response) {
                 if (error) done(error);
@@ -129,7 +129,7 @@ describe('POST /image/resize', function() {
         api.post('files', '/image/resize',
             {
                 height : 200,
-                path : image.path
+                file : image.path
             },
             function(error, data, response) {
                 if (error) done(error);
@@ -149,7 +149,7 @@ describe('POST /image/resize', function() {
         api.post('files', '/image/resize',
             {
                 width : 200,
-                path : image.path
+                file : image.path
             },
             function(error, data, response) {
                 if (error) done(error);
@@ -170,7 +170,7 @@ describe('POST /image/resize', function() {
             {
                 width : 200,
                 height : 200,
-                path : image.path
+                file : image.path
             },
             function(error, data, response) {
                 if (error) done(error);
@@ -192,7 +192,7 @@ describe('POST /image/resize', function() {
             {
                 width : 200,
                 style : 'fit',
-                path : image.path
+                file : image.path
             },
             function(error, data, response) {
                 if (error) done(error);
@@ -213,7 +213,7 @@ describe('POST /image/resize', function() {
             {
                 height : 200,
                 style : 'fit',
-                path : image.path
+                file : image.path
             },
             function(error, data, response) {
                 if (error) done(error);
@@ -235,7 +235,7 @@ describe('POST /image/resize', function() {
                 height : 200,
                 width : 200,
                 style : 'fit',
-                path : image.path
+                file : image.path
             },
             function(error, data, response) {
                 if (error) done(error);
@@ -258,7 +258,7 @@ describe('POST /image/resize', function() {
                 height : 200,
                 width : 200,
                 label : 'labeltestando',
-                path : image.path
+                file : image.path
             },
             function(error, data, response) {
                 if (error) done(error);
@@ -272,7 +272,91 @@ describe('POST /image/resize', function() {
             }
         );
     });
+    it('resizeia imagem pela url', function(done) {
+        api.post('files', '/image/resize',
+            {
+                height : 200,
+                width : 200,
+                label : 'url',
+                file : image.url
+            },
+            function(error, data, response) {
+                if (error) done(error);
+                else {
+                    should.exist(data, 'não retornou dado nenhum');
+                    data.should.have.property('path')
+                        .with.include(path)
+                        .and.include('url');
+                    done();
+                }
+            }
+        );
+    });
+    it('resizeia imagem pelo id', function(done) {
+        api.post('files', '/image/resize',
+            {
+                height : 200,
+                width : 200,
+                label : 'id',
+                file : image._id
+            },
+            function(error, data, response) {
+                if (error) done(error);
+                else {
+                    should.exist(data, 'não retornou dado nenhum');
+                    data.should.have.property('url')
+                        .with.include(path)
+                        .and.include('id');
+                    done();
+                }
+            }
+        );
+    });
 })
+
+
+describe('GET /image/*', function() {
+    it('imagem que nao existe', function(done) {
+        api.get('files', '/image/asdaskmdseaoijeoaijeaa', {}, function (error, data, response) {
+            if (error) done(error);
+            else {
+                response.should.have.status(200);
+                data.should.have.property('error');
+                done();
+            }
+        });
+    });
+    it('consulta imagem pelo path', function(done) {
+        api.get('files', '/image/' + w200extend.path, {}, function (error, data, response) {
+            if (error) done(error);
+            else {
+                data.should.not.have.property('error');
+                data.should.have.property('_id').equal(w200extend._id);
+                done();
+            }
+        });
+    });
+    it('consulta imagem pela url', function(done) {
+        api.get('files', '/image/' + w200extend.url, {}, function (error, data, response) {
+            if (error) done(error);
+            else {
+                data.should.not.have.property('error');
+                data.should.have.property('_id').equal(w200extend._id);
+                done();
+            }
+        });
+    });
+    it('consulta imagem pelo id', function(done) {
+        api.get('files', '/image/' + w200extend._id, {}, function (error, data, response) {
+            if (error) done(error);
+            else {
+                data.should.not.have.property('error');
+                data.should.have.property('url').equal(w200extend.url);
+                done();
+            }
+        });
+    });
+});
 
 
 describe('Verificação dos resizeamentos', function() {
