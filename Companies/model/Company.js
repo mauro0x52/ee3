@@ -35,14 +35,35 @@ companySchema = new Schema({
 });
 
 companySchema.pre('save', function(next) {
-    var crypto = require('crypto');
+    var crypto = require('crypto'),
+        slug, foundSlug,
+        charFrom = 'àáâãäåçèéêëìíîïñðóòôõöøùúûüýÿ',
+        charTo   = 'aaaaaaceeeeiiiinooooooouuuuyy',
+        company = this;
 
-    if (this.isNew) {
-        //TODO fazer o gerador de slugs aqui
-        this.slug = 'slug-'+crypto.createHash('sha1').update(crypto.randomBytes(10)).digest('hex').substring(0, 10);
+    company.name = company.name.replace(/^\s+|\s+$/g, '');
+
+    slug = company.name;
+    slug = slug.replace(/^\s+|\s+$/g, '').replace(/\s+/g, '-').toLowerCase();
+    // remove acentos
+    for (var i = 0; i < charFrom.length; i++) {
+        slug = slug.replace(new RegExp(charFrom.charAt(i), 'g'), charTo.charAt(i))
     }
+    slug = slug.replace(/[^a-z,0-9,\-]/g, '');
 
-    next();
+    Company.find({slug : slug, _id : {$ne : company._id}}, function (error, data) {
+        if (error) next(error);
+        else {
+            if (data.length === 0) {
+                company.slug = slug;
+            }
+            else {
+                company.slug = slug + '-' + crypto.createHash('sha1').update(crypto.randomBytes(10)).digest('hex').substring(0, 2);
+            }
+            next();
+        }
+
+    });
 });
 
 
