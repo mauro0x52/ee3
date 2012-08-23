@@ -17,7 +17,6 @@ random = rand();
 user = { username : 'testes+' + random + '@empreendemia.com.br'};
 company = {name : 'Emprêsa   muito bacanão! '};
 
-
 describe('POST /company', function () {
     before(function (done) {
         // cria usuario
@@ -612,5 +611,26 @@ describe('GET /company/:company_id', function () {
                 }
             }
         );
+    });
+});
+
+describe('PUT /company/:company:id', function(error, data){
+    it('empresa não existe', function(done) {
+        api.put('companies', '/company/asndosaindsa', {}, function (error, data, response) {
+            if (error) done(error);
+            response.should.have.status(200);
+            data.should.have.property('error');
+            done();
+        });
+    });
+    it('muda o nome da empresa', function(done) {
+        api.put('companies', '/company/asndosaindsa', {
+            name : 'Outro nome muuuito bacana'
+        }, function (error, data, response) {
+            if (error) done(error);
+            response.should.have.status(200);
+            data.should.have.property('error');
+            done();
+        });
     });
 });
