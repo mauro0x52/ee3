@@ -146,15 +146,20 @@ companySchema.methods.findProduct = function (id, cb) {
 companySchema.methods.findContact = function (id, cb) {
     "use strict";
 
-    var i;
+    var i,
+        contact;
 
     //varre os contatos da empresa
     for (i = 0; i < this.contacts.length; i = i + 1) {
         if (this.contacts[i]._id.toString() === id.toString()) {
-            cb(undefined, this.contacts[i])
+            contact = this.contacts[i];
         }
     }
-    cb('contact not found', null);
+    if (contact) {
+        cb(undefined, contact);
+    } else {
+        cb('contact not found', null);
+    }
 };
 
 /** FindEmbedded

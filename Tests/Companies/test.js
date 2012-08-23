@@ -27,4 +27,7 @@ describe('Phone', function() {
 describe('Embedded', function() {
     require("./Embedded.js");
 });
+describe('Contact', function() {
+    require("./Contact.js");
+});
 
