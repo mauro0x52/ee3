@@ -131,7 +131,7 @@ describe('DEL /user/[login]/app/[app_id]', function () {
                 tokenApp = data.token;
                 appId = data._id;
                 api.post('auth', '/user/' + userId + '/app/' + appId, {token : token}, function (error, data) {
-                    auth = data.authorizedApps[0].token;
+                    auth = data.token;
                     done();
                 });
             });
@@ -227,7 +227,7 @@ describe('GET /user/[login]/app/[app_id]', function () {
                 tokenApp = data.token;
                 appId = data._id;
                 api.post('auth', '/user/' + userId + '/app/' + appId, {token : token}, function (error, data) {
-                    auth = data.authorizedApps[0].token;
+                    auth = data.token;
                     done();
                 });
             });
@@ -325,7 +325,7 @@ describe('PUT /user/[login]/app/[app_id]', function () {
                 tokenApp = data.token;
                 appId = data._id;
                 api.post('auth', '/user/' + userId + '/app/' + appId, {token : token}, function (error, data) {
-                    auth = data.authorizedApps[0].token;
+                    auth = data.token;
                     done();
                 });
             });

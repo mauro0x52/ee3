@@ -52,7 +52,7 @@ module.exports = function (app) {
                                 if (error) {
                                     response.send({error : error});
                                 } else {
-                                    response.send(user);
+                                    response.send(user.thirdPartyLogins.pop());
                                 }
                             });
                         }

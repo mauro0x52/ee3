@@ -403,9 +403,9 @@ describe('POST /thread/[slug]/message', function () {
             } else {
                 should.not.exist(data.error, 'erro inesperado');
                 data.should.have.property('_id');
-                data.should.have.property('place');
-                data.should.have.property('name');
-                data.should.have.property('slug');
+                data.should.have.property('content');
+                data.should.have.property('date');
+                data.should.have.property('sender');
                 done();
             }
         });
