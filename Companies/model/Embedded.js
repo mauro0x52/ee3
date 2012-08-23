@@ -12,7 +12,7 @@ var mongoose = require('mongoose'),
 
 embeddedSchema = new Schema({
     embed     : {type : String, trim : true, required : true},
-    link      : [require('./Link.js').Link]
+    link      : require('./Link.js').LinkStruct
 });
 
 exports.Embedded = embeddedSchema;

@@ -168,15 +168,20 @@ companySchema.methods.findContact = function (id, cb) {
 companySchema.methods.findEmbedded = function (id, cb) {
     "use strict";
 
-    var i;
+    var i,
+        embed;
 
     //varre os embeddeds da empresa
     for (i = 0; i < this.embeddeds.length; i = i + 1) {
         if (this.embeddeds[i]._id.toString() === id.toString()) {
-            cb(undefined, this.embeddeds[i])
+            embed = this.embeddeds[i];
         }
     }
-    cb('embedded not found', null);
+    if (embed) {
+        cb(undefined, embed);
+    } else {
+        cb('embedded not found', null);
+    }
 };
 
 /** FindAddress
