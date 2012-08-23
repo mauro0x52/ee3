@@ -10,24 +10,23 @@ var should = require("should"),
     api = require("../Utils.js").api,
     db = require("../Utils.js").db,
     rand = require("../Utils.js").rand,
-    token, company, companyName, companySlug,
-    token2, company2, companyName2, companySlug2,
+    user, company,
     city;
 
 random = rand();
-userName = 'testes+' + random + '@empreendemia.com.br';
-companyName = 'Empresa ' + random;
+user = { username : 'testes+' + random + '@empreendemia.com.br'};
+company = {name : 'Emprêsa   muito bacanão! '};
 
 
 describe('POST /company', function () {
     before(function (done) {
         // cria usuario
         api.post('auth', '/user', {
-            username : userName,
+            username : user.username,
             password : 'testando',
             password_confirmation : 'testando'
         }, function(error, data) {
-            token = data.token;
+            user = data;
             done();
         });
     });
@@ -44,7 +43,7 @@ describe('POST /company', function () {
     });
     it('dados obrigatórios não preenchidos', function(done) {
         api.post('companies', '/company', {
-            token : token
+            token : user.token
         }, function(error, data, response) {
             if (error) return done(error);
             else {
@@ -57,7 +56,7 @@ describe('POST /company', function () {
     it('token inválido', function(done) {
         api.post('companies', '/company', {
             token : 'arbufudbcu1b3124913r987bass978a',
-            name : companyName,
+            name : company.name,
             activity : 'consultoria em testes',
             type : 'company',
             profile : 'both',
@@ -73,8 +72,8 @@ describe('POST /company', function () {
     });
     it('cadastra empresa', function(done) {
         api.post('companies', '/company', {
-            token : token,
-            name : companyName,
+            token : user.token,
+            name : company.name,
             activity : 'consultoria em testes',
             type : 'company',
             profile : 'both',
@@ -83,9 +82,10 @@ describe('POST /company', function () {
             about: 'sobre'
         }, function(error, data, response) {
             if (error) return done(error);
-            else {;
-                should.exist(data.slug, 'nao gerou slug corretamente');
-                should.not.exist(data.error, 'erro inesperado');
+            else {
+                data.should.not.have.property('error');
+                data.should.have.property('slug')
+                    .match(/[a-z,0-9,\-]+/);
                 company = data;
                 done();
             }
@@ -93,8 +93,8 @@ describe('POST /company', function () {
     });
     it('cadastro com mesmo nome', function(done) {
         api.post('companies', '/company', {
-            token : token,
-            name : companyName,
+            token : user.token,
+            name : company.name,
             activity : 'consultoria em testes',
             type : 'company',
             profile : 'both',
@@ -104,9 +104,29 @@ describe('POST /company', function () {
         }, function(error, data, response) {
             if (error) return done(error);
             else {
-                should.exist(data.slug, 'nao gerou slug corretamente');
-                should.not.exist(data.error, 'erro inesperado');
-                (company.slug ? company.slug : '').should.not.equal(data.slug, 'slugs repetidos');
+                data.should.not.have.property('error');
+                data.should.have.property('slug').not.equal(company.slug, 'slugs repetidos');
+                data.should.have.property('slug').match(/[a-z,0-9,\-]+\-[0-9,a-f]{2}/);
+                company = data;
+                done();
+            }
+        });
+    });
+    it('cadastro com nome escroto', function(done) {
+        api.post('companies', '/company', {
+            token : user.token,
+            name : '   Êmpresa com n0me muit@ escroto   !    ',
+            activity : 'consultoria em testes',
+            type : 'company',
+            profile : 'both',
+            active : 1,
+            about: 'sobre',
+            addresses : [{street:'nome da rua',number:294,complement:'complemento',city:'000000000000000000000001',headQuarters:true}, {street:'nome da rua',number:294,complement:'complemento',city:'000000000000000000000002',headQuarters:true}]
+        }, function(error, data, response) {
+            if (error) return done(error);
+            else {
+                data.should.not.have.property('error');
+                data.should.have.property('slug').match(/[a-z,0-9,\-]+/);
                 company = data;
                 done();
             }
@@ -127,7 +147,7 @@ describe('GET /companies', function () {
             }, function(error, data) {
                 api.post('companies', '/company', {
                     token : data.token,
-                    name : 'Empresa b'+rand(),
+                    name : 'Váreas empresa bacana!',
                     activity : 'consultoria em testes',
                     sectors : ['00000000000000000000000'+(1+Math.floor((Math.random()*2))), '00000000000000000000000'+(3 + Math.floor((Math.random()*2)))],
                     type : 'company',
@@ -544,7 +564,7 @@ describe('GET /company/:company_id', function () {
     it('empresa com atributos logado', function(done) {
         api.get('companies', '/company/' + company._id,
             {
-                token : token,
+                token : user.token,
                 attributes : {
                     products : true,
                     addresses : true,
