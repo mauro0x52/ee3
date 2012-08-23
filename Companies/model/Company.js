@@ -190,15 +190,20 @@ companySchema.methods.findEmbedded = function (id, cb) {
 companySchema.methods.findAddress = function (id, cb) {
     "use strict";
 
-    var i;
+    var i,
+        address;
 
     //varre os endereços da empresa
     for (i = 0; i < this.addresses.length; i = i + 1) {
         if (this.addresses[i]._id.toString() === id.toString()) {
-            cb(undefined, this.addresses[i])
+            address = this.addresses[i]
         }
     }
-    cb('address not found', null);
+    if (address) {
+        cb(undefined, address);
+    } else {
+        cb('address not found', null);
+    }
 };
 
 /** FindPhone
@@ -212,15 +217,20 @@ companySchema.methods.findAddress = function (id, cb) {
 companySchema.methods.findPhone = function (id, cb) {
     "use strict";
 
-    var i;
+    var i,
+        phone;
 
     //varre os produtos da empresa
     for (i = 0; i < this.phones.length; i = i + 1) {
         if (this.phones[i]._id.toString() === id.toString()) {
-            cb(undefined, this.phones[i])
+            phone = this.phones[i];
         }
     }
-    cb('phone not found', null);
+    if (phone) {
+        cb(undefined, phone);
+    } else {
+        cb('phone not found', null);
+    }
 };
 
 /** FindLink
