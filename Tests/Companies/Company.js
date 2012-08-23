@@ -15,7 +15,6 @@ var should = require("should"),
 
 random = rand();
 user = { username : 'testes+' + random + '@empreendemia.com.br'};
-company = {name : 'Emprêsa   muito bacanão! '};
 
 describe('POST /company', function () {
     before(function (done) {
@@ -55,7 +54,7 @@ describe('POST /company', function () {
     it('token inválido', function(done) {
         api.post('companies', '/company', {
             token : 'arbufudbcu1b3124913r987bass978a',
-            name : company.name,
+            name : 'Emprêsa   muito bacanão! ' + random,
             activity : 'consultoria em testes',
             type : 'company',
             profile : 'both',
@@ -72,7 +71,7 @@ describe('POST /company', function () {
     it('cadastra empresa', function(done) {
         api.post('companies', '/company', {
             token : user.token,
-            name : company.name,
+            name : '   Emprêsa   muito bacanão!   ' + random,
             activity : 'consultoria em testes',
             type : 'company',
             profile : 'both',
@@ -83,8 +82,8 @@ describe('POST /company', function () {
             if (error) return done(error);
             else {
                 data.should.not.have.property('error');
-                data.should.have.property('slug')
-                    .match(/[a-z,0-9,\-]+/);
+                data.should.have.property('slug').match(/[a-z,0-9,\-]+/);
+                data.should.have.property('name').equal('Emprêsa muito bacanão! ' + random);
                 company = data;
                 done();
             }
@@ -93,7 +92,7 @@ describe('POST /company', function () {
     it('cadastro com mesmo nome', function(done) {
         api.post('companies', '/company', {
             token : user.token,
-            name : company.name,
+            name : '   Emprêsa   muito bacanão!   ' + random,
             activity : 'consultoria em testes',
             type : 'company',
             profile : 'both',
@@ -104,7 +103,7 @@ describe('POST /company', function () {
             if (error) return done(error);
             else {
                 data.should.not.have.property('error');
-                data.should.have.property('slug').not.equal(company.slug, 'slugs repetidos');
+                data.should.have.property('slug').not.equal(company.slug);
                 data.should.have.property('slug').match(/[a-z,0-9,\-]+\-[0-9,a-f]{2}/);
                 company = data;
                 done();
@@ -114,7 +113,7 @@ describe('POST /company', function () {
     it('cadastro com nome escroto', function(done) {
         api.post('companies', '/company', {
             token : user.token,
-            name : '   Êmpresa com n0me muit@ escroto   !    ',
+            name : '   Êmpresa com n0me muit@ escroto   !    ' + rand(),
             activity : 'consultoria em testes',
             type : 'company',
             profile : 'both',
@@ -146,7 +145,7 @@ describe('GET /companies', function () {
             }, function(error, data) {
                 api.post('companies', '/company', {
                     token : data.token,
-                    name : 'Váreas empresa bacana!',
+                    name : 'Váreas empresa bacana!' + rand(),
                     activity : 'consultoria em testes',
                     sectors : ['00000000000000000000000'+(1+Math.floor((Math.random()*2))), '00000000000000000000000'+(3 + Math.floor((Math.random()*2)))],
                     type : 'company',
@@ -618,19 +617,91 @@ describe('PUT /company/:company:id', function(error, data){
     it('empresa não existe', function(done) {
         api.put('companies', '/company/asndosaindsa', {}, function (error, data, response) {
             if (error) done(error);
-            response.should.have.status(200);
-            data.should.have.property('error');
-            done();
+            else {
+                response.should.have.status(200);
+                data.should.have.property('error');
+                done();
+            }
+        });
+    });
+    it('token inválido', function(done) {
+        api.put('companies', '/company/'+company.slug, {
+            token : 'aeoibs09d8a98s',
+            name : 'Outro nome muuuito bacana '+random
+        }, function (error, data, response) {
+            if (error) done(error);
+            else {
+                data.should.have.property('error');
+                done();
+            }
         });
     });
     it('muda o nome da empresa', function(done) {
-        api.put('companies', '/company/asndosaindsa', {
-            name : 'Outro nome muuuito bacana'
+        api.put('companies', '/company/'+company.slug, {
+            token : user.token,
+            name : 'Outro nome muuuito bacana '+random
         }, function (error, data, response) {
             if (error) done(error);
-            response.should.have.status(200);
-            data.should.have.property('error');
-            done();
+            else {
+                data.should.have.property('_id').equal(company._id);
+                data.should.have.property('slug').not.equal(company.slug);
+                data.should.have.property('name').equal('Outro nome muuuito bacana '+random);
+                data.should.have.property('dateUpdated').above(company.dateUpdated);
+                company = data;
+                done();
+            }
+        });
+    });
+    it('outro nome, mesmo slug', function(done) {
+        api.put('companies', '/company/'+company.slug, {
+            token : user.token,
+            name : 'Ou#$%tro!$ n&$omE mUUUito bacana!!!!!!@$#%* '+random
+        }, function (error, data, response) {
+            if (error) done(error);
+            else {
+                data.should.have.property('_id').equal(company._id);
+                data.should.have.property('slug').equal(company.slug);
+                company = data;
+                done();
+            }
+        });
+    });
+});
+
+describe('DEL /company/:company_id', function(error, data){
+    it('empresa não existe', function(done) {
+        api.del('companies', '/company/asndosaindsa', {}, function (error, data, response) {
+            if (error) done(error);
+            else {
+                response.should.have.status(200);
+                data.should.have.property('error');
+                done();
+            }
+        });
+    });
+    it('token invalido', function(done) {
+        api.del('companies', '/company/'+company.slug, {
+            token: 'aosndoinwe'
+        }, function (error, data, response) {
+            if (error) done(error);
+            else {
+                data.should.have.property('error');
+                done();
+            }
+        });
+    });
+    it('apaga', function(done) {
+        api.del('companies', '/company/'+company.slug, {
+            token : user.token
+        }, function (error, data, response) {
+            if (error) done(error);
+            else {
+                should.not.exist(data);
+                api.get('companies', '/company/'+company.slug, {}, function(error, data, response) {
+                    data.should.have.property('error');
+                    done();
+                })
+            }
         });
     });
 });

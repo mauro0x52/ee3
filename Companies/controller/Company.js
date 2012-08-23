@@ -256,7 +256,7 @@ module.exports = function (app) {
                             response.send({error : 'company not found'});
                         } else {
                             //verifica se o usuário é dono da compania
-                            if (! company.isOwner(request.param('login', null))) {
+                            if (!company.isOwner(user._id)) {
                                 response.send({error : 'permission denied'});
                             } else {
                                 //Valida cada campo para ver se existe e trata para adicionar no Model
@@ -322,7 +322,7 @@ module.exports = function (app) {
                                     if (error) {
                                         response.send({error : error});
                                     } else {
-                                        response.send({company : company});
+                                        response.send(company);
                                     }
                                 });
                             }
@@ -364,7 +364,7 @@ module.exports = function (app) {
                             response.send({error : 'company not found'});
                         } else {
                             //verifica se o usuário é dono da compania
-                            if (! company.isOwner(request.param('login', null))) {
+                            if (! company.isOwner(user._id)) {
                                 response.send({error : 'permission denied'});
                             } else {
                                 //remove a compania
@@ -372,7 +372,7 @@ module.exports = function (app) {
                                     if (error) {
                                         response.send({error : error});
                                     } else {
-                                        response.send({error : ''});
+                                        response.send(undefined);
                                     }
                                 });
                             }

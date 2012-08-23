@@ -41,7 +41,7 @@ companySchema.pre('save', function(next) {
         charTo   = 'aaaaaaceeeeiiiinooooooouuuuyy',
         company = this;
 
-    company.name = company.name.replace(/^\s+|\s+$/g, '');
+    company.name = company.name.replace(/\s+/g, ' ');
 
     slug = company.name;
     slug = slug.replace(/^\s+|\s+$/g, '').replace(/\s+/g, '-').toLowerCase();
