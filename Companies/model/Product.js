@@ -68,15 +68,20 @@ productSchema.pre('save', function (next) {
 productSchema.methods.findImage = function (id, cb) {
     "use strict";
 
-    var i;
+    var i,
+        image;
 
     //varre os links do produto
     for (i = 0; i < this.images.length; i = i + 1) {
         if (this.images[i]._id.toString() === id.toString()) {
-            cb(undefined, this.images[i])
+            image = this.images[i];
         }
     }
-    cb('image not found', null);
+    if (image) {
+        cb(undefined, image);
+    } else {
+        cb('image not found', null);
+    }
 };
 
 /** FindLink
@@ -90,15 +95,20 @@ productSchema.methods.findImage = function (id, cb) {
 productSchema.methods.findLink = function (id, cb) {
     "use strict";
 
-    var i;
+    var i,
+        link;
 
     //varre os links do produto
     for (i = 0; i < this.links.length; i = i + 1) {
         if (this.links[i]._id.toString() === id.toString()) {
-            cb(undefined, this.links[i])
+            link = this.links[i];
         }
     }
-    cb('link not found', null);
+    if (link) {
+        cb(undefined, link);
+    } else {
+        cb('link not found', null);
+    }
 };
 
 /** findThumbnail
@@ -112,15 +122,20 @@ productSchema.methods.findLink = function (id, cb) {
 productSchema.methods.findThumbnail = function (id, cb) {
     "use strict";
 
-    var i;
+    var i,
+        thumbnail;
 
     //varre os links do produto
     for (i = 0; i < this.thumbnails.length; i = i + 1) {
         if (this.thumbnails[i]._id.toString() === id.toString()) {
-            cb(undefined, this.thumbnails[i])
+            thumbnail = this.thumbnails[i];
         }
     }
-    cb('thumbnail not found', null);
+    if (thumbnail) {
+        cb(undefined, thumbnail);
+    } else {
+        cb('thumbnail not found', null);
+    }
 };
 
 Product = exports.Product = productSchema;

@@ -254,15 +254,20 @@ companySchema.methods.findPhone = function (id, cb) {
 companySchema.methods.findLink = function (id, cb) {
     "use strict";
 
-    var i;
+    var i,
+        link;
 
     //varre os links da empresa
     for (i = 0; i < this.links.length; i = i + 1) {
         if (this.links[i]._id.toString() === id.toString()) {
-            cb(undefined, this.links[i])
+            link = this.links[i];
         }
     }
-    cb('link not found', null);
+    if (link) {
+        cb(undefined, link);
+    } else {
+        cb('link not found', null);
+    }
 };
 
 Company = exports.Company = mongoose.model('Companies', companySchema);

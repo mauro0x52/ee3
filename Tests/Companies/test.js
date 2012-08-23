@@ -30,4 +30,7 @@ describe('Embedded', function() {
 describe('Contact', function() {
     require("./Contact.js");
 });
+describe('Link', function() {
+    require("./Link.js");
+});
 
