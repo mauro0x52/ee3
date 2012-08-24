@@ -10,11 +10,13 @@ var should = require("should"),
     api = require("../Utils.js").api,
     db = require("../Utils.js").db,
     rand = require("../Utils.js").rand,
-    user, company,
+    user, company, user2,
     city;
 
 random = rand();
 user = { username : 'testes+' + random + '@empreendemia.com.br'};
+user2 = { username : 'testes+' + random + '2@empreendemia.com.br'};
+
 
 describe('POST /company', function () {
     before(function (done) {
@@ -614,6 +616,19 @@ describe('GET /company/:company_id', function () {
 });
 
 describe('PUT /company/:company:id', function(error, data){
+
+    before(function (done) {
+        // cria usuario
+        api.post('auth', '/user', {
+            username : user2.username,
+            password : 'testando',
+            password_confirmation : 'testando'
+        }, function(error, data) {
+            user2 = data;
+            done();
+        });
+    });
+
     it('empresa não existe', function(done) {
         api.put('companies', '/company/asndosaindsa', {}, function (error, data, response) {
             if (error) done(error);
@@ -666,6 +681,18 @@ describe('PUT /company/:company:id', function(error, data){
             }
         });
     });
+    it('empresa criada por outro usuário', function(done) {
+        api.put('companies', '/company/'+company.slug, {
+            token : user2.token,
+            name : 'Ou#$%tro!$ n&$omE mUUUito bacana!!!!!!@$#%* '+random
+        }, function (error, data, response) {
+            if (error) done(error);
+            else {
+                data.should.have.property('error');
+                done();
+            }
+        });
+    });
 });
 
 describe('DEL /company/:company_id', function(error, data){
@@ -701,6 +728,17 @@ describe('DEL /company/:company_id', function(error, data){
                     data.should.have.property('error');
                     done();
                 })
+            }
+        });
+    });
+    it('empresa criada por outro usuário', function(done) {
+        api.del('companies', '/company/'+company.slug, {
+            token : user2.token
+        }, function (error, data, response) {
+            if (error) done(error);
+            else {
+                data.should.have.property('error');
+                done();
             }
         });
     });
