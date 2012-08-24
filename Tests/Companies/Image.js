@@ -9,7 +9,7 @@
 var should = require("should"),
     api = require("../Utils.js").api,
     rand = require("../Utils.js").rand,
-    userA, companyA, productA, productA2, userB, companyB;
+    userA, companyA, productA, imageA, productA2, userB, companyB;
 
 
 random = rand();
@@ -237,6 +237,7 @@ describe('POST /company/:company_slug/product/:product_slug/image', function() {
                     data.should.have.property('file');
                     data.should.have.property('title').equal('Titulo da imagem');
                     data.should.have.property('legend').equal('Legenda da imagem');
+                    imageA = data;
                     done();
                 }
             }
@@ -334,12 +335,67 @@ describe('GET /company/:company_slug/product/:product_slug/images', function() {
 });
 
 describe('GET /company/:company_slug/product/:product_slug/image/:id', function() {
-    it('empresa não existe');
-    it('produto não existe');
-    it('empresa sem produtos');
-    it('produto sem imagens');
-    it('imagem não existe');
-    it('dados da imagens');
+    it('empresa não existe', function(done) {
+        api.get('companies', '/company/sdfinoi2o3i54hrtefdsv/product/afsdf2w34sdvc/image/sadio12h3ansd', {}, function(error, data, response) {
+            if (error) return done(error);
+            else {
+                should.exist(response);
+                response.should.have.status(200);
+                should.exist(data);
+                data.should.have.property('error');
+                done();
+            }
+        });
+    });
+    it('produto não existe', function(done) {
+        api.get('companies', '/company/' + companyA.slug + '/product/dsafwefsdfb/image/sadio12h3ansd', {}, function(error, data, response) {
+            if (error) return done(error);
+            else {
+                data.should.have.property('error');
+                done();
+            }
+        });
+    });
+    it('empresa sem produtos', function(done) {
+        api.get('companies', '/company/' + companyB.slug + '/product/dsafwefsdfb/image/asdfxvcoin', {}, function(error, data, response) {
+            if (error) return done(error);
+            else {
+                data.should.have.property('error');
+                done();
+            }
+        });
+    });
+    it('produto sem imagens', function(done) {
+        api.get('companies', '/company/' + companyA.slug + '/product/' + productA2.slug + '/image/adsfvnowier', {}, function(error, data, response) {
+            if (error) return done(error);
+            else {
+                data.should.have.property('error');
+                done();
+            }
+        });
+    });
+    it('imagem não existe', function(done) {
+        api.get('companies', '/company/' + companyA.slug + '/product/' + productA.slug + '/image/adsfvnowier', {}, function(error, data, response) {
+            if (error) return done(error);
+            else {
+                data.should.have.property('error');
+                done();
+            }
+        });
+    });
+    it('dados da imagens', function(done) {
+        api.get('companies', '/company/' + companyA.slug + '/product/' + productA.slug + '/image/' + imageA._id, {}, function(error, data, response) {
+            if (error) return done(error);
+            else {
+                data.should.have.property('url').equal(imageA.url);
+                data.should.have.property('_id').equal(imageA._id);
+                data.should.have.property('file').equal(imageA.file);
+                data.should.have.property('title').equal(imageA.title);
+                data.should.have.property('legend').equal(imageA.legend);
+                done();
+            }
+        });
+    });
 });
 
 describe('PUT /company/:company_slug/product/:product_slug/image/:id', function() {

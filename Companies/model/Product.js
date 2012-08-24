@@ -74,7 +74,7 @@ productSchema.methods.findImage = function (id, cb) {
 
     //varre os links do produto
     for (i = 0; i < this.images.length; i = i + 1) {
-        if (this.images[i]._id.toString() === id.toString()) {
+        if (this.images[i]._id.toString() === id) {
             image = this.images[i];
         }
     }

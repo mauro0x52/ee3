@@ -146,7 +146,7 @@ module.exports = function (app) {
         });
     });
 
-    /** GET /company/:company_slug/product/:product_slug/image/:id
+    /** GET /company/:company_id/product/:product_id/image/:image_id
      *
      * @autor : Rafael Erthal
      * @since : 2012-08
@@ -159,11 +159,11 @@ module.exports = function (app) {
      * @request : {}
      * @response : {file,url,title,legend}
      */
-    app.get('/company/:company_slug/product/:product_slug/image/:id', function (request, response) {
+    app.get('/company/:company_id/product/:product_id/image/:image_id', function (request, response) {
         response.contentType('json');
 
         //busca a compania
-        Company.find({slug : request.params.company_slug}, function (error, company) {
+        Company.findByIdentity(request.params.company_id, function (error, company) {
             if (error) {
                 response.send({error : error});
             } else {
@@ -172,7 +172,7 @@ module.exports = function (app) {
                     response.send({error : 'company not found'});
                 } else {
                     //busca o produto
-                    company.findProduct(request.params.product_slug, function (error, product) {
+                    company.findProduct(request.params.product_id, function (error, product) {
                         if (error) {
                             response.send({error : error});
                         } else {
@@ -181,7 +181,7 @@ module.exports = function (app) {
                                 response.send({error : 'product not found'});
                             } else {
                                 //busca a imagem
-                                product.findImage(request.params.id, function (error, image) {
+                                product.findImage(request.params.image_id, function (error, image) {
                                     if (error) {
                                         response.send({error : error});
                                     } else {
@@ -189,7 +189,7 @@ module.exports = function (app) {
                                         if (image === null) {
                                             response.send({error : 'image not found'});
                                         } else {
-                                            response.send({image : image});
+                                            response.send(image);
                                         }
                                     }
                                 });
