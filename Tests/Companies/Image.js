@@ -9,7 +9,6 @@
 var should = require("should"),
     api = require("../Utils.js").api,
     rand = require("../Utils.js").rand,
-    companyImageUrl, productImageUrl, random,
     user, company, product;
 
 describe('POST /company/:company_slug/product/:product_slug/image', function() {
