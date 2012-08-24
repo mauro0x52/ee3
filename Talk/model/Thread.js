@@ -35,7 +35,7 @@ threadSchema.pre('save', function(next) {
         charTo   = 'aaaaaaceeeeiiiinooooooouuuuyy',
         thread = this;
 
-    thread.name = thread.name.replace(/^\s+|\s+$/g, '');
+    thread.name = thread.name.replace(/\s+/g, ' ');
 
     slug = thread.name;
     slug = slug.replace(/^\s+|\s+$/g, '').replace(/\s+/g, '-').toLowerCase();

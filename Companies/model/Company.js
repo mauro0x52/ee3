@@ -58,7 +58,7 @@ companySchema.pre('save', function(next) {
                 company.slug = slug;
             }
             else {
-                company.slug = slug + '-' + crypto.createHash('sha1').update(crypto.randomBytes(10)).digest('hex').substring(0, 2);
+                company.slug = slug + '-' + data.length + '' + crypto.createHash('sha1').update(crypto.randomBytes(10)).digest('hex').substring(0, 1);
             }
             next();
         }

@@ -44,7 +44,7 @@ appSchema.pre('save', function(next) {
                 app.slug = slug;
             }
             else {
-                app.slug = slug + '-' + crypto.createHash('sha1').update(crypto.randomBytes(10)).digest('hex').substring(0, 2);
+                app.slug = slug + '-' + data.length + '' + crypto.createHash('sha1').update(crypto.randomBytes(10)).digest('hex').substring(0, 1);
             }
             next();
         }

@@ -34,7 +34,7 @@ profileSchema.pre('save', function(next) {
         charTo   = 'aaaaaaceeeeiiiinooooooouuuuyy',
         profile = this;
 
-    this.name = this.name.replace(/^\s+|\s+$/g, '');
+    this.name = this.name.replace(/\s+/g, ' ');
 
     slug = this.name;
     slug = slug.replace(/^\s+|\s+$/g, '').replace(/\s+/g, '-').toLowerCase();
@@ -51,7 +51,7 @@ profileSchema.pre('save', function(next) {
                 profile.slug = slug;
             }
             else {
-                profile.slug = slug + '-' + crypto.createHash('sha1').update(crypto.randomBytes(10)).digest('hex').substring(0, 2);
+                profile.slug = slug + '-' + data.length + '' + crypto.createHash('sha1').update(crypto.randomBytes(10)).digest('hex').substring(0, 1);
             }
             next();
         }
