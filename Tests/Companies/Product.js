@@ -134,9 +134,9 @@ describe('GET /company/:company_id/products', function() {
             password : 'testando',
             password_confirmation : 'testando'
         }, function(error, data) {
-            user.token = data.token;
+            user2.token = data.token;
             api.post('companies', '/company', {
-                token : user.token,
+                token : user2.token,
                 name : 'Empresa 2 ' + random,
                 activity : 'consultoria em testes',
                 type : 'company',
@@ -244,6 +244,105 @@ describe('GET /company/:company_id/product/:product_id', function() {
                 data.should.have.property('_id').equal(product._id);
                 data.should.have.property('slug').equal(product.slug);
                 data.should.have.property('name').equal(product.name);
+                done();
+            }
+        });
+    });
+});
+
+
+
+describe('PUT /company/:company_id/product/:product_id', function() {
+    it('token inválido', function(done) {
+        api.put('companies', '/company/' + company.slug + '/product/' + product.slug, {
+            token : 'fdg9nhoifkjnslkdnlksndfsdf'
+        }, function(error, data, response) {
+            if (error) done(error);
+            else {
+                response.should.have.status(200);
+                should.exist(data);
+                data.should.have.property('error');
+                done();
+            }
+        });
+    });
+    it('empresa não encontrada', function(done) {
+        api.put('companies', '/company/adsf-g0hpotlmaçsldma/product/' + product.slug, {
+            token : user.token
+        }, function(error, data, response) {
+            if (error) done(error);
+            else {
+                response.should.have.status(200);
+                should.exist(data);
+                data.should.have.property('error');
+                done();
+            }
+        });
+    });
+    it('produto não encontrado', function(done) {
+        api.put('companies', '/company/' + company.slug + '/product/adiopbfngoib214o3i5b5osnbd', {
+            token : user.token
+        }, function(error, data, response) {
+            if (error) done(error);
+            else {
+                response.should.have.status(200);
+                should.exist(data);
+                data.should.have.property('error');
+                done();
+            }
+        });
+    });
+    it('empresa sem produto', function(done) {
+        api.put('companies', '/company/' + company2.slug + '/product/adiopbfngoib214o3i5b5osnbd', {
+            token : user2.token
+        }, function(error, data, response) {
+            if (error) done(error);
+            else {
+                response.should.have.status(200);
+                should.exist(data);
+                data.should.have.property('error');
+                done();
+            }
+        });
+    });
+    it('empresa de outro usuário', function(done) {
+        api.put('companies', '/company/' + company.slug + '/product/' + product.slug, {
+            token : user2.token,
+            name : 'Vou mudar o nome de sacanagem'
+        }, function(error, data, response) {
+            if (error) done(error);
+            else {
+                data.should.have.property('error');
+                done();
+            }
+        });
+    });
+    it('mantem slug', function(done) {
+        api.put('companies', '/company/' + company.slug + '/product/' + product.slug, {
+            token : user.token,
+            name : product.name + '       !@$#%    '
+        }, function(error, data, response) {
+            if (error) done(error);
+            else {
+                data.should.not.have.property('error');
+                data.should.not.have.property('_id').equal(product._id);
+                data.should.not.have.property('slug').equal(product.slug);
+                data.should.not.have.property('name').equal(product.name + ' !@$#%');
+                done();
+            }
+        });
+    });
+    it('muda o nome', function(done) {
+        api.put('companies', '/company/' + company.slug + '/product/' + product.slug, {
+            token : user.token,
+            name : 'Vou mudar o nome '+random
+        }, function(error, data, response) {
+            if (error) done(error);
+            else {
+                data.should.not.have.property('error');
+                data.should.not.have.property('_id').equal(product._id);
+                data.should.not.have.property('slug').equal('vou-mudar-o-nome-'+random);
+                data.should.not.have.property('name').equal('Vou mudar o nome '+random);
                 done();
             }
         });

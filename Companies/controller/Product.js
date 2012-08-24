@@ -173,18 +173,23 @@ module.exports = function (app) {
                                 response.send({error : 'permission denied'});
                             } else {
                                 company.findProduct(request.params.product_slug, function(error, product){
-                                    product.name = request.param('name');
-                                    product.slug = request.param('slug');
-                                    product.abstract = request.param('abstract');
-                                    product.about = request.param('about');
+                                    if (!product) {
+                                        response.send({error : 'product not found'});
+                                    }
+                                    else {
+                                        product.name = request.param('name');
+                                        product.slug = request.param('slug');
+                                        product.abstract = request.param('abstract');
+                                        product.about = request.param('about');
 
-                                    product.save(function(error){
-                                        if (error) {
-                                            response.send({error : error});
-                                        } else {
-                                            response.send({Product : product});
-                                        }
-                                    });
+                                        product.save(function(error){
+                                            if (error) {
+                                                response.send({error : error});
+                                            } else {
+                                                response.send({Product : product});
+                                            }
+                                        });
+                                    }
                                 })
                             }
                         }
