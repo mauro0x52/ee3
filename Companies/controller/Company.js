@@ -372,7 +372,7 @@ module.exports = function (app) {
                                     if (error) {
                                         response.send({error : error});
                                     } else {
-                                        response.send(undefined);
+                                        response.send(null);
                                     }
                                 });
                             }

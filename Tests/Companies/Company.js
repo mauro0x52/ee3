@@ -106,7 +106,7 @@ describe('POST /company', function () {
             else {
                 data.should.not.have.property('error');
                 data.should.have.property('slug').not.equal(company.slug);
-                data.should.have.property('slug').match(/[a-z,0-9,\-]+\-[0-9,a-f]{2}/);
+                data.should.have.property('slug').match(/[a-z,0-9,\-]+\-[0-9,a-f]{2,}/);
                 company = data;
                 done();
             }
@@ -137,7 +137,7 @@ describe('POST /company', function () {
 
 describe('GET /companies', function () {
     before(function (done) {
-        // cria 10 empresas
+        // cria várias empresas
         var countCompanies = 0;
         for (var i = 0; i < 20; i++) {
             api.post('auth', '/user', {

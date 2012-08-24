@@ -52,7 +52,7 @@ productSchema.pre('save', function (next) {
             foundSlug = true;
         }
     }
-    if (foundSlug) this.slug = this.slug + '-' + data.length + '' + crypto.createHash('sha1').update(crypto.randomBytes(10)).digest('hex').substring(0, 1);
+    if (foundSlug) this.slug = this.slug + '-' + this.parent.products.length; + '' + crypto.createHash('sha1').update(crypto.randomBytes(10)).digest('hex').substring(0, 1);
 
     next();
 });

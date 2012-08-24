@@ -154,7 +154,7 @@ module.exports = function (app) {
                             } else {
                                 // se o thumbnail nao esta setado
                                 if (!product.thumbnail || !product.thumbnail.original || !product.thumbnail.original.url) {
-                                    response.send(undefined);
+                                    response.send(null);
                                 } else {
                                     response.send(product.thumbnail);
                                 }
@@ -202,7 +202,7 @@ module.exports = function (app) {
                             } else {
                                 // se nao tem nenhuma imagem
                                 if (!product.thumbnail || !product.thumbnail.original || !product.thumbnail.original.url) {
-                                    response.send(undefined);
+                                    response.send(null);
                                 } else {
                                     if (request.params.size === 'original') {
                                         response.send(product.thumbnail.original);
@@ -286,7 +286,7 @@ module.exports = function (app) {
                                                     response.send({error: error});
                                                 }
                                                 else {
-                                                    response.send(undefined);
+                                                    response.send(null);
                                                 }
                                             });
                                         }
@@ -421,7 +421,7 @@ module.exports = function (app) {
                 } else {
                     // se o thumbnail nao esta setado
                     if (!company.thumbnail || !company.thumbnail.original || !company.thumbnail.original.url) {
-                        response.send(undefined);
+                        response.send(null);
                     } else {
                         response.send(company.thumbnail);
                     }
@@ -457,7 +457,7 @@ module.exports = function (app) {
                 } else {
                     // se o thumbnail nao esta setado
                     if (!company.thumbnail || !company.thumbnail.original || !company.thumbnail.original.url) {
-                        response.send(undefined);
+                        response.send(null);
                     } else {
                         if (request.params.size === 'original') {
                             response.send(company.thumbnail.original);
@@ -529,7 +529,7 @@ module.exports = function (app) {
                                         response.send({error: error});
                                     }
                                     else {
-                                        response.send(undefined);
+                                        response.send(null);
                                     }
                                 });
                             }

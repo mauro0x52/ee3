@@ -93,7 +93,11 @@ module.exports = function (app) {
                 if (company === null) {
                     response.send({error : 'company not found'});
                 } else {
-                    response.send({Products : company.products});
+                    if (company.products.length > 0) {
+                        response.send(company.products);
+                    } else {
+                        response.send(null);
+                    }
                 }
             }
         });
