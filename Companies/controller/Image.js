@@ -26,14 +26,14 @@ module.exports = function (app) {
      * @request : {login,token,url,file,title,legend}
      * @response : {confirmation}
      */
-    app.post('/company/:company_slug/product/:product_slug/image', function (request, response) {
+    app.post('/company/:company_id/product/:product_id/image', function (request, response) {
         response.contentType('json');
 
         //valida o token do usuário
         auth(request.param('token', null), function (user) {
             if (user) {
                 //busca a compania
-                Company.findOne({slug : request.params.company_slug}, function (error, company) {
+                Company.findByIdentity(request.params.company_id, function (error, company) {
                     if (error) {
                         response.send({error : error});
                     } else {
@@ -42,11 +42,11 @@ module.exports = function (app) {
                             response.send({error : 'company not found'});
                         } else {
                             //verifica se o usuário é dono da compania
-                            if (! company.isOwner(request.param('login', null))) {
+                            if (!company.isOwner(user._id)) {
                                 response.send({error : 'permission denied'});
                             } else {
                                 //busca o produto
-                                company.findProduct(request.params.product_slug, function (error, product) {
+                                company.findProduct(request.params.product_id, function (error, product) {
                                     if (error) {
                                         response.send({error : error});
                                     } else {
@@ -61,20 +61,20 @@ module.exports = function (app) {
                                                 // faz upload da imagem
                                                 files.image.upload(
                                                     request.files.file,
-                                                    '/company/' + request.params.company_slug + '/product/' + request.params.product_slug + '/images',
+                                                    '/companies/' + request.params.company_id + '/products/' + request.params.product_id + '/images',
                                                     function (error, data) {
                                                         if (error) {
                                                             response.send({error : error});
                                                         } else {
                                                             //coloca os dados do post em um objeto
                                                             product.images.push({
-                                                                file : data.original._id,
+                                                                file : data._id,
                                                                 url : data.url,
                                                                 title : request.param('title', null),
                                                                 legend : request.param('legend', null)
                                                             });
                                                             //salva a imagem
-                                                            product.save(function (error) {
+                                                            product.parent.save(function (error) {
                                                                 if (error) {
                                                                     response.send({error : error});
                                                                 } else {
@@ -98,7 +98,7 @@ module.exports = function (app) {
         });
     });
 
-    /** GET /company/:company_slug/product/:product_slug/images
+    /** GET /company/:company_id/product/:product_id/images
      *
      * @autor : Rafael Erthal
      * @since : 2012-08
@@ -111,11 +111,11 @@ module.exports = function (app) {
      * @request : {}
      * @response : {[file,url,title,legend]}
      */
-    app.get('/company/:company_slug/product/:product_slug/images', function (request, response) {
+    app.get('/company/:company_id/product/:product_id/images', function (request, response) {
         response.contentType('json');
 
         //busca a compania
-        Company.find({slug : request.params.company_slug}, function (error, company) {
+        Company.findByIdentity(request.params.company_id, function (error, company) {
             if (error) {
                 response.send({error : error});
             } else {
@@ -124,7 +124,7 @@ module.exports = function (app) {
                     response.send({error : 'company not found'});
                 } else {
                     //busca o produto
-                    company.findProduct(request.params.product_slug, function (error, product) {
+                    company.findProduct(request.params.product_id, function (error, product) {
                         if (error) {
                             response.send({error : error});
                         } else {
@@ -132,7 +132,12 @@ module.exports = function (app) {
                             if (product === null) {
                                 response.send({error : 'product not found'});
                             } else {
-                                response.send({images : product.images});
+                                if (!product.images || !product.images.length) {
+                                    response.send(null);
+                                }
+                                else {
+                                    response.send(product.images);
+                                }
                             }
                         }
                     });

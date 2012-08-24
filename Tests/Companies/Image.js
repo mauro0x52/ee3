@@ -9,24 +9,328 @@
 var should = require("should"),
     api = require("../Utils.js").api,
     rand = require("../Utils.js").rand,
-    user, company, product;
+    userA, companyA, productA, productA2, userB, companyB;
+
+
+random = rand();
+userA = {username : 'testes+' + random + '@empreendemia.com.br'};
+userB = {username : 'testes+' + random + 'B@empreendemia.com.br'};
 
 describe('POST /company/:company_slug/product/:product_slug/image', function() {
-    it('token inválido');
-    it('empresa não existe');
-    it('empresa sem produtos');
-    it('produto não existe');
-    it('empresa de outro usuário');
-    it('não escolhe imagem');
-    it('envia imagem');
+
+    before(function(done) {
+        var saveAll = 0;
+        // cria usuario A
+        api.post('auth', '/user', {
+            username : userA.username,
+            password : 'testando',
+            password_confirmation : 'testando'
+        }, function(error, data) {
+            userA.token = data.token;
+            // cria empresa
+            api.post('companies', '/company', {
+                token : userA.token,
+                name : 'Empresa '+random,
+                activity : 'consultoria em testes',
+                type : 'company',
+                profile : 'both',
+                active : true
+            }, function(error, data) {
+                companyA = data;
+                api.post('companies', '/company/' + companyA.slug + '/product',
+                    {
+                        token : userA.token,
+                        name : 'Um produto ' + random
+                    },
+                    function(error, data, response) {
+                        productA = data;
+                        saveAll++
+                        if (saveAll === 3) done();
+                    }
+                );
+                api.post('companies', '/company/' + companyA.slug + '/product',
+                    {
+                        token : userA.token,
+                        name : 'Outro produto' + random
+                    },
+                    function(error, data, response) {
+                        productA2 = data;
+                        saveAll++;
+                        if (saveAll === 3) done();
+                    }
+                );
+            });
+        });
+        // cria usuario B
+        api.post('auth', '/user', {
+            username : userB.username,
+            password : 'testando',
+            password_confirmation : 'testando'
+        }, function(error, data) {
+            userB.token = data.token;
+            // cria empresa
+            api.post('companies', '/company', {
+                token : userB.token,
+                name : 'Empresa '+random,
+                activity : 'consultoria em testes',
+                type : 'company',
+                profile : 'both',
+                active : true
+            }, function(error, data) {
+                companyB = data;
+                saveAll++;
+                if (saveAll === 3) done();
+            });
+        });
+    })
+
+    it('url existe', function(done) {
+        api.file('companies', '/company/asfdhjgpoinhpoaejr/product/asdiaubfas/image',
+            {
+                token : userA.token,
+                title : 'Título da imagem',
+                legend : 'Legenda da imagem'
+            },
+            {
+                file : 'vader.jpg'
+            },
+            function(error, data, response) {
+                if (error) return done(error);
+                else {
+                    should.exist(response);
+                    response.should.have.status(200);
+                    should.exist(data);
+                    data.should.have.property('error');
+                    done();
+                }
+            }
+        );
+    });
+    it('token inválido', function(done) {
+        api.file('companies', '/company/' + companyA.slug + '/product/' + productA.slug + '/image',
+            {
+                token : 'aiusbdiuhg19082y3re98sfdyhx',
+                title : 'Título da imagem',
+                legend : 'Legenda da imagem'
+            },
+            {
+                file : 'vader.jpg'
+            },
+            function(error, data, response) {
+                if (error) return done(error);
+                else {
+                    data.should.have.property('error');
+                    done();
+                }
+            }
+        );
+    });
+    it('empresa não existe', function(done) {
+        api.file('companies', '/company/sdfinoi2o3i54hrtefdsv/product/' + productA.slug + '/image',
+            {
+                token : userA.token,
+                title : 'Título da imagem',
+                legend : 'Legenda da imagem'
+            },
+            {
+                file : 'vader.jpg'
+            },
+            function(error, data, response) {
+                if (error) return done(error);
+                else {
+                    data.should.have.property('error');
+                    done();
+                }
+            }
+        );
+    });
+    it('empresa sem produtos', function(done) {
+        api.file('companies', '/company/' + companyB.slug + '/product/asdfoi3esfd/image',
+            {
+                token : userB.token,
+                title : 'Título da imagem',
+                legend : 'Legenda da imagem'
+            },
+            {
+                file : 'vader.jpg'
+            }, function(error, data, response) {
+                if (error) return done(error);
+                else {
+                    data.should.have.property('error');
+                    done();
+                }
+            }
+        );
+    });
+    it('produto não existe', function(done) {
+        api.file('companies', '/company/' + companyA.slug + '/product/asdfpvongop23jrpofsd/image',
+            {
+                token : userA.token,
+                title : 'Título da imagem',
+                legend : 'Legenda da imagem'
+            },
+            {
+                file : 'vader.jpg'
+            },
+            function(error, data, response) {
+                if (error) return done(error);
+                else {
+                    data.should.have.property('error');
+                    done();
+                }
+            }
+        );
+    });
+    it('empresa de outro usuário', function(done) {
+        api.file('companies', '/company/' + companyA.slug + '/product/' + productA.slug + '/image',
+            {
+                token : userB.token,
+                title : 'Título da imagem',
+                legend : 'Legenda da imagem'
+            },
+            {
+                file : 'vader.jpg'
+            },
+            function(error, data, response) {
+                if (error) return done(error);
+                else {
+                    data.should.have.property('error');
+                    done();
+                }
+            }
+        );
+    });
+    it('não escolhe imagem', function(done) {
+        api.file('companies', '/company/' + companyA.slug + '/product/' + productA.slug + '/image',
+            {
+                token : userA.token,
+                title : 'Título da imagem',
+                legend : 'Legenda da imagem'
+            },
+            {},
+            function(error, data, response) {
+                if (error) return done(error);
+                else {
+                    data.should.have.property('error');
+                    done();
+                }
+            }
+        );
+    });
+    it('envia imagem', function(done) {
+        api.file('companies', '/company/' + companyA.slug + '/product/' + productA.slug + '/image',
+            {
+                token : userA.token,
+                title : 'Titulo da imagem',
+                legend : 'Legenda da imagem'
+            },
+            {
+                file : 'vader.jpg'
+            },
+            function(error, data, response) {
+                if (error) return done(error);
+                else {
+                    data.should.not.have.property('error');
+                    data.should.have.property('url')
+                        .match(/^http\:\/\/.+\/companies\/.+\/products\/.+\/images\/.+\/original\..+$/);
+                    data.should.have.property('_id');
+                    data.should.have.property('file');
+                    data.should.have.property('title').equal('Titulo da imagem');
+                    data.should.have.property('legend').equal('Legenda da imagem');
+                    done();
+                }
+            }
+        );
+    });
 });
 
 describe('GET /company/:company_slug/product/:product_slug/images', function() {
-    it('empresa não existe');
-    it('produto não existe');
-    it('empresa sem produtos');
-    it('produto sem imagens');
-    it('lista de imagens');
+    before(function(done) {
+        var countImages = 0;
+        for (var i = 0; i < 10; i++) {
+            api.file('companies', '/company/' + companyA.slug + '/product/' + productA.slug + '/image',
+                {
+                    token : userA.token,
+                    title : 'Titulo da imagem',
+                    legend : 'Legenda da imagem'
+                },
+                {
+                    file : 'vader.jpg'
+                },
+                function(error, data, response) {
+                    countImages++;
+                    if (countImages === 10) done();
+                }
+            );
+        }
+    })
+
+    it('url existe', function(done) {
+        api.get('companies', '/company/sdfinoi2o3i54hrtefdsv/product/' + productA.slug + '/images', {}, function(error, data, response) {
+            if (error) return done(error);
+            else {
+                should.exist(response);
+                response.should.have.status(200);
+                should.exist(data);
+                done();
+            }
+        });
+    });
+    it('empresa não existe', function(done) {
+        api.get('companies', '/company/sdfinoi2o3i54hrtefdsv/product/' + productA.slug + '/images', {}, function(error, data, response) {
+            if (error) return done(error);
+            else {
+                data.should.have.property('error');
+                done();
+            }
+        });
+    });
+    it('produto não existe', function(done) {
+        api.get('companies', '/company/' + companyA.slug + '/product/ngpbfonpoaisder90/images', {}, function(error, data, response) {
+            if (error) return done(error);
+            else {
+                data.should.have.property('error');
+                done();
+            }
+        });
+    });
+    it('empresa sem produtos', function(done) {
+        api.get('companies', '/company/' + companyB.slug + '/product/ngpbfonpoaisder90/images', {}, function(error, data, response) {
+            if (error) return done(error);
+            else {
+                data.should.have.property('error');
+                done();
+            }
+        });
+    });
+    it('produto sem imagens', function(done) {
+        api.get('companies', '/company/' + companyA.slug + '/product/' + productA2.slug + '/images', {}, function(error, data, response) {
+            if (error) return done(error);
+            else {
+                should.not.exist(data);
+                done();
+            }
+        });
+    });
+    it('lista de imagens', function(done) {
+        api.get('companies', '/company/' + companyA.slug + '/product/' + productA.slug + '/images', {}, function(error, data, response) {
+            if (error) return done(error);
+            else {
+                data.should.not.have.property('error');
+                data.should.be.an.instanceOf(Array);
+                data.length.should.be.above(10);
+                for (var i = 0; i < data.length; i++) {
+                    data[i].should.have.property('url')
+                        .match(/^http\:\/\/.+\/companies\/.+\/products\/.+\/images\/.+\/original\..+$/);
+                    data[i].should.have.property('_id');
+                    data[i].should.have.property('file');
+                    data[i].should.have.property('title');
+                    data[i].should.have.property('legend');
+                }
+                done();
+            }
+        });
+    });
 });
 
 describe('GET /company/:company_slug/product/:product_slug/image/:id', function() {

@@ -17,4 +17,7 @@ imageStruct = {
     legend : {type : String, trim : true}
 };
 
+imageSchema = new Schema(imageStruct);
+
 exports.ImageStruct = imageStruct;
+exports.Image = imageSchema;
