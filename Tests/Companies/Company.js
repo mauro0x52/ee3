@@ -725,8 +725,11 @@ describe('DEL /company/:company_id', function(error, data){
             else {
                 should.not.exist(data);
                 api.get('companies', '/company/'+company.slug, {}, function(error, data, response) {
-                    data.should.have.property('error');
-                    done();
+                    if (error) done(error);
+                    else {
+                        data.should.have.property('error');
+                        done();
+                    }
                 })
             }
         });

@@ -68,7 +68,6 @@ describe('POST /company/[id]/thumbnail', function () {
                 if (error) return done(error);
                 else {
                     should.exist(data, 'não retornou dado nenhum');
-                    should.exist(data.error, 'não retornou erro');
                     done();
                 }
             }
@@ -86,7 +85,7 @@ describe('POST /company/[id]/thumbnail', function () {
                 if (error) return done(error);
                 else {
                     should.exist(data, 'não retornou dado nenhum');
-                    should.exist(data && data.error ? true : undefined, 'não retornou erro');
+                    data.should.have.property('error');
                     done();
                 }
             }
@@ -104,15 +103,15 @@ describe('POST /company/[id]/thumbnail', function () {
                 if (error) return done(error);
                 else {
                     should.exist(data, 'não retornou dado nenhum');
-                    should.not.exist(data.error, 'não pode retornar erro');
-                    (data && data.original && data.original.url ? data.original.url : '')
-                        .should.match(/^http\:\/\/.+\/companies\/.+\/thumbnails\/.+\/original\..+$/, 'não salvou o original corretamente');
-                    (data && data.small && data.small.url ? data.small.url : '')
-                        .should.match(/^http\:\/\/.+\/companies\/.+\/thumbnails\/.+\/small\..+$/, 'não salvou o small corretamente');
-                    (data && data.medium && data.medium.url ? data.medium.url : '')
-                        .should.match(/^http\:\/\/.+\/companies\/.+\/thumbnails\/.+\/medium\..+$/, 'não salvou o medium corretamente');
-                    (data && data.large && data.large.url ? data.large.url : '')
-                        .should.match(/^http\:\/\/.+\/companies\/.+\/thumbnails\/.+\/large\..+$/, 'não salvou o large corretamente');
+                    data.should.not.have.property('error');
+                    data.should.have.property('original').property('url')
+                        .match(/^http\:\/\/.+\/companies\/.+\/thumbnails\/.+\/original\..+$/);
+                    data.should.have.property('small').property('url')
+                        .match(/^http\:\/\/.+\/companies\/.+\/thumbnails\/.+\/small..+$/);
+                    data.should.have.property('medium').property('url')
+                        .match(/^http\:\/\/.+\/companies\/.+\/thumbnails\/.+\/medium..+$/);
+                    data.should.have.property('large').property('url')
+                        .match(/^http\:\/\/.+\/companies\/.+\/thumbnails\/.+\/large..+$/);
                     company.thumbnail = data;
                     done();
                 }
@@ -133,16 +132,16 @@ describe('POST /company/[id]/thumbnail', function () {
                 if (error) return done(error);
                 else {
                     should.exist(data, 'não retornou dado nenhum');
-                    should.not.exist(data && data.error ? true : undefined);
-                    (data && data.original && data.original.url ? data.original.url : '')
-                        .should.match(/^http\:\/\/.+\/companies\/.+\/thumbnails\/.+\/original\..+$/, 'não salvou o original corretamente');
-                    (data && data.small && data.small.url ? data.small.url : '')
-                        .should.match(/^http\:\/\/.+\/companies\/.+\/thumbnails\/.+\/small\..+$/, 'não salvou o small corretamente');
-                    (data && data.medium && data.medium.url ? data.medium.url : '')
-                        .should.match(/^http\:\/\/.+\/companies\/.+\/thumbnails\/.+\/medium\..+$/, 'não salvou o medium corretamente');
-                    (data && data.large && data.large.url ? data.large.url : '')
-                        .should.match(/^http\:\/\/.+\/companies\/.+\/thumbnails\/.+\/large\..+$/, 'não salvou o large corretamente');
-                    company.thumbnail.original.url.should.not.equal(data && data.original && data.original.url ? data.original.url : '', 'as urls deveriam ser diferentes');
+                    data.should.not.have.property('error');
+                    data.should.have.property('original').property('url')
+                        .match(/^http\:\/\/.+\/companies\/.+\/thumbnails\/.+\/original\..+$/)
+                        .not.equal(company.thumbnail.original.url);
+                    data.should.have.property('small').property('url')
+                        .match(/^http\:\/\/.+\/companies\/.+\/thumbnails\/.+\/small..+$/);
+                    data.should.have.property('medium').property('url')
+                        .match(/^http\:\/\/.+\/companies\/.+\/thumbnails\/.+\/medium..+$/);
+                    data.should.have.property('large').property('url')
+                        .match(/^http\:\/\/.+\/companies\/.+\/thumbnails\/.+\/large..+$/);
                     company.thumbnail = data;
                     done();
                 }
@@ -180,9 +179,11 @@ describe('GET /company/[id]/thumbnail', function () {
                         active : true
                     },
                     function(error, data) {
-                        company2 = data;
                         if (error) return done(error);
-                        else done();
+                        else {
+                            done();
+                            company2 = data;
+                        }
                     }
                 );
             }
@@ -192,36 +193,41 @@ describe('GET /company/[id]/thumbnail', function () {
     it('empresa não existe', function (done) {
         api.get('companies', '/company/asddasddaoiheoins/thumbnail', {}, function(error, data, response) {
             if (error) return done(error);
-            response.should.have.status(200);
-            should.exist(data, 'não retornou dado nenhum');
-            should.exist(data && data.error ? true : undefined, 'não retornou erro');
-            done();
+            else {
+                response.should.have.status(200);
+                should.exist(data, 'não retornou dado nenhum');
+                data.should.have.property('error');
+                done();
+            }
         });
     });
     it('empresa com thumbnail', function (done) {
         api.get('companies', '/company/' + company.slug + '/thumbnail', {}, function(error, data, response) {
             if (error) return done(error);
-            response.should.have.status(200);
-            should.exist(data, 'não retornou dado nenhum');
-            should.not.exist(data && data.error ? true : undefined, 'retornou erro inexperado');
-            (data && data.original && data.original.url ? data.original.url : '')
-                .should.match(/^http\:\/\/.+\/companies\/.+\/thumbnails\/.+\/original\..+$/, 'não salvou o original corretamente');
-            (data && data.small && data.small.url ? data.small.url : '')
-                .should.match(/^http\:\/\/.+\/companies\/.+\/thumbnails\/.+\/small\..+$/, 'não salvou o small corretamente');
-            (data && data.medium && data.medium.url ? data.medium.url : '')
-                .should.match(/^http\:\/\/.+\/companies\/.+\/thumbnails\/.+\/medium\..+$/, 'não salvou o medium corretamente');
-            (data && data.large && data.large.url ? data.large.url : '')
-                .should.match(/^http\:\/\/.+\/companies\/.+\/thumbnails\/.+\/large\..+$/, 'não salvou o large corretamente');
-            done();
+            else {
+                response.should.have.status(200);
+                should.exist(data, 'não retornou dado nenhum');
+                data.should.not.have.property('error');
+                data.should.have.property('original').property('url')
+                    .match(/^http\:\/\/.+\/companies\/.+\/thumbnails\/.+\/original\..+$/);
+                data.should.have.property('small').property('url')
+                    .match(/^http\:\/\/.+\/companies\/.+\/thumbnails\/.+\/small..+$/);
+                data.should.have.property('medium').property('url')
+                    .match(/^http\:\/\/.+\/companies\/.+\/thumbnails\/.+\/medium..+$/);
+                data.should.have.property('large').property('url')
+                    .match(/^http\:\/\/.+\/companies\/.+\/thumbnails\/.+\/large..+$/);
+                done();
+            }
         });
     });
     it('empresa sem thumbnail', function (done) {
         api.get('companies', '/company/' + company2.slug  + '/thumbnail', {}, function(error, data, response) {
             if (error) return done(error);
-            response.should.have.status(200);
-            should.not.exist(data, 'deveria retornar undefined')
-            should.not.exist(data && data.error ? true : undefined, 'retornou erro inexperado');
-            done();
+            else {
+                response.should.have.status(200);
+                should.not.exist(data, 'deveria retornar undefined')
+                done();
+            }
         });
     });
 });
@@ -231,39 +237,50 @@ describe('GET /company/:company_id/thumbnail/:size', function() {
     it('url existe', function (done) {
         api.get('companies', '/company/fassafsafassad/thumbnail/daoishoihe', {}, function(error, data, response) {
             if (error) return done(error);
-            response.should.have.status(200);
-            should.exist(data, 'não retornou dado nenhum');
-            done();
+            else {
+                response.should.have.status(200);
+                should.exist(data, 'não retornou dado nenhum');
+                done();
+            }
         });
     });
     it('empresa não existe', function (done) {
         api.get('companies', '/company/fassafsafassad/thumbnail/daoishoihe', {}, function(error, data, response) {
             if (error) return done(error);
-            should.exist(data.error, 'tem que retornar erro');
-            done();
+            else {
+                should.exist(data.error, 'tem que retornar erro');
+                done();
+            }
         });
     });
     it('pega tamanho medio', function (done) {
         api.get('companies', '/company/'+company.slug+'/thumbnail/medium', {}, function(error, data, response) {
             if (error) return done(error);
-            should.not.exist(data.error, 'não pode retornar erro');
-            (company.thumbnail.medium.url).should.equal(data.url);
-            done();
+            else {
+                data.should.not.have.property('error');
+                data.should.have.property('url').equal(company.thumbnail.medium.url)
+                should.not.exist(data.error, 'não pode retornar erro');
+                done();
+            }
         });
     });
     it('tamanho qualquer retorna small', function (done) {
         api.get('companies', '/company/'+company.slug+'/thumbnail/fasfsafsasfafas', {}, function(error, data, response) {
             if (error) return done(error);
-            should.not.exist(data.error, 'não pode retornar erro');
-            (company.thumbnail.small.url).should.equal(data.url);
-            done();
+            else {
+                data.should.not.have.property('error');
+                data.should.have.property('url').equal(company.thumbnail.small.url)
+                done();
+            }
         });
     });
     it('empresa sem thumbnail', function (done) {
         api.get('companies', '/company/'+company2.slug+'/thumbnail/fasfsafsasfafas', {}, function(error, data, response) {
             if (error) return done(error);
-            should.not.exist(data, 'deve retornar vazio');
-            done();
+            else {
+                should.not.exist(data, 'deve retornar vazio');
+                done();
+            }
         });
     });
 });
@@ -293,18 +310,22 @@ describe('DEL /company/[id]/thumbnail', function() {
                 profile : 'both',
                 active : true
             }, function(error, data) {
-                company3 = data;
                 if (error) return done(error);
-                else done();
+                else {
+                    company3 = data;
+                    done();
+                }
             });
         });
     });
     it('url existe', function (done) {
         api.del('companies', '/company/asddasddaoiheoins/thumbnail', {}, function(error, data, response) {
             if (error) return done(error);
-            response.should.have.status(200);
-            should.exist(data, 'não retornou dado nenhum');
-            done();
+            else {
+                response.should.have.status(200);
+                should.exist(data, 'não retornou dado nenhum');
+                done();
+            }
         });
     });
     it('token invalido', function (done) {
@@ -312,8 +333,10 @@ describe('DEL /company/[id]/thumbnail', function() {
             {},
             function(error, data, response) {
                 if (error) return done(error);
-                should.exist(data.error, 'tem que retornar erro');
-                done();
+                else {
+                    data.should.have.property('error');
+                    done();
+                }
             }
         );
     });
@@ -322,11 +345,13 @@ describe('DEL /company/[id]/thumbnail', function() {
             { token : user3.token },
             function(error, data, response) {
                 if (error) return done(error);
-                should.not.exist(data, 'retorna vazio');
-                api.get('companies', '/company/' + company3.slug + '/thumbnail', {}, function(error, data, response) {
-                    should.not.exist(data, 'retorna vazio (get)');
-                    done();
-                });
+                else {
+                    should.not.exist(data, 'retorna vazio');
+                    api.get('companies', '/company/' + company3.slug + '/thumbnail', {}, function(error, data, response) {
+                        should.not.exist(data, 'retorna vazio (get)');
+                        done();
+                    });
+                }
             }
         );
     });
@@ -349,9 +374,11 @@ describe('POST /company/[id]/product/[id]/thumbnail', function () {
             token : user.token,
             name : product.name
         }, function(error, data, response) {
-            product = data;
             if (error) return done(error);
-            else done();
+            else {
+                product = data;
+                done();
+            }
         });
     });
     it('não envia imagem', function (done) {
@@ -364,7 +391,7 @@ describe('POST /company/[id]/product/[id]/thumbnail', function () {
                 if (error) return done(error);
                 else {
                     response.should.have.status(200);
-                    should.exist(data.error, 'não retornou erro');
+                    data.should.have.property('error');
                     done();
                 }
             }
@@ -381,8 +408,7 @@ describe('POST /company/[id]/product/[id]/thumbnail', function () {
             function(error, data, response) {
                 if (error) return done(error);
                 else {
-                    response.should.have.status(200);
-                    should.exist(data.error, 'não retornou erro');
+                    data.should.have.property('error');
                     done();
                 }
             }
@@ -399,17 +425,15 @@ describe('POST /company/[id]/product/[id]/thumbnail', function () {
             function(error, data, response) {
                 if (error) return done(error);
                 else {
-                    response.should.have.status(200);
-                    should.exist(data, 'não retornou dado nenhum');
-                    should.not.exist(data.error, 'erro indesejado');
-                    (data && data.original && data.original.url ? data.original.url : '')
-                        .should.match(/^http\:\/\/.+\/companies\/.+\/products\/.+\/thumbnails\/.+\/original\..+$/, 'não salvou o original corretamente');
-                    (data && data.small && data.small.url ? data.small.url : '')
-                        .should.match(/^http\:\/\/.+\/companies\/.+\/products\/.+\/thumbnails\/.+\/small\..+$/, 'não salvou o small corretamente');
-                    (data && data.medium && data.medium.url ? data.medium.url : '')
-                        .should.match(/^http\:\/\/.+\/companies\/.+\/products\/.+\/thumbnails\/.+\/medium\..+$/, 'não salvou o medium corretamente');
-                    (data && data.large && data.large.url ? data.large.url : '')
-                        .should.match(/^http\:\/\/.+\/companies\/.+\/products\/.+\/thumbnails\/.+\/large\..+$/, 'não salvou o large corretamente');
+                    data.should.not.have.property('error');
+                    data.should.have.property('original').property('url')
+                        .match(/^http\:\/\/.+\/companies\/.+\/products\/.+\/thumbnails\/.+\/original\..+$/);
+                    data.should.have.property('small').property('url')
+                        .match(/^http\:\/\/.+\/companies\/.+\/products\/.+\/thumbnails\/.+\/small..+$/);
+                    data.should.have.property('medium').property('url')
+                        .match(/^http\:\/\/.+\/companies\/.+\/products\/.+\/thumbnails\/.+\/medium..+$/);
+                    data.should.have.property('large').property('url')
+                        .match(/^http\:\/\/.+\/companies\/.+\/products\/.+\/thumbnails\/.+\/large..+$/);
                     product.thumbnail = data;
                     done();
                 }
@@ -427,17 +451,15 @@ describe('POST /company/[id]/product/[id]/thumbnail', function () {
             function(error, data, response) {
                 if (error) return done(error);
                 else {
-                    response.should.have.status(200);
-                    should.exist(data, 'não retornou dado nenhum');
-                    should.not.exist(data.error, 'erro indesejado');
-                    (data && data.original && data.original.url ? data.original.url : '')
-                        .should.match(/^http\:\/\/.+\/companies\/.+\/products\/.+\/thumbnails\/.+\/original\..+$/, 'não salvou o original corretamente');
-                    (data && data.small && data.small.url ? data.small.url : '')
-                        .should.match(/^http\:\/\/.+\/companies\/.+\/products\/.+\/thumbnails\/.+\/small\..+$/, 'não salvou o small corretamente');
-                    (data && data.medium && data.medium.url ? data.medium.url : '')
-                        .should.match(/^http\:\/\/.+\/companies\/.+\/products\/.+\/thumbnails\/.+\/medium\..+$/, 'não salvou o medium corretamente');
-                    (data && data.large && data.large.url ? data.large.url : '')
-                        .should.match(/^http\:\/\/.+\/companies\/.+\/products\/.+\/thumbnails\/.+\/large\..+$/, 'não salvou o large corretamente');
+                    data.should.not.have.property('error');
+                    data.should.have.property('original').property('url')
+                        .match(/^http\:\/\/.+\/companies\/.+\/products\/.+\/thumbnails\/.+\/original\..+$/);
+                    data.should.have.property('small').property('url')
+                        .match(/^http\:\/\/.+\/companies\/.+\/products\/.+\/thumbnails\/.+\/small..+$/);
+                    data.should.have.property('medium').property('url')
+                        .match(/^http\:\/\/.+\/companies\/.+\/products\/.+\/thumbnails\/.+\/medium..+$/);
+                    data.should.have.property('large').property('url')
+                        .match(/^http\:\/\/.+\/companies\/.+\/products\/.+\/thumbnails\/.+\/large..+$/);
                     product.thumbnail.original.url.should.not.equal(data && data.original && data.large.url ? data.original.url : '', 'as urls deveriam ser diferentes');
                     product.thumbnail = data;
                     done();
@@ -457,46 +479,56 @@ describe('GET /company/:company_id/product/:product_id/thumbnail', function () {
             name : product.name+'b'
         }, function(error, data, response) {
             if (error) return done(error);
-            product2 = data;
-            done();
+            else {
+                product2 = data;
+                done();
+            }
         });
     })
 
     it('empresa não existe', function (done) {
         api.get('companies', '/company/asddasddaoiheoins/product/'+product.slug+'/thumbnail', {}, function(error, data, response) {
             if (error) return done(error);
-            response.should.have.status(200);
-            should.exist(data, 'não retornou dado nenhum');
-            data.should.have.property('error');
-            done();
+            else {
+                response.should.have.status(200);
+                should.exist(data, 'não retornou dado nenhum');
+                data.should.have.property('error');
+                done();
+            }
         });
     });
     it('produto não existe', function (done) {
         api.get('companies', '/company/' + company.slug + '/product/dasdasdassadsaddsa/thumbnail', {}, function(error, data, response) {
             if (error) return done(error);
-            response.should.have.status(200);
-            should.exist(data, 'não retornou dado nenhum');
-            data.should.have.property('error');
-            done();
+            else {
+                response.should.have.status(200);
+                should.exist(data, 'não retornou dado nenhum');
+                data.should.have.property('error');
+                done();
+            }
         });
     });
     it('produto com thumbnail', function (done) {
         api.get('companies', '/company/' + company.slug + '/product/' + product.slug + '/thumbnail', {}, function (error, data, response) {
             if (error) return done(error);
-            should.exist(data);
-            data.should.not.have.property('error');
-            data.should.have.property('original').with.property('url', product.thumbnail.original.url);
-            data.should.have.property('small').with.property('url', product.thumbnail.small.url);
-            data.should.have.property('medium').with.property('url', product.thumbnail.medium.url);
-            data.should.have.property('large').with.property('url', product.thumbnail.large.url);
-            done();
+            else {
+                should.exist(data);
+                data.should.not.have.property('error');
+                data.should.have.property('original').property('url').equal(product.thumbnail.original.url);
+                data.should.have.property('small').property('url').equal(product.thumbnail.small.url);
+                data.should.have.property('medium').property('url').equal(product.thumbnail.medium.url);
+                data.should.have.property('large').property('url').equal(product.thumbnail.large.url);
+                done();
+            }
         });
     });
     it('produto sem thumbnail', function (done) {
         api.get('companies', '/company/' + company.slug + '/product/'+product2.slug+'/thumbnail', {}, function(error, data, response) {
             if (error) return done(error);
-            should.not.exist(data, 'deveria retornar undefined')
-            done();
+            else {
+                should.not.exist(data, 'deveria retornar undefined')
+                done();
+            }
         });
     });
 });
@@ -506,46 +538,58 @@ describe('GET /company/:company_id/product/:product_id/thumbnail/:size', functio
     it('url existe', function (done) {
         api.get('companies', '/company/fassafsafassad/product/afasdasdas/thumbnail/daoishoihe', {}, function(error, data, response) {
             if (error) return done(error);
-            response.should.have.status(200);
-            should.exist(data, 'não retornou dado nenhum');
-            done();
+            else {
+                response.should.have.status(200);
+                should.exist(data, 'não retornou dado nenhum');
+                done();
+            }
         });
     });
     it('empresa não existe', function (done) {
         api.get('companies', '/company/fassafsafassad/product/afasdasdas/thumbnail/daoishoihe', {}, function(error, data, response) {
             if (error) return done(error);
-            should.exist(data.error, 'tem que retornar erro');
-            done();
+            else {
+                should.exist(data.error, 'tem que retornar erro');
+                done();
+            }
         });
     });
     it('produto não existe', function (done) {
         api.get('companies', '/company/'+company.slug+'/product/afasdasdas/thumbnail/daoishoihe', {}, function(error, data, response) {
             if (error) return done(error);
-            should.exist(data.error, 'tem que retornar erro');
-            done();
+            else {
+                should.exist(data.error, 'tem que retornar erro');
+                done();
+            }
         });
     });
     it('pega tamanho medio', function (done) {
         api.get('companies', '/company/'+company.slug+'/product/'+product.slug+'/thumbnail/medium', {}, function(error, data, response) {
             if (error) return done(error);
-            should.not.exist(data.error, 'não pode retornar erro');
-            (product.thumbnail.medium.url).should.equal(data.url);
-            done();
+            else {
+                data.should.not.have.property('error');
+                data.should.have.property('url').equal(product.thumbnail.medium.url);
+                done();
+            }
         });
     });
     it('tamanho qualquer retorna small', function (done) {
         api.get('companies', '/company/'+company.slug+'/product/'+product.slug+'/thumbnail/fasfsafsasfafas', {}, function(error, data, response) {
             if (error) return done(error);
-            should.not.exist(data.error, 'não pode retornar erro');
-            (product.thumbnail.small.url).should.equal(data.url);
-            done();
+            else {
+                data.should.not.have.property('error');
+                data.should.have.property('url').equal(product.thumbnail.small.url);
+                done();
+            }
         });
     });
     it('produto sem thumbnail', function (done) {
         api.get('companies', '/company/'+company.slug+'/product/'+product2.slug+'/thumbnail/fasfsafsasfafas', {}, function(error, data, response) {
             if (error) return done(error);
-            should.not.exist(data, 'deve retornar vazio');
-            done();
+            else {
+                should.not.exist(data, 'deve retornar vazio');
+                done();
+            }
         });
     });
 });
@@ -555,9 +599,11 @@ describe('DEL /company/:company_id/product/:product_id/thumbnail', function() {
     it('url existe', function (done) {
         api.del('companies', '/company/dasdsadsa/product/asdsdasadsad/thumbnail', {}, function(error, data, response) {
             if (error) return done(error);
-            response.should.have.status(200);
-            should.exist(data, 'não retornou dado nenhum');
-            done();
+            else {
+                response.should.have.status(200);
+                should.exist(data, 'não retornou dado nenhum');
+                done();
+            }
         });
     });
     it('token invalido', function (done) {
@@ -565,8 +611,10 @@ describe('DEL /company/:company_id/product/:product_id/thumbnail', function() {
             {},
             function(error, data, response) {
                 if (error) return done(error);
-                should.exist(data.error, 'tem que retornar erro');
-                done();
+                else {
+                    data.should.have.property('error');
+                    done();
+                }
             }
         );
     });
@@ -575,11 +623,13 @@ describe('DEL /company/:company_id/product/:product_id/thumbnail', function() {
             { token : user.token },
             function(error, data, response) {
                 if (error) return done(error);
-                should.not.exist(data, 'deve retornar vazio');
-                api.get('companies', '/company/'+company.slug+'/product/'+product.slug+'/thumbnail/fasfsafsasfafas', {}, function(error, data, response) {
-                    should.not.exist(data, 'deve retornar vazio (get)');
-                    done();
-                });
+                else {
+                    should.not.exist(data, 'deve retornar vazio');
+                    api.get('companies', '/company/'+company.slug+'/product/'+product.slug+'/thumbnail/fasfsafsasfafas', {}, function(error, data, response) {
+                        should.not.exist(data, 'deve retornar vazio (get)');
+                        done();
+                    });
+                }
             }
         );
     });

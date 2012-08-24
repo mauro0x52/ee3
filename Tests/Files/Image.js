@@ -63,7 +63,7 @@ describe('POST /image', function() {
                 if (error) done(error);
                 else {
                     should.exist(data, 'não retornou dado nenhum');
-                    data.should.have.property('url').with.include(path);
+                    data.should.have.property('url').include(path);
                     image = data;
                     done();
                 }
@@ -83,7 +83,7 @@ describe('POST /image', function() {
                 else {
                     should.exist(data, 'não retornou dado nenhum');
                     data.should.have.property('url')
-                        .with.include(path)
+                        .include(path)
                         .and.should.not.equal(image.url);
                     done();
                 }
@@ -136,7 +136,7 @@ describe('POST /image/resize', function() {
                 else {
                     should.exist(data, 'não retornou dado nenhum');
                     data.should.have.property('url')
-                        .with.include(path)
+                        .include(path)
                         .and.include('h200')
                         .and.include('extend');
                     h200extend = data;
@@ -156,7 +156,7 @@ describe('POST /image/resize', function() {
                 else {
                     should.exist(data, 'não retornou dado nenhum');
                     data.should.have.property('url')
-                        .with.include(path)
+                        .include(path)
                         .and.include('w200')
                         .and.include('extend');
                     w200extend = data;
@@ -177,7 +177,7 @@ describe('POST /image/resize', function() {
                 else {
                     should.exist(data, 'não retornou dado nenhum');
                     data.should.have.property('url')
-                        .with.include(path)
+                        .include(path)
                         .and.include('w200')
                         .and.include('h200')
                         .and.include('extend');
@@ -199,7 +199,7 @@ describe('POST /image/resize', function() {
                 else {
                     should.exist(data, 'não retornou dado nenhum');
                     data.should.have.property('url')
-                        .with.include(path)
+                        .include(path)
                         .and.include('w200')
                         .and.include('fit');
                     w200fit = data;
@@ -220,7 +220,7 @@ describe('POST /image/resize', function() {
                 else {
                     should.exist(data, 'não retornou dado nenhum');
                     data.should.have.property('url')
-                        .with.include(path)
+                        .include(path)
                         .and.include('h200')
                         .and.include('fit');
                     h200fit = data;
@@ -242,7 +242,7 @@ describe('POST /image/resize', function() {
                 else {
                     should.exist(data, 'não retornou dado nenhum');
                     data.should.have.property('url')
-                        .with.include(path)
+                        .include(path)
                         .and.include('w200')
                         .and.include('h200')
                         .and.include('fit');
@@ -265,7 +265,7 @@ describe('POST /image/resize', function() {
                 else {
                     should.exist(data, 'não retornou dado nenhum');
                     data.should.have.property('url')
-                        .with.include(path)
+                        .include(path)
                         .and.include('labeltestando');
                     done();
                 }
@@ -285,7 +285,7 @@ describe('POST /image/resize', function() {
                 else {
                     should.exist(data, 'não retornou dado nenhum');
                     data.should.have.property('path')
-                        .with.include(path)
+                        .include(path)
                         .and.include('url');
                     done();
                 }
@@ -305,7 +305,7 @@ describe('POST /image/resize', function() {
                 else {
                     should.exist(data, 'não retornou dado nenhum');
                     data.should.have.property('url')
-                        .with.include(path)
+                        .include(path)
                         .and.include('id');
                     done();
                 }
