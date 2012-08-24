@@ -188,3 +188,64 @@ describe('GET /company/:company_id/products', function() {
         });
     });
 });
+
+
+describe('GET /company/:company_id/product/:product_id', function() {
+    it('empresa não encontrada', function(done) {
+        api.get('companies', '/company/ds9fbv09ufasjewasd/product/'+product.slug, {}, function (error, data, response) {
+            if (error) done(error);
+            else {
+                response.should.have.status(200);
+                should.exist(data);
+                data.should.have.property('error');
+                done();
+            }
+        });
+    });
+    it('produto de empresa sem produto', function(done) {
+        api.get('companies', '/company/' + company2.slug + '/product/asdpnfsdb0vc9h23n4we', {}, function (error, data, response) {
+            if (error) done(error);
+            else {
+                should.exist(data);
+                data.should.have.property('error');
+                done();
+            }
+        });
+    });
+    it('produto não encontrado', function(done) {
+        api.get('companies', '/company/' + company.slug + '/product/asdpnfsdb0vc9h23n4we', {}, function (error, data, response) {
+            if (error) done(error);
+            else {
+                should.exist(data);
+                data.should.have.property('error');
+                done();
+            }
+        });
+    });
+    it('produto por slug', function(done) {
+        api.get('companies', '/company/' + company.slug + '/product/' + product.slug, {}, function (error, data, response) {
+            if (error) done(error);
+            else {
+                should.exist(data);
+                data.should.not.have.property('error');
+                data.should.have.property('_id').equal(product._id);
+                data.should.have.property('slug').equal(product.slug);
+                data.should.have.property('name').equal(product.name);
+                done();
+            }
+        });
+    });
+    it('produto por id', function(done) {
+        api.get('companies', '/company/' + company.slug + '/product/' + product._id, {}, function (error, data, response) {
+            if (error) done(error);
+            else {
+                should.exist(data);
+                data.should.not.have.property('error');
+                data.should.have.property('_id').equal(product._id);
+                data.should.have.property('slug').equal(product.slug);
+                data.should.have.property('name').equal(product.name);
+                done();
+            }
+        });
+    });
+});

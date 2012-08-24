@@ -129,7 +129,11 @@ module.exports = function (app) {
                     response.send({error : 'company not found'});
                 } else {
                     company.findProduct (request.params.product_id,function (error, product){
-                        response.send({Product : product});
+                        if (!product) {
+                            response.send({error : 'product not found'});
+                        } else {
+                            response.send(product);
+                        }
                     });
                 }
             }
