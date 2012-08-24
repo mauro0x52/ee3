@@ -35,7 +35,7 @@ productSchema.pre('save', function (next) {
         charTo   = 'aaaaaaceeeeiiiinooooooouuuuyy',
         i;
 
-    this.name = this.name.replace(/^\s+|\s+$/g, '');
+    this.name = this.name.replace(/\s+/g, ' ');
 
     slug = this.name;
     slug = slug.replace(/^\s+|\s+$/g, '').replace(/\s+/g, '-').toLowerCase();
@@ -44,12 +44,16 @@ productSchema.pre('save', function (next) {
         slug = slug.replace(new RegExp(charFrom.charAt(i), 'g'), charTo.charAt(i))
     }
     this.slug = slug.replace(/[^a-z,0-9,\-]/g, '');
-    
+
+    foundSlug = false;
+
     for (i = 0; i < this.parent.products.length; i = i + 1) {
         if (this.parent.products[i]._id !== this._id && this.parent.products[i].slug === this.slug) {
-            this.slug = this.slug + '-' + crypto.createHash('sha1').update(crypto.randomBytes(10)).digest('hex').substring(0, 2);
+            foundSlug = true;
         }
     }
+    if (foundSlug) this.slug = this.slug + '-' + crypto.createHash('sha1').update(crypto.randomBytes(10)).digest('hex').substring(0, 2);
+
     next();
 });
 

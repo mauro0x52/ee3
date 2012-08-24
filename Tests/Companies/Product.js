@@ -10,18 +10,19 @@ var should = require("should"),
     api = require("../Utils.js").api,
     db = require("../Utils.js").db,
     rand = require("../Utils.js").rand,
+    random,
     token, company, product,
-    token2, company2, companyName2, companySlug2;
-    
+    token2, company2;
+
+random = rand();
+user = {username : 'testes+' + random + '@empreendemia.com.br'};
 
 describe('POST /company/[slug]/product', function () {
     before(function (done) {
-        random = rand();
-        userName = 'testes+' + random + '@empreendemia.com.br';
-        
+
         // cria usuario
         api.post('auth', '/user', {
-            username : userName,
+            username : user.username,
             password : 'testando',
             password_confirmation : 'testando'
         }, function(error, data) {
@@ -39,7 +40,7 @@ describe('POST /company/[slug]/product', function () {
             });
         });
     });
-    
+
     it('token inválido', function(done) {
         api.post('companies', '/company/' + company.slug + '/product',
             {
@@ -50,8 +51,8 @@ describe('POST /company/[slug]/product', function () {
                 if (error) return done(error);
                 else {
                     response.should.have.status(200);
-                    should.exist(data.error, 'erro inexperado');
-                    should.not.exist(data.slug, 'não é para gerar token');
+                    should.exist(data);
+                    data.should.have.property('error');
                     done();
                 }
             }
@@ -65,9 +66,7 @@ describe('POST /company/[slug]/product', function () {
             function(error, data, response) {
                 if (error) return done(error);
                 else {
-                    response.should.have.status(200);
-                    should.exist(data.error, 'erro inexperado');
-                    should.not.exist(data.slug, 'não é para gerar token');
+                    data.should.have.property('error');
                     done();
                 }
             }
@@ -77,15 +76,33 @@ describe('POST /company/[slug]/product', function () {
         api.post('companies', '/company/' + company.slug + '/product',
             {
                 token : token,
-                name : 'Produto ' + random
+                name : '   Produto muito     bonitão! ' + random
             },
             function(error, data, response) {
                 if (error) return done(error);
                 else {
-                    response.should.have.status(200);
-                    should.not.exist(data.error, 'erro inexperado');
-                    should.exist(data.slug, 'não gerou slug corretamente');
+                    data.should.not.have.property('error');
+                    data.should.have.property('slug').equal('produto-muito-bonitao-' + random);
+                    data.should.have.property('name').equal('Produto muito bonitão! ' + random);
                     product = data;
+                    done();
+                }
+            }
+        );
+    });
+    it('cadastra produto com mesmo nome', function(done) {
+        api.post('companies', '/company/' + company.slug + '/product',
+            {
+                token : token,
+                name : '   Produto muito     bonitão! ' + random
+            },
+            function(error, data, response) {
+                if (error) return done(error);
+                else {
+                    data.should.not.have.property('error');
+                    data.should.have.property('slug')
+                        .match(/[a-z,0-9,\-]+\-[0-9,a-f]{2}/)
+                        .not.equal(product.slug);
                     done();
                 }
             }

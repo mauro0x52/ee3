@@ -27,7 +27,7 @@ appSchema.pre('save', function(next) {
         charTo   = 'aaaaaaceeeeiiiinooooooouuuuyy',
         app = this;
 
-    this.name = this.name.replace(/^\s+|\s+$/g, '');
+    this.name = this.name.replace(/\s+/g, ' ');
 
     slug = this.name;
     slug = slug.replace(/^\s+|\s+$/g, '').replace(/\s+/g, '-').toLowerCase();
