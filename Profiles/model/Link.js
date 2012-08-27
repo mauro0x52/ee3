@@ -11,7 +11,7 @@ var mongoose = require('mongoose'),
     linkSchema;
 
 linkSchema = new schema({
-    type : {type : String, required : true, enum : ['blog', 'youtube', 'facebook', 'vimeo', 'slideshare', 'website']},
+    type : {type : String, required : true, enum : ['Blog', 'Youtube', 'Facebook', 'Vimeo', 'Slideshare', 'Website']},
     url  : {type : String, required : true, trim : true}
 });
 

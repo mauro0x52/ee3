@@ -132,7 +132,7 @@ module.exports = function (app) {
                             response.send({error : error});
                         } else {
                             //verifica se trabalho foi encontrado
-                            if ( === null) {
+                            if (job === null) {
                                 response.send({error : 'job not found'});
                             } else {
                                 response.send({job : job});
