@@ -13,7 +13,7 @@ var crypto = require('crypto'),
 
 regionSchema = new Schema({
     name       : {type : String, trim : true, required : true},
-    slug       : {type : String, trim : true, required : true, unique : true},
+    slug       : {type : String, trim : true, unique : true},
     countryIds : [{type: objectId}],
     cityIds    : [{type: objectId}],
     stateIds   : [{type: objectId}]
