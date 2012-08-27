@@ -502,7 +502,7 @@ module.exports = function (app) {
                                             link.type = request.param('type', null);
                                             link.url = request.param('url', null);
                                             //salva as modificações
-                                            link.save(function (error) {
+                                            company.save(function (error) {
                                                 if (error) {
                                                     response.send({error : error});
                                                 } else {

@@ -32,7 +32,7 @@ module.exports = function (app) {
         auth(request.param('token', null), function (user) {
             if (user) {
                 //busca o perfil
-                Profile.findOne({"slugs" : request.params.slug}, function (error, profile) {
+                Profile.findByIdentity(request.params.slug, function (error, profile) {
                     if (error) {
                         response.send({error : error});
                     } else {
@@ -41,11 +41,12 @@ module.exports = function (app) {
                             response.send({error : 'profile not found'});
                         } else {
                             //verifica se o usuário é dono da compania
-                            if (! profile.isOwner(request.param('login', null))) {
+                            if (! profile.isOwner(user._id)) {
                                 response.send({error : 'permission denied'});
                             } else {
                                 //coloca os dados do post em um objeto
                                 profile.jobs.push({
+                                    name : request.param('name', null),
                                     company : request.param('company', null),
                                     companyName : request.param('companyName', null),
                                     description : request.param('description', null),
@@ -57,7 +58,7 @@ module.exports = function (app) {
                                     if (error) {
                                         response.send({error : error});
                                     } else {
-                                        response.send({error : ''});
+                                        response.send(profile.jobs.pop());
                                     }
                                 });
                             }
@@ -87,7 +88,7 @@ module.exports = function (app) {
         response.contentType('json');
 
         //busca o perfil
-        Profile.findOne({"slugs" : request.params.slug}, function (error, profile) {
+        Profile.findByIdentity(request.params.slug, function (error, profile) {
             if (error) {
                 response.send({error : error});
             } else {
@@ -95,7 +96,7 @@ module.exports = function (app) {
                 if (profile === null) {
                     response.send({error : 'profile not found'});
                 } else {
-                    response.send({jobs : profile.jobs});
+                    response.send(profile.jobs);
                 }
             }
         });
@@ -114,11 +115,11 @@ module.exports = function (app) {
      * @request : {}
      * @response : {company,companyName,description,dateStart,dateEnd}
      */
-    app.get('/company/:slug/job/:id', function (request, response) {
+    app.get('/profile/:slug/job/:id', function (request, response) {
         response.contentType('json');
 
         //busca o perfil
-        Profile.findOne({"slugs" : request.params.slug}, function (error, profile) {
+        Profile.findByIdentity(request.params.slug, function (error, profile) {
             if (error) {
                 response.send({error : error});
             } else {
@@ -135,7 +136,7 @@ module.exports = function (app) {
                             if (job === null) {
                                 response.send({error : 'job not found'});
                             } else {
-                                response.send({job : job});
+                                response.send(job);
                             }
                         }
                     });
@@ -157,14 +158,14 @@ module.exports = function (app) {
      * @request : {login,token,company,companyName,description,dateStart,dateEnd}
      * @response : {confirmation}
      */
-    app.put('/company/:slug/job/:id', function (request, response) {
+    app.put('/profile/:slug/job/:id', function (request, response) {
         response.contentType('json');
 
         //valida o token do usuário
         auth(request.param('token', null), function (user) {
             if (user) {
                 //busca o perfil
-                Profile.findOne({"slugs" : request.params.slug}, function (error, profile) {
+                Profile.findByIdentity(request.params.slug, function (error, profile) {
                     if (error) {
                         response.send({error : error});
                     } else {
@@ -173,7 +174,7 @@ module.exports = function (app) {
                             response.send({error : 'profile not found'});
                         } else {
                             //verifica se o usuário é dono do perfil
-                            if (! profile.isOwner(request.param('login', null))) {
+                            if (! profile.isOwner(user._id)) {
                                 response.send({error : 'permission denied'});
                             } else {
                                 //busca o trabalho
@@ -187,16 +188,17 @@ module.exports = function (app) {
                                         } else {
                                             //altera os dados do trabalho
                                             job.company = request.param('company', null);
+                                            job.name = request.param('name', null);
                                             job.companyName = request.param('companyName', null);
                                             job.description = request.param('description', null);
                                             job.dateStart = request.param('dateStart', null);
                                             job.dateEnd = request.param('dateEnd', null);
                                             //salva as alterações
-                                            job.save(function (error) {
+                                            profile.save(function (error) {
                                                 if (error) {
                                                     response.send({error : error});
                                                 } else {
-                                                    response.send({error : ''});
+                                                    response.send(job);
                                                 }
                                             });
                                         }
@@ -225,14 +227,14 @@ module.exports = function (app) {
      * @request : {login,token}
      * @response : {confirmation}
      */
-    app.del('/company/:slug/job/:id', function (request, response) {
+    app.del('/profile/:slug/job/:id', function (request, response) {
         response.contentType('json');
 
         //valida o token do usuário
         auth(request.param('token', null), function (user) {
             if (user) {
                 //busca o perfil
-                Profile.findOne({"slugs" : request.params.slug}, function (error, profile) {
+                Profile.findByIdentity(request.params.slug, function (error, profile) {
                     if (error) {
                         response.send({error : error});
                     } else {
@@ -241,7 +243,7 @@ module.exports = function (app) {
                             response.send({error : 'profile not found'});
                         } else {
                             //verifica se o usuário é dono do perfil
-                            if (! profile.isOwner(request.param('login', null))) {
+                            if (! profile.isOwner(user._id)) {
                                 response.send({error : 'permission denied'});
                             } else {
                                 //busca o trabalho
@@ -259,7 +261,7 @@ module.exports = function (app) {
                                                 if (error) {
                                                     response.send({error : error});
                                                 } else {
-                                                    response.send({error : ''});
+                                                    response.send(null);
                                                 }
                                             });
                                         }

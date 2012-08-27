@@ -222,7 +222,7 @@ module.exports = function (app) {
                                         app.authorizationDate = request.param('authorizationDate', null);
                                         app.expirationDate = request.param('expirationDate', null);
                                         //salva dados da autorização
-                                        app.save(function (error) {
+                                        user.save(function (error) {
                                             if (error) {
                                                 response.send({error : error});
                                             } else {

@@ -186,7 +186,7 @@ module.exports = function (app) {
                                             link.type = request.param('type', null);
                                             link.url = request.param('url', null);
                                             //salva as alterações
-                                            link.save(function (error) {
+                                            profile.save(function (error) {
                                                 if (error) {
                                                     response.send({error : error});
                                                 } else {

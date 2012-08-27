@@ -186,7 +186,7 @@ module.exports = function (app) {
                                             contact.type = request.param('type', null);
                                             contact.address = request.param('address', null);
                                             //salva as alterações
-                                            contact.save(function (error) {
+                                            profile.save(function (error) {
                                                 if (error) {
                                                     response.send({error : error});
                                                 } else {
