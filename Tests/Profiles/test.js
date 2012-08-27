@@ -19,3 +19,11 @@ describe('Phone', function() {
     require("./Phone.js");
 });
 
+describe('Job', function() {
+    require("./Job.js");
+});
+
+describe('Contact', function() {
+    require("./Contact.js");
+});
+
