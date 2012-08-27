@@ -15,3 +15,7 @@ describe('Link', function() {
     require("./Link.js");
 });
 
+describe('Phone', function() {
+    require("./Phone.js");
+});
+

@@ -372,9 +372,6 @@ describe('DEL /profile/[slug]/link/[id]', function () {
                 return done(error);
             } else {
                 should.not.exist(data);
-                api.get('profiles', '/profile/' + profile + '/link/' + link, {token : token}, function(error, data, response) {
-                    console.log(data)
-                });
                 done();
             }
         });
