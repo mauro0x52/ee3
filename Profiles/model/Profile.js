@@ -36,7 +36,7 @@ profileSchema.pre('save', function(next) {
 
     this.name = this.name.replace(/\s+/g, ' ');
 
-    slug = this.name;
+    slug = this.name + ' ' + this.surname;
     slug = slug.replace(/^\s+|\s+$/g, '').replace(/\s+/g, '-').toLowerCase();
     // remove acentos
     for (var i = 0; i < charFrom.length; i++) {

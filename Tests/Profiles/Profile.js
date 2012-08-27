@@ -9,38 +9,46 @@
 var should = require("should"),
     api = require("../Utils.js").api,
     rand = require("../Utils.js").rand,
-    random, user, profile;
+    random, userA, profileA;
 
 random = rand();
-user = {
+userA = {
     username : 'testes+' + random + '@empreendemia.com.br'
 }
-profile = {
-    name : 'Nome' + random,
-    surname : 'Sobrenome' + random
-}
 
+userB = {
+    username : 'testes+b' + random + '@empreendemia.com.br'
+}
 
 describe('POST /profile', function () {
     before(function (done) {
         // cria usuario
         api.post('auth', '/user', {
-            username : user.username,
+            username : userA.username,
             password : 'testando',
             password_confirmation : 'testando'
         }, function(error, data) {
-            user.token = data.token;
-            user._id = data._id;
-            done();
+            userA.token = data.token;
+            userA._id = data._id;
+            // cria outro usuario
+            api.post('auth', '/user', {
+                username : userB.username,
+                password : 'testando',
+                password_confirmation : 'testando'
+            }, function(error, data) {
+                userB.token = data.token;
+                userB._id = data._id;
+                done();
+            });
         });
     });
 
     it('dados obrigatórios não preenchidos', function(done) {
         api.post('profiles', '/profile', {
-            token : user.token
+            token : userA.token
         }, function(error, data, response) {
             if (error) return done(error);
-            else { 
+            else {
                 response.should.have.status(200);
                 should.exist(data.error);
                 should.not.exist(data.slug);
@@ -51,12 +59,11 @@ describe('POST /profile', function () {
     it('token inválido', function(done) {
         api.post('profiles', '/profile', {
             token : 'arbufudbcu1b3124913r987bass978a',
-            name : profile.name,
-            surname : profile.surname,
-            about : 'sobre'
+            name : 'Nome' + random,
+            surname : 'Sobrenome' + random
         }, function(error, data, response) {
             if (error) return done(error);
-            else { 
+            else {
                 response.should.have.status(200);
                 should.exist(data.error);
                 should.not.exist(data.slug);
@@ -66,21 +73,59 @@ describe('POST /profile', function () {
     });
     it('cadastra profile', function(done) {
         api.post('profiles', '/profile', {
-            token : user.token,
-            name : profile.name,
-            surname : profile.surname,
-            about : 'sobre'
+            token : userA.token,
+            name : 'Nome' + random,
+            surname : 'Sobrenome' + random
         }, function(error, data, response) {
             if (error) return done(error);
-            else { 
-                response.should.have.status(200);
-                should.not.exist(data.error, 'erro inesperado');
-                data.should.have.property('slug');
-                data.should.have.property('name', profile.name);
-                data.should.have.property('surname', profile.surname);
-                profile = data;
+            else {
+                data.should.not.have.property('error');
+                data.should.have.property('slug').equal('nome'+random+'-sobrenome'+random);
+                data.should.have.property('name').equal('Nome' + random);
+                data.should.have.property('surname').equal('Sobrenome' + random);
+                profileA = data;
                 done();
             }
         });
     });
+    it('outro profile com mesmo nome', function(done) {
+        api.post('profiles', '/profile', {
+            token : userB.token,
+            name : 'Nome' + random,
+            surname : 'Sobrenome' + random
+        }, function(error, data, response) {
+            if (error) return done(error);
+            else {
+                data.should.not.have.property('error');
+                data.should.have.property('slug')
+                    .include(profileA.slug)
+                    .match(/nome[0-9,a-f]{2,}\-sobrenome[0-9,a-f]{2,}\-[0-9,a-f]{2,}/);
+                data.should.have.property('name').equal('Nome' + random);
+                data.should.have.property('surname').equal('Sobrenome' + random);
+                profileA = data;
+                done();
+            }
+        });
+    });
+});
+
+describe('GET /profile/:profile_id', function() {
+    it('perfil que não existe');
+    it('perfil pelo id');
+    it('perfil pelo slug');
+});
+
+describe('PUT /profile/:profile_id', function() {
+    it('token inválido');
+    it('perfil que não existe');
+    it('perfil de outro usuário');
+    it('mantém o slug');
+    it('altera o slug');
+});
+
+describe('DEL /profile/:profile_id', function() {
+    it('token inválido');
+    it('perfil que não existe');
+    it('perfil de outro usuário');
+    it('remove perfil');
 });
