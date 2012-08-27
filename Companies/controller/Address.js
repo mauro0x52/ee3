@@ -254,7 +254,8 @@ module.exports = function (app) {
                                             response.send({error : 'address not found'});
                                         } else {
                                             //remove o endereço
-                                            address.remove(function (error) {
+                                            address.remove();
+                                            company.save(function (error) {
                                                 if (error) {
                                                     response.send({error : error});
                                                 } else {

@@ -11,3 +11,7 @@ describe('Thumbnail', function() {
     require("./Thumbnail.js");
 });
 
+describe('Link', function() {
+    require("./Link.js");
+});
+

@@ -32,7 +32,7 @@ module.exports = function (app) {
         auth(request.param('token', null), function (user) {
             if (user) {
                 //busca o perfil
-                Profile.findOne({"slugs" : request.params.slug}, function (error, profile) {
+                Profile.findByIdentity(request.params.slug, function (error, profile) {
                     if (error) {
                         response.send({error : error});
                     } else {
@@ -41,20 +41,20 @@ module.exports = function (app) {
                             response.send({error : 'profile not found'});
                         } else {
                             //verifica se o usuário é dono da compania
-                            if (! profile.isOwner(request.param('login', null))) {
+                            if (! profile.isOwner(user._id)) {
                                 response.send({error : 'permission denied'});
                             } else {
                                 //coloca os dados do post em um objeto
                                 profile.links.push({
                                     type : request.param('type', null),
-                                    utl : request.param('url', null)
+                                    url : request.param('url', null)
                                 });
                                 //salva o link
                                 profile.save(function (error) {
                                     if (error) {
                                         response.send({error : error});
                                     } else {
-                                        response.send({error : ''});
+                                        response.send(profile.links.pop());
                                     }
                                 });
                             }
@@ -67,7 +67,7 @@ module.exports = function (app) {
         });
     });
 
-    /** GET /company/:slug/links
+    /** GET /profile/:slug/links
      *
      * @autor : Rafael Erthal
      * @since : 2012-08
@@ -84,7 +84,7 @@ module.exports = function (app) {
         response.contentType('json');
 
         //busca o perfil
-        Profile.findOne({"slugs" : request.params.slug}, function (error, profile) {
+        Profile.findByIdentity(request.params.slug, function (error, profile) {
             if (error) {
                 response.send({error : error});
             } else {
@@ -92,13 +92,13 @@ module.exports = function (app) {
                 if (profile === null) {
                     response.send({error : 'profile not found'});
                 } else {
-                    response.send({links : profile.links});
+                    response.send(profile.links);
                 }
             }
         });
     });
 
-    /** GET /company/:slug/link/:id
+    /** GET /profile/:slug/link/:id
      *
      * @autor : Rafael Erthal
      * @since : 2012-08
@@ -111,11 +111,11 @@ module.exports = function (app) {
      * @request : {}
      * @response : {type,url}
      */
-    app.get('/company/:slug/link/:id', function (request, response) {
+    app.get('/profile/:slug/link/:id', function (request, response) {
         response.contentType('json');
 
         //busca o perfil
-        Profile.findOne({"slugs" : request.params.slug}, function (error, profile) {
+        Profile.findByIdentity(request.params.slug, function (error, profile) {
             if (error) {
                 response.send({error : error});
             } else {
@@ -129,10 +129,10 @@ module.exports = function (app) {
                             response.send({error : error});
                         } else {
                             //verifica se link foi encontrado
-                            if ( === null) {
+                            if (link === null) {
                                 response.send({error : 'link not found'});
                             } else {
-                                response.send({link : link});
+                                response.send(link);
                             }
                         }
                     });
@@ -141,7 +141,7 @@ module.exports = function (app) {
         });
     });
 
-    /** PUT /company/:slug/link/:id
+    /** PUT /profile/:slug/link/:id
      *
      * @autor : Rafael Erthal
      * @since : 2012-08
@@ -154,14 +154,14 @@ module.exports = function (app) {
      * @request : {login,token,type,url}
      * @response : {confirmation}
      */
-    app.put('/company/:slug/link/:id', function (request, response) {
+    app.put('/profile/:slug/link/:id', function (request, response) {
         response.contentType('json');
 
         //valida o token do usuário
         auth(request.param('token', null), function (user) {
             if (user) {
                 //busca o perfil
-                Profile.findOne({"slugs" : request.params.slug}, function (error, profile) {
+                Profile.findByIdentity(request.params.slug, function (error, profile) {
                     if (error) {
                         response.send({error : error});
                     } else {
@@ -170,7 +170,7 @@ module.exports = function (app) {
                             response.send({error : 'profile not found'});
                         } else {
                             //verifica se o usuário é dono do perfil
-                            if (! profile.isOwner(request.param('login', null))) {
+                            if (! profile.isOwner(user._id)) {
                                 response.send({error : 'permission denied'});
                             } else {
                                 //busca o link
@@ -190,7 +190,7 @@ module.exports = function (app) {
                                                 if (error) {
                                                     response.send({error : error});
                                                 } else {
-                                                    response.send({error : ''});
+                                                    response.send(link);
                                                 }
                                             });
                                         }
@@ -206,7 +206,7 @@ module.exports = function (app) {
         });
     });
 
-    /** DEL /company/:slug/link/:id
+    /** DEL /profile/:slug/link/:id
      *
      * @autor : Rafael Erthal
      * @since : 2012-08
@@ -219,14 +219,14 @@ module.exports = function (app) {
      * @request : {login,token}
      * @response : {confirmation}
      */
-    app.del('/company/:slug/link/:id', function (request, response) {
+    app.del('/profile/:slug/link/:id', function (request, response) {
         response.contentType('json');
 
         //valida o token do usuário
         auth(request.param('token', null), function (user) {
             if (user) {
                 //busca o perfil
-                Profile.findOne({"slugs" : request.params.slug}, function (error, profile) {
+                Profile.findByIdentity(request.params.slug, function (error, profile) {
                     if (error) {
                         response.send({error : error});
                     } else {
@@ -235,7 +235,7 @@ module.exports = function (app) {
                             response.send({error : 'profile not found'});
                         } else {
                             //verifica se o usuário é dono do perfil
-                            if (! profile.isOwner(request.param('login', null))) {
+                            if (! profile.isOwner(user._id)) {
                                 response.send({error : 'permission denied'});
                             } else {
                                 //busca o link
@@ -248,11 +248,12 @@ module.exports = function (app) {
                                             response.send({error : 'link not found'});
                                         } else {
                                             //remove o link
-                                            link.remove(function (error) {
+                                            link.remove();
+                                            profile.save(function (error) {
                                                 if (error) {
                                                     response.send({error : error});
                                                 } else {
-                                                    response.send({error : ''});
+                                                    response.send(null);
                                                 }
                                             });
                                         }

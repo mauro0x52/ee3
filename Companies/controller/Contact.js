@@ -248,7 +248,8 @@ module.exports = function (app) {
                                             response.send({error : 'contact not found'});
                                         } else {
                                             //remove o contato
-                                            contact.remove(function (error) {
+                                            contact.remove();
+                                            company.save(function (error) {
                                                 if (error) {
                                                     response.send({error : error});
                                                 } else {

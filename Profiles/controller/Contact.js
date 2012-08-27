@@ -32,7 +32,7 @@ module.exports = function (app) {
         auth(request.param('token', null), function (user) {
             if (user) {
                 //busca o perfil
-                Profile.findOne({"slugs" : request.params.slug}, function (error, profile) {
+                Profile.findByIdentity(request.params.slug, function (error, profile) {
                     if (error) {
                         response.send({error : error});
                     } else {
@@ -41,7 +41,7 @@ module.exports = function (app) {
                             response.send({error : 'profile not found'});
                         } else {
                             //verifica se o usuário é dono da compania
-                            if (! profile.isOwner(request.param('login', null))) {
+                            if (! profile.isOwner(user._id)) {
                                 response.send({error : 'permission denied'});
                             } else {
                                 //coloca os dados do post em um objeto
@@ -54,7 +54,7 @@ module.exports = function (app) {
                                     if (error) {
                                         response.send({error : error});
                                     } else {
-                                        response.send({error : ''});
+                                        response.send(profile.contacts.pop());
                                     }
                                 });
                             }
@@ -84,7 +84,7 @@ module.exports = function (app) {
         response.contentType('json');
 
         //busca o perfil
-        Profile.findOne({"slugs" : request.params.slug}, function (error, profile) {
+        Profile.findByIdentity(request.params.slug, function (error, profile) {
             if (error) {
                 response.send({error : error});
             } else {
@@ -92,7 +92,7 @@ module.exports = function (app) {
                 if (profile === null) {
                     response.send({error : 'profile not found'});
                 } else {
-                    response.send({contacts : profile.contacts});
+                    response.send(profile.contacts);
                 }
             }
         });
@@ -111,11 +111,11 @@ module.exports = function (app) {
      * @request : {}
      * @response : {type,address}
      */
-    app.get('/company/:slug/contact/:id', function (request, response) {
+    app.get('/profile/:slug/contact/:id', function (request, response) {
         response.contentType('json');
 
         //busca o perfil
-        Profile.findOne({"slugs" : request.params.slug}, function (error, profile) {
+        Profile.findByIdentity(request.params.slug, function (error, profile) {
             if (error) {
                 response.send({error : error});
             } else {
@@ -132,7 +132,7 @@ module.exports = function (app) {
                             if (contact === null) {
                                 response.send({error : 'contact not found'});
                             } else {
-                                response.send({contact : contact});
+                                response.send(contact);
                             }
                         }
                     });
@@ -154,14 +154,14 @@ module.exports = function (app) {
      * @request : {login,token,type,address}
      * @response : {confirmation}
      */
-    app.put('/company/:slug/contact/:id', function (request, response) {
+    app.put('/profile/:slug/contact/:id', function (request, response) {
         response.contentType('json');
 
         //valida o token do usuário
         auth(request.param('token', null), function (user) {
             if (user) {
                 //busca o perfil
-                Profile.findOne({"slugs" : request.params.slug}, function (error, profile) {
+                Profile.findByIdentity(request.params.slug, function (error, profile) {
                     if (error) {
                         response.send({error : error});
                     } else {
@@ -170,7 +170,7 @@ module.exports = function (app) {
                             response.send({error : 'profile not found'});
                         } else {
                             //verifica se o usuário é dono do perfil
-                            if (! profile.isOwner(request.param('login', null))) {
+                            if (! profile.isOwner(user._id)) {
                                 response.send({error : 'permission denied'});
                             } else {
                                 //busca o contato
@@ -190,7 +190,7 @@ module.exports = function (app) {
                                                 if (error) {
                                                     response.send({error : error});
                                                 } else {
-                                                    response.send({error : ''});
+                                                    response.send(contact);
                                                 }
                                             });
                                         }
@@ -219,14 +219,14 @@ module.exports = function (app) {
      * @request : {login,token}
      * @response : {confirmation}
      */
-    app.del('/company/:slug/contact/:id', function (request, response) {
+    app.del('/profile/:slug/contact/:id', function (request, response) {
         response.contentType('json');
 
         //valida o token do usuário
         auth(request.param('token', null), function (user) {
             if (user) {
                 //busca o perfil
-                Profile.find({slug : request.params.slug}, function (error, profile) {
+                Profile.findByIdentity(request.params.slug, function (error, profile) {
                     if (error) {
                         response.send({error : error});
                     } else {
@@ -235,7 +235,7 @@ module.exports = function (app) {
                             response.send({error : 'profile not found'});
                         } else {
                             //verifica se o usuário é dono do perfil
-                            if (! profile.isOwner(request.param('login', null))) {
+                            if (! profile.isOwner(user._id)) {
                                 response.send({error : 'permission denied'});
                             } else {
                                 //busca o contato
@@ -248,11 +248,12 @@ module.exports = function (app) {
                                             response.send({error : 'contact not found'});
                                         } else {
                                             //remove o contato
-                                            contact.remove(function (error) {
+                                            contact.remove();
+                                            profile.save(function (error) {
                                                 if (error) {
                                                     response.send({error : error});
                                                 } else {
-                                                    response.send({error : ''});
+                                                    response.send(null);
                                                 }
                                             });
                                         }

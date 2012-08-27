@@ -58,6 +58,7 @@ profileSchema.pre('save', function(next) {
 
     });
 });
+
 /** IsOwner
  * @author : Rafael Erthal e Lucas Kalado
  * @since : 2012-08
