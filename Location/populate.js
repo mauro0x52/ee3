@@ -1,73 +1,83 @@
-var model = require('./model/Model.js');
+var model = require('./model/Model.js'), country, state, city, region, countriesIds, citiesIds, statesIds, regionId;
 
+var rand = function(type) {
+    var crypto = require('crypto');
+    var string;
+    var hash = crypto.createHash('sha1').update(crypto.randomBytes(10)).digest('hex').substring(0, 5);
 
-//Countries
-var brasil = new model.Country({_id: '50118bc9bb469bc90c000001', name: 'Brasil', acronym: 'BR', slug:"brasil", ddi: 55, regionIds:["50118c17f21a5fce0c000003"]});
-var usa = new model.Country({_id: '50118bc9bb469bc90c000002', name: 'United States', acronym: 'USA', slug: "united states", ddi: 1, regionIds:["50118c17f21a5fce0c000003"]});
+    if (type === 'email') {
+        string = 'testes+' + hash + '@empreendemia.com.br';
+    } else {
+        string = hash;
+    }
+    return string;
+}
 
+//Populando Location
 
-//Region
-var america = new model.Region({_id: '50118c17f21a5fce0c000003',name: 'America', slug: 'america',
-                        countryIds:[
-                            '50118bc9bb469bc90c000001'
-                        ],
-                        stateIds:[
-                            "501190446b48b7530d000005",
-                            "501190446b48b7530d000006"
-                        ],
-                        cityIds:[
-                            "50119a84e5385bfc0d00000c",
-                            "50119a84e5385bfc0d000009"
-                        ]});
-                        
-var africa = new model.Region({_id: '50118c17f21a5fce0c000004',name: 'Africa', slug: 'africa',
-                        countryIds:[
-                            '50118bc9bb469bc90c000002'
-                        ],
-                        stateIds:[
-                            "501190446b48b7530d000007",
-                            "501190446b48b7530d000008"
-                        ],
-                        cityIds:[
-                            "50119a84e5385bfc0d00000e",
-                            "50119a84e5385bfc0d00000f"
-                        ]})
+var region = new model.Region({
+    name: 'Am'+rand()+'a',
+    countryIds:[],
+    stateIds:[],
+    cityIds:[]
+})
 
+region.save(function(error){
+    if (error) {
+        console.log(error);
+    } else {
+        regionId : region._id;
+    }
+})
 
-//States
-var mg = new model.State({_id:'501190446b48b7530d000005',name:'Minas Gerais',slug:'minas_gerais',countryId:'50118bc9bb469bc90c000001', regionIds:["50118c17f21a5fce0c000003"]});
-var sp = new model.State({_id:'501190446b48b7530d000006',name:'São Paulo',slug:'sao_paulo',countryId:'50118bc9bb469bc90c000001', regionIds:["50118c17f21a5fce0c000003"]});
-var alabama = new model.State({_id:'501190446b48b7530d000007',name:'Alabama',slug:'alabama',countryId:'50118bc9bb469bc90c000002'});
-var newyork = new model.State({_id:'501190446b48b7530d000008',name:'New York',slug:'new_york',countryId:'50118bc9bb469bc90c000002'});
-
-
-//Cities
-var bh = new model.City({_id:"50119a84e5385bfc0d00000c",name:'Belo Horizonte', slug:"belo_horizonte",ddd:'31', stateId:'501190446b48b7530d000005', regionIds:["50118c17f21a5fce0c000003"]});
-var contagem = new model.City({_id:"50119a84e5385bfc0d000009",name:'Contagem', slug:"contagem", ddd:'31', stateId:'501190446b48b7530d000005', regionIds:["50118c17f21a5fce0c000003"]});
-var campinas = new model.City({_id:"50119a84e5385bfc0d00000a",name:'Campinas', slug:"campinas", ddd:'19', stateId:'501190446b48b7530d000006'});
-var sp = new model.City({_id:"50119a84e5385bfc0d00000b",name:'São Paulo', slug:"sao_paulo", ddd:'11', stateId:'501190446b48b7530d000006'});
-var montgomery = new model.City({_id:"50119a84e5385bfc0d00000d",name:'Montgomery', slug:"montgomery", ddd:'00', stateId:'501190446b48b7530d000007'});
-var loxley = new model.City({_id:"50119a84e5385bfc0d00000e",name:'Loxley', slug:"loxley", ddd:'00', stateId:'501190446b48b7530d000007'});
-var albany = new model.City({_id:"50119a84e5385bfc0d00000f",name:'Albany', slug:"albany", ddd:'00', stateId:'501190446b48b7530d000008'});
-var buffalo = new model.City({_id:"50119a84e5385bfc0d000010",name:'Buffalo', slug:"buffalo", ddd:'00', stateId:'501190446b48b7530d000008'});
-
-
-brasil.save()
-usa.save()
-
-america.save()
-africa.save()
-
-mg.save();
-sp.save();
-alabama.save();
-newyork.save();
-
-bh.save();
-contagem.save();
-campinas.save();
-sp.save();
-montgomery.save();
-loxley.save();
-albany.save();
-buffalo.save();
+for(i=0;i<15;i++){
+    //Gera Country
+    var country = new model.Country({
+        name: 'Pais'+rand(),
+        acronym: 'U'+rand()+'A',
+        ddi: '123',
+        regionIds: regionId
+    });
+    //Salva Country
+    country.save(function(error){
+        if (error) {
+            console.log(error)
+        } else {
+            console.log(country._id);
+            countriesIds[i] = country._id;
+            for(n=0;n<20;n++){
+                //Cria states
+                var state = new model.State({
+                    name:'M'+rand()+'s',
+                    countryId:country._id,
+                    regionIds: regionId
+                });
+                //Salva State
+                state.save(function(error){
+                    if (error) {
+                        console.log(error);
+                    } else {
+                        statesIds[''+n+''] = state._id;
+                        for(b=0;b<20;b++){
+                            //Cria cities
+                            var city = new model.City({
+                                name:'Be '+rand()+' te',
+                                ddd:'123',
+                                stateId : state._id,
+                                regionIds: regionId
+                            })
+                            //Salva Cities
+                            city.save(function(error){
+                                if (error) {
+                                    console.log(error);
+                                } else {
+                                    citiesIds[b] = city._id;
+                                }
+                            });
+                        }
+                    }
+                });
+            }
+        }
+    })
+}

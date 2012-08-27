@@ -13,7 +13,7 @@ var crypto = require('crypto'),
 
 stateSchema = new Schema({
     name      : {type : String, trim : true, required : true},
-    slug      : {type : String, trim : true, required : true, unique : true},
+    slug      : {type : String, trim : true, unique : true},
     countryId : {type: objectId},
     regionIds : [{type: objectId}]
 });
