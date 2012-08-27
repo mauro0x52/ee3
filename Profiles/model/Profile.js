@@ -82,7 +82,7 @@ profileSchema.methods.isOwner = function (id) {
 };
 
 
-/** FindByIdOrSlug
+/** FindByIdentity
  * @author : Mauro Ribeiro
  * @since : 2012-08
  *

@@ -23,18 +23,18 @@ module.exports = function (app) {
      * @request : {slug}
      * @response : {jobs, slugs, name, surname, thumbnail, about, phones, contacts, links}
      */
-    app.get('/profile/:slug', function (request,response) {
+    app.get('/profile/:profile_id', function (request,response) {
         response.contentType('json');
 
         //Localiza o Profile
-        Profile.findOne({"slugs" : request.params.slug}, function (error, profile) {
+        Profile.findByIdentity(request.params.profile_id, function (error, profile) {
             if (error) {
                 response.send({error: error});
             } else {
                 if (profile === null) {
                     response.send({error : 'profile not found'});
                 } else {
-                    response.send({profile: profile});
+                    response.send(profile);
                 }
             }
         });
@@ -97,14 +97,14 @@ module.exports = function (app) {
      * @request : {slugs, name, surname, about, login, token}
      * @response : {this}
      */
-    app.put('/profile/:slug', function (request,response) {
+    app.put('/profile/:profile_id', function (request,response) {
         response.contentType('json');
 
         //Verifica se o usuário logado é válido
         auth(request.param('token'), function (user) {
             if (user) {
                 //Localiza o Profile
-                Profile.findOne({"slugs" : request.params.slug}, function (error, profile) {
+                Profile.findByIdentity(request.params.profile_id, function (error, profile) {
                     if (error) {
                         response.send({error: error});
                     } else {
@@ -112,22 +112,32 @@ module.exports = function (app) {
                         if (profile === null) {
                             response.send({error : "profile not found"});
                         } else {
-                            profile.name = request.param('name', null);
-                            profile.surname = request.param('surname', null);
-                            profile.about = request.param('about', null);
-                            profile.dateUpdated = new Date();
-                            profile.save(function (error) {
-                                if (error) {
-                                    response.send({error : error});
-                                } else {
-                                    response.send(profile);
+                            if (!profile.isOwner(user._id)) {
+                                response.send({error : 'permission denied'});
+                            } else {
+                                if (request.param('name')) {
+                                    profile.name = request.param('name');
                                 }
-                            });
+                                if (request.param('surname')) {
+                                    profile.surname = request.param('surname');
+                                }
+                                if (request.param('about')) {
+                                    profile.about = request.param('about');
+                                }
+                                profile.dateUpdated = new Date();
+                                profile.save(function (error) {
+                                    if (error) {
+                                        response.send({error : error});
+                                    } else {
+                                        response.send(profile);
+                                    }
+                                });
+                            }
                         }
                     }
                 });
             } else {
-                request.send({error : 'invalid token'});
+                response.send({error : 'invalid token'});
             }
         });
     });
