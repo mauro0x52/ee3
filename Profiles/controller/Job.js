@@ -192,7 +192,7 @@ module.exports = function (app) {
                                             job.dateStart = request.param('dateStart', null);
                                             job.dateEnd = request.param('dateEnd', null);
                                             //salva as alterações
-                                            job.save(function (error) {
+                                            profile.save(function (error) {
                                                 if (error) {
                                                     response.send({error : error});
                                                 } else {

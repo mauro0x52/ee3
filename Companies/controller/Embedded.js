@@ -186,7 +186,7 @@ module.exports = function (app) {
                                             embedded.link = request.param('link', null);
                                             embedded.embed = request.param('embed', null);
                                             //salva as alterações
-                                            embedded.save(function (error) {
+                                            company.save(function (error) {
                                                 if (error) {
                                                     response.send({error : error});
                                                 } else {

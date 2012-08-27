@@ -192,7 +192,7 @@ module.exports = function (app) {
                                             address.city = request.param('city', null);
                                             address.headQuarters = request.param('headQuarters', null);
                                             //salva as alterações
-                                            address.save(function (error) {
+                                            company.save(function (error) {
                                                 if (error) {
                                                     response.send({error : error});
                                                 } else {

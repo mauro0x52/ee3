@@ -188,7 +188,7 @@ module.exports = function (app) {
                                         phone.areaCode = request.param('areaCode', null);
                                         phone.intCode = request.param('intCode', null);
                                         //salva as alterações
-                                        phone.save(function (error) {
+                                        profile.save(function (error) {
                                             if (error) {
                                                 response.send({error : error});
                                             } else {
