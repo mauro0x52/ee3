@@ -44,8 +44,7 @@ describe('POST /company/:company_slug/product/:product_slug/image', function() {
                     },
                     function(error, data, response) {
                         productA = data;
-                        saveAll++
-                        if (saveAll === 3) done();
+                        if (++saveAll === 3) done();
                     }
                 );
                 api.post('companies', '/company/' + companyA.slug + '/product',
@@ -55,8 +54,7 @@ describe('POST /company/:company_slug/product/:product_slug/image', function() {
                     },
                     function(error, data, response) {
                         productA2 = data;
-                        saveAll++;
-                        if (saveAll === 3) done();
+                        if (++saveAll === 3) done();
                     }
                 );
             });
@@ -78,8 +76,7 @@ describe('POST /company/:company_slug/product/:product_slug/image', function() {
                 active : true
             }, function(error, data) {
                 companyB = data;
-                saveAll++;
-                if (saveAll === 3) done();
+                if (++saveAll === 3) done();
             });
         });
     })
