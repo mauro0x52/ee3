@@ -234,8 +234,60 @@ describe('PUT /profile/:profile_id', function() {
 });
 
 describe('DEL /profile/:profile_id', function() {
-    it('token inválido');
-    it('perfil que não existe');
-    it('perfil de outro usuário');
-    it('remove perfil');
+    it('token inválido', function (done) {
+        api.del('profiles', '/profile/'+profileA.slug, {
+                token : 'asdfvc98y3q24iourbewfsdljk'
+            }, function(error, data, response) {
+                if (error) done(error);
+                else {
+                    response.should.have.status(200);
+                    data.should.have.property('error');
+                    done();
+                }
+            }
+        );
+    });
+    it('perfil que não existe', function (done) {
+        api.del('profiles', '/profile/asdksdkvlnxlkgv', {
+                token : userA.token
+            }, function(error, data, response) {
+                if (error) done(error);
+                else {
+                    data.should.have.property('error');
+                    done();
+                }
+            }
+        );
+    });
+    it('perfil de outro usuário', function (done) {
+        api.del('profiles', '/profile/'+profileB.slug, {
+                token : userA.token
+            }, function(error, data, response) {
+                if (error) done(error);
+                else {
+                    data.should.have.property('error');
+                    done();
+                }
+            }
+        );
+    });
+    it('remove perfil', function (done) {
+        api.del('profiles', '/profile/'+profileA.slug, {
+                token : userA.token
+            }, function(error, data, response) {
+                if (error) done(error);
+                else {
+                    data.should.have.property('error');
+                    api.get('profiles', '/profile/' + profileA.slug, {}, function(error, data, response) {
+                        if (error) done(error);
+                        else {
+                            should.not.exist(data);
+                            done();
+                        }
+                    });
+                    done();
+                }
+            }
+        );
+    });
 });
