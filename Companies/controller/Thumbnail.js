@@ -94,7 +94,6 @@ module.exports = function (app) {
                                                                 }
                                                             };
                                                             product.parent.save(function (error) {
-                                                                console.log(product);
                                                                 if (error) {
                                                                     response.send({error: error});
                                                                 }

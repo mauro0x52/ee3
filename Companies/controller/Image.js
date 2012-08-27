@@ -13,7 +13,7 @@ module.exports = function (app) {
         files  = require('./../Utils.js').files,
         Company = Model.Company;
 
-    /** POST /company/:company_slug/product/:product_slug/image
+    /** POST /company/:company_id/product/:product_id/image
      *
      * @autor : Rafael Erthal
      * @since : 2012-08
@@ -201,7 +201,7 @@ module.exports = function (app) {
         });
     });
 
-    /** PUT /company/:company_slug/product/:product_slug/image/:id
+    /** PUT /company/:company_id/product/:product_id/image/:id
      *
      * @autor : Rafael Erthal
      * @since : 2012-08
@@ -214,14 +214,14 @@ module.exports = function (app) {
      * @request : {login,token,title,legend,url}
      * @response : {confirmation}
      */
-    app.put('/company/:company_slug/product/:product_slug/image/:id', function (request, response) {
+    app.put('/company/:company_id/product/:product_id/image/:image_id', function (request, response) {
         response.contentType('json');
 
         //valida o token do usuário
         auth(request.param('token', null), function (user) {
             if (user) {
                 //busca a compania
-                Company.find({slug : request.params.company_slug}, function (error, company) {
+                Company.findByIdentity(request.params.company_id, function (error, company) {
                     if (error) {
                         response.send({error : error});
                     } else {
@@ -230,11 +230,11 @@ module.exports = function (app) {
                             response.send({error : 'company not found'});
                         } else {
                             //verifica se o usuário é dono da compania
-                            if (! company.isOwner(request.param('login', null))) {
+                            if (! company.isOwner(user._id)) {
                                 response.send({error : 'permission denied'});
                             } else {
                                 //busca o produto
-                                company.findProduct(request.params.product_slug, function (error, product) {
+                                company.findProduct(request.params.product_id, function (error, product) {
                                     if (error) {
                                         response.send({error : error});
                                     } else {
@@ -243,7 +243,7 @@ module.exports = function (app) {
                                             response.send({error : 'product not found'});
                                         } else {
                                             //busca a imagem
-                                            product.findImage(request.params.id, function (error, image) {
+                                            product.findImage(request.params.image_id, function (error, image) {
                                                 if (error) {
                                                     response.send({error : error});
                                                 } else {
@@ -254,13 +254,12 @@ module.exports = function (app) {
                                                         //altera os dados da imagem
                                                         image.title = request.param('title', null);
                                                         image.legend = request.param('legend', null);
-                                                        image.url = request.param('url', null);
                                                         //salva as modificações
-                                                        image.save(function (error) {
+                                                        company.save(function (error) {
                                                             if (error) {
                                                                 response.send({error : error});
                                                             } else {
-                                                                response.send({error : ''});
+                                                                response.send(image);
                                                             }
                                                         });
                                                     }
@@ -279,7 +278,7 @@ module.exports = function (app) {
         });
     });
 
-    /** DEL /company/:company_slug/product/:product_slug/image/:id
+    /** DEL /company/:company_id/product/:product_id/image/:id
      *
      * @autor : Rafael Erthal
      * @since : 2012-08
@@ -292,14 +291,14 @@ module.exports = function (app) {
      * @request : {login,token}
      * @response : {confirmation}
      */
-    app.del('/company/:company_slug/product/:product_slug/image/:id', function (request, response) {
+    app.del('/company/:company_id/product/:product_id/image/:image_id', function (request, response) {
         response.contentType('json');
 
         //valida o token do usuário
         auth(request.param('token', null), function (user) {
             if (user) {
                 //busca a compania
-                Company.find({slug : request.params.company_slug}, function (error, company) {
+                Company.findByIdentity(request.params.company_id, function (error, company) {
                     if (error) {
                         response.send({error : error});
                     } else {
@@ -308,11 +307,11 @@ module.exports = function (app) {
                             response.send({error : 'company not found'});
                         } else {
                             //verifica se o usuário é dono da compania
-                            if (! company.isOwner(request.param('login', null))) {
+                            if (!company.isOwner(user._id)) {
                                 response.send({error : 'permission denied'});
                             } else {
                                 //busca o produto
-                                company.findProduct(request.params.product_slug, function (error, product) {
+                                company.findProduct(request.params.product_id, function (error, product) {
                                     if (error) {
                                         response.send({error : error});
                                     } else {
@@ -321,7 +320,7 @@ module.exports = function (app) {
                                             response.send({error : 'product not found'});
                                         } else {
                                             //busca a imagem
-                                            product.findImage(request.params.id, function (error, image) {
+                                            product.findImage(request.params.image_id, function (error, image) {
                                                 if (error) {
                                                     response.send({error : error});
                                                 } else {
@@ -329,12 +328,13 @@ module.exports = function (app) {
                                                     if (image === null) {
                                                         response.send({error : 'image not found'});
                                                     } else {
+                                                        image.remove();
                                                         //remove a imagem
-                                                        image.remove(function (error) {
+                                                        company.save(function (error) {
                                                             if (error) {
                                                                 response.send({error : error});
                                                             } else {
-                                                                response.send({error : ''});
+                                                                response.send(null);
                                                             }
                                                         });
                                                     }
