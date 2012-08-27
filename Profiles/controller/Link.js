@@ -248,7 +248,8 @@ module.exports = function (app) {
                                             response.send({error : 'link not found'});
                                         } else {
                                             //remove o link
-                                            link.remove(function (error) {
+                                            link.remove();
+                                            profile.save(function (error) {
                                                 if (error) {
                                                     response.send({error : error});
                                                 } else {

@@ -249,7 +249,8 @@ module.exports = function (app) {
                                             response.send({error : 'phone not found'});
                                         } else {
                                             //remove o telefone
-                                            phone.remove(function (error) {
+                                            phone.remove();
+                                            profile.save(function (error) {
                                                 if (error) {
                                                     response.send({error : error});
                                                 } else {

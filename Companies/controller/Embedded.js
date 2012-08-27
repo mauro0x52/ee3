@@ -248,7 +248,8 @@ module.exports = function (app) {
                                             response.send({error : 'embedded not found'});
                                         } else {
                                             //remove o embedded
-                                            embedded.remove(function (error) {
+                                            embedded.remove();
+                                            company.save(function (error) {
                                                 if (error) {
                                                     response.send({error : error});
                                                 } else {

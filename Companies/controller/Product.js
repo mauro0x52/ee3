@@ -237,7 +237,8 @@ module.exports = function (app) {
                                     if (error) {
                                         request.send({error : error});
                                     } else {
-                                        product.remove(function(error){
+                                        product.remove();
+                                        company.save(function(error){
                                             if (error) {
                                                 response.send({error : error});
                                             } else {

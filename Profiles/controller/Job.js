@@ -254,7 +254,8 @@ module.exports = function (app) {
                                             response.send({error : 'job not found'});
                                         } else {
                                             //remove o trabalho
-                                            job.remove(function (error) {
+                                            job.remove();
+                                            profile.save(function (error) {
                                                 if (error) {
                                                     response.send({error : error});
                                                 } else {
