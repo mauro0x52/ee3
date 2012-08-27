@@ -103,7 +103,7 @@ module.exports = function (app) {
         });
     });
 
-    /** GET /company/:company_slug/product/:product_slug
+    /** GET /company/:company_slug/product/:product_id
      *
      * @autor : Rafael Erthal
      * @since : 2012-08
@@ -140,7 +140,7 @@ module.exports = function (app) {
         });
     });
 
-    /** PUT /company/:company_slug/product/:product_slug
+    /** PUT /company/:company_slug/product/:product_id
      *
      * @autor : Rafael Erthal
      * @since : 2012-08
@@ -153,7 +153,7 @@ module.exports = function (app) {
      * @request : {token,name,slug,abstract,about}
      * @response : {confirmation}
      */
-    app.put('/company/:company_id/product/:product_slug', function (request, response) {
+    app.put('/company/:company_id/product/:product_id', function (request, response) {
         response.contentType('json');
 
         //valida o token do usuário
@@ -172,7 +172,7 @@ module.exports = function (app) {
                             if (! company.isOwner(user._id)) {
                                 response.send({error : 'permission denied'});
                             } else {
-                                company.findProduct(request.params.product_slug, function(error, product){
+                                company.findProduct(request.params.product_id, function(error, product){
                                     if (!product) {
                                         response.send({error : 'product not found'});
                                     }
@@ -182,11 +182,11 @@ module.exports = function (app) {
                                         product.abstract = request.param('abstract');
                                         product.about = request.param('about');
 
-                                        product.save(function(error){
+                                        company.save(function(error){
                                             if (error) {
                                                 response.send({error : error});
                                             } else {
-                                                response.send({Product : product});
+                                                response.send(product);
                                             }
                                         });
                                     }
@@ -235,13 +235,14 @@ module.exports = function (app) {
                             } else {
                                 company.findProduct (request.params.product_id, function(error, product){
                                     if (error) {
-                                        request.send({error : error});
+                                        response.send({error : error});
                                     } else {
-                                        product.remove(function(error){
+                                        product.remove();
+                                        company.save(function(error){
                                             if (error) {
                                                 response.send({error : error});
                                             } else {
-                                                response.send({error:''});
+                                                response.send(null);
                                             }
                                         })
                                     }

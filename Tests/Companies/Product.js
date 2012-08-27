@@ -177,7 +177,7 @@ describe('GET /company/:company_id/products', function() {
             if (error) done(error);
             else {
                 data.should.not.have.property('error');
-                data.length.should.be.above(9);
+                data.length.should.be.above(5);
                 for (var i = 0; i < data.length; i++) {
                     data[i].should.have.property('_id');
                     data[i].should.have.property('slug');
@@ -320,15 +320,25 @@ describe('PUT /company/:company_id/product/:product_id', function() {
     it('mantem slug', function(done) {
         api.put('companies', '/company/' + company.slug + '/product/' + product.slug, {
             token : user.token,
-            name : product.name + '       !@$#%    '
+            name : product.name + '!@$#%    '
         }, function(error, data, response) {
             if (error) done(error);
             else {
                 data.should.not.have.property('error');
-                data.should.not.have.property('_id').equal(product._id);
-                data.should.not.have.property('slug').equal(product.slug);
-                data.should.not.have.property('name').equal(product.name + ' !@$#%');
-                done();
+                data.should.have.property('_id').equal(product._id);
+                data.should.have.property('slug').equal(product.slug);
+                data.should.have.property('name').equal(product.name + '!@$#%');
+                product = data;
+                api.get('companies', '/company/' + company.slug + '/product/' + product.slug, {}, function (error, data, response) {
+                    if (error) done(error);
+                    else {
+                        data.should.not.have.property('error');
+                        data.should.have.property('_id').equal(product._id);
+                        data.should.have.property('slug').equal(product.slug);
+                        data.should.have.property('name').equal(product.name);
+                        done();
+                    }
+                });
             }
         });
     });
@@ -340,10 +350,103 @@ describe('PUT /company/:company_id/product/:product_id', function() {
             if (error) done(error);
             else {
                 data.should.not.have.property('error');
-                data.should.not.have.property('_id').equal(product._id);
-                data.should.not.have.property('slug').equal('vou-mudar-o-nome-'+random);
-                data.should.not.have.property('name').equal('Vou mudar o nome '+random);
+                data.should.have.property('_id').equal(product._id);
+                data.should.have.property('slug').equal('vou-mudar-o-nome-'+random);
+                data.should.have.property('name').equal('Vou mudar o nome '+random);
+                product = data;
+                api.get('companies', '/company/' + company.slug + '/product/' + product.slug, {}, function (error, data, response) {
+                    if (error) done(error);
+                    else {
+                        data.should.not.have.property('error');
+                        data.should.have.property('_id').equal(product._id);
+                        data.should.have.property('slug').equal('vou-mudar-o-nome-'+random);
+                        data.should.have.property('name').equal('Vou mudar o nome '+random);
+                        done();
+                    }
+                });
+            }
+        });
+    });
+});
+
+describe('DEL /company/:company_id/product/:product_id', function() {
+    it('token inválido', function(done) {
+        api.del('companies', '/company/' + company.slug + '/product/' + product.slug, {
+            token : 'fdg9nhoifkjnslkdnlksndfsdf'
+        }, function(error, data, response) {
+            if (error) done(error);
+            else {
+                response.should.have.status(200);
+                should.exist(data);
+                data.should.have.property('error');
                 done();
+            }
+        });
+    });
+    it('empresa não encontrada', function(done) {
+        api.del('companies', '/company/adsf-g0hpotlmaçsldma/product/' + product.slug, {
+            token : user.token
+        }, function(error, data, response) {
+            if (error) done(error);
+            else {
+                response.should.have.status(200);
+                should.exist(data);
+                data.should.have.property('error');
+                done();
+            }
+        });
+    });
+    it('produto não encontrado', function(done) {
+        api.del('companies', '/company/' + company.slug + '/product/adiopbfngoib214o3i5b5osnbd', {
+            token : user.token
+        }, function(error, data, response) {
+            if (error) done(error);
+            else {
+                response.should.have.status(200);
+                should.exist(data);
+                data.should.have.property('error');
+                done();
+            }
+        });
+    });
+    it('empresa sem produto', function(done) {
+        api.del('companies', '/company/' + company2.slug + '/product/adiopbfngoib214o3i5b5osnbd', {
+            token : user2.token
+        }, function(error, data, response) {
+            if (error) done(error);
+            else {
+                response.should.have.status(200);
+                should.exist(data);
+                data.should.have.property('error');
+                done();
+            }
+        });
+    });
+    it('empresa de outro usuário', function(done) {
+        api.del('companies', '/company/' + company.slug + '/product/' + product.slug, {
+            token : user2.token
+        }, function(error, data, response) {
+            if (error) done(error);
+            else {
+                data.should.have.property('error');
+                done();
+            }
+        });
+    });
+    it('apaga produto', function(done) {
+        api.del('companies', '/company/' + company.slug + '/product/' + product.slug, {
+            token : user.token
+        }, function(error, data, response) {
+            if (error) done(error);
+            else {
+                should.not.exist(data);
+                api.get('companies', '/company/' + company.slug + '/product/' + product.slug, {}, function (error, data, response) {
+                    if (error) done(error);
+                    else {
+                        data.should.have.property('error');
+                        done();
+                    }
+                });
             }
         });
     });
