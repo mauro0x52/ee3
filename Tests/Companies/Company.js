@@ -851,7 +851,18 @@ describe('PUT /company/:company:id', function(error, data){
                 data.should.have.property('name').equal('Outro nome muuuito bacana '+random);
                 data.should.have.property('dateUpdated').above(company.dateUpdated);
                 company = data;
-                done();
+                db.openCollection('companies', 'companies', function(error, companies) {
+                    companies.findOne({slug : company.slug }, function (error, dbcompany) {
+                        if (error) done (error);
+                        else {
+                            dbcompany.should.have.property('_id');
+                            dbcompany._id.toString().should.be.equal(data._id);
+                            dbcompany.should.have.property('slug').equal(data.slug);
+                            dbcompany.should.have.property('name').equal(data.name);
+                            done();
+                        }
+                    })
+                });
             }
         });
     });
@@ -865,7 +876,18 @@ describe('PUT /company/:company:id', function(error, data){
                 data.should.have.property('_id').equal(company._id);
                 data.should.have.property('slug').equal(company.slug);
                 company = data;
-                done();
+                db.openCollection('companies', 'companies', function(error, companies) {
+                    companies.findOne({slug : company.slug }, function (error, dbcompany) {
+                        if (error) done (error);
+                        else {
+                            dbcompany.should.have.property('_id');
+                            dbcompany._id.toString().should.be.equal(data._id);
+                            dbcompany.should.have.property('slug').equal(data.slug);
+                            dbcompany.should.have.property('name').equal(data.name);
+                            done();
+                        }
+                    })
+                });
             }
         });
     });
@@ -905,23 +927,6 @@ describe('DEL /company/:company_id', function(error, data){
             }
         });
     });
-    it('apaga', function(done) {
-        api.del('companies', '/company/'+company.slug, {
-            token : user.token
-        }, function (error, data, response) {
-            if (error) done(error);
-            else {
-                should.not.exist(data);
-                api.get('companies', '/company/'+company.slug, {}, function(error, data, response) {
-                    if (error) done(error);
-                    else {
-                        data.should.have.property('error');
-                        done();
-                    }
-                })
-            }
-        });
-    });
     it('empresa criada por outro usuário', function(done) {
         api.del('companies', '/company/'+company.slug, {
             token : user2.token
@@ -930,6 +935,25 @@ describe('DEL /company/:company_id', function(error, data){
             else {
                 data.should.have.property('error');
                 done();
+            }
+        });
+    });
+    it('apaga', function(done) {
+        api.del('companies', '/company/'+company.slug, {
+            token : user.token
+        }, function (error, data, response) {
+            if (error) done(error);
+            else {
+                should.not.exist(data);
+                db.openCollection('companies', 'companies', function(error, companies) {
+                    companies.count({slug : company.slug }, function (error, count) {
+                        if (error) done (error);
+                        else {
+                            count.should.be.equal(0);
+                            done();
+                        }
+                    })
+                });
             }
         });
     });
