@@ -180,7 +180,6 @@ describe('POST /company/[slug]/address', function () {
                     data.should.have.property('street', street);
                     data.should.have.property('number', number);
                     data.should.have.property('complement', complement);
-                    data.should.have.property('city', city);
                     done();
                 }
             }
@@ -623,7 +622,6 @@ describe('PUT /company/[slug]/address/[id]', function () {
                 data.should.have.property('street', street);
                 data.should.have.property('number', number);
                 data.should.have.property('complement', complement);
-                data.should.have.property('city', city);
                 done();
             }
         });

@@ -10,6 +10,7 @@ module.exports = function (app) {
 
     var Model = require('./../model/Model.js'),
         auth  = require('./../Utils.js').auth,
+        ObjectID = require('mongoose').Types.ObjectId,
         Company = Model.Company;
 
     /** POST /company/:slug/address
@@ -49,7 +50,7 @@ module.exports = function (app) {
                                     street : request.param('street', null),
                                     number : request.param('number', null),
                                     complement : request.param('complement', null),
-                                    city : request.param('city', null),
+                                    city : new ObjectID(request.param('city', null)),
                                     headQuarters : request.param('headQuarters', null)
                                 });
                                 //salva o endereço
@@ -189,7 +190,7 @@ module.exports = function (app) {
                                             address.street = request.param('street', null);
                                             address.number = request.param('number', null);
                                             address.complement = request.param('complement', null);
-                                            address.city = request.param('city', null);
+                                            address.city = new ObjectID(request.param('city', null));
                                             address.headQuarters = request.param('headQuarters', null);
                                             //salva as alterações
                                             company.save(function (error) {
