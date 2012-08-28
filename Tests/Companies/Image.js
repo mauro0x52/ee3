@@ -44,39 +44,38 @@ describe('POST /company/:company_slug/product/:product_slug/image', function() {
                     },
                     function(error, data, response) {
                         productA = data;
-                        if (++saveAll === 3) done();
+                        api.post('companies', '/company/' + companyA.slug + '/product',
+                        {
+                            token : userA.token,
+                            name : 'Outro produto' + random
+                        },
+                        function(error, data, response) {
+                            productA2 = data;
+                            // cria usuario B
+                            api.post('auth', '/user', {
+                                username : userB.username,
+                                password : 'testando',
+                                password_confirmation : 'testando'
+                            }, function(error, data) {
+                                userB.token = data.token;
+                               // cria empresa
+                               api.post('companies', '/company', {
+                                   token : userB.token,
+                                   name : 'Empresa '+random,
+                                   activity : 'consultoria em testes',
+                                   type : 'company',
+                                   profile : 'both',
+                                   active : true
+                               }, function(error, data) {
+                                   companyB = data;
+                                   done();
+                               });
+                            });
+                        }
+                    );
                     }
                 );
-                api.post('companies', '/company/' + companyA.slug + '/product',
-                    {
-                        token : userA.token,
-                        name : 'Outro produto' + random
-                    },
-                    function(error, data, response) {
-                        productA2 = data;
-                        if (++saveAll === 3) done();
-                    }
-                );
-            });
-        });
-        // cria usuario B
-        api.post('auth', '/user', {
-            username : userB.username,
-            password : 'testando',
-            password_confirmation : 'testando'
-        }, function(error, data) {
-            userB.token = data.token;
-            // cria empresa
-            api.post('companies', '/company', {
-                token : userB.token,
-                name : 'Empresa '+random,
-                activity : 'consultoria em testes',
-                type : 'company',
-                profile : 'both',
-                active : true
-            }, function(error, data) {
-                companyB = data;
-                if (++saveAll === 3) done();
+                
             });
         });
     })

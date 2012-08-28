@@ -93,7 +93,7 @@ module.exports = function (app) {
                                                                     legend : '200x200 thumbnail'
                                                                 }
                                                             };
-                                                            product.parent.save(function (error) {
+                                                            company.save(function (error) {
                                                                 if (error) {
                                                                     response.send({error: error});
                                                                 }
@@ -281,7 +281,7 @@ module.exports = function (app) {
                                             response.send({error : 'product not found'});
                                         } else {
                                             product.thumbnail = undefined;
-                                            product.parent.save(function (error) {
+                                            company.save(function (error) {
                                                 if (error) {
                                                     response.send({error: error});
                                                 }

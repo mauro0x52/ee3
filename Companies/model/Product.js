@@ -46,13 +46,12 @@ productSchema.pre('save', function (next) {
     this.slug = slug.replace(/[^a-z,0-9,\-]/g, '');
 
     foundSlug = false;
-
-    for (i = 0; i < this.parent.products.length; i = i + 1) {
-        if (this.parent.products[i]._id !== this._id && this.parent.products[i].slug === this.slug) {
+    for (i = 0; i < this.__parent.products.length; i = i + 1) {
+        if (this.__parent.products[i]._id !== this._id && this.__parent.products[i].slug === this.slug) {
             foundSlug = true;
         }
     }
-    if (foundSlug) this.slug = this.slug + '-' + this.parent.products.length; + '' + crypto.createHash('sha1').update(crypto.randomBytes(10)).digest('hex').substring(0, 1);
+    if (foundSlug) this.slug = this.slug + '-' + this.__parent.products.length; + '' + crypto.createHash('sha1').update(crypto.randomBytes(10)).digest('hex').substring(0, 1);
 
     next();
 });
