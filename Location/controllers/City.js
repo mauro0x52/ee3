@@ -24,12 +24,13 @@ module.exports = function (app) {
      * @allowedApp : Qualquer app
      * @allowedUser : Público
      *
-     * @request : {}
+     * @request : {limit, order, page}
      * @response : {Name, DDD, Slug}
      */
     app.get('/country/:slugCountry/state/:slugState/cities/', function (request, response) {
         var filter = {},
-            filterState = {};
+            filterState = {},
+            limit, order, query, from;
 
         response.contentType('json');
 
@@ -49,12 +50,35 @@ module.exports = function (app) {
                             if (state) {
                                 //Aplica o filtro de estado
                                 filter.stateId = state._id;
+                                
+                                //Cria o objeto query
+                                query = City.find(filter);
+                                
+                                // limit : padrao = 10, max = 20, min = 1
+                                limit = request.param('limit', 10) < 20 ? request.param('limit', 10) : 20;
+                                query.limit(limit);
+
+                                // order : padrao = name ascedenting
+                                order = request.param('order', [{name:1}]);
+                                if (!(order instanceof Array)) order = [order];
+
+                                for (var i = 0; i < order.length; i++) {
+                                    for (var name in order[i]) {
+                                        query.sort(name,order[i][name]);
+                                    }
+                                }
+
+                                // from : padrao = 0, min = 0
+                                from = limit * (request.param('page', 1) - 1);
+                                from = from >= 0 ? from : 0;
+                                query.skip(from);
+                                
                                 //Faz a busca das cidades.
-                                City.find(filter, function (error, cities) {
+                                query.exec(function (error, cities) {
                                     if (error) {
                                         response.send({error : error});
                                     } else {
-                                        response.send({cities : cities});
+                                        response.send(cities);
                                     }
                                 });
                             } else {
@@ -87,7 +111,7 @@ module.exports = function (app) {
 
         response.contentType('json');
 
-        Country.findOne({slug : request.params.slugCountry}, function (error, country) {
+        Country.findByIdentity({slug : request.params.slugCountry}, function (error, country) {
             if (error) {
                 response.send({error : error});
             } else {
@@ -95,20 +119,18 @@ module.exports = function (app) {
                     //Adiciona os Filtros necessários para localizar o Estado
                     filter = {countryId : country._id, slug : request.params.slugState};
                     //Localiza o Estado
-                    State.findOne(filter, function (error, state) {
+                    State.findByIdentity(filter, function (error, state) {
                         if (error) {
                             response.send({error : error});
                         } else {
                             if (state) {
-                                //Aplica os filtros necessários para localizar a cidade
-                                filter = {stateId : state._id, slug : request.params.slugCity};
                                 //Localiza a Cidade com os filtros informados
-                                City.findOne(filter, function (error, city) {
+                                City.findByIdentity(request.params.slugCity, state._id, function (error, city) {
                                     if (error) {
                                         response.send({error : error});
                                     } else {
                                         if (city) {
-                                            response.send({City : city});
+                                            response.send(city);
                                         } else {
                                             response.send({error : "city not found."});
                                         };

@@ -27,13 +27,36 @@ module.exports = function (app) {
     */
     app.get('/countries/', function (request, response) {
         response.contentType('json');
+        var limit, order, query, from;
+        
+        //Cria o objeto query
+        query = Country.find();
+
+        // limit : padrao = 10, max = 20, min = 1
+        limit = request.param('limit', 10) < 20 ? request.param('limit', 10) : 20;
+        query.limit(limit);
+
+        // order : padrao = name ascedenting
+        order = request.param('order', [{name:1}]);
+        if (!(order instanceof Array)) order = [order];
+
+        for (var i = 0; i < order.length; i++) {
+            for (var name in order[i]) {
+                query.sort(name,order[i][name]);
+            }
+        }
+
+        // from : padrao = 0, min = 0
+        from = limit * (request.param('page', 1) - 1);
+        from = from >= 0 ? from : 0;
+        query.skip(from);
         
         //Localiza os Países com filtros simples
-        Country.find(function (error, countries) {
+        query.exec(function (error, countries) {
             if (error) {
                 response.send({error : error});
             } else {
-                response.send({countries : countries});
+                response.send(countries);
             }
         });
     });
@@ -55,7 +78,7 @@ module.exports = function (app) {
         response.contentType('json');
         
         //Localiza o País desejado e retorna os dados informados
-        Country.findOne({slug : request.params.slug}, function (error, country) {
+        Country.findByIdentity(request.params.slug, function (error, country) {
             if (error) {
                 response.send({error : error});
             } else {

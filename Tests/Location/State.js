@@ -1,9 +1,9 @@
-/** Tests Location.City
+/** Tests Location.State
  *
  * @autor : Lucas Kalado
  * @since : 2012-08
  *
- * @description : Kit de testes do controller City do serviço Location
+ * @description : Kit de testes do controller State do serviço Location
  */
 
 var should = require("should"),
@@ -11,51 +11,39 @@ var should = require("should"),
     db = require("../Utils.js").db,
     rand = require("../Utils.js").rand;
 
-describe('GET /country/slug-8c31070edf/state/slug-eabc233c52/cities', function () {
+describe('GET /country/:slug_country/states', function () {
     before(function (done) {
         done();
     });
     
-    it('lista de cidades', function(done) {
-        api.get('location', '/country/slug-8c31070edf/state/slug-eabc233c52/cities',
+    it('lista de estados', function(done) {
+        api.get('location', '/country/slug-8c31070edf/states',
             null,
             function(error, data, response) {
                 if (error) return done(error);
                 else {
                     response.should.have.status(200);
                     should.not.exist(data.error, 'erro inesperado');
-                    data.length.should.be.below(10);
+                    data.length.should.be.below(11);
                     done();
                 }
             }
         );
     });
-    it('estado que não existe', function(done) {
-        api.get('location', '/country/slug-8c31070edf/state/asdasdasdadeada/cities',
+    it('pais que não existe', function(done) {
+        api.get('location', '/country/asdasdqqewasdasdasd/states',
             {},
             function(error, data, response) {
                 if (error) return done(error);
                 else {
-                    should.exist(data.error);
+                    should.exist(data.error,"erro era esperado");
                     done();
                 }
             }
         );
     });
-    it('pa�s que não existe', function(done) {
-        api.get('location', '/country/asdasdqqewasdasdasd/state/slug-eabc233c52/cities',
-            {},
-            function(error, data, response) {
-                if (error) return done(error);
-                else {
-                    should.exist(data.error);
-                    done();
-                }
-            }
-        );
-    });
-    it('lista de 18 cidades', function(done) {
-        api.get('location', '/country/slug-8c31070edf/state/slug-eabc233c52/cities',
+    it('lista de 18 estados', function(done) {
+        api.get('location', '/country/slug-8c31070edf/states',
             {
                 limit : 18
             },
@@ -63,14 +51,14 @@ describe('GET /country/slug-8c31070edf/state/slug-eabc233c52/cities', function (
                 if (error) return done(error);
                 else {
                     should.not.exist(data.error, 'erro inesperado');
-                    data.length.should.be.below(18);
+                    data.length.should.be.below(19);
                     done();
                 }
             }
         );
     });
-    it('tenta listar mais de 20 cidades', function(done) {
-        api.get('location', '/country/slug-8c31070edf/state/slug-eabc233c52/cities',
+    it('tenta listar mais de 20 estados', function(done) {
+        api.get('location', '/country/slug-8c31070edf/states',
             {
                 limit : 25
             },
@@ -85,18 +73,18 @@ describe('GET /country/slug-8c31070edf/state/slug-eabc233c52/cities', function (
         );
     });
     it('paginação', function(done) {
-        api.get('location', '/country/slug-8c31070edf/state/slug-eabc233c52/cities', {limit : 4, page : 1}, function(error, data, response) {
+        api.get('location', '/country/slug-8c31070edf/states', {limit : 4, page : 1}, function(error, data, response) {
                 if (error) return done(error);
                 else {
                     should.not.exist(data.error);
-                    var cities = data;
-                    api.get('location', '/country/slug-8c31070edf/state/slug-eabc233c52/cities', {limit : 2, page : 2}, function(error, data, response) {
+                    var states = data;
+                    api.get('location', '/company/slug-8c31070edf/states', {limit : 2, page : 2}, function(error, data, response) {
                             if (error) return done(error);
                             else {
                                 should.not.exist(data.error, 'erro inesperado');
-                                JSON.stringify(cities)
+                                JSON.stringify(states)
                                     .should.include(JSON.stringify(data[0]), 'resultado menor tem que está dentro do resultado maior');
-                                JSON.stringify(cities)
+                                JSON.stringify(states)
                                     .should.include(JSON.stringify(data[1]), 'resultado menor tem que está dentro do resultado maior');
                                 done();
                             }
@@ -107,7 +95,7 @@ describe('GET /country/slug-8c31070edf/state/slug-eabc233c52/cities', function (
         );
     });
     it('ordenação padrão (name ascending)', function(done) {
-        api.get('location', '/country/slug-8c31070edf/state/slug-eabc233c52/cities',
+        api.get('location', '/country/slug-8c31070edf/states',
             {},
             function(error, data, response) {
                 if (error) return done(error);
@@ -123,7 +111,7 @@ describe('GET /country/slug-8c31070edf/state/slug-eabc233c52/cities', function (
         );
     });
     it('ordenação por slug', function(done) {
-        api.get('location', '/country/slug-8c31070edf/state/slug-eabc233c52/cities',
+        api.get('location', '/country/slug-8c31070edf/states',
             {
                 order: {'slug': -1}
             },
@@ -131,7 +119,7 @@ describe('GET /country/slug-8c31070edf/state/slug-eabc233c52/cities', function (
                 if (error) return done(error);
                 else {
                     should.not.exist(data.error, 'erro inesperado');
-                    data.length.should.be.below(2);
+                    data.length.should.be.above(2);
                     for (var i = 1; i < data.length; i++) {
                         data[i-1].slug.should.be.above(data[i].slug, 'não ordenou');
                     }
@@ -142,13 +130,13 @@ describe('GET /country/slug-8c31070edf/state/slug-eabc233c52/cities', function (
     });
 });
 
-describe('GET /country/slug-8c31070edf/state/slug-eabc233c52/city/:city_id', function () {
+describe('GET /country/:slug_country/state/:state_id', function () {
     before(function (done) {
         done();
     });
 
     it('url deve existir', function(done) {
-        api.get('location', '/country/slug-8c31070edf/state/slug-eabc233c52/city/awoineaiionsndoinsdoisa',
+        api.get('location', '/country/slug-8c31070edf/state/slug-eabc233c52',
             {},
             function(error, data, response) {
                 if (error) return done(error);
@@ -159,8 +147,8 @@ describe('GET /country/slug-8c31070edf/state/slug-eabc233c52/city/:city_id', fun
             }
         );
     });
-    it('cidade que não existe', function(done) {
-        api.get('location', '/country/slug-8c31070edf/state/slug-eabc233c52/city/awoineaiionsndoinsdoisa',
+    it('pa�s que não existe', function(done) {
+        api.get('location', '/country/asdasdqqewasdasdasd/state/slug-eabc233c52',
             {},
             function(error, data, response) {
                 if (error) return done(error);
@@ -172,7 +160,7 @@ describe('GET /country/slug-8c31070edf/state/slug-eabc233c52/city/:city_id', fun
         );
     });
     it('estado que não existe', function(done) {
-        api.get('location', '/country/slug-8c31070edf/state/asdasdasdadeada/city/slug-01a03345ab',
+        api.get('location', '/country/slug-8c31070edf/state/awoineaiionsndoinsdoisa',
             {},
             function(error, data, response) {
                 if (error) return done(error);
@@ -183,39 +171,27 @@ describe('GET /country/slug-8c31070edf/state/slug-eabc233c52/city/:city_id', fun
             }
         );
     });
-    it('pa�s que não existe', function(done) {
-        api.get('location', '/country/asdasdqqewasdasdasd/state/slug-eabc233c52/city/slug-01a03345ab',
+    it('pega estado por id', function(done) {
+        api.get('location', '/country/slug-8c31070edf/state/503b7c247dd8ba7914000043',
             {},
             function(error, data, response) {
                 if (error) return done(error);
                 else {
-                    should.exist(data.error);
+                    data.should.have.property('_id', '503b7c247dd8ba7914000043', 'os ids devem ser iguais');
+                    data.should.have.property('slug', 'slug-eabc233c52', 'os slugs devem ser iguais');
                     done();
                 }
             }
         );
     });
-    it('pega cidade por id', function(done) {
-        api.get('location', '/country/slug-8c31070edf/state/slug-eabc233c52/city/503b7c247dd8ba7914000157',
+    it('pega estado por slug', function(done) {
+        api.get('location', '/country/slug-8c31070edf/state/slug-eabc233c52',
             {},
             function(error, data, response) {
                 if (error) return done(error);
                 else {
-                    data.should.have.property('_id', '503b7c247dd8ba7914000157', 'os ids devem ser iguais');
-                    data.should.have.property('slug', 'slug-01a03345ab', 'os slugs devem ser iguais');
-                    done();
-                }
-            }
-        );
-    });
-    it('pega cidade por slug', function(done) {
-        api.get('location', '/country/slug-8c31070edf/state/slug-eabc233c52/city/slug-01a03345ab',
-            {},
-            function(error, data, response) {
-                if (error) return done(error);
-                else {
-                    data.should.have.property('_id', '503b7c247dd8ba7914000157', 'os ids devem ser iguais');
-                    data.should.have.property('slug', 'slug-01a03345ab', 'os slugs devem ser iguais');
+                    data.should.have.property('_id', '503b7c247dd8ba7914000043', 'os ids devem ser iguais');
+                    data.should.have.property('slug', 'slug-eabc233c52', 'os slugs devem ser iguais');
                     done();
                 }
             }
