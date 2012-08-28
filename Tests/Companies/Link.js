@@ -383,8 +383,11 @@ describe('DEL /company/[slug]/link/[id]', function () {
             if (error) {
                 return done(error);
             } else {
-                should.not.exist(data);
-                done();
+                should.not.exist(data, 'erro inesperado');
+                api.get('companies', '/company/' + company + '/link/' + link, {token : token}, function (error, data) {
+                    should.exist(data.error, 'não exclui');
+                    done();
+                });
             }
         });
     });

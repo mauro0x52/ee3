@@ -395,13 +395,16 @@ describe('DEL /user/[id]/third-party-login', function () {
         });
     });
 
-    it('exibe login externo', function (done) {
+    it('remove login externo', function (done) {
         api.del('auth', '/user/'+userId+'/third-party-login/' + third, {token : token}, function (error, data, response) {
             if (error) {
                 done(error);
             } else {
                 should.not.exist(data, 'erro inesperado');
-                done();
+                api.get('auth', '/user/'+userId+'/third-party-login/' + third, {token : token}, function (error, data) {
+                    should.exist(data.error, 'não exclui o login externo');
+                    done();
+                });
             }
         });
     });

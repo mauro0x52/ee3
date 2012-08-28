@@ -196,7 +196,10 @@ describe('DEL /user/[login]/app/[app_id]', function () {
                 return done(error);
             } else {
                 should.not.exist(data);
-                done();
+                api.get('auth', '/user/'+userId+'/app/' + appId, {token : token}, function (error, data) {
+                    should.exist(data.error, 'não exclui o login externo');
+                    done();
+                });
             }
         });
     });

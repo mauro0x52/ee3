@@ -139,24 +139,6 @@ describe('POST /company/[slug]/address', function () {
         );
     });
 
-    it('city em branco', function(done) {
-        api.post('companies', '/company/' + company + '/address', {
-                token   : token,
-                street : "Rua " + rand(),
-                number : "Numero " + rand(),
-                complement : "Complemento " + rand(),
-                headQuarters : true
-            }, function(error, data, response) {
-                if (error) {
-                    return done(error);
-                } else { 
-                    should.exist(data.error);
-                    done();
-                }
-            }
-        );
-    });
-
     it('headquarters em branco', function(done) {
         api.post('companies', '/company/' + company + '/address', {
                 token   : token,
@@ -455,7 +437,10 @@ describe('DEL /company/[slug]/address/[id]', function () {
                 return done(error);
             } else {
                 should.not.exist(data);
-                done();
+                api.get('companies', '/company/' + company + '/address/' + address, {token : token}, function (error, data) {
+                    should.exist(data.error, 'não exclui');
+                    done();
+                });
             }
         });
     });
@@ -589,23 +574,6 @@ describe('PUT /company/[slug]/address/[id]', function () {
             street : "Rua " + rand(),
             number : "Numero " + rand(),
             city : "Cidade " + rand(),
-            headQuarters : true
-        }, function(error, data, response) {
-            if (error) {
-                return done(error);
-            } else {
-                should.exist(data.error);
-                done();
-            }
-        });
-    });
-    
-    it('city em branco', function(done) {
-        api.put('companies', '/company/' + company + '/address/' + address, {
-            token : token,
-            street : "Rua " + rand(),
-            number : "Numero " + rand(),
-            complement : "Complemento " + rand(),
             headQuarters : true
         }, function(error, data, response) {
             if (error) {

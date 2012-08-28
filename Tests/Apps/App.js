@@ -376,7 +376,10 @@ describe('DEL /app/[slug]', function () {
                 return done(error);
             } else {
                 should.not.exist(data, 'erro inesperado');
-                done();
+                api.get('apps', '/app/' + slug, {token : token}, function (error, data) {
+                    should.exist(data.error, 'não exclui');
+                    done();
+                });
             }
         });
     });

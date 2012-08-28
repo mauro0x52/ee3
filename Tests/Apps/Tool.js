@@ -466,7 +466,10 @@ describe('DEL /app/[slug]/version/[number]/tool/[id]', function () {
                 return done(error);
             } else {
                 should.not.exist(data, 'erro inesperado');
-                done();
+                api.get('apps', '/app/' + slug + '/version/' + version + '/tool/' + tool, {token : token}, function (error, data) {
+                    should.exist(data.error, 'não exclui');
+                    done();
+                });
             }
         });
     });

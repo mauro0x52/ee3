@@ -474,7 +474,10 @@ describe('DEL /company/[slug]/phone/[id]', function () {
                 return done(error);
             } else {
                 should.not.exist(data);
-                done();
+                api.get('companies', '/company/' + company + '/phone/' + phone, {token : token}, function (error, data) {
+                    should.exist(data.error, 'não exclui');
+                    done();
+                });
             }
         });
     });

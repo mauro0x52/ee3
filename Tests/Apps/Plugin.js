@@ -460,13 +460,16 @@ describe('DEL /app/[slug]/version/[number]/plugin/[id]', function () {
         });
     });
 
-    it('plugin existente', function(done) {
+    it('remover plugin', function(done) {
         api.del('apps', '/app/' + slug + '/version/' + version + '/plugin/' + plugin, {token : token}, function(error, data, response) {
             if (error) {
                 return done(error);
             } else {
                 should.not.exist(data, 'erro inesperado');
-                done();
+                api.get('apps', '/app/' + slug + '/version/' + version + '/plugin/' + plugin, {token : token}, function (error, data) {
+                    should.exist(data.error, 'não exclui');
+                    done();
+                });
             }
         });
     });
@@ -614,7 +617,7 @@ describe('PUT /app/[slug]/version/[number]/plugin/[id]', function () {
         );
     });
 
-    it('plugin existente', function(done) {
+    it('editar plugin', function(done) {
         var new_name = 'Plugin ' + rand();
         api.put('apps', '/app/' + slug + '/version/' + version + '/plugin/' + plugin, {
                 token : token,
