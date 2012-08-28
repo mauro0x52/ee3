@@ -20,31 +20,60 @@ citySchema = new Schema({
 });
 
 citySchema.pre('save', function(next) {
-    if (this.isNew) {
-        //TODO fazer o gerador de slugs aqui
-        this.slug = 'slug-'+crypto.createHash('sha1').update(crypto.randomBytes(10)).digest('hex').substring(0, 10);
+    var crypto = require('crypto'),
+        slug, foundSlug,
+        charFrom = 'àáâãäåçèéêëìíîïñðóòôõöøùúûüýÿ',
+        charTo   = 'aaaaaaceeeeiiiinooooooouuuuyy',
+        city = this;
+
+    city.name = city.name.replace(/\s+/g, ' ');
+
+    slug = city.name;
+    slug = slug.replace(/^\s+|\s+$/g, '').replace(/\s+/g, '-').toLowerCase();
+    // remove acentos
+    for (var i = 0; i < charFrom.length; i++) {
+        slug = slug.replace(new RegExp(charFrom.charAt(i), 'g'), charTo.charAt(i))
     }
-    next();
+    slug = slug.replace(/[^a-z,0-9,\-]/g, '');
+
+    City.find({slug : slug, _id : {$ne : city._id}}, function (error, data) {
+        if (error) next(error);
+        else {
+            if (data.length === 0) {
+                city.slug = slug;
+            }
+            else {
+                city.slug = slug + '-' + data.length + '' + crypto.createHash('sha1').update(crypto.randomBytes(10)).digest('hex').substring(0, 1);
+            }
+            next();
+        }
+
+    });
 });
 
-/** FindByIdOrUsername
+/** FindByIdOrSlug
  * @author : Mauro Ribeiro
  * @since : 2012-08
  *
- * @description : Procura um usuário pelo id ou pelo username
+ * @description : Procura uma cidade pelo id ou pelo slug
  * @param id : id ou username do produto
+ * @param state : ID do state
  * @param cb : callback a ser chamado
  */
-citySchema.statics.findByIdentity = function (id, cb) {
+citySchema.statics.findByIdentity = function (id, state, cb) {
     "use strict";
-
+    var filter = {};
+    
+    filter.stateId = state;
     if (new RegExp("[0-9 a-f]{24}").test(id)) {
         // procura por id
-        City.findById(id, cb);
+        filter._id = id;
     } else {
-        // procura por username
-        City.findOne({slug : slug}, cb);
+        // procura por slug
+        filter.slug = id;
     }
+    
+    City.findOne(filter, cb);
 };
 
 /*  Exportando o pacote  */

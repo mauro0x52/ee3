@@ -24,18 +24,37 @@ module.exports = function (app) {
      * @allowedApp : Qualquer app
      * @allowedUser : Público
      *
-     * @request : {}
+     * @request : {order, limit, page}
      * @response : {Name, Slug, CountryIds, StateIds, CityIds}
     */
     app.get('/regions/', function (request, response) {
         response.contentType('json');
         
+        var limit, order, findRegion;
+            
+            
+        findRegion = Region.find();
+        
+        // limit : padrao = 10, max = 20, min = 1
+        limit = request.param('limit', 10) < 20 ? request.param('limit', 10) : 20;
+        findRegion.limit(limit);
+        
+        // order : padrao = name ascedenting
+        order = request.param('order', [{name:1}]);
+        if (!(order instanceof Array)) order = [order];
+
+        for (var i = 0; i < order.length; i++) {
+            for (var name in order[i]) {
+                findRegion.sort(name,order[i][name]);
+            }
+        }
+        
         //Localiza todas as regiões
-        Region.find( function (error, regions) {
+        findRegion.exec (function (error, regions) {
             if (error) {
                 response.send({error : error});
             } else {
-                response.send({Regions : regions});
+                response.send(regions);
             }
         });
     });
@@ -57,12 +76,12 @@ module.exports = function (app) {
         response.contentType('json');
 
         //Localiza a região informada através do Slug
-        Region.findOne({slug : request.params.slug}, function (error, region) {
+        Region.findByIdentity(request.params.slug, function (error, region) {
             if (error) {
                 response.send({error : error});
             } else {
                 if (region) {
-                    response.send({Region : region});
+                    response.send(region);
                 } else {
                     response.send({error : "region not found."});
                 }
@@ -80,21 +99,42 @@ module.exports = function (app) {
      * @allowedApp : Qualquer app
      * @allowedUser : Público
      *
-     * @request : {slugRegion}
+     * @request : {slugRegion, limit, order, page}
      * @response : {Name, Acronym, DDI, Slug}
     */
     app.get('/region/:slugRegion/countries', function (request, response) {
         var filter = {},
-            where = {};
+            where = {},
+            limit, order, query, from;
 
         response.contentType('json');
         
         //Localiza a Região pelo nome
-        Region.findOne({"slug" : request.params.slugRegion}, function (error, region) {
+        Region.findByIdentity(request.params.slugRegion, function (error, region) {
             //Verifica se existe a região e retorna erro caso não exista
             if (region) {
                 //Cria a query com os dados da região para buscar os Países
-                var query = Country.find();
+                query = Country.find();
+
+                // limit : padrao = 10, max = 20, min = 1
+                limit = request.param('limit', 10) < 20 ? request.param('limit', 10) : 20;
+                query.limit(limit);
+
+                // order : padrao = name ascedenting
+                order = request.param('order', [{name:1}]);
+                if (!(order instanceof Array)) order = [order];
+
+                for (var i = 0; i < order.length; i++) {
+                    for (var name in order[i]) {
+                        query.sort(name,order[i][name]);
+                    }
+                }
+                
+                // from : padrao = 0, min = 0
+                from = limit * (request.param('page', 1) - 1);
+                from = from >= 0 ? from : 0;
+                query.skip(from);
+                
                 query.where("regionIds");
                 query.in([region._id]);
                 //Localiza os Países 
@@ -102,7 +142,7 @@ module.exports = function (app) {
                     if (error) {
                         response.send({error : error});
                     } else {
-                        response.send({Countries : countries});
+                        response.send(countries);
                     }
                 });
             } else {
@@ -121,21 +161,42 @@ module.exports = function (app) {
      * @allowedApp : Qualquer app
      * @allowedUser : Público
      *
-     * @request : {slugRegion}
+     * @request : {slugRegion, limit, order, page}
      * @response : {Name, Slug}
     */
     app.get('/region/:slugRegion/states', function (request, response) {
         var filter = {},
-            where = {};
+            where = {},
+            limit, order, query, from;
 
         response.contentType('json');
         
         //Localiza a Região pelo nome
-        Region.findOne({"slug" : request.params.slugRegion}, function (error, region) {
+        Region.findByIdentity(request.params.slugRegion, function (error, region) {
             //Verifica se existe a região e retorna erro caso não exista
             if (region) {
                 //Cria a query com os dados da região para buscar os Estados
-                var query = State.find();
+                query = State.find();
+                
+                // limit : padrao = 10, max = 20, min = 1
+                limit = request.param('limit', 10) < 20 ? request.param('limit', 10) : 20;
+                query.limit(limit);
+
+                // order : padrao = name ascedenting
+                order = request.param('order', [{name:1}]);
+                if (!(order instanceof Array)) order = [order];
+
+                for (var i = 0; i < order.length; i++) {
+                    for (var name in order[i]) {
+                        query.sort(name,order[i][name]);
+                    }
+                }
+                
+                // from : padrao = 0, min = 0
+                from = limit * (request.param('page', 1) - 1);
+                from = from >= 0 ? from : 0;
+                query.skip(from);
+                
                 query.where("regionIds");
                 query.in([region._id]);
                 //Localiza os Estados 
@@ -143,7 +204,7 @@ module.exports = function (app) {
                     if (error) {
                         response.send({error : error});
                     } else {
-                        response.send({States : states});
+                        response.send(states);
                     }
                 });
             } else {
@@ -162,21 +223,42 @@ module.exports = function (app) {
      * @allowedApp : Qualquer app
      * @allowedUser : Público
      *
-     * @request : {slugRegion}
+     * @request : {slugRegion, limit, order, page}
      * @response : {Name, Slug}
     */
     app.get('/region/:slugRegion/cities', function (request, response) {
         var filter = {},
-            where = {};
+            where = {},
+            limit, order, query, from;
 
         response.contentType('json');
         
         //Localiza a Região pelo nome
-        Region.findOne({"slug" : request.params.slugRegion}, function (error, region) {
+        Region.findByIdentity(request.params.slugRegion, function (error, region) {
             //Verifica se existe a região e retorna erro caso não exista
             if (region) {
                 //Cria a query com os dados da região para buscar as Cidades
-                var query = City.find();
+                query = City.find();
+                
+                // limit : padrao = 10, max = 20, min = 1
+                limit = request.param('limit', 10) < 20 ? request.param('limit', 10) : 20;
+                query.limit(limit);
+
+                // order : padrao = name ascedenting
+                order = request.param('order', [{name:1}]);
+                if (!(order instanceof Array)) order = [order];
+
+                for (var i = 0; i < order.length; i++) {
+                    for (var name in order[i]) {
+                        query.sort(name,order[i][name]);
+                    }
+                }
+                
+                // from : padrao = 0, min = 0
+                from = limit * (request.param('page', 1) - 1);
+                from = from >= 0 ? from : 0;
+                query.skip(from);
+                
                 query.where("regionIds");
                 query.in([region._id]);
                 //Localiza as Cidades
@@ -184,7 +266,7 @@ module.exports = function (app) {
                     if (error) {
                         response.send({error : error});
                     } else {
-                        response.send({Cities : cities});
+                        response.send(cities);
                     }
                 });
             } else {
