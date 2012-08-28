@@ -10,6 +10,7 @@ var should = require("should"),
     api = require("../Utils.js").api,
     db = require("../Utils.js").db,
     rand = require("../Utils.js").rand,
+    ObjectId = require('mongodb').BSONPure.ObjectID,
     user, company, user2,
     city;
 
@@ -481,6 +482,193 @@ describe('GET /companies', function () {
                             }
                         }
                     );
+                }
+            }
+        );
+    });
+});
+
+
+describe('GET /companies/count', function () {
+
+    it('conta todas empresas', function(done) {
+        api.get('companies', '/companies/count', null, function(error, data, response) {
+            if (error) done(error);
+            else {
+                response.should.have.status(200);
+                should.exist(data);
+                data.should.not.have.property('error');
+                data.should.have.property('count').above(1);
+                db.openCollection('companies', 'companies', function(error, companies) {
+                    companies.count(function (error, count) {
+                        count.should.be.equal(data.count);
+                        done();
+                    })
+                });
+            }
+        });
+    });
+    it('conta por setor', function(done) {
+        api.get('companies', '/companies/count',
+            {
+                filterBySectors : {sectors:['000000000000000000000001']}
+            },
+            function(error, data, response) {
+                if (error) return done(error);
+                else {
+                    data.should.not.have.property('error');
+                    data.should.have.property('count').above(1);
+                    db.openCollection('companies', 'companies', function(error, companies) {
+                        companies.count({sectors : {$all : [ObjectId('000000000000000000000001')]}}, function (error, count) {
+                            if (error) done(error);
+                            else {
+                                count.should.be.equal(data.count);
+                                done();
+                            }
+                        })
+                    });
+                }
+            }
+        );
+    });
+    it('conta por vários setores (AND)', function(done) {
+        api.get('companies', '/companies/count',
+            {
+                filterBySectors : {sectors : ['000000000000000000000001', '000000000000000000000003']}
+            },
+            function(error, data, response) {
+                if (error) return done(error);
+                else {
+                    data.should.not.have.property('error');
+                    data.should.have.property('count').above(1);
+                    db.openCollection('companies', 'companies', function(error, companies) {
+                        companies.count({sectors : {$all : [ObjectId('000000000000000000000001'),ObjectId('000000000000000000000003')]}}, function (error, count) {
+                            if (error) done(error);
+                            else {
+                                count.should.be.equal(data.count);
+                                done();
+                            }
+                        })
+                    });
+                }
+            }
+        );
+    });
+    it('conta por vários setores (OR)', function(done) {
+        api.get('companies', '/companies/count',
+            {
+                filterBySectors : {sectors : ['000000000000000000000001', '000000000000000000000003'], operator : 'or'}
+            },
+            function(error, data, response) {
+                if (error) return done(error);
+                else {
+                    data.should.not.have.property('error');
+                    data.should.have.property('count').above(1);
+                    db.openCollection('companies', 'companies', function(error, companies) {
+                        companies.count({sectors : {$in : [ObjectId('000000000000000000000001'),ObjectId('000000000000000000000003')]}}, function (error, count) {
+                            if (error) done(error);
+                            else {
+                                count.should.be.equal(data.count);
+                                done();
+                            }
+                        })
+                    });
+                }
+            }
+        );
+    });
+    it('conta por cidade', function(done) {
+        api.get('companies', '/companies/count',
+            {
+                filterByCities : {cities:['000000000000000000000001']}
+            },
+            function(error, data, response) {
+                if (error) return done(error);
+                else {
+                    data.should.not.have.property('error');
+                    data.should.have.property('count').above(1);
+                    db.openCollection('companies', 'companies', function(error, companies) {
+                        companies.count({'addresses.city' : { $in : [ObjectId('000000000000000000000001')] }}, function (error, count) {
+                            if (error) done(error);
+                            else {
+                                count.should.be.equal(data.count);
+                                done();
+                            }
+                        })
+                    });
+                }
+            }
+        );
+    });
+    it('conta por cidades (or)', function(done) {
+        api.get('companies', '/companies/count',
+            {
+                filterByCities : {cities:['000000000000000000000001','000000000000000000000002'], operator:'or'}
+            },
+            function(error, data, response) {
+                if (error) return done(error);
+                else {
+                    data.should.not.have.property('error');
+                    data.should.have.property('count').above(1);
+                    db.openCollection('companies', 'companies', function(error, companies) {
+                        companies.count({'addresses.city' : { $in : [ObjectId('000000000000000000000001'),ObjectId('000000000000000000000002')] }}, function (error, count) {
+                            if (error) done(error);
+                            else {
+                                count.should.be.equal(data.count);
+                                done();
+                            }
+                        })
+                    });
+                }
+            }
+        );
+    });
+    it('conta por cidades (and)', function(done) {
+        api.get('companies', '/companies/count',
+            {
+                filterByCities : {cities:['000000000000000000000001','000000000000000000000002'], operator:'and'}
+            },
+            function(error, data, response) {
+                if (error) return done(error);
+                else {
+                    data.should.not.have.property('error');
+                    data.should.have.property('count').above(1);
+                    db.openCollection('companies', 'companies', function(error, companies) {
+                        companies.count({'addresses.city' : { $all : [ObjectId('000000000000000000000001'),ObjectId('000000000000000000000002')] }}, function (error, count) {
+                            if (error) done(error);
+                            else {
+                                count.should.be.equal(data.count);
+                                done();
+                            }
+                        })
+                    });
+                }
+            }
+        );
+    });
+    it('conta por setores (and) e cidades (or) com paginação', function(done) {
+        api.get('companies', '/companies/count',
+            {
+                filterBySectors : {sectors : ['000000000000000000000001', '000000000000000000000003'], operator : 'and'},
+                filterByCities : {cities : ['000000000000000000000001','000000000000000000000002'], operator:'or'}
+            },
+            function(error, data, response) {
+                if (error) return done(error);
+                else {
+                    data.should.not.have.property('error');
+                    data.should.have.property('count').above(1);
+                    db.openCollection('companies', 'companies', function(error, companies) {
+                        companies.count({
+                            'sectors' : { $all : [ObjectId('000000000000000000000001'),ObjectId('000000000000000000000003')] },
+                            'addresses.city' : { $in : [ObjectId('000000000000000000000001'),ObjectId('000000000000000000000002')] }
+                        }, function (error, count) {
+                            if (error) done(error);
+                            else {
+                                count.should.be.equal(data.count);
+                                done();
+                            }
+                        })
+                    });
                 }
             }
         );

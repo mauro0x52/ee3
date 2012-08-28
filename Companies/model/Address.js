@@ -14,7 +14,7 @@ addressSchema = new Schema({
     street       : {type : String, trim : true, required : true},
     number       : {type : String, trim : true, required : true},
     complement   : {type : String, trim : true, required : true},
-    city         : {type : String, trim : true, required : true},
+    city         : objectId,
     headQuarters : {type : Boolean, required : true}
 });
 

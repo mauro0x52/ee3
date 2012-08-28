@@ -171,6 +171,46 @@ module.exports = function (app) {
     app.get('/companies/count', function (request, response) {
         response.contentType('json');
 
+        var ObjectId = require('mongoose').Types.ObjectId,
+            query, limit, from, to, order, countCompany,
+            filterBySectors, filterBySectorsOperator, sectorsList,
+            filterByCities, citiesList;
+
+
+        countCompany = Company.count();
+
+        // filterBySectors
+        filterBySectors = request.param('filterBySectors');
+
+        if (filterBySectors && filterBySectors.sectors) {
+            sectorsList = typeof filterBySectors.sectors === 'string' ? [filterBySectors.sectors] : filterBySectors.sectors;
+            if (filterBySectors.operator === 'or') {
+                countCompany.where('sectors').in(sectorsList);
+            } else {
+                countCompany.where('sectors').all(sectorsList);
+            }
+        }
+        // filterByCities
+        filterByCities = request.param('filterByCities');
+
+        if (filterByCities && filterByCities.cities) {
+            citiesList = typeof filterByCities.cities === 'string' ? [filterByCities.cities] : filterByCities.cities;
+            if (filterByCities.operator === 'or') {
+                countCompany.where('addresses.city').in(citiesList);
+            } else {
+                countCompany.where('addresses.city').all(citiesList);
+            }
+        }
+
+        countCompany.exec(
+            function (error, count){
+                if (error) {
+                    response.send({error : error })
+                } else {
+                    response.send({count : count});
+                }
+            }
+        );
     });
 
     /** GET /company/:slug
