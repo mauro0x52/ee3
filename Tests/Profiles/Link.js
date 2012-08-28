@@ -372,7 +372,10 @@ describe('DEL /profile/[slug]/link/[id]', function () {
                 return done(error);
             } else {
                 should.not.exist(data);
-                done();
+                api.get('profiles', '/profile/' + profile + '/link/' + link, {token : token}, function (error, data) {
+                    should.exist(data.error, 'não exclui');
+                    done();
+                });
             }
         });
     });

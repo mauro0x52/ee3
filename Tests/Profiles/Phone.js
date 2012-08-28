@@ -474,7 +474,10 @@ describe('DEL /profile/[slug]/phone/[id]', function () {
                 return done(error);
             } else {
                 should.not.exist(data);
-                done();
+                api.get('profiles', '/profile/' + profile + '/phone/' + phone, {token : token}, function (error, data) {
+                    should.exist(data.error, 'não exclui');
+                    done();
+                });
             }
         });
     });

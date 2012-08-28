@@ -385,7 +385,10 @@ describe('DEL /profile/[slug]/contact/[id]', function () {
                 return done(error);
             } else {
                 should.not.exist(data);
-                done();
+                api.get('profiles', '/profile/' + profile + '/contact/' + contact, {token : token}, function (error, data) {
+                    should.exist(data.error, 'não exclui');
+                    done();
+                });
             }
         });
     });
