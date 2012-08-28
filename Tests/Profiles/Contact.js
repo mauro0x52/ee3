@@ -528,10 +528,13 @@ describe('PUT /profile/[slug]/contact/[id]', function () {
                 return done(error);
             } else {
                 should.not.exist(data.error);
-                data.should.have.property('_id');
-                data.should.have.property('address', address);
-                data.should.have.property('type', type);
-                done();
+                api.get('profiles', '/profile/' + profile + '/contact/' + contact, {token : token}, function (error, data) {
+                    should.not.exist(data.error, 'algo deu errado');
+                    data.should.have.property('_id');
+                    data.should.have.property('address', address);
+                    data.should.have.property('type', type);
+                    done();
+                });
             }
         });
     });

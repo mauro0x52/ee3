@@ -674,13 +674,16 @@ describe('PUT /profile/[slug]/phone/[id]', function () {
                 return done(error);
             } else {
                 should.not.exist(data.error);
-                data.should.have.property('_id');
-                data.should.have.property('number', number);
-                data.should.have.property('extension', extension);
-                data.should.have.property('areaCode', areaCode);
-                data.should.have.property('intCode', intCode);
-                data.should.have.property('type', type);
-                done();
+                api.get('profiles', '/profile/' + profile + '/phone/' + phone, {token : token}, function (error, data) {
+                    should.not.exist(data.error, 'algo deu errado');
+                    data.should.have.property('_id');
+                    data.should.have.property('number', number);
+                    data.should.have.property('extension', extension);
+                    data.should.have.property('areaCode', areaCode);
+                    data.should.have.property('intCode', intCode);
+                    data.should.have.property('type', type);
+                    done();
+                });
             }
         });
     });
