@@ -9,7 +9,8 @@
 var should = require("should"),
     api = require("../Utils.js").api,
     db = require("../Utils.js").db,
-    rand = require("../Utils.js").rand;
+    rand = require("../Utils.js").rand,
+    dt = require("./config.js");
 
 describe('GET /regions', function () {
     before(function (done) {
@@ -125,7 +126,7 @@ describe('GET /region/:region_id', function () {
     });
 
     it('url deve existir', function(done) {
-        api.get('location', '/region/awoineaiionsndoinsdoisa',
+        api.get('location', '/region/'+dt.region.id,
             {},
             function(error, data, response) {
                 if (error) return done(error);
@@ -149,7 +150,7 @@ describe('GET /region/:region_id', function () {
         );
     });
     it('pega região por id', function(done) {
-        api.get('location', '/region/503b7d9a73ab698114000001',
+        api.get('location', '/region/'+dt.region.id,
             {},
             function(error, data, response) {
                 if (error) return done(error);
@@ -162,7 +163,7 @@ describe('GET /region/:region_id', function () {
         );
     });
     it('pega região por slug', function(done) {
-        api.get('location', '/region/slug-a752c3e488',
+        api.get('location', '/region/'+dt.region.id,
             {},
             function(error, data, response) {
                 if (error) return done(error);

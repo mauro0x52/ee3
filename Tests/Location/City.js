@@ -9,15 +9,17 @@
 var should = require("should"),
     api = require("../Utils.js").api,
     db = require("../Utils.js").db,
-    rand = require("../Utils.js").rand;
+    rand = require("../Utils.js").rand,
+    dt = require("./config.js");
 
-describe('GET /country/slug-8c31070edf/state/slug-eabc233c52/cities', function () {
+
+describe('GET /country/[slugCountry]/state/[slugState]/cities', function () {
     before(function (done) {
         done();
     });
     
     it('lista de cidades', function(done) {
-        api.get('location', '/country/slug-8c31070edf/state/slug-eabc233c52/cities',
+        api.get('location', '/country/'+dt.country.slug+'/state/'+dt.state.slug+'/cities',
             null,
             function(error, data, response) {
                 if (error) return done(error);
@@ -31,7 +33,7 @@ describe('GET /country/slug-8c31070edf/state/slug-eabc233c52/cities', function (
         );
     });
     it('estado que não existe', function(done) {
-        api.get('location', '/country/slug-8c31070edf/state/asdasdasdadeada/cities',
+        api.get('location', '/country/'+dt.country.slug+'/state/asdasdadsasdasds/cities',
             {},
             function(error, data, response) {
                 if (error) return done(error);
@@ -43,7 +45,7 @@ describe('GET /country/slug-8c31070edf/state/slug-eabc233c52/cities', function (
         );
     });
     it('pa�s que não existe', function(done) {
-        api.get('location', '/country/asdasdqqewasdasdasd/state/slug-eabc233c52/cities',
+        api.get('location', '/country/asdasdasdasdasdad/state/'+dt.state.slug+'/cities',
             {},
             function(error, data, response) {
                 if (error) return done(error);
@@ -55,7 +57,7 @@ describe('GET /country/slug-8c31070edf/state/slug-eabc233c52/cities', function (
         );
     });
     it('lista de 18 cidades', function(done) {
-        api.get('location', '/country/slug-8c31070edf/state/slug-eabc233c52/cities',
+        api.get('location', '/country/'+dt.country.slug+'/state/'+dt.state.slug+'/cities',
             {
                 limit : 18
             },
@@ -70,7 +72,7 @@ describe('GET /country/slug-8c31070edf/state/slug-eabc233c52/cities', function (
         );
     });
     it('tenta listar mais de 20 cidades', function(done) {
-        api.get('location', '/country/slug-8c31070edf/state/slug-eabc233c52/cities',
+        api.get('location', '/country/'+dt.country.slug+'/state/'+dt.state.slug+'/cities',
             {
                 limit : 25
             },
@@ -85,15 +87,17 @@ describe('GET /country/slug-8c31070edf/state/slug-eabc233c52/cities', function (
         );
     });
     it('paginação', function(done) {
-        api.get('location', '/country/slug-8c31070edf/state/slug-eabc233c52/cities', {limit : 4, page : 1}, function(error, data, response) {
+        api.get('location', '/country/'+dt.country.slug+'/state/'+dt.state.slug+'/cities', {limit : 4, page : 1}, function(error, data, response) {
                 if (error) return done(error);
                 else {
+                    data.should.have.lengthOf(4);
                     should.not.exist(data.error);
                     var cities = data;
-                    api.get('location', '/country/slug-8c31070edf/state/slug-eabc233c52/cities', {limit : 2, page : 2}, function(error, data, response) {
+                    api.get('location', '/country/'+dt.country.slug+'/state/'+dt.state.slug+'/cities', {limit : 2, page : 2}, function(error, data, response) {
                             if (error) return done(error);
                             else {
                                 should.not.exist(data.error, 'erro inesperado');
+                                data.should.have.lengthOf(2);
                                 JSON.stringify(cities)
                                     .should.include(JSON.stringify(data[0]), 'resultado menor tem que está dentro do resultado maior');
                                 JSON.stringify(cities)
@@ -107,7 +111,7 @@ describe('GET /country/slug-8c31070edf/state/slug-eabc233c52/cities', function (
         );
     });
     it('ordenação padrão (name ascending)', function(done) {
-        api.get('location', '/country/slug-8c31070edf/state/slug-eabc233c52/cities',
+        api.get('location', '/country/'+dt.country.slug+'/state/'+dt.state.slug+'/cities',
             {},
             function(error, data, response) {
                 if (error) return done(error);
@@ -123,7 +127,7 @@ describe('GET /country/slug-8c31070edf/state/slug-eabc233c52/cities', function (
         );
     });
     it('ordenação por slug', function(done) {
-        api.get('location', '/country/slug-8c31070edf/state/slug-eabc233c52/cities',
+        api.get('location', '/country/'+dt.country.slug+'/state/'+dt.state.slug+'/cities',
             {
                 order: {'slug': -1}
             },
@@ -142,13 +146,13 @@ describe('GET /country/slug-8c31070edf/state/slug-eabc233c52/cities', function (
     });
 });
 
-describe('GET /country/slug-8c31070edf/state/slug-eabc233c52/city/:city_id', function () {
+describe('GET /country/[slugCountry]/state/[slugState]/city/[slugCity]', function () {
     before(function (done) {
         done();
     });
 
     it('url deve existir', function(done) {
-        api.get('location', '/country/slug-8c31070edf/state/slug-eabc233c52/city/awoineaiionsndoinsdoisa',
+        api.get('location', '/country/'+dt.country.slug+'/state/'+dt.state.slug+'/city/awoineaiionsndoinsdoisa',
             {},
             function(error, data, response) {
                 if (error) return done(error);
@@ -160,7 +164,7 @@ describe('GET /country/slug-8c31070edf/state/slug-eabc233c52/city/:city_id', fun
         );
     });
     it('cidade que não existe', function(done) {
-        api.get('location', '/country/slug-8c31070edf/state/slug-eabc233c52/city/awoineaiionsndoinsdoisa',
+        api.get('location', '/country/'+dt.country.slug+'/state/'+dt.state.slug+'/city/awoineaiionsndoinsdoisa',
             {},
             function(error, data, response) {
                 if (error) return done(error);
@@ -172,7 +176,7 @@ describe('GET /country/slug-8c31070edf/state/slug-eabc233c52/city/:city_id', fun
         );
     });
     it('estado que não existe', function(done) {
-        api.get('location', '/country/slug-8c31070edf/state/asdasdasdadeada/city/slug-01a03345ab',
+        api.get('location', '/country/'+dt.country.slug+'/state/asdasdasdasd/city/city/'+dt.city.slug,
             {},
             function(error, data, response) {
                 if (error) return done(error);
@@ -184,7 +188,7 @@ describe('GET /country/slug-8c31070edf/state/slug-eabc233c52/city/:city_id', fun
         );
     });
     it('pa�s que não existe', function(done) {
-        api.get('location', '/country/asdasdqqewasdasdasd/state/slug-eabc233c52/city/slug-01a03345ab',
+        api.get('location', '/country/asdasdasdasdaasd/state/'+dt.state.slug+'/city/'+dt.city.slug,
             {},
             function(error, data, response) {
                 if (error) return done(error);
@@ -196,7 +200,7 @@ describe('GET /country/slug-8c31070edf/state/slug-eabc233c52/city/:city_id', fun
         );
     });
     it('pega cidade por id', function(done) {
-        api.get('location', '/country/slug-8c31070edf/state/slug-eabc233c52/city/503b7c247dd8ba7914000157',
+        api.get('location', '/country/'+dt.country.slug+'/state/'+dt.state.slug+'/city/'+dt.city.id,
             {},
             function(error, data, response) {
                 if (error) return done(error);
@@ -209,7 +213,7 @@ describe('GET /country/slug-8c31070edf/state/slug-eabc233c52/city/:city_id', fun
         );
     });
     it('pega cidade por slug', function(done) {
-        api.get('location', '/country/slug-8c31070edf/state/slug-eabc233c52/city/slug-01a03345ab',
+        api.get('location', '/country/'+dt.country.slug+'/state/'+dt.state.slug+'/city/'+dt.city.slug,
             {},
             function(error, data, response) {
                 if (error) return done(error);

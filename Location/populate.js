@@ -1,4 +1,4 @@
-var model = require('./model/Model.js'), country, state, city, region, region2, regionId, rg;
+var model = require('./model/Model.js'), country, state, city, region, region2, regionx, regiony, regionId, rg;
 var countriesIds = [], countriesIds2 = [], statesIds = [], statesIds2 = [], citiesIds = [], citiesIds2 = [], regionsIds = [];
 
 var rand = function(type) {
@@ -111,6 +111,35 @@ for(i=0;i<=15;i++){
     })
 }
 
-region.countryIds = countriesIds;
-region.stateIds = statesIds;
-region.cityIds = citiesIds;
+
+model.Region.findById(region._id,function(error, regionx){
+    if (error) {
+        console.log(error);
+    } else {
+        regionx.countryIds = countriesIds;
+        regionx.stateIds = statesIds;
+        regionx.cityIds = citiesIds;
+        
+        regionx.save(function(error){
+            if (error) {
+                console.log(error);
+            }
+        });
+    }
+});
+
+model.Region.findById(region2._id,function(error, regiony){
+    if (error) {
+        console.log(error);
+    } else {
+        regiony.countryIds = countriesIds2;
+        regiony.stateIds = statesIds2;
+        regiony.cityIds = citiesIds2;
+        
+        regiony.save(function(error){
+            if (error) {
+                console.log(error);
+            }
+        });
+    }
+});
