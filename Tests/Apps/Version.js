@@ -430,9 +430,10 @@ describe('PUT /app/[slug]/version/[numer]', function () {
             if (error) {
                 return done(error);
             } else {
-                should.exist(data.error);
-                data.should.not.have.property('_id');
-                data.should.not.have.property('number');
+                should.not.exist(data.error, 'erro inesperado');
+                should.exist(data);
+                data.should.have.property('_id');
+                data.should.have.property('number', version);
                 done();
             }
         });

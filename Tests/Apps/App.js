@@ -387,7 +387,8 @@ describe('DEL /app/[slug]', function () {
 
 describe('PUT /app/[slug]', function () {
     var token,
-        slug;
+        slug,
+        app;
 
     before(function (done) {
         // cria usuario
@@ -406,6 +407,7 @@ describe('PUT /app/[slug]', function () {
                 if (error) {
                     done(error);
                 } else {
+                    app = data;
                     slug = data.slug;
                     done();
                 }
@@ -435,7 +437,6 @@ describe('PUT /app/[slug]', function () {
                 return done(error);
             } else { 
                 should.exist(data.error);
-                should.not.exist(data.slug);
                 data.should.not.have.property('_id');
                 data.should.not.have.property('slug');
                 data.should.not.have.property('name');
@@ -454,12 +455,13 @@ describe('PUT /app/[slug]', function () {
             if (error) {
                 return done(error);
             } else {
-                should.exist(data.error);
-                data.should.not.have.property('_id');
-                data.should.not.have.property('slug');
-                data.should.not.have.property('name');
-                data.should.not.have.property('type');
-                data.should.not.have.property('creator');
+                should.not.exist(data.error, 'erro inesperado');
+                should.exist(data);
+                data.should.have.property('_id');
+                data.should.have.property('slug');
+                data.should.have.property('name', app.name);
+                data.should.have.property('type', 'free');
+                data.should.have.property('creator');
                 done();
             }
         });
