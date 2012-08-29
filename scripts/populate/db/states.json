@@ -1,0 +1,27 @@
+{ "_id" : { "$oid" : "000000000000000000000001" } , "slug" : "acre" , "name" : "Acre" , "symbol" : "ac" , "country" : { "$oid" : "000000000000000000000001" } }
+{ "_id" : { "$oid" : "000000000000000000000002" } , "slug" : "alagoas" , "name" : "Alagoas" , "symbol" : "al" , "country" : { "$oid" : "000000000000000000000001" } }
+{ "_id" : { "$oid" : "000000000000000000000003" } , "slug" : "amazonas" , "name" : "Amazonas" , "symbol" : "am" , "country" : { "$oid" : "000000000000000000000001" } }
+{ "_id" : { "$oid" : "000000000000000000000004" } , "slug" : "amapa" , "name" : "Amapá" , "symbol" : "ap" , "country" : { "$oid" : "000000000000000000000001" } }
+{ "_id" : { "$oid" : "000000000000000000000005" } , "slug" : "bahia" , "name" : "Bahia" , "symbol" : "ba" , "country" : { "$oid" : "000000000000000000000001" } }
+{ "_id" : { "$oid" : "000000000000000000000006" } , "slug" : "ceara" , "name" : "Ceará" , "symbol" : "ce" , "country" : { "$oid" : "000000000000000000000001" } }
+{ "_id" : { "$oid" : "000000000000000000000007" } , "slug" : "distrito-federal" , "name" : "Distrito Federal" , "symbol" : "df" , "country" : { "$oid" : "000000000000000000000001" } }
+{ "_id" : { "$oid" : "000000000000000000000008" } , "slug" : "espirito-santo" , "name" : "Espírito Santo" , "symbol" : "es" , "country" : { "$oid" : "000000000000000000000001" } }
+{ "_id" : { "$oid" : "000000000000000000000009" } , "slug" : "goias" , "name" : "Goiás" , "symbol" : "go" , "country" : { "$oid" : "000000000000000000000001" } }
+{ "_id" : { "$oid" : "00000000000000000000000a" } , "slug" : "maranhao" , "name" : "Maranhão" , "symbol" : "ma" , "country" : { "$oid" : "000000000000000000000001" } }
+{ "_id" : { "$oid" : "00000000000000000000000b" } , "slug" : "minas-gerais" , "name" : "Minas Gerais" , "symbol" : "mg" , "country" : { "$oid" : "000000000000000000000001" } }
+{ "_id" : { "$oid" : "00000000000000000000000c" } , "slug" : "mato-grosso-do-sul" , "name" : "Mato Grosso do Sul" , "symbol" : "ms" , "country" : { "$oid" : "000000000000000000000001" } }
+{ "_id" : { "$oid" : "00000000000000000000000d" } , "slug" : "mato-grosso" , "name" : "Mato Grosso" , "symbol" : "mt" , "country" : { "$oid" : "000000000000000000000001" } }
+{ "_id" : { "$oid" : "00000000000000000000000e" } , "slug" : "para" , "name" : "Pará" , "symbol" : "pa" , "country" : { "$oid" : "000000000000000000000001" } }
+{ "_id" : { "$oid" : "00000000000000000000000f" } , "slug" : "paraiba" , "name" : "Paraíba" , "symbol" : "pb" , "country" : { "$oid" : "000000000000000000000001" } }
+{ "_id" : { "$oid" : "000000000000000000000010" } , "slug" : "pernambuco" , "name" : "Pernambuco" , "symbol" : "pe" , "country" : { "$oid" : "000000000000000000000001" } }
+{ "_id" : { "$oid" : "000000000000000000000011" } , "slug" : "piaui" , "name" : "Piauí" , "symbol" : "pi" , "country" : { "$oid" : "000000000000000000000001" } }
+{ "_id" : { "$oid" : "000000000000000000000012" } , "slug" : "parana" , "name" : "Paraná" , "symbol" : "pr" , "country" : { "$oid" : "000000000000000000000001" } }
+{ "_id" : { "$oid" : "000000000000000000000013" } , "slug" : "rio-de-janeiro" , "name" : "Rio de Janeiro" , "symbol" : "rj" , "country" : { "$oid" : "000000000000000000000001" } }
+{ "_id" : { "$oid" : "000000000000000000000014" } , "slug" : "rio-grande-do-norte" , "name" : "Rio Grande do Norte" , "symbol" : "rn" , "country" : { "$oid" : "000000000000000000000001" } }
+{ "_id" : { "$oid" : "000000000000000000000015" } , "slug" : "rondonia" , "name" : "Rondônia" , "symbol" : "ro" , "country" : { "$oid" : "000000000000000000000001" } }
+{ "_id" : { "$oid" : "000000000000000000000016" } , "slug" : "roraima" , "name" : "Roraima" , "symbol" : "rr" , "country" : { "$oid" : "000000000000000000000001" } }
+{ "_id" : { "$oid" : "000000000000000000000017" } , "slug" : "rio-grande-do-sul" , "name" : "Rio Grande do Sul" , "symbol" : "rs" , "country" : { "$oid" : "000000000000000000000001" } }
+{ "_id" : { "$oid" : "000000000000000000000018" } , "slug" : "santa-catarina" , "name" : "Santa Catarina" , "symbol" : "sc" , "country" : { "$oid" : "000000000000000000000001" } }
+{ "_id" : { "$oid" : "000000000000000000000019" } , "slug" : "sergipe" , "name" : "Sergipe" , "symbol" : "se" , "country" : { "$oid" : "000000000000000000000001" } }
+{ "_id" : { "$oid" : "00000000000000000000001a" } , "slug" : "sao-paulo" , "name" : "São Paulo" , "symbol" : "sp" , "country" : { "$oid" : "000000000000000000000001" } }
+{ "_id" : { "$oid" : "00000000000000000000001b" } , "slug" : "tocantins" , "name" : "Tocantins" , "symbol" : "to" , "country" : { "$oid" : "000000000000000000000001" } }
