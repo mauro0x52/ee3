@@ -135,7 +135,7 @@ module.exports = function (app) {
                 from = from >= 0 ? from : 0;
                 query.skip(from);
                 
-                query.where("regionIds");
+                query.where("regions");
                 query.in([region._id]);
                 //Localiza os Países 
                 query.exec(function (error, countries) {
@@ -197,7 +197,7 @@ module.exports = function (app) {
                 from = from >= 0 ? from : 0;
                 query.skip(from);
                 
-                query.where("regionIds");
+                query.where("regions");
                 query.in([region._id]);
                 //Localiza os Estados 
                 query.exec(function (error, states) {
@@ -259,7 +259,7 @@ module.exports = function (app) {
                 from = from >= 0 ? from : 0;
                 query.skip(from);
                 
-                query.where("regionIds");
+                query.where("regions");
                 query.in([region._id]);
                 //Localiza as Cidades
                 query.exec(function (error, cities) {
