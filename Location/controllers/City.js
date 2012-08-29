@@ -27,7 +27,7 @@ module.exports = function (app) {
      * @request : {limit, order, page}
      * @response : {Name, DDD, Slug}
      */
-    app.get('/country/:slugCountry/state/:slugState/cities/', function (request, response) {
+    app.get('/country/:slugCountry/state/:slugState/cities', function (request, response) {
         var filter = {},
             filterState = {},
             limit, order, query, from;
@@ -126,7 +126,6 @@ module.exports = function (app) {
                             if (state) {
                                 //Localiza a Cidade com os filtros informados
                                 City.findByIdentity(request.params.slugCity, state._id, function (error, city) {
-                                	console.log(city);
                                     if (error) {
                                         response.send({error : error});
                                     } else {

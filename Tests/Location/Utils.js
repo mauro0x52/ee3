@@ -20,7 +20,7 @@ module.exports = {
         slug : "sao-paulo"
     },
     city : {
-        id : "0000000000000000000016b2",
+        id : "00000000000000000000224d",
         slug : "campinas"
     }
 }

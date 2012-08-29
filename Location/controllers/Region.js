@@ -27,7 +27,7 @@ module.exports = function (app) {
      * @request : {order, limit, page}
      * @response : {Name, Slug, CountryIds, StateIds, CityIds}
     */
-    app.get('/regions/', function (request, response) {
+    app.get('/regions', function (request, response) {
         response.contentType('json');
         
         var limit, order, findRegion;
@@ -73,7 +73,7 @@ module.exports = function (app) {
      * @request : {}
      * @response : {Name, Slug, CountryIds, StateIds, CityIds}
     */
-    app.get('/region/:slug/', function (request, response) {
+    app.get('/region/:slug', function (request, response) {
         response.contentType('json');
 
         //Localiza a região informada através do Slug

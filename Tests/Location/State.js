@@ -80,7 +80,7 @@ describe('GET /country/:slug_country/states', function () {
                     should.not.exist(data.error);
                     data.should.have.lengthOf(4);
                     var states = data;
-                    api.get('location', '/company/'+dt.country.slug+'/states', {limit : 2, page : 2}, function(error, data, response) {
+                    api.get('location', '/country/'+dt.country.slug+'/states', {limit : 2, page : 2}, function(error, data, response) {
                             if (error) return done(error);
                             else {
                                 should.not.exist(data.error, 'erro inesperado');

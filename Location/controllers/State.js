@@ -25,7 +25,7 @@ module.exports = function (app) {
      * @request : {}
      * @response : {Name, Slug}
      */
-    app.get('/country/:slug/states/', function (request, response) {
+    app.get('/country/:slug/states', function (request, response) {
         response.contentType('json');
         var filter = {},
             limit, order, query, from;

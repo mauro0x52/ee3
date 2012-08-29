@@ -69,7 +69,7 @@ describe('GET /regions', function () {
                     should.not.exist(data.error);
                     data.length.should.be.below(5);
                     var regions = data;
-                    if (data.should.have.lengthOf(4)){
+                    if (data.length == 4){
 	                    api.get('location', '/regions', {limit : 2, page : 2}, function(error, data, response) {
 	                            if (error) return done(error);
 	                            else {
@@ -83,6 +83,8 @@ describe('GET /regions', function () {
 	                            }
 	                        }
 	                    );
+                    } else {
+	                    done();
                     }
                 }
             }

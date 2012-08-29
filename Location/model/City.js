@@ -64,7 +64,6 @@ citySchema.statics.findByIdentity = function (id, stateId, cb) {
     "use strict";
     var filterCity = {};
 
-
     if (new RegExp("[0-9 a-f]{24}").test(id)) {
         // procura por id
         filterCity._id = id;
@@ -73,7 +72,6 @@ citySchema.statics.findByIdentity = function (id, stateId, cb) {
         filterCity.state = stateId;
         filterCity.slug = id;
     }
-    console.log(filterCity);
     
     City.findOne(filterCity, cb);
 };

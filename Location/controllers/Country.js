@@ -25,7 +25,7 @@ module.exports = function (app) {
      * @request : {filterByName, filterByRegion}
      * @response : {Name, Acronym, DDI, Slug}
     */
-    app.get('/countries/', function (request, response) {
+    app.get('/countries', function (request, response) {
         response.contentType('json');
         var limit, order, query, from;
 
@@ -76,7 +76,7 @@ module.exports = function (app) {
      * @request : {slug}
      * @response : {Name, Acronym, DDI, Slug}
      */
-    app.get('/country/:slug/', function (request, response) {
+    app.get('/country/:slug', function (request, response) {
         response.contentType('json');
         
         //Localiza o País desejado e retorna os dados informados
