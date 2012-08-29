@@ -58,7 +58,7 @@ describe('POST /company/[slug]/address', function () {
             }, function(error, data, response) {
                 if (error) {
                     return done(error);
-                } else { 
+                } else {
                     should.exist(data.error);
                     done();
                 }
@@ -77,13 +77,15 @@ describe('POST /company/[slug]/address', function () {
             }, function(error, data, response) {
                 if (error) {
                     return done(error);
-                } else { 
+                } else {
                     should.exist(data.error);
                     done();
                 }
             }
         );
     });
+
+    it('usuário sem permissão');
 
     it('street em branco', function(done) {
         api.post('companies', '/company/' + company + '/address', {
@@ -95,7 +97,7 @@ describe('POST /company/[slug]/address', function () {
             }, function(error, data, response) {
                 if (error) {
                     return done(error);
-                } else { 
+                } else {
                     should.exist(data.error);
                     done();
                 }
@@ -113,7 +115,7 @@ describe('POST /company/[slug]/address', function () {
             }, function(error, data, response) {
                 if (error) {
                     return done(error);
-                } else { 
+                } else {
                     should.exist(data.error);
                     done();
                 }
@@ -131,7 +133,7 @@ describe('POST /company/[slug]/address', function () {
             }, function(error, data, response) {
                 if (error) {
                     return done(error);
-                } else { 
+                } else {
                     should.exist(data.error);
                     done();
                 }
@@ -149,7 +151,7 @@ describe('POST /company/[slug]/address', function () {
             }, function(error, data, response) {
                 if (error) {
                     return done(error);
-                } else { 
+                } else {
                     should.exist(data.error);
                     done();
                 }
@@ -162,7 +164,7 @@ describe('POST /company/[slug]/address', function () {
             number = "Numero " + rand(),
             complement = "Complemento " + rand(),
             city = "Cidade " + rand();
-                
+
         api.post('companies', '/company/' + company + '/address', {
                 token   : token,
                 street : street,
@@ -173,7 +175,7 @@ describe('POST /company/[slug]/address', function () {
             }, function(error, data, response) {
                 if (error) {
                     return done(error);
-                } else { 
+                } else {
                     should.exist(data);
                     should.not.exist(data.error);
                     data.should.have.property('_id');
@@ -230,7 +232,7 @@ describe('GET /company/[slug]/addresses', function () {
             });
         });
     });
-    
+
     it('url tem que existir', function(done) {
         api.get('companies', '/company/' + company + '/addresses', {}, function(error, data, response) {
             if (error) {
@@ -242,7 +244,7 @@ describe('GET /company/[slug]/addresses', function () {
             }
         });
     });
-    
+
     it('empresa inexistente', function(done) {
         api.get('companies', '/company/inexistente/addresses', {}, function(error, data, response) {
             if (error) {
@@ -253,13 +255,13 @@ describe('GET /company/[slug]/addresses', function () {
             }
         });
     });
-    
+
     it('listar endereços', function(done) {
         api.get('companies', '/company/' + company + '/addresses', {}, function(error, data, response) {
             if (error) {
                 return done(error);
             } else {
-                should.not.exist(data.error, 'erro inesperado');                
+                should.not.exist(data.error, 'erro inesperado');
                 data.length.should.be.above(19);
                 for (var i = 0 ; i < data.length; i = i + 1) {
                     data[i].should.have.property('_id');
@@ -314,7 +316,7 @@ describe('GET /company/[slug]/address/[id]', function () {
             });
         });
     });
-    
+
     it('url tem que existir', function(done) {
         api.get('companies', '/company/' + company + '/address/' + address, {}, function(error, data, response) {
             if (error) {
@@ -326,7 +328,7 @@ describe('GET /company/[slug]/address/[id]', function () {
             }
         });
     });
-    
+
     it('empresa inexistente', function(done) {
         api.get('companies', '/company/inexistente/address/' + address, {}, function(error, data, response) {
             if (error) {
@@ -337,13 +339,13 @@ describe('GET /company/[slug]/address/[id]', function () {
             }
         });
     });
-    
+
     it('exibir endereço', function(done) {
         api.get('companies', '/company/' + company + '/address/' + address, {}, function(error, data, response) {
             if (error) {
                 return done(error);
             } else {
-                should.not.exist(data.error, 'erro inesperado');                
+                should.not.exist(data.error, 'erro inesperado');
                 data.should.have.property('_id');
                 data.should.have.property('street');
                 data.should.have.property('number');
@@ -395,7 +397,7 @@ describe('DEL /company/[slug]/address/[id]', function () {
             });
         });
     });
-    
+
     it('url tem que existir', function(done) {
         api.del('companies', '/company/' + company + '/address/' + address, {}, function(error, data, response) {
             if (error) {
@@ -407,7 +409,7 @@ describe('DEL /company/[slug]/address/[id]', function () {
             }
         });
     });
-    
+
     it('token inválido', function(done) {
         api.del('companies', '/company/' + company + '/address/' + address, {token : 'invalido'}, function(error, data, response) {
             if (error) {
@@ -418,7 +420,9 @@ describe('DEL /company/[slug]/address/[id]', function () {
             }
         });
     });
-    
+
+    it('usuário sem permissão');
+
     it('empresa inexistente', function(done) {
         api.del('companies', '/company/inexistente/address/' + address, {token : token}, function(error, data, response) {
             if (error) {
@@ -429,7 +433,7 @@ describe('DEL /company/[slug]/address/[id]', function () {
             }
         });
     });
-    
+
     it('remove endereço', function(done) {
         api.del('companies', '/company/' + company + '/address/' + address, {token : token}, function(error, data, response) {
             if (error) {
@@ -484,7 +488,7 @@ describe('PUT /company/[slug]/address/[id]', function () {
             });
         });
     });
-    
+
     it('url tem que existir', function(done) {
         api.put('companies', '/company/' + company + '/address/' + address, {}, function(error, data, response) {
             if (error) {
@@ -496,7 +500,7 @@ describe('PUT /company/[slug]/address/[id]', function () {
             }
         });
     });
-    
+
     it('token inválido', function(done) {
         api.put('companies', '/company/' + company + '/address/' + address, {
             token : 'invalido',
@@ -514,7 +518,9 @@ describe('PUT /company/[slug]/address/[id]', function () {
             }
         });
     });
-    
+
+    it('usuário sem permissão');
+
     it('empresa inexistente', function(done) {
         api.put('companies', '/company/inexistente/address/' + address, {
             token : token,
@@ -532,7 +538,7 @@ describe('PUT /company/[slug]/address/[id]', function () {
             }
         });
     });
-    
+
     it('street em branco', function(done) {
         api.put('companies', '/company/' + company + '/address/' + address, {
             token : token,
@@ -549,7 +555,7 @@ describe('PUT /company/[slug]/address/[id]', function () {
             }
         });
     });
-    
+
     it('number em branco', function(done) {
         api.put('companies', '/company/' + company + '/address/' + address, {
             token : token,
@@ -566,7 +572,7 @@ describe('PUT /company/[slug]/address/[id]', function () {
             }
         });
     });
-    
+
     it('complement em branco', function(done) {
         api.put('companies', '/company/' + company + '/address/' + address, {
             token : token,
@@ -583,7 +589,7 @@ describe('PUT /company/[slug]/address/[id]', function () {
             }
         });
     });
-    
+
     it('headQuarters em branco', function(done) {
         api.put('companies', '/company/' + company + '/address/' + address, {
             token : token,
@@ -600,7 +606,7 @@ describe('PUT /company/[slug]/address/[id]', function () {
             }
         });
     });
-    
+
     it('edita endereço', function(done) {
         var street = "Rua " + rand(),
             number = "Numero " + rand(),
