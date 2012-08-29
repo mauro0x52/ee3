@@ -12,7 +12,7 @@ source services.sh
 
 # Funcao principal
 installAll() {
-    
+
     echo ""
     echo "------------------------------------------------------------"
     echo "Iniciando serviços"
@@ -21,7 +21,7 @@ installAll() {
 
     cd $CONFIG_PROJECT_FOLDER
 
-	
+
     echo "- Instalando forever"
     npm install -g forever
     echo ""
@@ -35,11 +35,18 @@ installAll() {
         echo "-- criando config.js"
         if [ ! -f config.js ];
         then
-        	cp config.js.default config.js
-        	echo "--- ok"
-        else 
-        	echo "--- config.js já existe"
+            cp config.js.default config.js
+            echo "--- ok"
+        else
+            echo "--- config.js já existe"
+            CONFIGJS_MODDATE=$(stat -c %Y config.js)
+            CONFIGJSDEFAULT_MODDATE=$(stat -c %Y config.js.default)
+            if [ ${CONFIGJSDEFAULT_MODDATE} -gt ${CONFIGJS_MODDATE} ]
+            then
+                echo "----- config.js.default está mais atual"
+            fi
         fi
+
         echo ""
         cd ..
     done
