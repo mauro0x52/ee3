@@ -60,7 +60,7 @@ describe('POST /company', function () {
             name : 'Emprêsa   muito bacanão! ' + random,
             activity : 'consultoria em testes',
             type : 'company',
-            profile : 'both',
+            profile : 'all',
             active : 1
         }, function(error, data, response) {
             if (error) return done(error);
@@ -77,7 +77,7 @@ describe('POST /company', function () {
             name : '   Emprêsa   muito bacanão!   ' + random,
             activity : 'consultoria em testes',
             type : 'company',
-            profile : 'both',
+            profile : 'all',
             active : 1,
             addresses : [{street:'nome da rua',number:294,complement:'complemento',city:'000000000000000000000001',headQuarters:true}, {street:'nome da rua',number:294,complement:'complemento',city:'000000000000000000000002',headQuarters:true}],
             about: 'sobre'
@@ -98,7 +98,7 @@ describe('POST /company', function () {
             name : '   Emprêsa   muito bacanão!   ' + random,
             activity : 'consultoria em testes',
             type : 'company',
-            profile : 'both',
+            profile : 'all',
             active : 1,
             about: 'sobre',
             addresses : [{street:'nome da rua',number:294,complement:'complemento',city:'000000000000000000000001',headQuarters:true}, {street:'nome da rua',number:294,complement:'complemento',city:'000000000000000000000002',headQuarters:true}]
@@ -119,7 +119,7 @@ describe('POST /company', function () {
             name : '   Êmpresa com n0me muit@ escroto   !    ' + rand(),
             activity : 'consultoria em testes',
             type : 'company',
-            profile : 'both',
+            profile : 'all',
             active : 1,
             about: 'sobre',
             addresses : [{street:'nome da rua',number:294,complement:'complemento',city:'000000000000000000000001',headQuarters:true}, {street:'nome da rua',number:294,complement:'complemento',city:'000000000000000000000002',headQuarters:true}]
@@ -152,7 +152,7 @@ describe('GET /companies', function () {
                     activity : 'consultoria em testes',
                     sectors : ['00000000000000000000000'+(1+Math.floor((Math.random()*2))), '00000000000000000000000'+(3 + Math.floor((Math.random()*2)))],
                     type : 'company',
-                    profile : 'both',
+                    profile : 'all',
                     active : 1,
                     about: 'sobre',
                     addresses : [{street:'nome da rua',number:294,complement:'complemento',city:'000000000000000000000000',headQuarters:true}, {street:'nome da rua',number:294,complement:'complemento',city:'000000000000000000000002',headQuarters:true}]
@@ -737,9 +737,9 @@ describe('GET /company/:company_id', function () {
                 if (error) return done(error);
                 else {
                     should.not.exist(data.products, 'não deve mostrar produtos');
-                    data.should.have.property('addresses').with.not.property('street');
-                    data.should.have.property('addresses').with.not.property('number');
-                    data.should.have.property('addresses').with.not.property('complement');
+                    data.should.have.property('addresses').not.have.property('street');
+                    data.should.have.property('addresses').not.have.property('number');
+                    data.should.have.property('addresses').not.have.property('complement');
                     should.not.exist(data.about, 'não deve mostrar sobre');
                     should.not.exist(data.embeddeds, 'não deve mostrar embeddeds');
                     should.not.exist(data.phones, 'não deve mostrar telefones');
@@ -791,9 +791,9 @@ describe('GET /company/:company_id', function () {
                 if (error) return done(error);
                 else {
                     should.not.exist(data.error, 'erro inesperado');
-                    data.should.have.property('addresses').with.not.property('street');
-                    data.should.have.property('addresses').with.not.property('number');
-                    data.should.have.property('addresses').with.not.property('complement');
+                    data.should.have.property('addresses').have.not.property('street');
+                    data.should.have.property('addresses').have.not.property('number');
+                    data.should.have.property('addresses').have.not.property('complement');
                     should.not.exist(data.phones, 'não deve mostrar telefones');
                     should.not.exist(data.contacts, 'não deve mostrar contatos');
                     done();
@@ -839,6 +839,18 @@ describe('PUT /company/:company:id', function(error, data){
             }
         });
     });
+    it('tenta setar um campo obrigatório como nulo', function(done) {
+        api.put('companies', '/company/'+company.slug, {
+            token : user.token,
+            name : null
+        }, function (error, data, response) {
+            if (error) done(error);
+            else {
+                data.should.have.property('error');
+                done();
+            }
+        });
+    });
     it('muda o nome da empresa', function(done) {
         api.put('companies', '/company/'+company.slug, {
             token : user.token,
@@ -849,6 +861,8 @@ describe('PUT /company/:company:id', function(error, data){
                 data.should.have.property('_id').equal(company._id);
                 data.should.have.property('slug').not.equal(company.slug);
                 data.should.have.property('name').equal('Outro nome muuuito bacana '+random);
+                data.should.have.property('activity').equal(company.activity);
+                data.should.have.property('about').equal(company.about);
                 data.should.have.property('dateUpdated').above(company.dateUpdated);
                 company = data;
                 db.openCollection('companies', 'companies', function(error, companies) {
@@ -859,6 +873,7 @@ describe('PUT /company/:company:id', function(error, data){
                             dbcompany._id.toString().should.be.equal(data._id);
                             dbcompany.should.have.property('slug').equal(data.slug);
                             dbcompany.should.have.property('name').equal(data.name);
+                            dbcompany.should.have.property('about').equal(data.about);
                             done();
                         }
                     })

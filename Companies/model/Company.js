@@ -21,6 +21,7 @@ companySchema = new Schema({
     products    : [require('./Product.js').Product],
     addresses   : [require('./Address.js').Address],
     type        : {type : String, enum : ['freelancer', 'company', 'group'], required : true},
+    profile     : {type : String, enum : ['buyer', 'seller', 'all'], required : true},
     active      : {type : Boolean, required : true},
     tags        : [{type : String, lowercase : true , trim : true}],
     activity    : {type : String},

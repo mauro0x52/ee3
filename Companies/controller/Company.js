@@ -301,61 +301,26 @@ module.exports = function (app) {
                                 response.send({error : 'permission denied'});
                             } else {
                                 //Valida cada campo para ver se existe e trata para adicionar no Model
-                                if (request.param("slug")) {
-                                    company.slug = request.param("slug");
-                                }
-                                if (request.param("name")) {
-                                    company.name = request.param("name");
-                                }
-                                if (request.param("thumbnails")) {
-                                    company.thumbnails = request.param("thumbnails");
-                                }
-                                if (request.param("members")) {
-                                    company.members = request.param("members");
-                                }
-                                if (request.param("users")) {
-                                    company.users = request.param("users");
-                                }
-                                if (request.param("sectors")) {
-                                    company.sectors = request.param("sectors");
-                                }
-                                if (request.param("products")) {
-                                    company.products = request.param("products");
-                                }
-                                if (request.param("addresses")) {
-                                    company.addresses = request.param("addresses");
-                                }
-                                if (request.param("type")) {
-                                    company.type = request.param("type");
-                                }
-                                if (request.param("profile")) {
-                                    company.profile = request.param("profile");
-                                }
-                                if (request.param("active")) {
-                                    company.active = request.param("active");
-                                }
-                                if (request.param("tags")) {
-                                    company.tags = request.param("tags");
-                                }
-                                if (request.param("abstract")) {
-                                    company.abstract = request.param("abstract");
-                                }
-                                if (request.param("about")) {
-                                    company.about = request.param("about");
-                                }
-                                if (request.param("phones")) {
-                                    company.phones = request.param("phones");
-                                }
-                                if (request.param("contacts")) {
-                                    company.contacts = request.param("contacts");
-                                }
-                                if (request.param("links")) {
-                                    company.links = request.param("links");
-                                }
-                                if (request.param("embeddeds")) {
-                                    company.embeddeds = request.param("embeddeds");
-                                }
-
+                                company.slug        = request.param("slug", company.slug);
+                                company.name        = request.param("name", company.name);
+                                company.thumbnails  = request.param("thumbnails", company.thumbnails);
+                                company.members     = request.param("members", company.members);
+                                company.users       = request.param("users", company.users);
+                                company.sectors     = request.param("sectors", company.sectors);
+                                company.products    = request.param("products", company.products);
+                                company.addresses   = request.param("addresses", company.addresses);
+                                company.type        = request.param("type", company.type);
+                                company.profile     = request.param("profile", company.profile);
+                                company.active      = request.param("active", company.active);
+                                company.addresses   = request.param("addresses", company.addresses);
+                                company.tags        = request.param("tags", company.tags);
+                                company.activity    = request.param("activity", company.activity);
+                                company.abstract    = request.param("abstract", company.abstract);
+                                company.about       = request.param("about", company.about);
+                                company.phones      = request.param("phones", company.phones);
+                                company.contacts    = request.param("contacts", company.contacts);
+                                company.links       = request.param("links", company.links);
+                                company.embeddeds   = request.param("embeddeds", company.embeddeds);
                                 company.dateUpdated = new Date();
 
                                 //Salva o objeto no Model de Companies e retorna o objeto para o solicitante

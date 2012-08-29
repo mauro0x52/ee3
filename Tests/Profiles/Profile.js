@@ -75,7 +75,8 @@ describe('POST /profile', function () {
         api.post('profiles', '/profile', {
             token : userA.token,
             name : 'Nome' + random,
-            surname : 'Sobrenome' + random
+            surname : 'Sobrenome' + random,
+            about : 'sobre'
         }, function(error, data, response) {
             if (error) return done(error);
             else {
@@ -172,6 +173,34 @@ describe('PUT /profile/:profile_id', function() {
                 if (error) done(error);
                 else {
                     data.should.have.property('error');
+                    done();
+                }
+            }
+        );
+    });
+    it('setar um campo obrigatório como nulo', function (done) {
+        api.put('profiles',  '/profile/' + profileA.slug, {
+                token : userA.token,
+                name : null
+            }, function(error, data, response) {
+                if (error) done(error);
+                else {
+                    data.should.have.property('error');
+                    done();
+                }
+            }
+        );
+    });
+    it('setar um campo opcional como nulo', function (done) {
+        api.put('profiles',  '/profile/' + profileA.slug, {
+                token : userA.token,
+                about : null
+            }, function(error, data, response) {
+                if (error) done(error);
+                else {
+                    data.should.not.have.property('error');
+                    data.should.have.property('about').equal('');
+                    profileA = data;
                     done();
                 }
             }

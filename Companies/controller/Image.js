@@ -252,8 +252,8 @@ module.exports = function (app) {
                                                         response.send({error : 'image not found'});
                                                     } else {
                                                         //altera os dados da imagem
-                                                        image.title = request.param('title', null);
-                                                        image.legend = request.param('legend', null);
+                                                        image.title = request.param('title', image.title);
+                                                        image.legend = request.param('legend', image.legend);
                                                         //salva as modificações
                                                         company.save(function (error) {
                                                             if (error) {
