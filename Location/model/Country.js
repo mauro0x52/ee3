@@ -2,7 +2,7 @@
  * @author : Lucas Calado
  * @since : 2012-07
  *
- * @description : Representação da entidade de países
+ * @description : RepresentaĞ·Ğ³o da entidade de paĞ½ses
  */
 var crypto = require('crypto'),
     mongoose = require('mongoose'),
@@ -12,7 +12,7 @@ var crypto = require('crypto'),
 
 countrySchema = new Schema({
     name      : {type : String, trim : true, required : true},
-    acronym   : {type : String, required : true},
+    symbol   : {type : String, required : true},
     slug      : {type : String, trim : true},
     ddi       : {type : String, required : true},
     regions : [{type: objectId}]
@@ -21,7 +21,7 @@ countrySchema = new Schema({
 countrySchema.pre('save', function(next) {
     var crypto = require('crypto'),
         slug, foundSlug,
-        charFrom = 'àáâãäåçèéêëìíîïñğóòôõöøùúûüıÿ',
+        charFrom = 'Ğ°Ğ±Ğ²Ğ³Ğ´ĞµĞ·Ğ¸Ğ¹ĞºĞ»Ğ¼Ğ½Ğ¾Ğ¿ÑÑ€ÑƒÑ‚Ñ„Ñ…Ñ†ÑˆÑ‰ÑŠÑ‹ÑŒÑÑ',
         charTo   = 'aaaaaaceeeeiiiinooooooouuuuyy',
         country = this;
 

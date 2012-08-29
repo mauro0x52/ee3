@@ -93,7 +93,8 @@ describe('POST /conversant', function () {
 
 describe('PUT /conversant/[id]/change-label', function () {
     var token,
-        conversant;
+        conversant,
+        obj;
 
     before(function (done) {
         // cria usuario
@@ -108,6 +109,7 @@ describe('PUT /conversant/[id]/change-label', function () {
                 label : 'Label ' + rand()
             }, function (error, data, response) {
                 conversant = data._id;
+                obj = data
                 done();
             });
         });
@@ -150,10 +152,10 @@ describe('PUT /conversant/[id]/change-label', function () {
                 if (error) {
                     return done(error);
                 } else { 
-                    should.exist(data.error);
-                    data.should.not.have.property('_id');
-                    data.should.not.have.property('label');
-                    data.should.not.have.property('user');
+                    obj = data;
+                    should.not.exist(data.error);
+                    data.should.have.property('_id');
+                    data.should.have.property('label', obj.label);
                     done();
                 }
             }

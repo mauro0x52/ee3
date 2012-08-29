@@ -386,7 +386,8 @@ describe('PUT /profile/[slug]/link/[id]', function () {
         slug,
         version,
         profile,
-        link;
+        link,
+        obj;
 
     before(function (done) {
         // cria usuario
@@ -408,7 +409,8 @@ describe('PUT /profile/[slug]/link/[id]', function () {
                     url     : 'Url ' + rand(),
                     type    : 'Youtube'
                 }, function(error, data, response) {
-                    link = data._id
+                    link = data._id;
+                    obj = data;
                     done();
                 });
             });
@@ -465,7 +467,10 @@ describe('PUT /profile/[slug]/link/[id]', function () {
             if (error) {
                 return done(error);
             } else {
-                should.exist(data.error);
+                obj = data;
+                should.not.exist(data.error);
+                data.should.have.property('_id');
+                data.should.have.property('url', obj.url);
                 done();
             }
         });
@@ -479,7 +484,10 @@ describe('PUT /profile/[slug]/link/[id]', function () {
             if (error) {
                 return done(error);
             } else {
-                should.exist(data.error);
+                obj = data;
+                should.not.exist(data.error);
+                data.should.have.property('_id');
+                data.should.have.property('type', obj.type);
                 done();
             }
         });

@@ -321,8 +321,8 @@ module.exports = function (app) {
                                 company.contacts    = request.param("contacts", company.contacts);
                                 company.links       = request.param("links", company.links);
                                 company.embeddeds   = request.param("embeddeds", company.embeddeds);
-                                company.dateUpdated = new Date();
 
+                                company.dateUpdated = new Date();
                                 //Salva o objeto no Model de Companies e retorna o objeto para o solicitante
                                 company.save(function (error) {
                                     if (error) {

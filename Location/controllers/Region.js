@@ -27,27 +27,28 @@ module.exports = function (app) {
      * @request : {order, limit, page}
      * @response : {Name, Slug, CountryIds, StateIds, CityIds}
     */
-    app.get('/regions/', function (request, response) {
+    app.get('/regions', function (request, response) {
         response.contentType('json');
         
         var limit, order, findRegion;
-            
-            
+        
         findRegion = Region.find();
         
         // limit : padrao = 10, max = 20, min = 1
         limit = request.param('limit', 10) < 20 ? request.param('limit', 10) : 20;
         findRegion.limit(limit);
         
-        // order : padrao = name ascedenting
+        // order : padrao = dateCreated descending
         order = request.param('order', [{name:1}]);
         if (!(order instanceof Array)) order = [order];
 
+        var sort = {};
         for (var i = 0; i < order.length; i++) {
             for (var name in order[i]) {
-                findRegion.sort(name,order[i][name]);
+                sort[name] = order[i][name];
             }
         }
+        findRegion.sort(sort);
         
         //Localiza todas as regiões
         findRegion.exec (function (error, regions) {
@@ -72,7 +73,7 @@ module.exports = function (app) {
      * @request : {}
      * @response : {Name, Slug, CountryIds, StateIds, CityIds}
     */
-    app.get('/region/:slug/', function (request, response) {
+    app.get('/region/:slug', function (request, response) {
         response.contentType('json');
 
         //Localiza a região informada através do Slug
@@ -120,15 +121,17 @@ module.exports = function (app) {
                 limit = request.param('limit', 10) < 20 ? request.param('limit', 10) : 20;
                 query.limit(limit);
 
-                // order : padrao = name ascedenting
-                order = request.param('order', [{name:1}]);
-                if (!(order instanceof Array)) order = [order];
-
-                for (var i = 0; i < order.length; i++) {
-                    for (var name in order[i]) {
-                        query.sort(name,order[i][name]);
-                    }
-                }
+                // order : padrao = dateCreated descending
+		        order = request.param('order', [{name:1}]);
+		        if (!(order instanceof Array)) order = [order];
+		
+		        var sort = {};
+		        for (var i = 0; i < order.length; i++) {
+		            for (var name in order[i]) {
+		                sort[name] = order[i][name];
+		            }
+		        }
+		        query.sort(sort);
                 
                 // from : padrao = 0, min = 0
                 from = limit * (request.param('page', 1) - 1);
@@ -182,15 +185,17 @@ module.exports = function (app) {
                 limit = request.param('limit', 10) < 20 ? request.param('limit', 10) : 20;
                 query.limit(limit);
 
-                // order : padrao = name ascedenting
-                order = request.param('order', [{name:1}]);
-                if (!(order instanceof Array)) order = [order];
-
-                for (var i = 0; i < order.length; i++) {
-                    for (var name in order[i]) {
-                        query.sort(name,order[i][name]);
-                    }
-                }
+                // order : padrao = dateCreated descending
+		        order = request.param('order', [{name:1}]);
+		        if (!(order instanceof Array)) order = [order];
+		
+		        var sort = {};
+		        for (var i = 0; i < order.length; i++) {
+		            for (var name in order[i]) {
+		                sort[name] = order[i][name];
+		            }
+		        }
+		        query.sort(sort);
                 
                 // from : padrao = 0, min = 0
                 from = limit * (request.param('page', 1) - 1);
@@ -244,15 +249,17 @@ module.exports = function (app) {
                 limit = request.param('limit', 10) < 20 ? request.param('limit', 10) : 20;
                 query.limit(limit);
 
-                // order : padrao = name ascedenting
-                order = request.param('order', [{name:1}]);
-                if (!(order instanceof Array)) order = [order];
-
-                for (var i = 0; i < order.length; i++) {
-                    for (var name in order[i]) {
-                        query.sort(name,order[i][name]);
-                    }
-                }
+                // order : padrao = dateCreated descending
+		        order = request.param('order', [{name:1}]);
+		        if (!(order instanceof Array)) order = [order];
+		
+		        var sort = {};
+		        for (var i = 0; i < order.length; i++) {
+		            for (var name in order[i]) {
+		                sort[name] = order[i][name];
+		            }
+		        }
+		        query.sort(sort);
                 
                 // from : padrao = 0, min = 0
                 from = limit * (request.param('page', 1) - 1);

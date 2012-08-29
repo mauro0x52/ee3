@@ -177,10 +177,10 @@ module.exports = function (app) {
                                         response.send({error : 'product not found'});
                                     }
                                     else {
-                                        product.name = request.param('name');
-                                        product.slug = request.param('slug');
-                                        product.abstract = request.param('abstract');
-                                        product.about = request.param('about');
+                                        product.name = request.param('name', product.name);
+                                        product.slug = request.param('slug', product.slug);
+                                        product.abstract = request.param('abstract', product.abstract);
+                                        product.about = request.param('about', product.about);
 
                                         company.save(function(error){
                                             if (error) {

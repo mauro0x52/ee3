@@ -3,7 +3,7 @@
  * @autor : Lucas Kalado
  * @since : 2012-08
  *
- * @description : Kit de testes do controller Country do serviço Location
+ * @description : Kit de testes do controller Country do servi√ßo Location
  */
 
 var should = require("should"),
@@ -17,7 +17,7 @@ describe('GET /countries', function () {
         done();
     });
     
-    it('lista de pa�ses', function(done) {
+    it('lista de países', function(done) {
         api.get('location', '/countries',
             null,
             function(error, data, response) {
@@ -32,7 +32,7 @@ describe('GET /countries', function () {
             }
         );
     });
-    it('lista de 18 pa�ses', function(done) {
+    it('lista de 18 países', function(done) {
         api.get('location', '/countries',
             {
                 limit : 18
@@ -47,7 +47,7 @@ describe('GET /countries', function () {
             }
         );
     });
-    it('tenta listar mais de 20 pa�ses', function(done) {
+    it('tenta listar mais de 20 países', function(done) {
         api.get('location', '/countries',
             {
                 limit : 25
@@ -67,19 +67,25 @@ describe('GET /countries', function () {
                 if (error) return done(error);
                 else {
                     should.not.exist(data.error);
+                    data.length.should.be.below(5);
                     var countries = data;
-                    api.get('location', '/countries', {limit : 2, page : 2}, function(error, data, response) {
-                            if (error) return done(error);
-                            else {
-                                should.not.exist(data.error, 'erro inesperado');
-                                JSON.stringify(countries)
-                                    .should.include(JSON.stringify(data[0]), 'resultado menor tem que está dentro do resultado maior');
-                                JSON.stringify(countries)
-                                    .should.include(JSON.stringify(data[1]), 'resultado menor tem que está dentro do resultado maior');
-                                done();
-                            }
-                        }
-                    );
+                    if (data.length == 4){
+	                    api.get('location', '/countries', {limit : 2, page : 2}, function(error, data, response) {
+	                            if (error) return done(error);
+	                            else {
+	                                should.not.exist(data.error, 'erro inesperado');
+	                                data.length.should.be.below(3);
+	                                JSON.stringify(countries)
+	                                    .should.include(JSON.stringify(data[0]), 'resultado menor tem que est√° dentro do resultado maior');
+	                                JSON.stringify(countries)
+	                                    .should.include(JSON.stringify(data[1]), 'resultado menor tem que est√° dentro do resultado maior');
+	                                done();
+	                            }
+	                        }
+	                    );
+                    } else {
+	                    done();
+                    }
                 }
             }
         );
@@ -91,9 +97,9 @@ describe('GET /countries', function () {
                 if (error) return done(error);
                 else {
                     should.not.exist(data.error, 'erro inesperado');
-                    data.length.should.be.above(2);
+                    data.length.should.be.below(11);
                     for (var i = 1; i < data.length; i++) {
-                        data[i-1].name.should.be.above(data[i].name, 'não ordenou');
+                        data[i].name.should.be.above(data[i-1].name, 'n√£o ordenou');
                     }
                     done();
                 }
@@ -109,7 +115,7 @@ describe('GET /countries', function () {
                 if (error) return done(error);
                 else {
                     should.not.exist(data.error, 'erro inesperado');
-                    data.length.should.be.above(2);
+                    data.length.should.be.below(11);
                     for (var i = 1; i < data.length; i++) {
                         data[i-1].slug.should.be.above(data[i].slug, 'não ordenou');
                     }
@@ -120,13 +126,13 @@ describe('GET /countries', function () {
     });
 });
 
-describe('GET /countries/:slug_country', function () {
+describe('GET /country/:slug_country', function () {
     before(function (done) {
         done();
     });
 
     it('url deve existir', function(done) {
-        api.get('location', '/countries/'+dt.country.slug,
+        api.get('location', '/country/'+dt.country.slug,
             {},
             function(error, data, response) {
                 if (error) return done(error);
@@ -137,8 +143,8 @@ describe('GET /countries/:slug_country', function () {
             }
         );
     });
-    it('pa�s que não existe', function(done) {
-        api.get('location', '/countries/'+dt.country.slug,
+    it('país que não existe', function(done) {
+        api.get('location', '/country/asdasdasdasd',
             {},
             function(error, data, response) {
                 if (error) return done(error);
@@ -149,27 +155,27 @@ describe('GET /countries/:slug_country', function () {
             }
         );
     });
-    it('pega pa�s por id', function(done) {
-        api.get('location', '/countries/'+dt.country.slug,
+    it('pega país por id', function(done) {
+        api.get('location', '/country/'+dt.country.slug,
             {},
             function(error, data, response) {
                 if (error) return done(error);
                 else {
-                    data.should.have.property('_id', '503b7c227dd8ba7914000011', 'os ids devem ser iguais');
-                    data.should.have.property('slug', 'slug-8c31070edf', 'os slugs devem ser iguais');
+                    data.should.have.property('_id', dt.country.id, 'os ids devem ser iguais');
+                    data.should.have.property('slug', dt.country.slug, 'os slugs devem ser iguais');
                     done();
                 }
             }
         );
     });
-    it('pega pa�s por slug', function(done) {
-        api.get('location', '/countries/'+dt.country.slug,
+    it('pega país por slug', function(done) {
+        api.get('location', '/country/'+dt.country.slug,
             {},
             function(error, data, response) {
                 if (error) return done(error);
                 else {
-                    data.should.have.property('_id', '503b7c227dd8ba7914000011', 'os ids devem ser iguais');
-                    data.should.have.property('slug', 'slug-8c31070edf', 'os slugs devem ser iguais');
+                    data.should.have.property('_id', dt.country.id, 'os ids devem ser iguais');
+                    data.should.have.property('slug', dt.country.slug, 'os slugs devem ser iguais');
                     done();
                 }
             }

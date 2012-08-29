@@ -479,7 +479,8 @@ describe('PUT /app/[slug]/version/[number]/tool/[id]', function () {
     var token,
         slug,
         version,
-        tool;
+        tool,
+        name;
 
     before(function (done) {
         // cria usuario
@@ -506,6 +507,7 @@ describe('PUT /app/[slug]/version/[number]/tool/[id]', function () {
                         source: 'Código ' + rand()
                     }, function (error, data) {
                         tool = data._id;
+                        name = data.name;
                         done();
                     });
                 });
@@ -607,10 +609,10 @@ describe('PUT /app/[slug]/version/[number]/tool/[id]', function () {
                 if (error) {
                     return done(error);
                 } else {
-                    should.exist(data.error);
-                    data.should.not.have.property('_id');
-                    data.should.not.have.property('name');
-                    data.should.not.have.property('source');
+                    should.not.exist(data.error, 'algo deu errado');
+                    data.should.have.property('_id');
+                    data.should.have.property('name', name);
+                    data.should.have.property('source');
                     done();
                 }
             }

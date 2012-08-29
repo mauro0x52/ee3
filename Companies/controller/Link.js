@@ -228,8 +228,8 @@ module.exports = function (app) {
                                                         response.send({error : 'link not found'});
                                                     } else {
                                                         //altera os dados do link
-                                                        link.type = request.param('type', null);
-                                                        link.url = request.param('url', null);
+                                                        link.type = request.param('type', link.type);
+                                                        link.url = request.param('url', link.url);
                                                         //salva as modificações
                                                         link.save(function (error) {
                                                             if (error) {
@@ -499,8 +499,8 @@ module.exports = function (app) {
                                             response.send({error : 'link not found'});
                                         } else {
                                             //altera os dados do link
-                                            link.type = request.param('type', null);
-                                            link.url = request.param('url', null);
+                                            link.type = request.param('type', link.type);
+                                            link.url = request.param('url', link.url);
                                             //salva as modificações
                                             company.save(function (error) {
                                                 if (error) {

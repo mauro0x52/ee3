@@ -488,7 +488,8 @@ describe('PUT /company/[slug]/phone/[id]', function () {
         slug,
         version,
         company,
-        phone;
+        phone,
+        obj;
 
     before(function (done) {
         // cria usuario
@@ -516,7 +517,8 @@ describe('PUT /company/[slug]/phone/[id]', function () {
                     intCode   : 'intCode ' + rand(),
                     type      : 'home'
                 }, function(error, data, response) {
-                    phone = data._id
+                    phone = data._id;
+                    obj = data;
                     done();
                 });
             });
@@ -582,7 +584,10 @@ describe('PUT /company/[slug]/phone/[id]', function () {
             if (error) {
                 return done(error);
             } else {
-                should.exist(data.error);
+                obj = data;
+                should.not.exist(data.error);
+                data.should.have.property('_id');
+                data.should.have.property('number', obj.number);
                 done();
             }
         });
@@ -599,7 +604,10 @@ describe('PUT /company/[slug]/phone/[id]', function () {
             if (error) {
                 return done(error);
             } else {
-                should.exist(data.error);
+                obj = data;
+                should.not.exist(data.error);
+                data.should.have.property('_id');
+                data.should.have.property('extension', obj.extension);
                 done();
             }
         });
@@ -616,7 +624,10 @@ describe('PUT /company/[slug]/phone/[id]', function () {
             if (error) {
                 return done(error);
             } else {
-                should.exist(data.error);
+                obj = data;
+                should.not.exist(data.error);
+                data.should.have.property('_id');
+                data.should.have.property('areaCode', obj.areaCode);
                 done();
             }
         });
@@ -633,7 +644,10 @@ describe('PUT /company/[slug]/phone/[id]', function () {
             if (error) {
                 return done(error);
             } else {
-                should.exist(data.error);
+                obj = data;
+                should.not.exist(data.error);
+                data.should.have.property('_id');
+                data.should.have.property('intCode', obj.intCode);
                 done();
             }
         });
@@ -650,7 +664,10 @@ describe('PUT /company/[slug]/phone/[id]', function () {
             if (error) {
                 return done(error);
             } else {
-                should.exist(data.error);
+                obj = data;
+                should.not.exist(data.error);
+                data.should.have.property('_id');
+                data.should.have.property('type', obj.type);
                 done();
             }
         });

@@ -118,8 +118,9 @@ module.exports = function (app) {
                                 profile.name        = request.param('name', profile.name);
                                 profile.surname     = request.param('surname', profile.surname);
                                 profile.about       = request.param('about', profile.about);
+
                                 profile.dateUpdated = new Date();
-                                
+
                                 profile.save(function (error) {
                                     if (error) {
                                         response.send({error : error});

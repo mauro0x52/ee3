@@ -85,8 +85,6 @@ describe('POST /company/[slug]/address', function () {
         );
     });
 
-    it('usuário sem permissão');
-
     it('street em branco', function(done) {
         api.post('companies', '/company/' + company + '/address', {
                 token   : token,
@@ -421,8 +419,6 @@ describe('DEL /company/[slug]/address/[id]', function () {
         });
     });
 
-    it('usuário sem permissão');
-
     it('empresa inexistente', function(done) {
         api.del('companies', '/company/inexistente/address/' + address, {token : token}, function(error, data, response) {
             if (error) {
@@ -454,7 +450,8 @@ describe('PUT /company/[slug]/address/[id]', function () {
         slug,
         version,
         company,
-        address;
+        address,
+        obj;
 
     before(function (done) {
         // cria usuario
@@ -482,7 +479,8 @@ describe('PUT /company/[slug]/address/[id]', function () {
                     city : "Cidade " + rand(),
                     headQuarters : true
                 }, function(error, data, response) {
-                    address = data._id
+                    address = data._id;
+                    obj = data;
                     done();
                 });
             });
@@ -519,8 +517,6 @@ describe('PUT /company/[slug]/address/[id]', function () {
         });
     });
 
-    it('usuário sem permissão');
-
     it('empresa inexistente', function(done) {
         api.put('companies', '/company/inexistente/address/' + address, {
             token : token,
@@ -550,7 +546,10 @@ describe('PUT /company/[slug]/address/[id]', function () {
             if (error) {
                 return done(error);
             } else {
-                should.exist(data.error);
+                obj = data;
+                should.not.exist(data.error);
+                data.should.have.property('_id');
+                data.should.have.property('street', obj.street);
                 done();
             }
         });
@@ -567,7 +566,10 @@ describe('PUT /company/[slug]/address/[id]', function () {
             if (error) {
                 return done(error);
             } else {
-                should.exist(data.error);
+                obj = data;
+                should.not.exist(data.error);
+                data.should.have.property('_id');
+                data.should.have.property('number', obj.number);
                 done();
             }
         });
@@ -584,7 +586,10 @@ describe('PUT /company/[slug]/address/[id]', function () {
             if (error) {
                 return done(error);
             } else {
-                should.exist(data.error);
+                obj = data;
+                should.not.exist(data.error);
+                data.should.have.property('_id');
+                data.should.have.property('complement', obj.complement);
                 done();
             }
         });
@@ -601,7 +606,10 @@ describe('PUT /company/[slug]/address/[id]', function () {
             if (error) {
                 return done(error);
             } else {
-                should.exist(data.error);
+                obj = data;
+                should.not.exist(data.error);
+                data.should.have.property('_id');
+                data.should.have.property('headQuarters', obj.headQuarters);
                 done();
             }
         });

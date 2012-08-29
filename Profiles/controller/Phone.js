@@ -182,11 +182,11 @@ module.exports = function (app) {
                                         response.send({error : error});
                                     } else {
                                         //altera os dados do telefone
-                                        phone.type = request.param('type', null);
-                                        phone.number = request.param('number', null);
-                                        phone.extension = request.param('extension', null);
-                                        phone.areaCode = request.param('areaCode', null);
-                                        phone.intCode = request.param('intCode', null);
+                                        phone.type = request.param('type', phone.type);
+                                        phone.number = request.param('number', phone.number);
+                                        phone.extension = request.param('extension', phone.extension);
+                                        phone.areaCode = request.param('areaCode', phone.areaCode);
+                                        phone.intCode = request.param('intCode', phone.intCode);
                                         //salva as alterações
                                         profile.save(function (error) {
                                             if (error) {

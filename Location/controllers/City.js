@@ -27,7 +27,7 @@ module.exports = function (app) {
      * @request : {limit, order, page}
      * @response : {Name, DDD, Slug}
      */
-    app.get('/country/:slugCountry/state/:slugState/cities/', function (request, response) {
+    app.get('/country/:slugCountry/state/:slugState/cities', function (request, response) {
         var filter = {},
             filterState = {},
             limit, order, query, from;
@@ -49,7 +49,7 @@ module.exports = function (app) {
                             //Com o resultado da validação do estado, faz a busca de todas as cidades.
                             if (state) {
                                 //Aplica o filtro de estado
-                                filter.stateId = state._id;
+                                filter.state = state._id;
                                 
                                 //Cria o objeto query
                                 query = City.find(filter);
@@ -58,15 +58,17 @@ module.exports = function (app) {
                                 limit = request.param('limit', 10) < 20 ? request.param('limit', 10) : 20;
                                 query.limit(limit);
 
-                                // order : padrao = name ascedenting
-                                order = request.param('order', [{name:1}]);
-                                if (!(order instanceof Array)) order = [order];
-
-                                for (var i = 0; i < order.length; i++) {
-                                    for (var name in order[i]) {
-                                        query.sort(name,order[i][name]);
-                                    }
-                                }
+                                // order : padrao = dateCreated descending
+						        order = request.param('order', [{name:1}]);
+						        if (!(order instanceof Array)) order = [order];
+						
+						        var sort = {};
+						        for (var i = 0; i < order.length; i++) {
+						            for (var name in order[i]) {
+						                sort[name] = order[i][name];
+						            }
+						        }
+						        query.sort(sort);
 
                                 // from : padrao = 0, min = 0
                                 from = limit * (request.param('page', 1) - 1);
@@ -106,20 +108,18 @@ module.exports = function (app) {
      * @request : {slugCountry,slugState,slugCity}
      * @response : {Name, DDD, Slug}
      */
-    app.get('/country/:slugCountry/state/:slugState/city/:slugCity/', function (request, response) {
-        var filter;
+    app.get('/country/:slugCountry/state/:slugState/city/:slugCity', function (request, response) {
+    	var filter;
 
         response.contentType('json');
 
-        Country.findByIdentity({slug : request.params.slugCountry}, function (error, country) {
+        Country.findByIdentity(request.params.slugCountry, function (error, country) {
             if (error) {
                 response.send({error : error});
             } else {
                 if (country) {
-                    //Adiciona os Filtros necessários para localizar o Estado
-                    filter = {countryId : country._id, slug : request.params.slugState};
                     //Localiza o Estado
-                    State.findByIdentity(filter, function (error, state) {
+                    State.findByIdentity(request.params.slugState, country._id, function (error, state) {
                         if (error) {
                             response.send({error : error});
                         } else {

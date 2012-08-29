@@ -393,7 +393,8 @@ describe('PUT /profile/[slug]/job/[id]', function () {
         slug,
         version,
         profile,
-        job;
+        job,
+        obj;
 
     before(function (done) {
         // cria usuario
@@ -421,7 +422,8 @@ describe('PUT /profile/[slug]/job/[id]', function () {
                     dateStart   : new Date(),
                     dateEnd     : new Date()
                 }, function(error, data, response) {
-                    job = data._id
+                    job = data._id;
+                    obj = data;
                     done();
                 });
             });
@@ -487,7 +489,10 @@ describe('PUT /profile/[slug]/job/[id]', function () {
             if (error) {
                 return done(error);
             } else {
-                should.exist(data.error);
+                obj = data;
+                should.not.exist(data.error);
+                data.should.have.property('_id');
+                data.should.have.property('name', obj.name);
                 done();
             }
         });

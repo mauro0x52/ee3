@@ -219,8 +219,8 @@ module.exports = function (app) {
                                         response.send({error : 'app not found'});
                                     } else {
                                         //edita dados da autorização
-                                        app.authorizationDate = request.param('authorizationDate', null);
-                                        app.expirationDate = request.param('expirationDate', null);
+                                        app.authorizationDate = request.param('authorizationDate', app.authorizationDate);
+                                        app.expirationDate = request.param('expirationDate', app.expirationDate);
                                         //salva dados da autorização
                                         user.save(function (error) {
                                             if (error) {

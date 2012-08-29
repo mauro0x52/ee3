@@ -187,12 +187,12 @@ module.exports = function (app) {
                                             response.send({error : 'job not found'});
                                         } else {
                                             //altera os dados do trabalho
-                                            job.company = request.param('company', null);
-                                            job.name = request.param('name', null);
-                                            job.companyName = request.param('companyName', null);
-                                            job.description = request.param('description', null);
-                                            job.dateStart = request.param('dateStart', null);
-                                            job.dateEnd = request.param('dateEnd', null);
+                                            job.company = request.param('company', job.company);
+                                            job.name = request.param('name', job.name);
+                                            job.companyName = request.param('companyName', job.companyName);
+                                            job.description = request.param('description', job.description);
+                                            job.dateStart = request.param('dateStart', job.dateStart);
+                                            job.dateEnd = request.param('dateEnd', job.dateEnd);
                                             //salva as alterações
                                             profile.save(function (error) {
                                                 if (error) {

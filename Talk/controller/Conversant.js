@@ -82,7 +82,7 @@ module.exports = function (app) {
                             response.send({error : 'user not found'});
                         } else {
                             //modifica a label
-                            conversant.label = request.param('new_label', null);
+                            conversant.label = request.param('new_label', conversant.label);
                             //salva modificação
                             conversant.save(function (error) {
                                 if (error) {
