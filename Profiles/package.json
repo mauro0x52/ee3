@@ -4,12 +4,10 @@
   "version": "0.0.1",
   "author": "Empreendemia",
   "dependencies": {
-    "ejs": "~0.8.x",
-    "express": "3.0.x",
-    "express-namespace": "0.1.x",
-    "mongodb": "1.1.x",
-    "mongoose": "3.0.x",
-    "restler": "2.0.x"
+    "ejs": "0.8.x",
+    "express": "3.0.0",
+    "mongoose": "3.0.1",
+    "restler": "2.0.1"
   },
   "devDependencies": {}
 }
