@@ -183,8 +183,8 @@ module.exports = function (app) {
                                             response.send({error : 'embedded not found'});
                                         } else {
                                             //altera os dados do embbeded
-                                            embedded.link = request.param('link', null);
-                                            embedded.embed = request.param('embed', null);
+                                            embedded.link = request.param('link', embedded.link);
+                                            embedded.embed = request.param('embed', embedded.embed);
                                             //salva as alterações
                                             company.save(function (error) {
                                                 if (error) {

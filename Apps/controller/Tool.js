@@ -317,12 +317,8 @@ module.exports = function (app) {
                                                         response.send({error : 'tool not found'});
                                                     } else {
                                                         //altera os dados da ferramenta
-                                                        if (request.param('name', null) || request.param('source', null) !== "") {
-                                                            tool.name = request.param('name', null)
-                                                        }
-                                                        if (request.param('source', null)) {
-                                                            tool.source = request.param('source', null);
-                                                        }
+                                                        tool.name = request.param('name', tool.name);
+                                                        tool.source = request.param('source', tool.source);
                                                         //salva modificações
                                                         tool.save(function (error) {
                                                             if (error) {

@@ -183,8 +183,8 @@ module.exports = function (app) {
                                             response.send({error : 'contact not found'});
                                         } else {
                                             //altera os dados do contato
-                                            contact.type = request.param('type', null);
-                                            contact.address = request.param('address', null);
+                                            contact.type = request.param('type', contact.type);
+                                            contact.address = request.param('address', contact.address);
                                             //salva as alterações
                                             profile.save(function (error) {
                                                 if (error) {

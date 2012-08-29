@@ -312,12 +312,8 @@ module.exports = function (app) {
                                                         response.send({error : 'plugin not found'});
                                                     } else {
                                                         //altera os dados da plugin
-                                                        if (request.param('name', null) || request.param('name', null) !== "") {
-                                                            plugin.name = request.param('name', null);
-                                                        }
-                                                        if (request.param('source', null)) {
-                                                            plugin.source = request.param('source', null);
-                                                        }
+                                                        plugin.name = request.param('name', plugin.name);
+                                                        plugin.source = request.param('source', plugin.source);
                                                         //salva modificações
                                                         plugin.save(function (error) {
                                                             if (error) {

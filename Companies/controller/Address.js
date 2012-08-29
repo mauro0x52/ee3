@@ -187,11 +187,11 @@ module.exports = function (app) {
                                             response.send({error : 'address not found'});
                                         } else {
                                             //altera os dados do endereço
-                                            address.street = request.param('street', null);
-                                            address.number = request.param('number', null);
-                                            address.complement = request.param('complement', null);
-                                            address.city = new ObjectID(request.param('city', null));
-                                            address.headQuarters = request.param('headQuarters', null);
+                                            address.street = request.param('street', address.street);
+                                            address.number = request.param('number', address.number);
+                                            address.complement = request.param('complement', address.complement);
+                                            address.city = new ObjectID(request.param('city', address.city));
+                                            address.headQuarters = request.param('headQuarters', address.headQuarters);
                                             //salva as alterações
                                             company.save(function (error) {
                                                 if (error) {

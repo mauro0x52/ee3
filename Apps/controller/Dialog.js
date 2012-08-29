@@ -312,12 +312,8 @@ module.exports = function (app) {
                                                         response.send({error : 'dialog not found'});
                                                     } else {
                                                         //altera os dados da dialogo
-                                                        if (request.param('name', null) || request.param('name', null) !== "") {
-                                                            dialog.name = request.param('name', null);
-                                                        }
-                                                        if (request.param('source', null)) {
-                                                            dialog.source = request.param('source', null);
-                                                        }
+                                                        dialog.name = request.param('name', dialog.name);
+                                                        dialog.source = request.param('source', dialog.source);
                                                         //salva modificações
                                                         dialog.save(function (error) {
                                                             if (error) {

@@ -115,15 +115,9 @@ module.exports = function (app) {
                             if (!profile.isOwner(user._id)) {
                                 response.send({error : 'permission denied'});
                             } else {
-                                if (request.param('name')) {
-                                    profile.name = request.param('name');
-                                }
-                                if (request.param('surname')) {
-                                    profile.surname = request.param('surname');
-                                }
-                                if (request.param('about')) {
-                                    profile.about = request.param('about');
-                                }
+                                profile.name = request.param('name', profile.name);
+                                profile.surname = request.param('surname', profile.surname);
+                                profile.about = request.param('about', profile.about);
                                 profile.dateUpdated = new Date();
                                 profile.save(function (error) {
                                     if (error) {
