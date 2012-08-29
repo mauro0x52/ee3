@@ -25,3 +25,11 @@ describe('Talk', function() {
 describe('Companies', function() {
     require("./Companies/test.js");
 });
+
+describe('Profiles', function() {
+    require("./Profiles/test.js");
+});
+
+describe('Location', function() {
+    require("./Location/test.js");
+});

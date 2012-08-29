@@ -50,10 +50,10 @@ module.exports = function (app) {
                             if (state) {
                                 //Aplica o filtro de estado
                                 filter.state = state._id;
-                                
+
                                 //Cria o objeto query
                                 query = City.find(filter);
-                                
+
                                 // limit : padrao = 10, max = 20, min = 1
                                 limit = request.param('limit', 10) < 20 ? request.param('limit', 10) : 20;
                                 query.limit(limit);
@@ -61,7 +61,7 @@ module.exports = function (app) {
                                 // order : padrao = dateCreated descending
 						        order = request.param('order', [{name:1}]);
 						        if (!(order instanceof Array)) order = [order];
-						
+
 						        var sort = {};
 						        for (var i = 0; i < order.length; i++) {
 						            for (var name in order[i]) {
@@ -74,7 +74,7 @@ module.exports = function (app) {
                                 from = limit * (request.param('page', 1) - 1);
                                 from = from >= 0 ? from : 0;
                                 query.skip(from);
-                                
+
                                 //Faz a busca das cidades.
                                 query.exec(function (error, cities) {
                                     if (error) {

@@ -17,7 +17,7 @@ describe('GET /country/[slugCountry]/state/[slugState]/cities', function () {
     before(function (done) {
         done();
     });
-    
+
     it('lista de cidades', function(done) {
         api.get('location', '/country/'+dt.country.slug+'/state/'+dt.state.slug+'/cities',
             null,

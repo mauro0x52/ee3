@@ -62,18 +62,14 @@ citySchema.pre('save', function(next) {
  */
 citySchema.statics.findByIdentity = function (id, stateId, cb) {
     "use strict";
-    var filterCity = {};
 
     if (new RegExp("[0-9 a-f]{24}").test(id)) {
         // procura por id
-        filterCity._id = id;
+        City.findOne({_id : id}, cb);
     } else {
         // procura por slug
-        filterCity.state = stateId;
-        filterCity.slug = id;
+        City.findOne({state : stateId, slug : id}, cb);
     }
-    
-    City.findOne(filterCity, cb);
 };
 
 /*  Exportando o pacote  */

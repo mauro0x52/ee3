@@ -6,9 +6,18 @@
  * @description : Kit de testes do serviço Location
  */
 
-describe('Location', function() {
+describe('Region', function() {
     require("./Region.js");
+});
+
+describe('Country', function() {
     require("./Country.js");
+});
+
+describe('State', function() {
     require("./State.js");
+});
+
+describe('City', function() {
     require("./City.js");
 });
