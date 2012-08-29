@@ -30,7 +30,7 @@ describe('POST /profile/[slug]/phone', function () {
                 name : 'Compania ' + rand(),
                 activity : 'consultoria em testes',
                 type : 'profile',
-                profile : 'both',
+                profile : 'all',
                 active : 1,
                 about: 'sobre'
             }, function(error, data, response) {
@@ -245,7 +245,7 @@ describe('GET /profile/[slug]/phonees', function () {
                 name : 'Compania ' + rand(),
                 activity : 'consultoria em testes',
                 type : 'profile',
-                profile : 'both',
+                profile : 'all',
                 active : 1,
                 about: 'sobre'
             }, function(error, data, response) {
@@ -333,7 +333,7 @@ describe('GET /profile/[slug]/phone/[id]', function () {
                 name : 'Compania ' + rand(),
                 activity : 'consultoria em testes',
                 type : 'profile',
-                profile : 'both',
+                profile : 'all',
                 active : 1,
                 about: 'sobre'
             }, function(error, data, response) {
@@ -414,7 +414,7 @@ describe('DEL /profile/[slug]/phone/[id]', function () {
                 name : 'Compania ' + rand(),
                 activity : 'consultoria em testes',
                 type : 'profile',
-                profile : 'both',
+                profile : 'all',
                 active : 1,
                 about: 'sobre'
             }, function(error, data, response) {
@@ -504,7 +504,7 @@ describe('PUT /profile/[slug]/phone/[id]', function () {
                 name : 'Compania ' + rand(),
                 activity : 'consultoria em testes',
                 type : 'profile',
-                profile : 'both',
+                profile : 'all',
                 active : 1,
                 about: 'sobre'
             }, function(error, data, response) {

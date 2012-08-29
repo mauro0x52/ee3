@@ -33,7 +33,7 @@ describe('POST /company/[slug]/product', function () {
                 name : 'Empresa ' + random,
                 activity : 'consultoria em testes',
                 type : 'company',
-                profile : 'both',
+                profile : 'all',
                 active : 1
             }, function(error, data, response) {
                 company = data;
@@ -140,7 +140,7 @@ describe('GET /company/:company_id/products', function() {
                 name : 'Empresa 2 ' + random,
                 activity : 'consultoria em testes',
                 type : 'company',
-                profile : 'both',
+                profile : 'all',
                 active : 1
             }, function(error, data, response) {
                 company2 = data;

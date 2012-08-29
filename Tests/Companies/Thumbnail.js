@@ -34,7 +34,7 @@ describe('POST /company/[id]/thumbnail', function () {
                 name : company.name,
                 activity : 'consultoria em testes',
                 type : 'company',
-                profile : 'both',
+                profile : 'all',
                 active : true
             }, function(error, data) {
                 company = data;
@@ -175,7 +175,7 @@ describe('GET /company/[id]/thumbnail', function () {
                         name : company2.name,
                         activity : 'consultoria em testes',
                         type : 'company',
-                        profile : 'both',
+                        profile : 'all',
                         active : true
                     },
                     function(error, data) {
@@ -307,7 +307,7 @@ describe('DEL /company/[id]/thumbnail', function() {
                 name : company3.name,
                 activity : 'consultoria em testes',
                 type : 'company',
-                profile : 'both',
+                profile : 'all',
                 active : true
             }, function(error, data) {
                 if (error) return done(error);

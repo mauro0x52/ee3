@@ -33,7 +33,7 @@ describe('POST /company/:company_slug/product/:product_slug/image', function() {
                 name : 'Empresa '+random,
                 activity : 'consultoria em testes',
                 type : 'company',
-                profile : 'both',
+                profile : 'all',
                 active : true
             }, function(error, data) {
                 companyA = data;
@@ -64,7 +64,7 @@ describe('POST /company/:company_slug/product/:product_slug/image', function() {
                                    name : 'Empresa '+random,
                                    activity : 'consultoria em testes',
                                    type : 'company',
-                                   profile : 'both',
+                                   profile : 'all',
                                    active : true
                                }, function(error, data) {
                                    companyB = data;
@@ -75,7 +75,7 @@ describe('POST /company/:company_slug/product/:product_slug/image', function() {
                     );
                     }
                 );
-                
+
             });
         });
     })
