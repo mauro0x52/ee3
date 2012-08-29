@@ -16,20 +16,20 @@ conversantSchema = new Schema({
     user      : {type : String, trim : true, required : true, unique : true},
     label     : {type : String, trim : true, required : true},
     lastCheck : {type : Date, required : true},
-    threadIds : [objectId]
+    threads   : [objectId]
 });
 
-/** Threads
+/** ActiveThreads
  * @author : Rafael Erthal
  * @since : 2012-07
  *
  * @description : busca as threads de um usuário
  * @param cb : callback a ser chamado para cada thread
  */
-conversantSchema.methods.threads = function (cb) {
+conversantSchema.methods.activeThreads = function (cb) {
     "use strict";
 
-    Thread.find({ _id : { $in : this.threadIds } }, cb);
+    Thread.find({ _id : { $in : this.threads } }, cb);
 };
 
 /** IsOnline

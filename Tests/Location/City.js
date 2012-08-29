@@ -10,7 +10,7 @@ var should = require("should"),
     api = require("../Utils.js").api,
     db = require("../Utils.js").db,
     rand = require("../Utils.js").rand,
-    dt = require("./config.js");
+    dt = require("./Utils.js");
 
 
 describe('GET /country/[slugCountry]/state/[slugState]/cities', function () {

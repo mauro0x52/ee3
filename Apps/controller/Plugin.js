@@ -60,7 +60,7 @@ module.exports = function (app) {
                                             plugin = new Plugin({
                                                 name      : request.param('name', null),
                                                 source    : request.param('source', null),
-                                                versionId : version._id
+                                                version   : version._id
                                             });
                                             //salva a nova plugin
                                             plugin.save(function (error) {

@@ -50,7 +50,7 @@ module.exports = function (app) {
                                 //coloca os dados do post em um objeto
                                 version = new Version({
                                     number : request.param('number', null),
-                                    appId  : app._id
+                                    app    : app._id
                                 });
                                 //salva a versão
                                 version.save(function (error) {

@@ -61,7 +61,7 @@ module.exports = function (app) {
                                             tool = new Tool({
                                                 name      : request.param('name', null),
                                                 source    : request.param('source', null),
-                                                versionId : version._id
+                                                version   : version._id
                                             });
                                             //salva a nova ferramenta
                                             tool.save(function (error) {

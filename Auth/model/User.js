@@ -52,7 +52,7 @@ userSchema.pre('save', function (next) {
     next();
 });
 
-/** FindByIdOrUsername
+/** findByIdentity
  * @author : Mauro Ribeiro
  * @since : 2012-08
  *

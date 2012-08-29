@@ -27,6 +27,12 @@ profileSchema = new schema({
     dateUpdated : {type : Date}
 });
 
+/** pre('save')
+ * @author : Rafael Erthal
+ * @since : 2012-08
+ *
+ * @description : gera slug do profile
+ */
 profileSchema.pre('save', function(next) {
     var crypto = require('crypto'),
         slug, foundSlug,
