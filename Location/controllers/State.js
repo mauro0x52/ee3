@@ -36,7 +36,7 @@ module.exports = function (app) {
                 response.send({error : error});
             } else {
                 if (country) {
-                    filter.countryId = country._id;
+                    filter.country = country._id;
                     
                     //Cria o objeto query
                     query = State.find(filter);
@@ -45,15 +45,17 @@ module.exports = function (app) {
                     limit = request.param('limit', 10) < 20 ? request.param('limit', 10) : 20;
                     query.limit(limit);
 
-                    // order : padrao = name ascedenting
-                    order = request.param('order', [{name:1}]);
-                    if (!(order instanceof Array)) order = [order];
-
-                    for (var i = 0; i < order.length; i++) {
-                        for (var name in order[i]) {
-                            query.sort(name,order[i][name]);
-                        }
-                    }
+                    // order : padrao = dateCreated descending
+			        order = request.param('order', [{name:1}]);
+			        if (!(order instanceof Array)) order = [order];
+			
+			        var sort = {};
+			        for (var i = 0; i < order.length; i++) {
+			            for (var name in order[i]) {
+			                sort[name] = order[i][name];
+			            }
+			        }
+			        query.sort(sort);
 
                     // from : padrao = 0, min = 0
                     from = limit * (request.param('page', 1) - 1);
@@ -99,10 +101,8 @@ module.exports = function (app) {
                 response.send({error : error});
             } else {
                 if (country) {
-                    //Adiciona os filtros necessários para encontrar o estado
-                    filter = {countryId : country._id, slug : request.params.slugState};
                     //Localiza o estado
-                    State.findByIdentity(filter, function (error, state) {
+                    State.findByIdentity(request.params.slugState, country._id, function (error, state) {
                         if (error) {
                             response.send({error : error});
                         } else {

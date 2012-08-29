@@ -3,7 +3,7 @@
  * @autor : Lucas Kalado
  * @since : 2012-08
  *
- * @description : Kit de testes do controller Region do serviço Location
+ * @description : Kit de testes do controller Region do servi√ßo Location
  */
 
 var should = require("should"),
@@ -17,7 +17,7 @@ describe('GET /regions', function () {
         done();
     });
     
-    it('lista de regi�es', function(done) {
+    it('lista de regiões', function(done) {
         api.get('location', '/regions',
             null,
             function(error, data, response) {
@@ -32,7 +32,7 @@ describe('GET /regions', function () {
             }
         );
     });
-    it('lista de 18 regi�es', function(done) {
+    it('lista de 18 regiões', function(done) {
         api.get('location', '/regions',
             {
                 limit : 18
@@ -47,7 +47,7 @@ describe('GET /regions', function () {
             }
         );
     });
-    it('tenta listar mais de 20 regi�es', function(done) {
+    it('tenta listar mais de 20 regiões', function(done) {
         api.get('location', '/regions',
             {
                 limit : 25
@@ -67,19 +67,23 @@ describe('GET /regions', function () {
                 if (error) return done(error);
                 else {
                     should.not.exist(data.error);
+                    data.length.should.be.below(5);
                     var regions = data;
-                    api.get('location', '/regions', {limit : 2, page : 2}, function(error, data, response) {
-                            if (error) return done(error);
-                            else {
-                                should.not.exist(data.error, 'erro inesperado');
-                                JSON.stringify(regions)
-                                    .should.include(JSON.stringify(data[0]), 'resultado menor tem que está dentro do resultado maior');
-                                JSON.stringify(regions)
-                                    .should.include(JSON.stringify(data[1]), 'resultado menor tem que está dentro do resultado maior');
-                                done();
-                            }
-                        }
-                    );
+                    if (data.should.have.lengthOf(4)){
+	                    api.get('location', '/regions', {limit : 2, page : 2}, function(error, data, response) {
+	                            if (error) return done(error);
+	                            else {
+	                                should.not.exist(data.error, 'erro inesperado');
+	                                data.length.should.be.below(3);
+	                                JSON.stringify(regions)
+	                                    .should.include(JSON.stringify(data[0]), 'resultado menor tem que está dentro do resultado maior');
+	                                JSON.stringify(regions)
+	                                    .should.include(JSON.stringify(data[1]), 'resultado menor tem que está dentro do resultado maior');
+	                                done();
+	                            }
+	                        }
+	                    );
+                    }
                 }
             }
         );
@@ -91,9 +95,9 @@ describe('GET /regions', function () {
                 if (error) return done(error);
                 else {
                     should.not.exist(data.error, 'erro inesperado');
-                    data.length.should.be.above(2);
+                    data.length.should.be.below(11);
                     for (var i = 1; i < data.length; i++) {
-                        data[i-1].name.should.be.above(data[i].name, 'não ordenou');
+                        data[i].name.should.be.above(data[i-1].name, 'não ordenou');
                     }
                     done();
                 }
@@ -109,9 +113,9 @@ describe('GET /regions', function () {
                 if (error) return done(error);
                 else {
                     should.not.exist(data.error, 'erro inesperado');
-                    data.length.should.be.above(2);
+                    data.length.should.be.below(11);
                     for (var i = 1; i < data.length; i++) {
-                        data[i-1].slug.should.be.above(data[i].slug, 'não ordenou');
+                        data[i-1].slug.should.be.above(data[i].slug, 'n√£o ordenou');
                     }
                     done();
                 }
@@ -137,7 +141,7 @@ describe('GET /region/:region_id', function () {
             }
         );
     });
-    it('regãoi que não existe', function(done) {
+    it('região que não existe', function(done) {
         api.get('location', '/region/awoineaiionsndoinsdoisa',
             {},
             function(error, data, response) {
@@ -149,27 +153,27 @@ describe('GET /region/:region_id', function () {
             }
         );
     });
-    it('pega regi�o por id', function(done) {
+    it('pega região por id', function(done) {
         api.get('location', '/region/'+dt.region.id,
             {},
             function(error, data, response) {
                 if (error) return done(error);
                 else {
-                    data.should.have.property('_id', '503b7d9a73ab698114000001', 'os ids devem ser iguais');
-                    data.should.have.property('slug', 'slug-a752c3e488', 'os slugs devem ser iguais');
+                    data.should.have.property('_id', dt.region.id, 'os ids devem ser iguais');
+                    data.should.have.property('slug', dt.region.slug, 'os slugs devem ser iguais');
                     done();
                 }
             }
         );
     });
-    it('pega regi�o por slug', function(done) {
+    it('pega região por slug', function(done) {
         api.get('location', '/region/'+dt.region.id,
             {},
             function(error, data, response) {
                 if (error) return done(error);
                 else {
-                    data.should.have.property('_id', '503b7d9a73ab698114000001', 'os ids devem ser iguais');
-                    data.should.have.property('slug', 'slug-a752c3e488', 'os slugs devem ser iguais');
+                    data.should.have.property('_id', dt.region.id, 'os ids devem ser iguais');
+                    data.should.have.property('slug', dt.region.slug, 'os slugs devem ser iguais');
                     done();
                 }
             }

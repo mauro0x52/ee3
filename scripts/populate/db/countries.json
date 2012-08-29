@@ -1,1 +1,1 @@
-{ "_id" : { "$oid" : "000000000000000000000001" } , "slug" : "brasil" , "name" : "Brasil" , "symbol" : "br" }
+{ "_id" : { "$oid" : "000000000000000000000001" } , "slug" : "brasil" , "name" : "Brasil" , "symbol" : "br", "regions" : {"$oid" : "000000000000000000000001"} }

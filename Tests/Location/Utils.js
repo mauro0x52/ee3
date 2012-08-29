@@ -8,19 +8,19 @@
 
 module.exports = {
     region : {
-        id : "",
-        slug : ""
+        id : "000000000000000000000001",
+        slug : "america"
     },
     country : {
-        id : "",
-        slug : ""
+        id : "000000000000000000000001",
+        slug : "brasil"
     },
     state : {
-        id : "",
-        slug : ""
+        id : "00000000000000000000001a",
+        slug : "sao-paulo"
     },
     city : {
-        id : "",
-        slug : ""
+        id : "0000000000000000000016b2",
+        slug : "campinas"
     }
 }

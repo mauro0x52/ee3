@@ -3,7 +3,7 @@
  * @autor : Lucas Kalado
  * @since : 2012-08
  *
- * @description : Kit de testes do controller State do serviço Location
+ * @description : Kit de testes do controller State do servi√ßo Location
  */
 
 var should = require("should"),
@@ -25,13 +25,13 @@ describe('GET /country/:slug_country/states', function () {
                 else {
                     response.should.have.status(200);
                     should.not.exist(data.error, 'erro inesperado');
-                    data.length.should.be.below(11);
+                    data.should.have.lengthOf(10);
                     done();
                 }
             }
         );
     });
-    it('pais que não existe', function(done) {
+    it('país que não existe', function(done) {
         api.get('location', '/country/asdasdqqewasdasdasd/states',
             {},
             function(error, data, response) {
@@ -52,7 +52,7 @@ describe('GET /country/:slug_country/states', function () {
                 if (error) return done(error);
                 else {
                     should.not.exist(data.error, 'erro inesperado');
-                    data.length.should.be.below(19);
+                    data.should.have.lengthOf(18);
                     done();
                 }
             }
@@ -67,7 +67,7 @@ describe('GET /country/:slug_country/states', function () {
                 if (error) return done(error);
                 else {
                     should.not.exist(data.error, 'erro inesperado');
-                    data.length.should.be.below(21);
+                    data.should.have.lengthOf(20);
                     done();
                 }
             }
@@ -78,11 +78,13 @@ describe('GET /country/:slug_country/states', function () {
                 if (error) return done(error);
                 else {
                     should.not.exist(data.error);
+                    data.should.have.lengthOf(4);
                     var states = data;
                     api.get('location', '/company/'+dt.country.slug+'/states', {limit : 2, page : 2}, function(error, data, response) {
                             if (error) return done(error);
                             else {
                                 should.not.exist(data.error, 'erro inesperado');
+                                data.should.have.lengthOf(2);
                                 JSON.stringify(states)
                                     .should.include(JSON.stringify(data[0]), 'resultado menor tem que está dentro do resultado maior');
                                 JSON.stringify(states)
@@ -102,9 +104,9 @@ describe('GET /country/:slug_country/states', function () {
                 if (error) return done(error);
                 else {
                     should.not.exist(data.error, 'erro inesperado');
-                    data.length.should.be.below(2);
+                    data.should.have.lengthOf(10);
                     for (var i = 1; i < data.length; i++) {
-                        data[i-1].name.should.be.above(data[i].name, 'não ordenou');
+                        data[i].name.should.be.above(data[i-1].name, 'não ordenou');
                     }
                     done();
                 }
@@ -120,7 +122,7 @@ describe('GET /country/:slug_country/states', function () {
                 if (error) return done(error);
                 else {
                     should.not.exist(data.error, 'erro inesperado');
-                    data.length.should.be.above(2);
+                    data.should.have.lengthOf(10);
                     for (var i = 1; i < data.length; i++) {
                         data[i-1].slug.should.be.above(data[i].slug, 'não ordenou');
                     }
@@ -148,7 +150,7 @@ describe('GET /country/:slug_country/state/:state_id', function () {
             }
         );
     });
-    it('pa�s que não existe', function(done) {
+    it('paÌs que não existe', function(done) {
         api.get('location', '/country/asdasdqqewasdasdasd/state/'+dt.state.slug,
             {},
             function(error, data, response) {
@@ -160,7 +162,7 @@ describe('GET /country/:slug_country/state/:state_id', function () {
             }
         );
     });
-    it('estado que não existe', function(done) {
+    it('estado que n√£o existe', function(done) {
         api.get('location', '/country/'+dt.country.slug+'/state/awoineaiionsndoinsdoisa',
             {},
             function(error, data, response) {
@@ -178,8 +180,8 @@ describe('GET /country/:slug_country/state/:state_id', function () {
             function(error, data, response) {
                 if (error) return done(error);
                 else {
-                    data.should.have.property('_id', '503b7c247dd8ba7914000043', 'os ids devem ser iguais');
-                    data.should.have.property('slug', 'slug-eabc233c52', 'os slugs devem ser iguais');
+                    data.should.have.property('_id', dt.state.id, 'os ids devem ser iguais');
+                    data.should.have.property('slug', dt.state.slug, 'os slugs devem ser iguais');
                     done();
                 }
             }
@@ -191,8 +193,8 @@ describe('GET /country/:slug_country/state/:state_id', function () {
             function(error, data, response) {
                 if (error) return done(error);
                 else {
-                    data.should.have.property('_id', '503b7c247dd8ba7914000043', 'os ids devem ser iguais');
-                    data.should.have.property('slug', 'slug-eabc233c52', 'os slugs devem ser iguais');
+                    data.should.have.property('_id', dt.state.id, 'os ids devem ser iguais');
+                    data.should.have.property('slug', dt.state.slug, 'os slugs devem ser iguais');
                     done();
                 }
             }

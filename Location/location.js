@@ -9,7 +9,7 @@
 var express = require('express'),
     config  = require('./config.js');
 
-var app = module.exports = express.createServer();
+var app = module.exports = express();
 
 /*  Configurando o server */
 app.configure(function () {

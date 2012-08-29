@@ -13,7 +13,7 @@ var crypto = require('crypto'),
 
 citySchema = new Schema({
     name    : {type : String, trim : true, required : true},
-    slug    : {type : String, trim : true, unique : true},
+    slug    : {type : String, trim : true},
     ddd     : {type : Number, required : true},
     state   : {type: objectId},
     regions : [{type: objectId}]
@@ -60,20 +60,22 @@ citySchema.pre('save', function(next) {
  * @param state : ID do state
  * @param cb : callback a ser chamado
  */
-citySchema.statics.findByIdentity = function (id, state, cb) {
+citySchema.statics.findByIdentity = function (id, stateId, cb) {
     "use strict";
-    var filter = {};
-    
-    filter.stateId = state;
+    var filterCity = {};
+
+
     if (new RegExp("[0-9 a-f]{24}").test(id)) {
         // procura por id
-        filter._id = id;
+        filterCity._id = id;
     } else {
         // procura por slug
-        filter.slug = id;
+        filterCity.state = stateId;
+        filterCity.slug = id;
     }
+    console.log(filterCity);
     
-    City.findOne(filter, cb);
+    City.findOne(filterCity, cb);
 };
 
 /*  Exportando o pacote  */
