@@ -11,8 +11,6 @@ var imagemagick = require('imagemagick'),
     express = require('express'),
     config  = require('./config.js');
 
-require('express-namespace');
-
 var app = express();
 
 /*  Configurando o server */

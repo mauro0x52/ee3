@@ -9,8 +9,6 @@
 var express = require('express'),
     config  = require('./config.js');
 
-require('express-namespace');
-
 var app = module.exports = express.createServer();
 
 /*  Configurando o server */

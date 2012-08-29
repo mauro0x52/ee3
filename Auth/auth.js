@@ -9,8 +9,6 @@
 var express = require('express'),
     config  = require('./config.js');
 
-require('express-namespace');
-
 var app = module.exports = express();
 
 /*  Configurando o server */
@@ -37,7 +35,7 @@ require('./controller/App.js')(app);
 /*  Métodos para dev e teste */
 app.get('/ping', function (request, response) {
     "use strict";
-    
+
     response.send(true);
 });
 
