@@ -189,11 +189,11 @@ module.exports = function (app) {
      * @request : {login,token}
      * @response : {confirmation}
      */
-    app.put('/profile/:profile_id/thumbnail/', function (request, response) {
+    app.put('/profile/:profile_id/thumbnail', function (request, response) {
         postProfileThumbnail(request, response);
     });
 
-    /** DEL /profile/:profile_id/contact/:idContact/thumbnail/:id
+    /** DEL /profile/:profile_id/thumbnail/
      *
      * @autor : Rafael Erthal
      * @since : 2012-08
@@ -206,12 +206,14 @@ module.exports = function (app) {
      * @request : {login,token}
      * @response : {confirmation}
      */
-    app.del('/profile/:profile_id/thumbnail/', function (request, response) {
+    app.del('/profile/:profile_id/thumbnail', function (request, response) {
         response.contentType('json');
 
         //valida o token do usuário
         auth(request.param('token'), function (user) {
-            if (user) {
+            if (!user) {
+                response.send({error : 'invalid token'});
+            } else {
                 //busca o perfil
                 Profile.findByIdentity(request.param('profile_id'), function (error, profile) {
                     if (error) {
@@ -238,8 +240,6 @@ module.exports = function (app) {
                         }
                     }
                 });
-            } else {
-                response.send({error : 'invalid token'});
             }
         });
     });
