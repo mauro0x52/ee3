@@ -25,10 +25,10 @@ module.exports = function (app) {
      * @request : {filterByName, filterByRegion}
      * @response : {Name, Acronym, DDI, Slug}
     */
-    app.get('/countries/', function (request, response) {
+    app.get('/countries', function (request, response) {
         response.contentType('json');
         var limit, order, query, from;
-        
+
         //Cria o objeto query
         query = Country.find();
 
@@ -36,21 +36,23 @@ module.exports = function (app) {
         limit = request.param('limit', 10) < 20 ? request.param('limit', 10) : 20;
         query.limit(limit);
 
-        // order : padrao = name ascedenting
+        // order : padrao = dateCreated descending
         order = request.param('order', [{name:1}]);
         if (!(order instanceof Array)) order = [order];
 
+        var sort = {};
         for (var i = 0; i < order.length; i++) {
             for (var name in order[i]) {
-                query.sort(name,order[i][name]);
+                sort[name] = order[i][name];
             }
         }
+        query.sort(sort);
 
         // from : padrao = 0, min = 0
         from = limit * (request.param('page', 1) - 1);
         from = from >= 0 ? from : 0;
         query.skip(from);
-        
+
         //Localiza os Países com filtros simples
         query.exec(function (error, countries) {
             if (error) {
@@ -74,7 +76,7 @@ module.exports = function (app) {
      * @request : {slug}
      * @response : {Name, Acronym, DDI, Slug}
      */
-    app.get('/country/:slug/', function (request, response) {
+    app.get('/country/:slug', function (request, response) {
         response.contentType('json');
         
         //Localiza o País desejado e retorna os dados informados

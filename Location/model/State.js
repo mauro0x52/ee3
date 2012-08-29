@@ -12,8 +12,8 @@ var crypto = require('crypto'),
     stateSchema, State;
 
 stateSchema = new Schema({
-    name      : {type : String, trim : true, required : true},
-    slug      : {type : String, trim : true, unique : true},
+    name    : {type : String, trim : true, required : true},
+    slug    : {type : String, trim : true},
     country : {type: objectId},
     regions : [{type: objectId}]
 });
@@ -66,14 +66,14 @@ stateSchema.statics.findByIdentity = function (id, countryId, cb) {
     if (new RegExp("[0-9 a-f]{24}").test(id)) {
         // procura por id
         filterState._id = id;
-        filterState.countryId = countryId;
-        State.findOne(filterState, cb);
+        filterState.country = countryId;
     } else {
-        // procura por username
+        // procura por slug
         filterState.slug = id;
-        filterState.countryId = countryId;
-        State.findOne(filterState, cb);
+        filterState.country = countryId;
     }
+    
+    State.findOne(filterState, cb);
 };
 
 /*  Exportando o pacote  */
