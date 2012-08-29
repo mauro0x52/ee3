@@ -430,7 +430,10 @@ describe('DEL /company/[slug]/embedded/[id]', function () {
                 return done(error);
             } else {
                 should.not.exist(data);
-                done();
+                api.get('companies', '/company/' + company + '/embedded/' + embedded, {token : token}, function (error, data) {
+                    should.exist(data.error, 'não exclui');
+                    done();
+                });
             }
         });
     });

@@ -9,7 +9,7 @@ var crypto = require('crypto'),
     mongoose = require('mongoose'),
     Schema   = mongoose.Schema,
     objectId = Schema.ObjectId,
-    stateSchema;
+    stateSchema, State;
 
 stateSchema = new Schema({
     name      : {type : String, trim : true, required : true},
@@ -19,14 +19,35 @@ stateSchema = new Schema({
 });
 
 stateSchema.pre('save', function(next) {
-    var crypto = require('crypto');
+    var crypto = require('crypto'),
+        slug, foundSlug,
+        charFrom = 'àáâãäåçèéêëìíîïñðóòôõöøùúûüýÿ',
+        charTo   = 'aaaaaaceeeeiiiinooooooouuuuyy',
+        state = this;
 
-    if (this.isNew) {
-        //TODO fazer o gerador de slugs aqui
-        this.slug = 'slug-'+crypto.createHash('sha1').update(crypto.randomBytes(10)).digest('hex').substring(0, 10);
+    state.name = region.name.replace(/\s+/g, ' ');
+
+    slug = state.name;
+    slug = slug.replace(/^\s+|\s+$/g, '').replace(/\s+/g, '-').toLowerCase();
+    // remove acentos
+    for (var i = 0; i < charFrom.length; i++) {
+        slug = slug.replace(new RegExp(charFrom.charAt(i), 'g'), charTo.charAt(i))
     }
+    slug = slug.replace(/[^a-z,0-9,\-]/g, '');
 
-    next();
+    State.find({slug : slug, _id : {$ne : state._id}}, function (error, data) {
+        if (error) next(error);
+        else {
+            if (data.length === 0) {
+                state.slug = slug;
+            }
+            else {
+                state.slug = slug + '-' + data.length + '' + crypto.createHash('sha1').update(crypto.randomBytes(10)).digest('hex').substring(0, 1);
+            }
+            next();
+        }
+
+    });
 });
 
 /** FindByIdOrUsername
@@ -40,20 +61,20 @@ stateSchema.pre('save', function(next) {
  */
 stateSchema.statics.findByIdentity = function (id, countryId, cb) {
     "use strict";
-    var filterState;
+    var filterState = {};
     
     if (new RegExp("[0-9 a-f]{24}").test(id)) {
         // procura por id
         filterState._id = id;
         filterState.countryId = countryId;
-        City.findOne(filterState, cb);
+        State.findOne(filterState, cb);
     } else {
         // procura por username
         filterState.slug = id;
         filterState.countryId = countryId;
-        City.findOne(filterState, cb);
+        State.findOne(filterState, cb);
     }
 };
 
 /*  Exportando o pacote  */
-exports.State = mongoose.model('States', stateSchema);
+State = exports.State = mongoose.model('States', stateSchema);

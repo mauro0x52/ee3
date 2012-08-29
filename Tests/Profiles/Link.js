@@ -372,7 +372,10 @@ describe('DEL /profile/[slug]/link/[id]', function () {
                 return done(error);
             } else {
                 should.not.exist(data);
-                done();
+                api.get('profiles', '/profile/' + profile + '/link/' + link, {token : token}, function (error, data) {
+                    should.exist(data.error, 'não exclui');
+                    done();
+                });
             }
         });
     });
@@ -494,10 +497,13 @@ describe('PUT /profile/[slug]/link/[id]', function () {
                 return done(error);
             } else {
                 should.not.exist(data.error);
-                data.should.have.property('_id');
-                data.should.have.property('url', url);
-                data.should.have.property('type', type);
-                done();
+                api.get('profiles', '/profile/' + profile + '/link/' + link, {token : token}, function (error, data) {
+                    should.not.exist(data.error, 'algo deu errado');
+                    data.should.have.property('_id');
+                    data.should.have.property('url', url);
+                    data.should.have.property('type', type);
+                    done();
+                });
             }
         });
     });

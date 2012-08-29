@@ -379,7 +379,10 @@ describe('DEL /profile/[slug]/job/[id]', function () {
                 return done(error);
             } else {
                 should.not.exist(data);
-                done();
+                api.get('profiles', '/profile/' + profile + '/job/' + job, {token : token}, function (error, data) {
+                    should.exist(data.error, 'não exclui');
+                    done();
+                });
             }
         });
     });
@@ -491,11 +494,14 @@ describe('PUT /profile/[slug]/job/[id]', function () {
     });
     
     it('edita contato', function(done) {
+        var name        = 'Nome ' + rand(),
+            companyName = 'Teste ' + rand(),
+            description = 'About ' + rand();
         api.put('profiles', '/profile/' + profile + '/job/' + job, {
             token : token,
-            name        : 'Nome ' + rand(),
-            companyName : 'Teste ' + rand(),
-            description : 'About ' + rand(),
+            name        : name,
+            companyName : companyName,
+            description : description,
             dateStart   : new Date(),
             dateEnd     : new Date()
         }, function(error, data, response) {
@@ -503,13 +509,14 @@ describe('PUT /profile/[slug]/job/[id]', function () {
                 return done(error);
             } else {
                 should.not.exist(data.error);
-                data.should.have.property('_id');
-                data.should.have.property('name');
-                data.should.have.property('companyName');
-                data.should.have.property('description');
-                data.should.have.property('dateStart');
-                data.should.have.property('dateEnd');
-                done();
+                api.get('profiles', '/profile/' + profile + '/job/' + job, {token : token}, function (error, data) {
+                    should.not.exist(data.error, 'algo deu errado');
+                    data.should.have.property('_id');
+                    data.should.have.property('name', name);
+                    data.should.have.property('companyName', companyName);
+                    data.should.have.property('description', description);
+                    done();
+                });
             }
         });
     });

@@ -139,24 +139,6 @@ describe('POST /company/[slug]/address', function () {
         );
     });
 
-    it('city em branco', function(done) {
-        api.post('companies', '/company/' + company + '/address', {
-                token   : token,
-                street : "Rua " + rand(),
-                number : "Numero " + rand(),
-                complement : "Complemento " + rand(),
-                headQuarters : true
-            }, function(error, data, response) {
-                if (error) {
-                    return done(error);
-                } else { 
-                    should.exist(data.error);
-                    done();
-                }
-            }
-        );
-    });
-
     it('headquarters em branco', function(done) {
         api.post('companies', '/company/' + company + '/address', {
                 token   : token,
@@ -198,7 +180,6 @@ describe('POST /company/[slug]/address', function () {
                     data.should.have.property('street', street);
                     data.should.have.property('number', number);
                     data.should.have.property('complement', complement);
-                    data.should.have.property('city', city);
                     done();
                 }
             }
@@ -455,7 +436,10 @@ describe('DEL /company/[slug]/address/[id]', function () {
                 return done(error);
             } else {
                 should.not.exist(data);
-                done();
+                api.get('companies', '/company/' + company + '/address/' + address, {token : token}, function (error, data) {
+                    should.exist(data.error, 'não exclui');
+                    done();
+                });
             }
         });
     });
@@ -600,23 +584,6 @@ describe('PUT /company/[slug]/address/[id]', function () {
         });
     });
     
-    it('city em branco', function(done) {
-        api.put('companies', '/company/' + company + '/address/' + address, {
-            token : token,
-            street : "Rua " + rand(),
-            number : "Numero " + rand(),
-            complement : "Complemento " + rand(),
-            headQuarters : true
-        }, function(error, data, response) {
-            if (error) {
-                return done(error);
-            } else {
-                should.exist(data.error);
-                done();
-            }
-        });
-    });
-    
     it('headQuarters em branco', function(done) {
         api.put('companies', '/company/' + company + '/address/' + address, {
             token : token,
@@ -655,7 +622,6 @@ describe('PUT /company/[slug]/address/[id]', function () {
                 data.should.have.property('street', street);
                 data.should.have.property('number', number);
                 data.should.have.property('complement', complement);
-                data.should.have.property('city', city);
                 done();
             }
         });

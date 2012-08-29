@@ -74,7 +74,7 @@ module.exports = function (app) {
                                                                 legend : request.param('legend', null)
                                                             });
                                                             //salva a imagem
-                                                            product.parent.save(function (error) {
+                                                            company.save(function (error) {
                                                                 if (error) {
                                                                     response.send({error : error});
                                                                 } else {

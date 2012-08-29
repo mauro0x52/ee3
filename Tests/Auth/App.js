@@ -196,7 +196,10 @@ describe('DEL /user/[login]/app/[app_id]', function () {
                 return done(error);
             } else {
                 should.not.exist(data);
-                done();
+                api.get('auth', '/user/'+userId+'/app/' + appId, {token : token}, function (error, data) {
+                    should.exist(data.error, 'não exclui o login externo');
+                    done();
+                });
             }
         });
     });
@@ -392,9 +395,13 @@ describe('PUT /user/[login]/app/[app_id]', function () {
                 return done(error);
             } else {
                 should.not.exist(data.error);
-                data.should.have.property('appId');
-                data.should.have.property('token');
-                done();
+                api.get('auth', '/user/'+userId+'/app/'+appId, {token : token}, function (error, data) {
+                    should.not.exist(data.error, 'algo deu errado');
+                    data.should.have.property('_id');
+                    data.should.have.property('appId');
+                    data.should.have.property('token');
+                    done();
+                });
             }
         });
     });

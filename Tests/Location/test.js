@@ -7,5 +7,8 @@
  */
 
 describe('Location', function() {
+    require("./Region.js");
+    require("./Country.js");
+    require("./State.js");
     require("./City.js");
 });

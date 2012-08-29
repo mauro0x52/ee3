@@ -110,12 +110,13 @@ module.exports = function (app) {
         order = request.param('order', [{dateCreated:-1}]);
         if (!(order instanceof Array)) order = [order];
 
+        var sort = {};
         for (var i = 0; i < order.length; i++) {
             for (var name in order[i]) {
-                findCompany.sort(name,order[i][name]);
+                sort[name] = order[i][name];
             }
         }
-
+        findCompany.sort(sort);
         // filterBySectors
         filterBySectors = request.param('filterBySectors');
 
