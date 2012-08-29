@@ -31,7 +31,7 @@ installAll() {
         cd $SERVICE
         echo "- Instalando $SERVICE"
         echo "-- instalando pacotes"
-        npm install
+        npm update
         echo "-- criando config.js"
         if [ ! -f config.js ];
         then
