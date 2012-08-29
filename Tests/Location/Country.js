@@ -9,7 +9,8 @@
 var should = require("should"),
     api = require("../Utils.js").api,
     db = require("../Utils.js").db,
-    rand = require("../Utils.js").rand;
+    rand = require("../Utils.js").rand,
+    dt = require("./config.js");
 
 describe('GET /countries', function () {
     before(function (done) {
@@ -125,7 +126,7 @@ describe('GET /countries/:slug_country', function () {
     });
 
     it('url deve existir', function(done) {
-        api.get('location', '/countries/slug-8c31070edf',
+        api.get('location', '/countries/'+dt.country.slug,
             {},
             function(error, data, response) {
                 if (error) return done(error);
@@ -137,7 +138,7 @@ describe('GET /countries/:slug_country', function () {
         );
     });
     it('país que nÃ£o existe', function(done) {
-        api.get('location', '/countries/slug-8c31070edf',
+        api.get('location', '/countries/'+dt.country.slug,
             {},
             function(error, data, response) {
                 if (error) return done(error);
@@ -149,7 +150,7 @@ describe('GET /countries/:slug_country', function () {
         );
     });
     it('pega país por id', function(done) {
-        api.get('location', '/countries/503b7c227dd8ba7914000011',
+        api.get('location', '/countries/'+dt.country.slug,
             {},
             function(error, data, response) {
                 if (error) return done(error);
@@ -162,7 +163,7 @@ describe('GET /countries/:slug_country', function () {
         );
     });
     it('pega país por slug', function(done) {
-        api.get('location', '/countries/slug-8c31070edf',
+        api.get('location', '/countries/'+dt.country.slug,
             {},
             function(error, data, response) {
                 if (error) return done(error);

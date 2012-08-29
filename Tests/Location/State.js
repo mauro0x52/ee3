@@ -9,7 +9,8 @@
 var should = require("should"),
     api = require("../Utils.js").api,
     db = require("../Utils.js").db,
-    rand = require("../Utils.js").rand;
+    rand = require("../Utils.js").rand,
+    dt = require("./config.js");
 
 describe('GET /country/:slug_country/states', function () {
     before(function (done) {
@@ -17,7 +18,7 @@ describe('GET /country/:slug_country/states', function () {
     });
     
     it('lista de estados', function(done) {
-        api.get('location', '/country/slug-8c31070edf/states',
+        api.get('location', '/country/'+dt.country.slug+'/states',
             null,
             function(error, data, response) {
                 if (error) return done(error);
@@ -43,7 +44,7 @@ describe('GET /country/:slug_country/states', function () {
         );
     });
     it('lista de 18 estados', function(done) {
-        api.get('location', '/country/slug-8c31070edf/states',
+        api.get('location', '/country/'+dt.country.slug+'/states',
             {
                 limit : 18
             },
@@ -58,7 +59,7 @@ describe('GET /country/:slug_country/states', function () {
         );
     });
     it('tenta listar mais de 20 estados', function(done) {
-        api.get('location', '/country/slug-8c31070edf/states',
+        api.get('location', '/country/'+dt.country.slug+'/states',
             {
                 limit : 25
             },
@@ -73,12 +74,12 @@ describe('GET /country/:slug_country/states', function () {
         );
     });
     it('paginação', function(done) {
-        api.get('location', '/country/slug-8c31070edf/states', {limit : 4, page : 1}, function(error, data, response) {
+        api.get('location', '/country/'+dt.country.slug+'/states', {limit : 4, page : 1}, function(error, data, response) {
                 if (error) return done(error);
                 else {
                     should.not.exist(data.error);
                     var states = data;
-                    api.get('location', '/company/slug-8c31070edf/states', {limit : 2, page : 2}, function(error, data, response) {
+                    api.get('location', '/company/'+dt.country.slug+'/states', {limit : 2, page : 2}, function(error, data, response) {
                             if (error) return done(error);
                             else {
                                 should.not.exist(data.error, 'erro inesperado');
@@ -95,7 +96,7 @@ describe('GET /country/:slug_country/states', function () {
         );
     });
     it('ordenação padrão (name ascending)', function(done) {
-        api.get('location', '/country/slug-8c31070edf/states',
+        api.get('location', '/country/'+dt.country.slug+'/states',
             {},
             function(error, data, response) {
                 if (error) return done(error);
@@ -111,7 +112,7 @@ describe('GET /country/:slug_country/states', function () {
         );
     });
     it('ordenação por slug', function(done) {
-        api.get('location', '/country/slug-8c31070edf/states',
+        api.get('location', '/country/'+dt.country.slug+'/states',
             {
                 order: {'slug': -1}
             },
@@ -136,7 +137,7 @@ describe('GET /country/:slug_country/state/:state_id', function () {
     });
 
     it('url deve existir', function(done) {
-        api.get('location', '/country/slug-8c31070edf/state/slug-eabc233c52',
+        api.get('location', '/country/'+dt.country.slug+'/state/'+dt.state.slug,
             {},
             function(error, data, response) {
                 if (error) return done(error);
@@ -148,7 +149,7 @@ describe('GET /country/:slug_country/state/:state_id', function () {
         );
     });
     it('pa�s que não existe', function(done) {
-        api.get('location', '/country/asdasdqqewasdasdasd/state/slug-eabc233c52',
+        api.get('location', '/country/asdasdqqewasdasdasd/state/'+dt.state.slug,
             {},
             function(error, data, response) {
                 if (error) return done(error);
@@ -160,7 +161,7 @@ describe('GET /country/:slug_country/state/:state_id', function () {
         );
     });
     it('estado que não existe', function(done) {
-        api.get('location', '/country/slug-8c31070edf/state/awoineaiionsndoinsdoisa',
+        api.get('location', '/country/'+dt.country.slug+'/state/awoineaiionsndoinsdoisa',
             {},
             function(error, data, response) {
                 if (error) return done(error);
@@ -172,7 +173,7 @@ describe('GET /country/:slug_country/state/:state_id', function () {
         );
     });
     it('pega estado por id', function(done) {
-        api.get('location', '/country/slug-8c31070edf/state/503b7c247dd8ba7914000043',
+        api.get('location', '/country/'+dt.country.slug+'/state/'+dt.state.id,
             {},
             function(error, data, response) {
                 if (error) return done(error);
@@ -185,7 +186,7 @@ describe('GET /country/:slug_country/state/:state_id', function () {
         );
     });
     it('pega estado por slug', function(done) {
-        api.get('location', '/country/slug-8c31070edf/state/slug-eabc233c52',
+        api.get('location', '/country/'+dt.country.slug+'/state/'+dt.state.slug,
             {},
             function(error, data, response) {
                 if (error) return done(error);
