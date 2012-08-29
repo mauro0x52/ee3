@@ -2,11 +2,12 @@
   "name": "Files",
   "version": "0.0.1",
   "dependencies": {
-    "express": "~3.0.0rc2",
-    "mongodb": "~1.1.2",
-    "mongoose": "~2.7.3",
-    "express-namespace": "~0.1.1",
-    "imagemagick": "~0.1.2",
-    "date-utils": "~1.2.11"
+    "ejs": "0.8.x",
+    "express": "3.0.0",
+    "mongoose": "2.7.4",
+    "imagemagick": "0.1.2",
+    "date-utils": "1.2.11",
+    "knox": "0.1.0",
+    "file-utils": "0.1.10"
   }
 }
