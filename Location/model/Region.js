@@ -13,11 +13,12 @@ var crypto = require('crypto'),
     Region;
 
 regionSchema = new Schema({
-    name       : {type : String, trim : true, required : true},
-    slug       : {type : String, trim : true, unique : true},
-    countryIds : [{type: objectId}],
-    cityIds    : [{type: objectId}],
-    stateIds   : [{type: objectId}]
+    name      : {type : String, trim : true, required : true},
+    slug      : {type : String, trim : true, unique : true},
+    acronym   : {type : String, required : true},
+    countries : [{type: objectId}],
+    cities    : [{type: objectId}],
+    states    : [{type: objectId}]
 });
 
 regionSchema.pre('save', function(next) {

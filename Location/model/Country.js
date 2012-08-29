@@ -2,7 +2,7 @@
  * @author : Lucas Calado
  * @since : 2012-07
  *
- * @description : RepresentaÃ§Ã£o da entidade de paÃ­ses
+ * @description : Representação da entidade de países
  */
 var crypto = require('crypto'),
     mongoose = require('mongoose'),
@@ -15,13 +15,13 @@ countrySchema = new Schema({
     acronym   : {type : String, required : true},
     slug      : {type : String, trim : true},
     ddi       : {type : String, required : true},
-    regionIds : [{type: objectId}]
+    regions : [{type: objectId}]
 });
 
 countrySchema.pre('save', function(next) {
     var crypto = require('crypto'),
         slug, foundSlug,
-        charFrom = 'Ã Ã¡Ã¢Ã£Ã¤Ã¥Ã§Ã¨Ã©ÃªÃ«Ã¬Ã­Ã®Ã¯Ã±Ã°Ã³Ã²Ã´ÃµÃ¶Ã¸Ã¹ÃºÃ»Ã¼Ã½Ã¿',
+        charFrom = 'àáâãäåçèéêëìíîïñğóòôõöøùúûüıÿ',
         charTo   = 'aaaaaaceeeeiiiinooooooouuuuyy',
         country = this;
 
@@ -54,8 +54,8 @@ countrySchema.pre('save', function(next) {
  * @author : Mauro Ribeiro
  * @since : 2012-08
  *
- * @description : Procura um país pelo id ou pelo slug
- * @param id : id ou slug do país
+ * @description : Procura um pa?s pelo id ou pelo slug
+ * @param id : id ou slug do pa?s
  * @param cb : callback a ser chamado
  */
 countrySchema.statics.findByIdentity = function (id, cb) {
