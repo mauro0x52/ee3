@@ -444,7 +444,8 @@ describe('PUT /company/[slug]/embedded/[id]', function () {
         slug,
         version,
         company,
-        embedded;
+        embedded,
+        obj;
 
     before(function (done) {
         // cria usuario
@@ -472,7 +473,8 @@ describe('PUT /company/[slug]/embedded/[id]', function () {
                         type : 'Youtube'
                     }
                 }, function(error, data, response) {
-                    embedded = data._id
+                    embedded = data._id;
+                    obj = data;
                     done();
                 });
             });
@@ -538,7 +540,10 @@ describe('PUT /company/[slug]/embedded/[id]', function () {
             if (error) {
                 return done(error);
             } else {
-                should.exist(data.error);
+                obj = data;
+                should.not.exist(data.error);
+                data.should.have.property('_id');
+                data.should.have.property('embed', obj.embed);
                 done();
             }
         });

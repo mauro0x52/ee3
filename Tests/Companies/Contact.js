@@ -399,7 +399,8 @@ describe('PUT /company/[slug]/contact/[id]', function () {
         slug,
         version,
         company,
-        contact;
+        contact,
+        obj;
 
     before(function (done) {
         // cria usuario
@@ -424,7 +425,8 @@ describe('PUT /company/[slug]/contact/[id]', function () {
                     address   : 'Number ' + rand(),
                     type      : 'Twitter'
                 }, function(error, data, response) {
-                    contact = data._id
+                    contact = data._id;
+                    obj = data;
                     done();
                 });
             });
@@ -481,7 +483,10 @@ describe('PUT /company/[slug]/contact/[id]', function () {
             if (error) {
                 return done(error);
             } else {
-                should.exist(data.error);
+                obj = data;
+                should.not.exist(data.error);
+                data.should.have.property('_id');
+                data.should.have.property('address', obj.address);
                 done();
             }
         });
@@ -495,7 +500,10 @@ describe('PUT /company/[slug]/contact/[id]', function () {
             if (error) {
                 return done(error);
             } else {
-                should.exist(data.error);
+                obj = data;
+                should.not.exist(data.error);
+                data.should.have.property('_id');
+                data.should.have.property('type', obj.type);
                 done();
             }
         });
