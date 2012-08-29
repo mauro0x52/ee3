@@ -20,6 +20,12 @@ appSchema = new Schema({
     type    : {type : String, required : true, enum : ['free', 'payed', 'compulsory']}
 });
 
+/** pre('save')
+ * @author : Rafael Erthal
+ * @since : 2012-08
+ *
+ * @description : gera slug do app
+ */
 appSchema.pre('save', function(next) {
     var crypto = require('crypto'),
         slug, foundSlug,
@@ -51,6 +57,7 @@ appSchema.pre('save', function(next) {
 
     });
 });
+
 /** Versions
  * @author : Rafael Erthal
  * @since : 2012-07
@@ -61,7 +68,7 @@ appSchema.pre('save', function(next) {
 appSchema.methods.versions = function (cb) {
     "use strict";
 
-    Version.find({appId : this._id}, cb);
+    Version.find({app : this._id}, cb);
 };
 
 /** FindVersion
@@ -75,7 +82,7 @@ appSchema.methods.versions = function (cb) {
 appSchema.methods.findVersion = function (number, cb) {
     "use strict";
 
-    Version.findOne({appId : this._id, number : number}, cb);
+    Version.findOne({app : this._id, number : number}, cb);
 };
 
 /*  Exportando o pacote  */

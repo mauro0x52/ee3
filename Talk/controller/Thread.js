@@ -55,7 +55,7 @@ module.exports = function (app) {
                                     response.send({error : error});
                                 } else {
                                     //coloca a thread na lista de threads do criador
-                                    conversant.threadIds.push(thread._id);
+                                    conversant.threads.push(thread._id);
                                     conversant.save(function (error) {
                                         if (error) {
                                             response.send({error : error});
@@ -112,7 +112,7 @@ module.exports = function (app) {
                                         response.send({error : 'thread not found'});
                                     } else {
                                         //coloca a thread na lista de threads do usuário
-                                        conversant.threadIds.push(thread._id);
+                                        conversant.threads.push(thread._id);
                                         //salva a modificação
                                         conversant.save(function (error) {
                                             if (error) {
@@ -162,7 +162,7 @@ module.exports = function (app) {
                             response.send({error : 'user not found'});
                         } else {
                             //busca as threads do usuário
-                            conversant.threads(function (error, threads) {
+                            conversant.activeThreads(function (error, threads) {
                                 if (error) {
                                     response.send({error : error});
                                 } else {

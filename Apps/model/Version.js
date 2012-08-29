@@ -16,7 +16,7 @@ var Tool = require('./Tool.js').Tool,
 
 versionSchema = new Schema({
     number : {type : String, trim : true, required : true},
-    appId  : {type : objectId}
+    app    : {type : objectId}
 });
 
 /** pre('save')
@@ -29,7 +29,7 @@ versionSchema.pre('save', function (next, done) {
     "use strict";
     
     //Verifica se já existe esta versão para o mesmo APP
-    var query = Version.findOne({number : this.number, appId : this.appId});
+    var query = Version.findOne({number : this.number, app : this.app});
     query.where("_id");
     query.ne([this._id]);
     //Localiza as versões
@@ -58,7 +58,7 @@ versionSchema.pre('save', function (next, done) {
 versionSchema.methods.tools = function (cb) {
     "use strict";
 
-    Tool.find({versionId : this._id}, cb);
+    Tool.find({version : this._id}, cb);
 };
 
 /** FindTool
@@ -72,7 +72,7 @@ versionSchema.methods.tools = function (cb) {
 versionSchema.methods.findTool = function (name, cb) {
     "use strict";
 
-    Tool.findOne({versionId : this._id, _id : name}, cb);
+    Tool.findOne({version : this._id, _id : name}, cb);
 };
 
 /** Plugins
@@ -85,7 +85,7 @@ versionSchema.methods.findTool = function (name, cb) {
 versionSchema.methods.plugins = function (cb) {
     "use strict";
 
-    Plugin.find({versionId : this._id}, cb);
+    Plugin.find({version : this._id}, cb);
 };
 
 /** FindPlugin
@@ -100,7 +100,7 @@ versionSchema.methods.findPlugin = function (name, cb) {
     "use strict";
 
     console.log(name);
-    Plugin.findOne({versionId : this._id, _id : name}, cb);
+    Plugin.findOne({version : this._id, _id : name}, cb);
 };
 
 /** Dialogs
@@ -113,7 +113,7 @@ versionSchema.methods.findPlugin = function (name, cb) {
 versionSchema.methods.dialogs = function (cb) {
     "use strict";
 
-    Dialog.find({versionId : this._id}, cb);
+    Dialog.find({version : this._id}, cb);
 };
 
 /** FindDialog
@@ -127,7 +127,7 @@ versionSchema.methods.dialogs = function (cb) {
 versionSchema.methods.findDialog = function (name, cb) {
     "use strict";
 
-    Dialog.findOne({versionId : this._id, _id : name}, cb);
+    Dialog.findOne({version : this._id, _id : name}, cb);
 };
 
 /*  Exportando o pacote  */

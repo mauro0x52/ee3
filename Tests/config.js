@@ -26,11 +26,11 @@ module.exports = {
             host : 'localhost',
             port : 38802,
             mongodb : {
-                port : 10034,
-                url : 'staff.mongohq.com',
-                username : 'empreendemia',
-                password : 'kawasaki88',
-                db : 'empreendemia'
+                port : 27017,
+                url : 'localhost',
+                username : undefined,
+                password : undefined,
+                db : 'companies'
             }
         },
         apps : {

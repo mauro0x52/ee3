@@ -60,7 +60,7 @@ module.exports = function (app) {
                                             dialog = new Dialog({
                                                 name      : request.param('name', null),
                                                 source    : request.param('source', null),
-                                                versionId : version._id
+                                                version   : version._id
                                             });
                                             //salva a nova dialogo
                                             dialog.save(function (error) {

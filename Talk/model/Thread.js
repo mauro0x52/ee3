@@ -28,6 +28,12 @@ threadSchema = new Schema({
     messages  : [messageSchema]
 });
 
+/** pre('save')
+ * @author : Rafael Erthal
+ * @since : 2012-08
+ *
+ * @description : gera slug da thread
+ */
 threadSchema.pre('save', function(next) {
     var crypto = require('crypto'),
         slug, foundSlug,

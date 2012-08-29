@@ -14,7 +14,7 @@ var mongoose = require('mongoose'),
 dialogSchema = new Schema({
     name      : {type : String, trim : true, required : true, unique : true},
     source    : {type : String, required : true},
-    versionId : {type : objectId}
+    version   : {type : objectId}
 });
 
 /** pre('save')
