@@ -191,7 +191,7 @@ sdk.modules.ui = function (app) {
             remove : function (ids) {
                 var i,
                     elements = this.get(ids);
-    
+
                 if (elements.constructor === Array) {
                     for (i = 0; i < elements.length; i = i + 1) {
                         this.remove(elements[i]);
