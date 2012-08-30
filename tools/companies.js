@@ -16,12 +16,16 @@ ListCompanies: function(){
         var companies, i;
 
         eval('companies = ' + data);
-
+        
+        /* Carrega uma empresa na tela */
+        this.ShowCompany(companies[0]);
+        
         for(i in companies) {
             this.ShowCompany(companies[i]);
         }
     });
-},
+}
+,
 
 ShowCompany : function (company) {
     var listCompanies = {};
@@ -85,7 +89,6 @@ ProductsTab : function (company) {
 
     /* Pega todos os produtos da empresa e adiciona na aba Produtos */
     tab.push({title : 'Produtos'});
-    tab.push({p : company.name});
     for (i in company.products) {
         /* Verifica se o Produto tem Thumbnail, se não adiciona uma imagem padrão. */
         /* Adiciona um HTML P com negrito informando o nome e imagem do produto. */
@@ -101,26 +104,34 @@ ProductsTab : function (company) {
 },
 
 ContactTab : function (company) {
-    var tab = [],
-        i;
-
-    /* Pega todos os contatos da empresa e adiciona na aba Contato */
-    tab.push({title : 'Produtos'});
+	var tab = [], i, address;
+	
+	tab.push({title : 'Contato'});
+	
+	/* Pega todos os contatos da empresa e adiciona na aba Contato */
     for (i in company.contacts) {
-        tab.push({p : {b : company.contacts[i].type+': '+company.contacts[i].address}});
+        tab.push({p : {b : company.contacts[i].type+' : '+company.contacts[i].address}});
     };
-
-    /* adiciona a aba */
-    this.ui.frame.tabs.add({id : 'productTab', src : 'http://dicsin.com.br/css/images/icone_livro.jpg', description : 'Produtos', value : tab});
+	
+	/* Pega todos os Endereços da empresa e adiciona na aba Contato */
+	for (i in company.addresses) {
+		this.ajax.get({url : 'http://' + this.config.location.host + ':' + this.config.location.port + '/city/' + company.addresses[i].city}, function (data) {
+			var city;
+		    
+		    /* Adiciona a variavel data na variável city */
+	        eval('city = ' + data);
+		    
+	        tab.push({p : {b : company.addresses[i].street + ', ' + company.addresses[i].number + ' ' + company.addresses[i].complement + ' - ' + city.name + ', ' + city.state}});
+        });
+	}
+	
+	/* adiciona a aba */
+    this.ui.frame.tabs.add({id : 'productTab', src : 'http://dicsin.com.br/css/images/icone_livro.jpg', description : 'Contatos', value : tab});
 }
 
 /*,
 
 ShowProduct : function (company, product) {
-
-},
-
-ShowContacts : function (company) {
 
 }
 */
