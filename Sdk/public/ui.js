@@ -115,7 +115,7 @@ sdk.modules.ui = function (app) {
     
                 if (elements.constructor === Array) {
                     for (i = 0; i < elements.length; i = i + 1) {
-                        this.remove(elements[i]);
+                        removeChild(elements[i]);
                     }
                 } else {
                     removeChild(elements);
@@ -424,7 +424,9 @@ sdk.modules.ui = function (app) {
          * @description : remove o objeto do pai
          */
         this.remove = function () {
-            HTMLobject.parentNode.removeChild(HTMLobject);
+            if (HTMLobject && HTMLobject.parentNode) {
+                HTMLobject.parentNode.removeChild(HTMLobject);
+            }
         };
 
         addAttribute({name : 'id', value : id});
@@ -991,7 +993,10 @@ sdk.modules.ui = function (app) {
         };
         this.tabs = {
             get : tabs.childs.get,
-            remove : tabs.childs.remove,
+            remove : function () {
+                content.value(' ');
+                tabs.childs.remove()
+            },
             add : function (params) {
                 tabs.childs.add(new tabOption(params, content));
             }
