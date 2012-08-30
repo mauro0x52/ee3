@@ -16,7 +16,7 @@ describe('GET /country/:slug_country/states', function () {
     before(function (done) {
         done();
     });
-    
+
     it('lista de estados', function(done) {
         api.get('location', '/country/'+dt.country.slug+'/states',
             null,
@@ -25,7 +25,7 @@ describe('GET /country/:slug_country/states', function () {
                 else {
                     response.should.have.status(200);
                     should.not.exist(data.error, 'erro inesperado');
-                    data.should.have.lengthOf(10);
+                    data.should.have.lengthOf(27);
                     done();
                 }
             }
@@ -53,21 +53,6 @@ describe('GET /country/:slug_country/states', function () {
                 else {
                     should.not.exist(data.error, 'erro inesperado');
                     data.should.have.lengthOf(18);
-                    done();
-                }
-            }
-        );
-    });
-    it('tenta listar mais de 20 estados', function(done) {
-        api.get('location', '/country/'+dt.country.slug+'/states',
-            {
-                limit : 25
-            },
-            function(error, data, response) {
-                if (error) return done(error);
-                else {
-                    should.not.exist(data.error, 'erro inesperado');
-                    data.should.have.lengthOf(20);
                     done();
                 }
             }
@@ -104,7 +89,7 @@ describe('GET /country/:slug_country/states', function () {
                 if (error) return done(error);
                 else {
                     should.not.exist(data.error, 'erro inesperado');
-                    data.should.have.lengthOf(10);
+                    data.should.have.lengthOf(27);
                     for (var i = 1; i < data.length; i++) {
                         data[i].name.should.be.above(data[i-1].name, 'não ordenou');
                     }
@@ -122,7 +107,7 @@ describe('GET /country/:slug_country/states', function () {
                 if (error) return done(error);
                 else {
                     should.not.exist(data.error, 'erro inesperado');
-                    data.should.have.lengthOf(10);
+                    data.should.have.lengthOf(27);
                     for (var i = 1; i < data.length; i++) {
                         data[i-1].slug.should.be.above(data[i].slug, 'não ordenou');
                     }

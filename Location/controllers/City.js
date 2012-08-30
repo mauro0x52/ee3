@@ -54,8 +54,7 @@ module.exports = function (app) {
                                 //Cria o objeto query
                                 query = City.find(filter);
 
-                                // limit : padrao = 10, max = 20, min = 1
-                                limit = request.param('limit', 10) < 20 ? request.param('limit', 10) : 20;
+                                limit = request.param('limit');
                                 query.limit(limit);
 
                                 // order : padrao = dateCreated descending

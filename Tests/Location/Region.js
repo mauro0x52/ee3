@@ -16,7 +16,7 @@ describe('GET /regions', function () {
     before(function (done) {
         done();
     });
-    
+
     it('lista de regiões', function(done) {
         api.get('location', '/regions',
             null,
@@ -42,21 +42,6 @@ describe('GET /regions', function () {
                 else {
                     should.not.exist(data.error, 'erro inesperado');
                     data.length.should.be.below(19);
-                    done();
-                }
-            }
-        );
-    });
-    it('tenta listar mais de 20 regiões', function(done) {
-        api.get('location', '/regions',
-            {
-                limit : 25
-            },
-            function(error, data, response) {
-                if (error) return done(error);
-                else {
-                    should.not.exist(data.error, 'erro inesperado');
-                    data.length.should.be.below(21);
                     done();
                 }
             }

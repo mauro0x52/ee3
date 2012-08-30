@@ -29,15 +29,14 @@ module.exports = function (app) {
     */
     app.get('/regions', function (request, response) {
         response.contentType('json');
-        
+
         var limit, order, findRegion;
-        
+
         findRegion = Region.find();
         
-        // limit : padrao = 10, max = 20, min = 1
-        limit = request.param('limit', 10) < 20 ? request.param('limit', 10) : 20;
+        limit = request.param('limit');
         findRegion.limit(limit);
-        
+
         // order : padrao = dateCreated descending
         order = request.param('order', [{name:1}]);
         if (!(order instanceof Array)) order = [order];
@@ -49,7 +48,7 @@ module.exports = function (app) {
             }
         }
         findRegion.sort(sort);
-        
+
         //Localiza todas as regiões
         findRegion.exec (function (error, regions) {
             if (error) {
@@ -89,7 +88,7 @@ module.exports = function (app) {
             }
         });
     });
-    
+
     /** GET /region/:slugRegion/countries
      *
      * @autor : Lucas Kalado
@@ -109,7 +108,7 @@ module.exports = function (app) {
             limit, order, query, from;
 
         response.contentType('json');
-        
+
         //Localiza a Região pelo nome
         Region.findByIdentity(request.params.slugRegion, function (error, region) {
             //Verifica se existe a região e retorna erro caso não exista
@@ -124,7 +123,7 @@ module.exports = function (app) {
                 // order : padrao = dateCreated descending
 		        order = request.param('order', [{name:1}]);
 		        if (!(order instanceof Array)) order = [order];
-		
+
 		        var sort = {};
 		        for (var i = 0; i < order.length; i++) {
 		            for (var name in order[i]) {
@@ -132,15 +131,15 @@ module.exports = function (app) {
 		            }
 		        }
 		        query.sort(sort);
-                
+
                 // from : padrao = 0, min = 0
                 from = limit * (request.param('page', 1) - 1);
                 from = from >= 0 ? from : 0;
                 query.skip(from);
-                
+
                 query.where("regions");
                 query.in([region._id]);
-                //Localiza os Países 
+                //Localiza os Países
                 query.exec(function (error, countries) {
                     if (error) {
                         response.send({error : error});
@@ -153,7 +152,7 @@ module.exports = function (app) {
             }
         });
     });
-    
+
     /** GET /region/:slugRegion/states
      *
      * @autor : Lucas Kalado
@@ -173,14 +172,14 @@ module.exports = function (app) {
             limit, order, query, from;
 
         response.contentType('json');
-        
+
         //Localiza a Região pelo nome
         Region.findByIdentity(request.params.slugRegion, function (error, region) {
             //Verifica se existe a região e retorna erro caso não exista
             if (region) {
                 //Cria a query com os dados da região para buscar os Estados
                 query = State.find();
-                
+
                 // limit : padrao = 10, max = 20, min = 1
                 limit = request.param('limit', 10) < 20 ? request.param('limit', 10) : 20;
                 query.limit(limit);
@@ -188,7 +187,7 @@ module.exports = function (app) {
                 // order : padrao = dateCreated descending
 		        order = request.param('order', [{name:1}]);
 		        if (!(order instanceof Array)) order = [order];
-		
+
 		        var sort = {};
 		        for (var i = 0; i < order.length; i++) {
 		            for (var name in order[i]) {
@@ -196,15 +195,15 @@ module.exports = function (app) {
 		            }
 		        }
 		        query.sort(sort);
-                
+
                 // from : padrao = 0, min = 0
                 from = limit * (request.param('page', 1) - 1);
                 from = from >= 0 ? from : 0;
                 query.skip(from);
-                
+
                 query.where("regions");
                 query.in([region._id]);
-                //Localiza os Estados 
+                //Localiza os Estados
                 query.exec(function (error, states) {
                     if (error) {
                         response.send({error : error});
@@ -217,7 +216,7 @@ module.exports = function (app) {
             }
         });
     });
-    
+
     /** GET /region/:slugRegion/cities
      *
      * @autor : Lucas Kalado
@@ -237,14 +236,14 @@ module.exports = function (app) {
             limit, order, query, from;
 
         response.contentType('json');
-        
+
         //Localiza a Região pelo nome
         Region.findByIdentity(request.params.slugRegion, function (error, region) {
             //Verifica se existe a região e retorna erro caso não exista
             if (region) {
                 //Cria a query com os dados da região para buscar as Cidades
                 query = City.find();
-                
+
                 // limit : padrao = 10, max = 20, min = 1
                 limit = request.param('limit', 10) < 20 ? request.param('limit', 10) : 20;
                 query.limit(limit);
@@ -252,7 +251,7 @@ module.exports = function (app) {
                 // order : padrao = dateCreated descending
 		        order = request.param('order', [{name:1}]);
 		        if (!(order instanceof Array)) order = [order];
-		
+
 		        var sort = {};
 		        for (var i = 0; i < order.length; i++) {
 		            for (var name in order[i]) {
@@ -260,12 +259,12 @@ module.exports = function (app) {
 		            }
 		        }
 		        query.sort(sort);
-                
+
                 // from : padrao = 0, min = 0
                 from = limit * (request.param('page', 1) - 1);
                 from = from >= 0 ? from : 0;
                 query.skip(from);
-                
+
                 query.where("regions");
                 query.in([region._id]);
                 //Localiza as Cidades

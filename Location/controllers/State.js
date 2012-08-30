@@ -37,18 +37,18 @@ module.exports = function (app) {
             } else {
                 if (country) {
                     filter.country = country._id;
-                    
+
                     //Cria o objeto query
                     query = State.find(filter);
 
                     // limit : padrao = 10, max = 20, min = 1
-                    limit = request.param('limit', 10) < 20 ? request.param('limit', 10) : 20;
+                    limit = request.param('limit');
                     query.limit(limit);
 
                     // order : padrao = dateCreated descending
 			        order = request.param('order', [{name:1}]);
 			        if (!(order instanceof Array)) order = [order];
-			
+
 			        var sort = {};
 			        for (var i = 0; i < order.length; i++) {
 			            for (var name in order[i]) {
@@ -61,7 +61,7 @@ module.exports = function (app) {
                     from = limit * (request.param('page', 1) - 1);
                     from = from >= 0 ? from : 0;
                     query.skip(from);
-                    
+
                     //Localiza todos os estados do país informado
                     query.exec(function (error, states) {
                         if (error) {

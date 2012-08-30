@@ -33,7 +33,7 @@ module.exports = function (app) {
         query = Country.find();
 
         // limit : padrao = 10, max = 20, min = 1
-        limit = request.param('limit', 10) < 20 ? request.param('limit', 10) : 20;
+        limit = request.param('limit');
         query.limit(limit);
 
         // order : padrao = dateCreated descending
@@ -62,7 +62,7 @@ module.exports = function (app) {
             }
         });
     });
-    
+
     /** GET /contry/:slug
      *
      * @autor : Lucas Kalado
@@ -78,7 +78,7 @@ module.exports = function (app) {
      */
     app.get('/country/:slug', function (request, response) {
         response.contentType('json');
-        
+
         //Localiza o País desejado e retorna os dados informados
         Country.findByIdentity(request.params.slug, function (error, country) {
             if (error) {

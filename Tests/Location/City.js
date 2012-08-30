@@ -26,7 +26,12 @@ describe('GET /country/[slugCountry]/state/[slugState]/cities', function () {
                 else {
                     response.should.have.status(200);
                     should.not.exist(data.error, 'erro inesperado');
-                    data.should.have.lengthOf(10);
+                    data.length.should.be.above(100);
+                    for (var i = 1; i < data.length; i++) {
+                        data[i].should.have.property('name');
+                        data[i].name.should.be.above(data[i-1].name, 'não ordenou');
+                        data[i].should.have.property('state').equal(dt.state.id);
+                    }
                     done();
                 }
             }
@@ -71,21 +76,6 @@ describe('GET /country/[slugCountry]/state/[slugState]/cities', function () {
             }
         );
     });
-    it('tenta listar mais de 20 cidades', function(done) {
-        api.get('location', '/country/'+dt.country.slug+'/state/'+dt.state.slug+'/cities',
-            {
-                limit : 25
-            },
-            function(error, data, response) {
-                if (error) return done(error);
-                else {
-                    should.not.exist(data.error, 'erro inesperado');
-                    data.should.have.lengthOf(20);
-                    done();
-                }
-            }
-        );
-    });
     it('paginação', function(done) {
         api.get('location', '/country/'+dt.country.slug+'/state/'+dt.state.slug+'/cities', {limit : 4, page : 1}, function(error, data, response) {
                 if (error) return done(error);
@@ -117,9 +107,10 @@ describe('GET /country/[slugCountry]/state/[slugState]/cities', function () {
                 if (error) return done(error);
                 else {
                     should.not.exist(data.error, 'erro inesperado');
-                    data.should.have.lengthOf(10);
+                    data.length.should.be.above(100);
                     for (var i = 1; i < data.length; i++) {
                         data[i].name.should.be.above(data[i-1].name, 'não ordenou');
+                        data[i].should.have.property('state').equal(dt.state.id);
                     }
                     done();
                 }
@@ -135,9 +126,10 @@ describe('GET /country/[slugCountry]/state/[slugState]/cities', function () {
                 if (error) return done(error);
                 else {
                     should.not.exist(data.error, 'erro inesperado');
-                    data.should.have.lengthOf(10);
+                    data.length.should.be.above(100);
                     for (var i = 1; i < data.length; i++) {
                         data[i-1].slug.should.be.above(data[i].slug, 'não ordenou');
+                        data[i].should.have.property('state').equal(dt.state.id);
                     }
                     done();
                 }
