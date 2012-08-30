@@ -990,8 +990,8 @@ sdk.modules.ui = function (app) {
             subtitle : subtitle.value
         };
         this.tabs = {
-            get : tabs.get,
-            remove : tabs.remove,
+            get : tabs.childs.get,
+            remove : tabs.childs.remove,
             add : function (params) {
                 tabs.childs.add(new tabOption(params, content));
             }
