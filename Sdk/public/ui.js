@@ -851,7 +851,7 @@ sdk.modules.ui = function (app) {
      */
     var browseOption = function (params) {
         var element = new Element(params.id, 'li'),
-            image = new Image({src : params.src, alt : params.description}),
+            image = new Image({src : params.src, alt : params.title}),
             title = new Span({value : params.title}),
             description = new Span({value : params.description});
         
@@ -891,7 +891,7 @@ sdk.modules.ui = function (app) {
         element.events.add({event : 'click', callback : function () {
             contentContainer.value(' ');
             contentContainer.childs.add(new Div({
-                content : params.value,
+                content : params.value
             }));
         }});
     };

@@ -29,6 +29,7 @@ module.exports = function (app) {
      */
     app.post('/company/:company_id/product/:product_id/thumbnail', function postProductThumbnail(request, response) {
         response.contentType('json');
+        response.header('Access-Control-Allow-Origin', '*');
 
         //valida o token do usuário
         auth(request.param('token', null), function (user) {
@@ -133,6 +134,7 @@ module.exports = function (app) {
      */
     app.get('/company/:company_id/product/:product_id/thumbnail', function (request, response) {
         response.contentType('json');
+        response.header('Access-Control-Allow-Origin', '*');
 
         //busca a compania
         Company.findByIdentity(request.params.company_id, function (error, company) {
@@ -181,6 +183,7 @@ module.exports = function (app) {
      */
     app.get('/company/:company_id/product/:product_id/thumbnail/:size', function (request, response) {
         response.contentType('json');
+        response.header('Access-Control-Allow-Origin', '*');
 
         //busca a compania
         Company.findByIdentity(request.params.company_id, function (error, company) {
@@ -236,6 +239,7 @@ module.exports = function (app) {
      * @response : {confirmation}
      */
     app.put('/company/:company_id/product/:product_id/thumbnail', function (request, response) {
+        response.header('Access-Control-Allow-Origin', '*');
         postProductThumbnail(request, response);
     });
 
@@ -254,6 +258,7 @@ module.exports = function (app) {
      */
     app.del('/company/:company_id/product/:product_id/thumbnail', function (request, response) {
         response.contentType('json');
+        response.header('Access-Control-Allow-Origin', '*');
 
         //valida o token do usuário
         auth(request.param('token', null), function (user) {
@@ -317,6 +322,7 @@ module.exports = function (app) {
      */
     app.post('/company/:company_id/thumbnail', function postCompanyThumbnail (request, response) {
         response.contentType('json');
+        response.header('Access-Control-Allow-Origin', '*');
 
         //valida o token do usuário
         auth(request.param('token', null), function (user) {
@@ -409,6 +415,7 @@ module.exports = function (app) {
      */
     app.get('/company/:company_id/thumbnail', function (request, response) {
         response.contentType('json');
+        response.header('Access-Control-Allow-Origin', '*');
 
         //busca a compania
         Company.findByIdentity(request.params.company_id, function (error, company) {
@@ -445,6 +452,7 @@ module.exports = function (app) {
      */
     app.get('/company/:company_id/thumbnail/:size', function (request, response) {
         response.contentType('json');
+        response.header('Access-Control-Allow-Origin', '*');
 
         //busca a compania
         Company.findByIdentity(request.params.company_id, function (error, company) {
@@ -489,6 +497,7 @@ module.exports = function (app) {
      */
     app.put('/company/:slug/thumbnail/:type', function (request, response) {
         postCompanyThumbnail(request, response);
+        response.header('Access-Control-Allow-Origin', '*');
     });
 
     /** DEL /company/:slug/thumbnail
@@ -506,6 +515,7 @@ module.exports = function (app) {
      */
     app.del('/company/:company_id/thumbnail', function (request, response) {
         response.contentType('json');
+        response.header('Access-Control-Allow-Origin', '*');
 
         //valida o token do usuário
         auth(request.param('token', null), function (user) {

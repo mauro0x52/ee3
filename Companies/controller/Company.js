@@ -29,6 +29,7 @@ module.exports = function (app) {
         var company;
 
         response.contentType('json');
+        response.header('Access-Control-Allow-Origin', '*');
 
         //valida o token do usuário
         auth(request.param('token', null), function (user) {
@@ -88,6 +89,7 @@ module.exports = function (app) {
      */
     app.get('/companies', function (request, response) {
         response.contentType('json');
+        response.header('Access-Control-Allow-Origin', '*');
 
         var ObjectId = require('mongoose').Types.ObjectId,
             query, limit, from, to, order, findCompany,
@@ -171,6 +173,7 @@ module.exports = function (app) {
      */
     app.get('/companies/count', function (request, response) {
         response.contentType('json');
+        response.header('Access-Control-Allow-Origin', '*');
 
         var ObjectId = require('mongoose').Types.ObjectId,
             query, limit, from, to, order, countCompany,
@@ -229,6 +232,7 @@ module.exports = function (app) {
      */
     app.get('/company/:id', function (request, response) {
         response.contentType('json');
+        response.header('Access-Control-Allow-Origin', '*');
 
         var id = request.params.id,
             attributes = request.param('attributes', {}),
@@ -283,6 +287,7 @@ module.exports = function (app) {
      */
     app.put('/company/:id', function (request, response) {
         response.contentType('json');
+        response.header('Access-Control-Allow-Origin', '*');
 
         //valida o token do usuário
         auth(request.param('token', null), function (user) {
@@ -356,6 +361,7 @@ module.exports = function (app) {
      */
     app.del('/company/:id', function (request, response) {
         response.contentType('json');
+        response.header('Access-Control-Allow-Origin', '*');
 
         //valida o token do usuário
         auth(request.param('token', null), function (user) {

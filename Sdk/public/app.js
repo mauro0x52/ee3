@@ -65,5 +65,6 @@ sdk.modules.app = function (sdk) {
                 }
             }
         }
+        app.config = sdk.config;
     };
 };
