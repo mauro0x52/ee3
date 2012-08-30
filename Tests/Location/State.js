@@ -185,4 +185,17 @@ describe('GET /country/:slug_country/state/:state_id', function () {
             }
         );
     });
+    it('pega estado por id de pais', function(done) {
+        api.get('location', '/country/'+dt.country.id+'/state/'+dt.state.slug,
+            {},
+            function(error, data, response) {
+                if (error) return done(error);
+                else {
+                    data.should.have.property('_id', dt.state.id, 'os ids devem ser iguais');
+                    data.should.have.property('slug', dt.state.slug, 'os slugs devem ser iguais');
+                    done();
+                }
+            }
+        );
+    });
 });

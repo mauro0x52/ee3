@@ -217,4 +217,30 @@ describe('GET /country/[slugCountry]/state/[slugState]/city/[slugCity]', functio
             }
         );
     });
+    it('pega cidade por id de estado', function(done) {
+        api.get('location', '/country/'+dt.country.slug+'/state/'+dt.state.id+'/city/'+dt.city.slug,
+            {},
+            function(error, data, response) {
+                if (error) return done(error);
+                else {
+                    data.should.have.property('_id', dt.city.id, 'os ids devem ser iguais');
+                    data.should.have.property('slug', dt.city.slug, 'os slugs devem ser iguais');
+                    done();
+                }
+            }
+        );
+    });
+    it('pega cidade por id de país', function(done) {
+        api.get('location', '/country/'+dt.country.id+'/state/'+dt.state.id+'/city/'+dt.city.slug,
+            {},
+            function(error, data, response) {
+                if (error) return done(error);
+                else {
+                    data.should.have.property('_id', dt.city.id, 'os ids devem ser iguais');
+                    data.should.have.property('slug', dt.city.slug, 'os slugs devem ser iguais');
+                    done();
+                }
+            }
+        );
+    });
 });

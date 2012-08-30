@@ -141,7 +141,7 @@ describe('GET /country/:slug_country', function () {
         );
     });
     it('pega país por id', function(done) {
-        api.get('location', '/country/'+dt.country.slug,
+        api.get('location', '/country/'+dt.country.id,
             {},
             function(error, data, response) {
                 if (error) return done(error);
