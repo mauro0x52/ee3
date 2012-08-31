@@ -39,7 +39,7 @@ sdk.modules.ui = function (app) {
             //atributo privilegiado
             that = this,
             HTMLobject = document.createElement(type);
-    
+
         this.changeId = function (val) {
             id = val;
         };
@@ -63,7 +63,7 @@ sdk.modules.ui = function (app) {
             get : function (ids) {
                 var i,
                     res;
-    
+
                 if (ids === undefined) {
                     res = childs_objects;
                 } else if (ids.constructor === Array) {
@@ -80,7 +80,7 @@ sdk.modules.ui = function (app) {
                 }
                 return res;
             },
-    
+
             /** add
              *
              * @autor : Rafael Erthal
@@ -91,7 +91,7 @@ sdk.modules.ui = function (app) {
              */
             add : function (elements) {
                 var i;
-    
+
                 if (elements.constructor === Array) {
                     for (i = 0; i < elements.length; i = i + 1) {
                         this.add(elements[i]);
@@ -100,7 +100,7 @@ sdk.modules.ui = function (app) {
                     addChild(elements);
                 }
             },
-    
+
             /** remove
              *
              * @autor : Rafael Erthal
@@ -112,17 +112,17 @@ sdk.modules.ui = function (app) {
             remove : function (ids) {
                 var i,
                     elements = this.get(ids);
-    
+
                 if (elements.constructor === Array) {
                     for (i = 0; i < elements.length; i = i + 1) {
-                        this.remove(elements[i]);
+                        removeChild(elements[i]);
                     }
                 } else {
                     removeChild(elements);
                 }
             }
         };
-    
+
         /** Attributes
          *
          * @autor : Rafael Erthal
@@ -142,7 +142,7 @@ sdk.modules.ui = function (app) {
             get : function (ids) {
                 var i,
                     res;
-    
+
                 if (ids === undefined) {
                     res = attributes_objects;
                 } else if (ids.constructor === Array) {
@@ -170,7 +170,7 @@ sdk.modules.ui = function (app) {
              */
             add : function (elements) {
                 var i;
-    
+
                 if (elements.constructor === Array) {
                     for (i = 0; i < elements.length; i = i + 1) {
                         this.add(elements[i]);
@@ -191,7 +191,7 @@ sdk.modules.ui = function (app) {
             remove : function (ids) {
                 var i,
                     elements = this.get(ids);
-    
+
                 if (elements.constructor === Array) {
                     for (i = 0; i < elements.length; i = i + 1) {
                         this.remove(elements[i]);
@@ -222,7 +222,7 @@ sdk.modules.ui = function (app) {
             get : function (ids) {
                 var i,
                     res;
-    
+
                 if (ids === undefined) {
                     res = events_objects;
                 } else if (ids.constructor === Array) {
@@ -239,7 +239,7 @@ sdk.modules.ui = function (app) {
                 }
                 return res;
             },
-    
+
             /** add
              *
              * @autor : Rafael Erthal
@@ -250,7 +250,7 @@ sdk.modules.ui = function (app) {
              */
             add : function (elements) {
                 var i;
-    
+
                 if (elements.constructor === Array) {
                     for (i = 0; i < elements.length; i = i + 1) {
                         this.add(elements[i]);
@@ -259,7 +259,7 @@ sdk.modules.ui = function (app) {
                     addEvent(elements);
                 }
             },
-    
+
             /** remove
              *
              * @autor : Rafael Erthal
@@ -373,7 +373,7 @@ sdk.modules.ui = function (app) {
                 HTMLobject.removeEventListener(element.event, element.callback, true);
             }
         };
-    
+
         /** value
          *
          * @autor : Rafael Erthal
@@ -424,7 +424,9 @@ sdk.modules.ui = function (app) {
          * @description : remove o objeto do pai
          */
         this.remove = function () {
-            HTMLobject.parentNode.removeChild(HTMLobject);
+            if (HTMLobject && HTMLobject.parentNode) {
+                HTMLobject.parentNode.removeChild(HTMLobject);
+            }
         };
 
         addAttribute({name : 'id', value : id});
@@ -531,7 +533,7 @@ sdk.modules.ui = function (app) {
             remove : element.childs.remove,
             add : function (obj) {
                 var i;
-    
+
                 if (obj) {
                     if (obj.constructor === String) {
                         element.value(element.value() + obj, "after");
@@ -557,6 +559,13 @@ sdk.modules.ui = function (app) {
                             element.childs.add(new Italic({
                                 id    : obj.id,
                                 value : obj.i
+                            }));
+                        }
+                        if (obj.a) {
+                            element.childs.add(new Italic({
+                                id    : obj.id,
+                                value : obj.a,
+                                click : obj.click
                             }));
                         }
                     }
@@ -608,6 +617,36 @@ sdk.modules.ui = function (app) {
      */
     var Span = function (params) {
         var element = new Element(params.id, 'span');
+
+        this.add = element.add;
+        this.remove = element.remove;
+        this.value = element.value;
+
+        this.value(params.value);
+    };
+
+    /** Achor
+     *
+     * @autor : Rafael Erthal
+     * @since : 2012-08
+     *
+     * @description : implementa a tag a
+     * @param id : id do objeto a ser criado
+     * @param value : valor a ser colocado no interior da tag
+     * @param url : target da ancora
+     * @param click : callback a ser chamado após click
+     */
+    var Anchor = function (params) {
+        var element = new Element(params.id, 'a');
+
+        if (!params.click) {
+            throw 'click callback is required';
+        }
+
+        element.events.add({event : 'click', callback : function () {
+            /* TODO chamar o atualizador de URL */
+            params.click.apply(app);
+        }});
 
         this.add = element.add;
         this.remove = element.remove;
@@ -677,7 +716,7 @@ sdk.modules.ui = function (app) {
      * @autor : Rafael Erthal
      * @since : 2012-08
      *
-     * @description : implementa a tag form 
+     * @description : implementa a tag form
      * @param id : id do objeto a ser criado
      * @param submit : callback a ser chamado que for dado submit
      * @param submitLabel : label do botão de submit
@@ -705,7 +744,17 @@ sdk.modules.ui = function (app) {
             get : element.childs.get,
             remove : element.childs.remove,
             add : function (obj) {
-                element.childs.add(new Fieldset(obj));
+                var i;
+
+                if (obj) {
+                    if (obj.constructor === Array) {
+                        for (i = 0; i < obj.length; i++) {
+                            this.add(obj[i]);
+                        }
+                    } else {
+                        element.childs.add(new Fieldset(obj));
+                    }
+                }
             }
         };
 
@@ -718,7 +767,7 @@ sdk.modules.ui = function (app) {
      * @autor : Rafael Erthal
      * @since : 2012-08
      *
-     * @description : implementa a tag fieldset 
+     * @description : implementa a tag fieldset
      * @param id : id do objeto a ser criado
      * @param legend : legend do fieldset
      */
@@ -735,7 +784,17 @@ sdk.modules.ui = function (app) {
             get : element.childs.get,
             remove : element.childs.remove,
             add : function (obj) {
-                element.childs.add(new Input(obj));
+                var i;
+
+                if (obj) {
+                    if (obj.constructor === Array) {
+                        for (i = 0; i < obj.length; i++) {
+                            this.add(obj[i]);
+                        }
+                    } else {
+                        element.childs.add(new Input(obj));
+                    }
+                }
             }
         };
 
@@ -854,10 +913,10 @@ sdk.modules.ui = function (app) {
             image = new Image({src : params.src, alt : params.title}),
             title = new Span({value : params.title}),
             description = new Span({value : params.description});
-        
+
         element.childs.add([image, title, description]);
         element.events.add({event : 'click', callback : params.click});
-        
+
         this.add = element.add;
         this.remove = element.remove;
         this.src = image.src;
@@ -870,11 +929,11 @@ sdk.modules.ui = function (app) {
      * @autor : Rafael Erthal
      * @since : 2012-08
      *
-     * @description : 
+     * @description :
      * @param id : id do objeto a ser criado
      * @param src : url do icone
-     * @param 
-     * @param 
+     * @param
+     * @param
      */
     var tabOption = function (params, contentContainer) {
         var element = new Element(params.id, 'li'),
@@ -917,7 +976,17 @@ sdk.modules.ui = function (app) {
             get    : navigation.childs.get,
             remove : navigation.childs.remove,
             add    : function (obj) {
-                navigation.childs.add(new MenuOption(obj));
+                var i;
+
+                if (obj) {
+                    if (obj.contructor === Array) {
+                        for (i = 0; i < obj.length; i++) {
+                            this.add(obj[i]);
+                        }
+                    } else {
+                        navigation.childs.add(new MenuOption(obj));
+                    }
+                }
             }
         };
 
@@ -925,7 +994,17 @@ sdk.modules.ui = function (app) {
             get    : actions.childs.get,
             remove : actions.childs.remove,
             add    : function (obj) {
-                actions.childs.add(new MenuOption(obj));
+                var i;
+
+                if (obj) {
+                    if (obj.constructor === Array) {
+                        for (i = 0; i < obj.length; i++) {
+                            this.add(obj[i]);
+                        }
+                    } else {
+                        actions.childs.add(new MenuOption(obj));
+                    }
+                }
             }
         };
     };
@@ -939,12 +1018,11 @@ sdk.modules.ui = function (app) {
      */
     List = function () {
         var element = new Element('list', 'div'),
-            filter = new Element('filter', 'form'),
             browse = new Element('browse', 'ul'),
             count = new Element('count', 'li');
 
         browse.childs.add([count]);
-        element.childs.add([filter, browse]);
+        element.childs.add([browse]);
 
         this.add = element.add;
         this.remove = element.remove;
@@ -956,11 +1034,21 @@ sdk.modules.ui = function (app) {
                 count.value(browse.childs.get().length - 1 + " resultados encontrados");
             },
             add    : function (obj) {
-                browse.childs.add(new browseOption(obj));
-                count.value(browse.childs.get().length - 1 + " resultados encontrados");
+                var i;
+
+                if (obj) {
+                    if (obj.constructor === Array) {
+                        for (i = 0; i < obj.length; i++) {
+                            this.add(obj[i]);
+                        }
+                    } else {
+                        browse.childs.add(new browseOption(obj));
+                        count.value(browse.childs.get().length - 1 + " resultados encontrados");
+                    }
+                }
             }
         };
-        
+
         count.value('nenhum resultado encontrado');
     };
 
@@ -990,8 +1078,11 @@ sdk.modules.ui = function (app) {
             subtitle : subtitle.value
         };
         this.tabs = {
-            get : tabs.get,
-            remove : tabs.remove,
+            get : tabs.childs.get,
+            remove : function () {
+                content.value(' ');
+                tabs.childs.remove()
+            },
             add : function (params) {
                 tabs.childs.add(new tabOption(params, content));
             }
