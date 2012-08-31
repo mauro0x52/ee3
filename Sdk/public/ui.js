@@ -746,12 +746,14 @@ sdk.modules.ui = function (app) {
             add : function (obj) {
                 var i;
 
-                if (obj.constructor === Array) {
-                    for (i = 0; i < obj.length; i++) {
-                        this.add(obj[i]);
+                if (obj) {
+                    if (obj.constructor === Array) {
+                        for (i = 0; i < obj.length; i++) {
+                            this.add(obj[i]);
+                        }
+                    } else {
+                        element.childs.add(new Fieldset(obj));
                     }
-                } else {
-                    element.childs.add(new Fieldset(obj));
                 }
             }
         };
@@ -784,12 +786,14 @@ sdk.modules.ui = function (app) {
             add : function (obj) {
                 var i;
 
-                if (obj.constructor === Array) {
-                    for (i = 0; i < obj.length; i++) {
-                        this.add(obj[i]);
+                if (obj) {
+                    if (obj.constructor === Array) {
+                        for (i = 0; i < obj.length; i++) {
+                            this.add(obj[i]);
+                        }
+                    } else {
+                        element.childs.add(new Input(obj));
                     }
-                } else {
-                    element.childs.add(new Input(obj));
                 }
             }
         };
@@ -972,7 +976,17 @@ sdk.modules.ui = function (app) {
             get    : navigation.childs.get,
             remove : navigation.childs.remove,
             add    : function (obj) {
-                navigation.childs.add(new MenuOption(obj));
+                var i;
+
+                if (obj) {
+                    if (obj.contructor === Array) {
+                        for (i = 0; i < obj.length; i++) {
+                            this.add(obj[i]);
+                        }
+                    } else {
+                        navigation.childs.add(new MenuOption(obj));
+                    }
+                }
             }
         };
 
@@ -980,7 +994,17 @@ sdk.modules.ui = function (app) {
             get    : actions.childs.get,
             remove : actions.childs.remove,
             add    : function (obj) {
-                actions.childs.add(new MenuOption(obj));
+                var i;
+
+                if (obj) {
+                    if (obj.constructor === Array) {
+                        for (i = 0; i < obj.length; i++) {
+                            this.add(obj[i]);
+                        }
+                    } else {
+                        actions.childs.add(new MenuOption(obj));
+                    }
+                }
             }
         };
     };
@@ -1020,8 +1044,18 @@ sdk.modules.ui = function (app) {
                 count.value(browse.childs.get().length - 1 + " resultados encontrados");
             },
             add    : function (obj) {
-                browse.childs.add(new browseOption(obj));
-                count.value(browse.childs.get().length - 1 + " resultados encontrados");
+                var i;
+
+                if (obj) {
+                    if (obj.constructor === Array) {
+                        for (i = 0; i < obj.length; i++) {
+                            this.add(obj[i]);
+                        }
+                    } else {
+                        browse.childs.add(new browseOption(obj));
+                        count.value(browse.childs.get().length - 1 + " resultados encontrados");
+                    }
+                }
             }
         };
 
