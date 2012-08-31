@@ -15,39 +15,7 @@ stateSchema = new Schema({
     name    : {type : String, trim : true, required : true},
     slug    : {type : String, trim : true},
     country : {type: objectId},
-    regions : [{type: objectId}]
-});
-
-stateSchema.pre('save', function(next) {
-    var crypto = require('crypto'),
-        slug, foundSlug,
-        charFrom = 'àáâãäåçèéêëìíîïñðóòôõöøùúûüýÿ',
-        charTo   = 'aaaaaaceeeeiiiinooooooouuuuyy',
-        state = this;
-
-    state.name = region.name.replace(/\s+/g, ' ');
-
-    slug = state.name;
-    slug = slug.replace(/^\s+|\s+$/g, '').replace(/\s+/g, '-').toLowerCase();
-    // remove acentos
-    for (var i = 0; i < charFrom.length; i++) {
-        slug = slug.replace(new RegExp(charFrom.charAt(i), 'g'), charTo.charAt(i))
-    }
-    slug = slug.replace(/[^a-z,0-9,\-]/g, '');
-
-    State.find({slug : slug, _id : {$ne : state._id}}, function (error, data) {
-        if (error) next(error);
-        else {
-            if (data.length === 0) {
-                state.slug = slug;
-            }
-            else {
-                state.slug = slug + '-' + data.length + '' + crypto.createHash('sha1').update(crypto.randomBytes(10)).digest('hex').substring(0, 1);
-            }
-            next();
-        }
-
-    });
+//    regions : [{type: objectId}]
 });
 
 /** FindByIdOrUsername
@@ -62,7 +30,7 @@ stateSchema.pre('save', function(next) {
 stateSchema.statics.findByIdentity = function (id, countryId, cb) {
     "use strict";
     var filterState = {};
-    
+
     if (new RegExp("[0-9 a-f]{24}").test(id)) {
         // procura por id
         filterState._id = id;
@@ -72,7 +40,7 @@ stateSchema.statics.findByIdentity = function (id, countryId, cb) {
         filterState.slug = id;
         filterState.country = countryId;
     }
-    
+
     State.findOne(filterState, cb);
 };
 

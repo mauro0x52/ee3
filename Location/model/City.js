@@ -14,42 +14,11 @@ var crypto = require('crypto'),
 citySchema = new Schema({
     name    : {type : String, trim : true, required : true},
     slug    : {type : String, trim : true},
-    ddd     : {type : Number, required : true},
-    state   : {type: objectId},
-    regions : [{type: objectId}]
+    state   : {type: objectId}
+//  ddd     : {type : Number, required : true},
+//  regions : [{type: objectId}]
 });
 
-citySchema.pre('save', function(next) {
-    var crypto = require('crypto'),
-        slug, foundSlug,
-        charFrom = 'àáâãäåçèéêëìíîïñðóòôõöøùúûüýÿ',
-        charTo   = 'aaaaaaceeeeiiiinooooooouuuuyy',
-        city = this;
-
-    city.name = city.name.replace(/\s+/g, ' ');
-
-    slug = city.name;
-    slug = slug.replace(/^\s+|\s+$/g, '').replace(/\s+/g, '-').toLowerCase();
-    // remove acentos
-    for (var i = 0; i < charFrom.length; i++) {
-        slug = slug.replace(new RegExp(charFrom.charAt(i), 'g'), charTo.charAt(i))
-    }
-    slug = slug.replace(/[^a-z,0-9,\-]/g, '');
-
-    City.find({slug : slug, _id : {$ne : city._id}}, function (error, data) {
-        if (error) next(error);
-        else {
-            if (data.length === 0) {
-                city.slug = slug;
-            }
-            else {
-                city.slug = slug + '-' + data.length + '' + crypto.createHash('sha1').update(crypto.randomBytes(10)).digest('hex').substring(0, 1);
-            }
-            next();
-        }
-
-    });
-});
 
 /** FindByIdOrSlug
  * @author : Mauro Ribeiro

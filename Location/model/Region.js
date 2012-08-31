@@ -57,13 +57,13 @@ regionSchema.pre('save', function(next) {
  * @author : Mauro Ribeiro
  * @since : 2012-08
  *
- * @description : Procura uma região pelo id ou pelo slug
- * @param id : id ou slug da região
+ * @description : Procura uma regiï¿½o pelo id ou pelo slug
+ * @param id : id ou slug da regiï¿½o
  * @param cb : callback a ser chamado
  */
 regionSchema.statics.findByIdentity = function (id, cb) {
     "use strict";
-    
+
     if (new RegExp("[0-9 a-f]{24}").test(id)) {
         // procura por id
         Region.findById(id, cb);
