@@ -146,4 +146,36 @@ module.exports = function (app) {
             }
         });
     });
+    
+    /** GET /city/:idCity
+     *
+     * @autor : Lucas Kalado
+     * @since : 2012-07
+     *
+     * @description : Lista a cidade desejada pegando com referência o ID
+     *
+     * @allowedApp : Qualquer app
+     * @allowedUser : Público
+     *
+     * @request : {idCity}
+     * @response : {Name, DDD, Slug}
+     */
+    app.get('/city/:idCity', function (request, response) {
+    	var filter;
+
+        response.contentType('json');
+        response.header('Access-Control-Allow-Origin', '*');
+        
+        City.findById(request.params.idCity, function (error, city) {
+            if (error) {
+                response.send({error : error});
+            } else {
+                if (city) {
+                    response.send(city);
+                } else {
+                    response.send({error : "city not found."});
+                };
+            }
+        });
+    });
 };
