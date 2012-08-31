@@ -1018,21 +1018,11 @@ sdk.modules.ui = function (app) {
      */
     List = function () {
         var element = new Element('list', 'div'),
-            filter = new Form({
-                id : 'filter',
-                submitLabel : 'filtrar',
-                submit : function () {
-
-                },
-                fieldsets : {
-                    legend : 'filtrar'
-                }
-            }),
             browse = new Element('browse', 'ul'),
             count = new Element('count', 'li');
 
         browse.childs.add([count]);
-        element.childs.add([filter, browse]);
+        element.childs.add([browse]);
 
         this.add = element.add;
         this.remove = element.remove;
@@ -1056,16 +1046,6 @@ sdk.modules.ui = function (app) {
                         count.value(browse.childs.get().length - 1 + " resultados encontrados");
                     }
                 }
-            }
-        };
-
-        this.filter = {
-            get    : filter.childs.get,
-            remove : function (ids) {
-
-            },
-            add    : function (obj) {
-
             }
         };
 
