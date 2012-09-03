@@ -12,7 +12,7 @@ load : function () {
 },
 
 ListCompanies: function(){
-    this.ajax.get({url : 'http://' + this.config.companies.host + ':' + this.config.companies.port + '/companies'}, function (data) {
+    this.ajax.get({url : 'http://' + this.config.companies.host + ':' + this.config.companies.port + '/companies', data : {limit : 20, page : 1}}, function (data) {
         var companies, i;
 
         eval('companies = ' + data);
@@ -92,15 +92,20 @@ ProductsTab : function (company) {
     for (i in company.products) {
         /* Verifica se o Produto tem Thumbnail, se não adiciona uma imagem padrão. */
         /* Adiciona um HTML P com negrito informando o nome e imagem do produto. */
-        if (company.products[i].thumbnail) {
-            tab.push({p : {b : company.products[i].name, img : company.products[i].thumbnail.small.url}});
-        } else {
-            tab.push({p : {b : company.products[i].name, img : 'http://dicsin.com.br/css/images/icone_livro.jpg'}});
-        };
+        tab.push({p : {a : company.products[i].name, url : company.slug + '/produto/' + company.products[i].slug, click : function(data){
+		
+			console.log('ok');
+			
+			
+		}}});
     };
 
     /* adiciona a aba */
     this.ui.frame.tabs.add({id : 'productTab', src : 'http://dicsin.com.br/css/images/icone_livro.jpg', description : 'Produtos', value : tab});
+},
+
+ShowProduct : function (company, product) {
+	
 },
 
 ContactTab : function (company) {
@@ -128,10 +133,3 @@ ContactTab : function (company) {
 	/* adiciona a aba */
     this.ui.frame.tabs.add({id : 'productTab', src : 'http://dicsin.com.br/css/images/icone_livro.jpg', description : 'Contatos', value : tab});
 }
-
-/*,
-
-ShowProduct : function (company, product) {
-
-}
-*/

@@ -41,7 +41,7 @@ describe('POST /company/[slug]/product', function () {
             });
         });
     });
-
+    
     it('token inválido', function(done) {
         api.post('companies', '/company/' + company.slug + '/product',
             {
@@ -173,6 +173,7 @@ describe('GET /company/:company_id/products', function() {
         });
     });
     it('lista de produtos', function(done) {
+    	console.log(company.slug);
         api.get('companies', '/company/'+company.slug+'/products', {}, function (error, data, response) {
             if (error) done(error);
             else {
