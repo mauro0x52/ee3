@@ -24,19 +24,19 @@ sdk.modules.ui = function (app) {
      * @description : implmenta a comunicação dos objetos da UI com o DOM
      */
     Element = function (id, type) {
-        var //método privados
+        var /* Método privados */
             addChild,
             removeChild,
             addAttribute,
             removeAttribute,
             addEvent,
             removeEvent,
-            //atributos privados
+            /* Atributos privados */
             childs_objects = [],
             attributes_objects = [],
             events_objects = [],
             value_object,
-            //atributo privilegiado
+            /* Elementos privilegiados */
             that = this,
             HTMLobject = document.createElement(type);
 
@@ -92,12 +92,14 @@ sdk.modules.ui = function (app) {
             add : function (elements) {
                 var i;
 
-                if (elements.constructor === Array) {
-                    for (i = 0; i < elements.length; i = i + 1) {
-                        this.add(elements[i]);
+                if (elements) {
+                    if (elements.constructor === Array) {
+                        for (i = 0; i < elements.length; i = i + 1) {
+                            this.add(elements[i]);
+                        }
+                    } else {
+                        addChild(elements);
                     }
-                } else {
-                    addChild(elements);
                 }
             },
 
@@ -113,12 +115,14 @@ sdk.modules.ui = function (app) {
                 var i,
                     elements = this.get(ids);
 
-                if (elements.constructor === Array) {
-                    for (i = 0; i < elements.length; i = i + 1) {
-                        removeChild(elements[i]);
+                if (elements) {
+                    if (elements.constructor === Array) {
+                        for (i = 0; i < elements.length; i = i + 1) {
+                            removeChild(elements[i]);
+                        }
+                    } else {
+                        removeChild(elements);
                     }
-                } else {
-                    removeChild(elements);
                 }
             }
         };
@@ -171,12 +175,14 @@ sdk.modules.ui = function (app) {
             add : function (elements) {
                 var i;
 
-                if (elements.constructor === Array) {
-                    for (i = 0; i < elements.length; i = i + 1) {
-                        this.add(elements[i]);
+                if (elements) {
+                    if (elements.constructor === Array) {
+                        for (i = 0; i < elements.length; i = i + 1) {
+                            this.add(elements[i]);
+                        }
+                    } else {
+                        addAttribute(elements);
                     }
-                } else {
-                    addAttribute(elements);
                 }
             },
 
@@ -192,12 +198,14 @@ sdk.modules.ui = function (app) {
                 var i,
                     elements = this.get(ids);
 
-                if (elements.constructor === Array) {
-                    for (i = 0; i < elements.length; i = i + 1) {
-                        this.remove(elements[i]);
+                if (elements) {
+                    if (elements.constructor === Array) {
+                        for (i = 0; i < elements.length; i = i + 1) {
+                            this.remove(elements[i]);
+                        }
+                    } else {
+                        removeAttribute(elements);
                     }
-                } else {
-                    removeAttribute(elements);
                 }
             }
         };
@@ -251,12 +259,14 @@ sdk.modules.ui = function (app) {
             add : function (elements) {
                 var i;
 
-                if (elements.constructor === Array) {
-                    for (i = 0; i < elements.length; i = i + 1) {
-                        this.add(elements[i]);
+                if (elements) {
+                    if (elements.constructor === Array) {
+                        for (i = 0; i < elements.length; i = i + 1) {
+                            this.add(elements[i]);
+                        }
+                    } else {
+                        addEvent(elements);
                     }
-                } else {
-                    addEvent(elements);
                 }
             },
 
@@ -272,12 +282,14 @@ sdk.modules.ui = function (app) {
                 var i,
                     elements = this.get(ids);
 
-                if (elements.constructor === Array) {
-                    for (i = 0; i < elements.length; i = i + 1) {
-                        this.remove(elements[i]);
+                if (elements) {
+                    if (elements.constructor === Array) {
+                        for (i = 0; i < elements.length; i = i + 1) {
+                            this.remove(elements[i]);
+                        }
+                    } else {
+                        removeEvent(elements);
                     }
-                } else {
-                    removeEvent(elements);
                 }
             }
         };
@@ -453,9 +465,7 @@ sdk.modules.ui = function (app) {
             throw 'alt is required';
         }
 
-        element.attributes.add({name : 'src', value : params.src});
-        element.attributes.add({name : 'alt', value : params.alt});
-
+        /* Publicando métodos privados */
         this.add = element.add;
         this.remove = element.remove;
         this.src = function (value) {
@@ -463,7 +473,9 @@ sdk.modules.ui = function (app) {
                 element.attributes.remove('src');
                 element.attributes.add({name : 'src', value : value});
             } else {
-                return element.attributes.get('src').value;
+                if (element.attributes.get('src')) {
+                    return element.attributes.get('src').value;
+                }
             }
         };
         this.alt = function (value) {
@@ -471,9 +483,15 @@ sdk.modules.ui = function (app) {
                 element.attributes.remove('alt');
                 element.attributes.add({name : 'alt', value : value});
             } else {
-                return element.attributes.get('alt').value;
+                if (element.attributes.get('alt')) {
+                    return element.attributes.get('alt').value;
+                }
             }
         };
+
+        /* Seta atributos da imagem */
+        this.src(params.src);
+        this.alt(params.alt);
     };
 
     /** Strong
@@ -488,11 +506,34 @@ sdk.modules.ui = function (app) {
     var Strong = function (params) {
         var element = new Element(params.id, 'b');
 
+        /* Seta valor da tag */
+        element.value(params.value);
+
+        /* Publicando métodos privados */
         this.add = element.add;
         this.remove = element.remove;
         this.value = element.value;
+    };
 
-        this.value(params.value);
+    /** Span
+     *
+     * @autor : Rafael Erthal
+     * @since : 2012-08
+     *
+     * @description : implementa a tag b
+     * @param id : id do objeto a ser criado
+     * @param value : valor a ser colocado no interior da tag
+     */
+    var Span = function (params) {
+        var element = new Element(params.id, 'span');
+
+        /* Seta valor da tag */
+        element.value(params.value);
+
+        /* Publicando métodos privados */
+        this.add = element.add;
+        this.remove = element.remove;
+        this.value = element.value;
     };
 
     /** Italic
@@ -507,11 +548,13 @@ sdk.modules.ui = function (app) {
     var Italic = function (params) {
         var element = new Element(params.id, 'i');
 
+        /* Seta valor da tag */
+        element.value(params.value);
+
+        /* Publicando métodos privados */
         this.add = element.add;
         this.remove = element.remove;
         this.value = element.value;
-
-        this.value(params.value);
     };
 
     /** Paragraph
@@ -526,8 +569,11 @@ sdk.modules.ui = function (app) {
     var Paragraph = function (params) {
         var element = new Element(params.id, 'p');
 
+        /* Publicando métodos privados */
         this.add = element.add;
         this.remove = element.remove;
+
+        /* Controle de conteudo do paragrafo */
         this.content = {
             get : element.childs.get,
             remove : element.childs.remove,
@@ -536,45 +582,50 @@ sdk.modules.ui = function (app) {
 
                 if (obj) {
                     if (obj.constructor === String) {
+                        /* Se for texto, simplesmente colocar na tag */
                         element.value(element.value() + obj, "after");
                     } else if (obj.constructor === Array) {
+                        /* Se for um array inserir cada um dos elementos */
                         for (i = 0; i < obj.length; i = i + 1) {
                             this.add(obj[i]);
                         }
+                    } else if (obj.img) {
+                        /* Cria uma imagem */
+                        element.childs.add(new Image({
+                            id    : obj.id,
+                            url   : obj.img,
+                            alt   : obj.alt
+                        }));
+                    } else if (obj.b) {
+                        /* Texto em negrito */
+                        element.childs.add(new Strong({
+                            id    : obj.id,
+                            value : obj.b
+                        }));
+                    } else if (obj.i) {
+                        /* Texto em itálico */
+                        element.childs.add(new Italic({
+                            id    : obj.id,
+                            value : obj.i
+                        }));
+                    } else if (obj.a) {
+                        /* Cria uma ancora */
+                        element.childs.add(new Anchor({
+                            id    : obj.id,
+                            value : obj.a,
+                            click : obj.click
+                        }));
+                    } else if (obj.constructor === Anchor || obj.constructor === Italic || obj.constructor === Strong || obj.constructor === Image) {
+                        /* Objeto já construido simplesmente adiciona-o */
+                        element.childs.add(obj);
                     } else {
-                        if (obj.img) {
-                            element.childs.add(new Image({
-                                id    : obj.id,
-                                url   : obj.img,
-                                alt   : obj.alt
-                            }));
-                        }
-                        if (obj.b) {
-                            element.childs.add(new Strong({
-                                id    : obj.id,
-                                value : obj.b
-                            }));
-                        }
-                        if (obj.i) {
-                            element.childs.add(new Italic({
-                                id    : obj.id,
-                                value : obj.i
-                            }));
-                        }
-                        if (obj.a) {
-                            element.childs.add(new Italic({
-                                id    : obj.id,
-                                value : obj.a,
-                                click : obj.click
-                            }));
-                        }
+                        throw 'invalid object';
                     }
-                } else {
-                    return element.value();
                 }
             }
         };
 
+        /* Seta valor da tag */
         this.content.add(params.content);
     };
 
@@ -599,30 +650,13 @@ sdk.modules.ui = function (app) {
             throw 'invalid heading type';
         }
 
+        /* Seta valor da tag */
+        element.value(params.value);
+
+        /* Publicando métodos privados */
         this.add = element.add;
         this.remove = element.remove;
         this.value = element.value;
-
-        this.value(params.value);
-    };
-
-    /** Span
-     *
-     * @autor : Rafael Erthal
-     * @since : 2012-08
-     *
-     * @description : implementa a tag span
-     * @param id : id do objeto a ser criado
-     * @param value : valor a ser colocado no interior da tag
-     */
-    var Span = function (params) {
-        var element = new Element(params.id, 'span');
-
-        this.add = element.add;
-        this.remove = element.remove;
-        this.value = element.value;
-
-        this.value(params.value);
     };
 
     /** Achor
@@ -643,16 +677,19 @@ sdk.modules.ui = function (app) {
             throw 'click callback is required';
         }
 
+        /* Seta valor da tag */
+        element.value(params.value);
+
+        /* Bindando clique da ancora */
         element.events.add({event : 'click', callback : function () {
             /* TODO chamar o atualizador de URL */
             params.click.apply(app);
         }});
 
+        /* Publicando métodos privados */
         this.add = element.add;
         this.remove = element.remove;
         this.value = element.value;
-
-        this.value(params.value);
     };
 
     /** Div
@@ -667,8 +704,11 @@ sdk.modules.ui = function (app) {
     var Div = function (params) {
         var element = new Element(params.id, 'div');
 
+        /* Publicando métodos privados */
         this.add = element.add;
         this.remove = element.remove;
+
+        /* Controle de conteudo do div */
         this.content = {
             get : element.childs.get,
             remove : element.childs.remove,
@@ -677,37 +717,48 @@ sdk.modules.ui = function (app) {
 
                 if (obj) {
                     if (obj.constructor === Array) {
+                        /* Se for um array inserir cada um dos elementos */
                         for (i = 0; i < obj.length; i = i + 1) {
                             this.add(obj[i], "after");
                         }
+                    } else if (obj.p) {
+                        /* Cria um parágrafo */
+                        element.childs.add(new Paragraph({
+                            id : obj.id,
+                            content : obj.p
+                        }));
+                    } else if (obj.title) {
+                        /* Cria um titulo */
+                        element.childs.add(new Heading({
+                            id : obj.id,
+                            type : 3,
+                            value : obj.title
+                        }));
+                    } else if (obj.subtitle) {
+                        /* Cria um subtitulo */
+                        element.childs.add(new Heading({
+                            id : obj.id,
+                            type : 4,
+                            value : obj.subtitle
+                        }));
+                    } else if (obj.form) {
+                        /* Cria um subtitulo */
+                        element.childs.add(new Heading({
+                            id : obj.id,
+                            type : 4,
+                            value : obj.subtitle
+                        }));
+                    } else if (obj.constructor === Paragraph || obj.constructor === Heading || obj.constructor === Form) {
+                        /* Objeto já construido simplesmente adiciona-o */
+                        element.childs.add(obj);
                     } else {
-                        if (obj.p) {
-                            element.childs.add(new Paragraph({
-                                id : obj.id,
-                                content : obj.p
-                            }));
-                        }
-                        if (obj.title) {
-                            element.childs.add(new Heading({
-                                id : obj.id,
-                                type : 3,
-                                value : obj.title
-                            }));
-                        }
-                        if (obj.subtitle) {
-                            element.childs.add(new Heading({
-                                id : obj.id,
-                                type : 4,
-                                value : obj.subtitle
-                            }));
-                        }
+                        throw 'invalid object';
                     }
-                } else {
-                    return element.value();
                 }
             }
         };
 
+        /* Seta valor da tag */
         this.content.add(params.content);
     };
 
@@ -720,10 +771,12 @@ sdk.modules.ui = function (app) {
      * @param id : id do objeto a ser criado
      * @param submit : callback a ser chamado que for dado submit
      * @param submitLabel : label do botão de submit
+     * @param fieldsets : fieldsets do form
      */
     var Form = function (params) {
         var element = new Element(params.id, 'form'),
-            submit = new Element(params.id, 'input');
+            submit = new Element(undefined, 'input'),
+            cb;
 
         if (!params.submitLabel) {
             throw 'submitLabel is required';
@@ -733,13 +786,19 @@ sdk.modules.ui = function (app) {
             throw 'submit is required';
         }
 
+        /* Seta atributos do submit */
         submit.attributes.add({name : 'type', value : 'submit'});
-        submit.attributes.add({name : 'value', value : params.submitLabel});
-        element.events.add({event : 'submit', callback : params.submit});
+        element.events.add({event : 'submit', callback : function () {
+            if (cb) {
+                cb();
+            }
+        }});
 
+        /* Publicando métodos privados */
         this.add = element.add;
         this.remove = element.remove;
 
+        /* Controle dos fieldsets do form */
         this.fieldsets = {
             get : element.childs.get,
             remove : element.childs.remove,
@@ -748,17 +807,42 @@ sdk.modules.ui = function (app) {
 
                 if (obj) {
                     if (obj.constructor === Array) {
+                        /* Se for um array inserir cada um dos elementos */
                         for (i = 0; i < obj.length; i++) {
                             this.add(obj[i]);
                         }
+                    } else if (obj.constructor === Fieldset) {
+                        /* Objeto já construido simplesmente adiciona-o */
+                        element.childs.add(obj)
                     } else {
+                        /* Cria fieldset */
                         element.childs.add(new Fieldset(obj));
                     }
                 }
             }
         };
+        this.submitLabel = function (value) {
+            if (value) {
+                submit.attributes.remove('value');
+                submit.attributes.add({name : 'value', value : value});
+            } else {
+                if (submit.attributes.get('value')) {
+                    return submit.attributes.get('value').value;
+                }
+            }
+        };
+        this.submit = function (value) {
+            if (value) {
+                cb = value;
+            } else {
+                return cb;
+            }
+        };
 
+        /* Seta valor da tag */
         this.fieldsets.add(params.fieldsets);
+        this.submitLabel(params.submitLabel);
+        this.submit(params.submit);
         element.childs.add(submit);
     };
 
@@ -773,13 +857,16 @@ sdk.modules.ui = function (app) {
      */
     var Fieldset = function (params) {
         var element = new Element(params.id, 'fieldset'),
-            legend = new Element(params.id, 'legend');
+            legend = new Element(undefined, 'legend');
 
-        legend.value(params.legend);
+        element.childs.add(legend);
 
+        /* Publicando métodos privados */
         this.add = element.add;
         this.remove = element.remove;
+        this.legend = legend.value;
 
+        /* Controle dos inputs do fieldset */
         this.inputs = {
             get : element.childs.get,
             remove : element.childs.remove,
@@ -788,18 +875,424 @@ sdk.modules.ui = function (app) {
 
                 if (obj) {
                     if (obj.constructor === Array) {
+                        /* Se for um array inserir cada um dos elementos */
                         for (i = 0; i < obj.length; i++) {
                             this.add(obj[i]);
                         }
+                    } else if (obj.constructor === Input) {
+                        /* Objeto já construido simplesmente adiciona-o */
+                        element.childs.add(obj)
                     } else {
+                        /* Cria input */
                         element.childs.add(new Input(obj));
                     }
                 }
             }
         };
 
-        element.childs.add(legend);
+        /* Seta valor da tag */
         this.inputs.add(params.inputs);
+        this.legend(params.legend);
+    };
+
+    /** InputText
+     *
+     * @autor : Rafael Erthal
+     * @since : 2012-08
+     *
+     * @description : implementa a tag input type text
+     * @param name : id do objeto a ser criado
+     * @param value : valor padrão do input
+     */
+    var InputText = function (params) {
+        var input = new Element('form-' + params.name, 'input'),
+            dd = new Element(undefined, 'dd');
+
+        dd.childs.add(input);
+
+        /* Publicando métodos privados */
+        this.add = dd.add;
+        this.remove = dd.remove;
+        this.name = function (value) {
+            if (value) {
+                /* Seta o atributo name */
+                input.attributes.remove('name');
+                input.attributes.add({name : 'name', value : value});
+                /* Seta o atributo id */
+                input.attributes.remove('id');
+                input.attributes.add({name : 'id', value : 'form-' + value});
+            } else {
+                if (input.attributes.get('name')) {
+                    return input.attributes.get('name').value;
+                }
+            }
+        };
+
+        this.value = function (value) {
+            if (value) {
+                input.attributes.remove('value');
+                input.attributes.add({name : 'value', value : value});
+            } else {
+                if (input.attributes.get('value')) {
+                    return input.attributes.get('value').value;
+                }
+            }
+        };
+
+        /* Seta valor da tag */
+        this.name(params.name);
+        this.value(params.value);
+        input.attributes.add({name : 'type', value : 'text'});
+    };
+
+    /** InputTextArea
+     *
+     * @autor : Rafael Erthal
+     * @since : 2012-08
+     *
+     * @description : implementa a tag input type text
+     * @param name : id do objeto a ser criado
+     * @param value : valor padrão do input
+     */
+    var InputTextArea = function (params) {
+        var input = new Element('form-' + params.name, 'textarea'),
+            dd = new Element(undefined, 'dd');
+
+        dd.childs.add(input);
+
+        /* Publicando métodos privados */
+        this.add = dd.add;
+        this.remove = dd.remove;
+        this.name = function (value) {
+            if (value) {
+                /* Seta o atributo name */
+                input.attributes.remove('name');
+                input.attributes.add({name : 'name', value : value});
+                /* Seta o atributo id */
+                input.attributes.remove('id');
+                input.attributes.add({name : 'id', value : 'form-' + value});
+            } else {
+                if (input.attributes.get('name')) {
+                    return input.attributes.get('name').value;
+                }
+            }
+        };
+
+        this.value = input.value;
+
+        /* Seta valor da tag */
+        this.name(params.name);
+        this.value(params.value);
+    };
+
+    /** InputPassword
+     *
+     * @autor : Rafael Erthal
+     * @since : 2012-08
+     *
+     * @description : implementa a tag input type text
+     * @param name : id do objeto a ser criado
+     * @param value : valor padrão do input
+     */
+    var InputPassword = function (params) {
+        var input = new Element('form-' + params.name, 'input'),
+            dd = new Element(undefined, 'dd');
+
+        dd.childs.add(input);
+
+        /* Publicando métodos privados */
+        this.add = dd.add;
+        this.remove = dd.remove;
+        this.name = function (value) {
+            if (value) {
+                /* Seta o atributo name */
+                input.attributes.remove('name');
+                input.attributes.add({name : 'name', value : value});
+                /* Seta o atributo id */
+                input.attributes.remove('id');
+                input.attributes.add({name : 'id', value : 'form-' + value});
+            } else {
+                if (input.attributes.get('name')) {
+                    return input.attributes.get('name').value;
+                }
+            }
+        };
+
+        this.value = function (value) {
+            if (value) {
+                input.attributes.remove('value');
+                input.attributes.add({name : 'value', value : value});
+            } else {
+                if (input.attributes.get('value')) {
+                    return input.attributes.get('value').value;
+                }
+            }
+        };
+
+        /* Seta valor da tag */
+        this.name(params.name);
+        this.value(params.value);
+        input.attributes.add({name : 'type', value : 'password'});
+    };
+
+    /** InputCheckbox
+     *
+     * @autor : Rafael Erthal
+     * @since : 2012-08
+     *
+     * @description : implementa a tag input type checkbox
+     * @param name : id do objeto a ser criado
+     * @param value : valor padrão do input
+     */
+    var InputCheckbox = function (params) {
+        var input = new Element('form-' + params.name, 'input'),
+            label = new Element(undefined, 'label'),
+            dd = new Element(undefined, 'dd');
+
+        dd.childs.add([input, label]);
+
+        /* Publicando métodos privados */
+        this.add = dd.add;
+        this.remove = dd.remove;
+        this.name = function (value) {
+            if (value) {
+                /* Seta o atributo name */
+                input.attributes.remove('name');
+                input.attributes.add({name : 'name', value : value});
+                /* Seta o atributo id */
+                input.attributes.remove('id');
+                input.attributes.add({name : 'id', value : 'form-' + value});
+                /* Seta o atributo for */
+                label.attributes.remove('for');
+                label.attributes.add({name : 'for', value : 'form-' + value});
+            } else {
+                if (input.attributes.get('name')) {
+                    return input.attributes.get('name').value;
+                }
+            }
+        };
+        this.value = function (value) {
+            if (value) {
+                input.attributes.remove('value');
+                input.attributes.add({name : 'value', value : value});
+            } else {
+                if (input.attributes.get('value')) {
+                    return input.attributes.get('value').value;
+                }
+            }
+        };
+        this.label = label.value
+
+        /* Seta valor da tag */
+        this.name(params.name);
+        this.label(params.label);
+        this.value(params.value);
+        input.attributes.add({name : 'type', value : 'checkbox'});
+        label.attributes.add({name : 'for', value : 'form-' + params.name})
+    };
+
+    /** InputRadio
+     *
+     * @autor : Rafael Erthal
+     * @since : 2012-08
+     *
+     * @description : implementa a tag input type radio
+     * @param name : id do objeto a ser criado
+     * @param value : valor padrão do input
+     */
+    var InputRadio = function (params) {
+        var input = new Element('form-' + params.name, 'input'),
+            label = new Element(undefined, 'label'),
+            dd = new Element(undefined, 'dd');
+
+        dd.childs.add([input, label]);
+
+        /* Publicando métodos privados */
+        this.add = dd.add;
+        this.remove = dd.remove;
+        this.name = function (value) {
+            if (value) {
+                /* Seta o atributo name */
+                input.attributes.remove('name');
+                input.attributes.add({name : 'name', value : value});
+                /* Seta o atributo id */
+                input.attributes.remove('id');
+                input.attributes.add({name : 'id', value : 'form-' + value + params.label});
+                /* Seta o atributo for */
+                label.attributes.remove('for');
+                label.attributes.add({name : 'for', value : 'form-' + value + params.label});
+            } else {
+                if (input.attributes.get('name')) {
+                    return input.attributes.get('name').value;
+                }
+            }
+        };
+        this.value = function (value) {
+            if (value) {
+                input.attributes.remove('value');
+                input.attributes.add({name : 'value', value : value});
+            } else {
+                if (input.attributes.get('value')) {
+                    return input.attributes.get('value').value;
+                }
+            }
+        };
+
+        this.label = label.value;
+
+        /* Seta valor da tag */
+        this.name(params.name);
+        this.label(params.label);
+        this.value(params.value);
+        input.attributes.add({name : 'type', value : 'radio'});
+    };
+
+    /** InputSelect
+     *
+     * @autor : Rafael Erthal
+     * @since : 2012-08
+     *
+     * @description : implementa a tag select
+     * @param name : id do objeto a ser criado
+     * @param optgroups : optgroups do select
+     */
+    var InputSelect = function (params) {
+        var input = new Element('form-' + params.name, 'select'),
+            dd = new Element(undefined, 'dd');
+
+        dd.childs.add(input);
+
+        /* Publicando métodos privados */
+        this.add = dd.add;
+        this.remove = dd.remove;
+        this.name = function (value) {
+            if (value) {
+                /* Seta o atributo name */
+                input.attributes.remove('name');
+                input.attributes.add({name : 'name', value : value});
+                /* Seta o atributo id */
+                input.attributes.remove('id');
+                input.attributes.add({name : 'id', value : 'form-' + value});
+            } else {
+                if (input.attributes.get('name')) {
+                    return input.attributes.get('name').value;
+                }
+            }
+        };
+
+        this.optgroups = {
+            get : input.childs.get,
+            remove : input.childs.remove,
+            add : function (obj) {
+                var i;
+
+                if (obj) {
+                    if (obj.constructor === Array) {
+                        /* Se for um array inserir cada um dos elementos */
+                        for (i = 0; i < obj.length; i++) {
+                            this.add(obj[i]);
+                        }
+                    } else if (obj.constructor === InputOptgroup) {
+                        /* Objeto já construido simplesmente adiciona-o */
+                        input.childs.add(obj)
+                    } else {
+                        /* Cria input */
+                        input.childs.add(new InputOptgroup(obj));
+                    }
+                }
+            }
+        };
+
+        /* Seta valor da tag */
+        this.name(params.name);
+        this.optgroups.add(params.optgroups);
+    };
+
+    /** InputOptgroup
+     *
+     * @autor : Rafael Erthal
+     * @since : 2012-08
+     *
+     * @description : implementa a tag select
+     * @param label : id do objeto a ser criado
+     * @param options : opções do optgroup
+     */
+    var InputOptgroup = function (params) {
+        var input = new Element(undefined, 'optgroup');
+
+        /* Publicando métodos privados */
+        this.add = input.add;
+        this.remove = input.remove;
+        this.label = function (value) {
+            if (value) {
+                /* Seta o atributo name */
+                input.attributes.remove('label');
+                input.attributes.add({name : 'label', value : value});
+            } else {
+                if (input.attributes.get('label')) {
+                    return input.attributes.get('label').value;
+                }
+            }
+        };
+
+        this.options = {
+            get : input.childs.get,
+            remove : input.childs.remove,
+            add : function (obj) {
+                var i;
+
+                if (obj) {
+                    if (obj.constructor === Array) {
+                        /* Se for um array inserir cada um dos elementos */
+                        for (i = 0; i < obj.length; i++) {
+                            this.add(obj[i]);
+                        }
+                    } else if (obj.constructor === InputOption) {
+                        /* Objeto já construido simplesmente adiciona-o */
+                        input.childs.add(obj)
+                    } else {
+                        /* Cria input */
+                        input.childs.add(new InputOption(obj));
+                    }
+                }
+            }
+        };
+
+        /* Seta valor da tag */
+        this.label(params.label);
+        this.options.add(params.options);
+    };
+
+    /** InputOption
+     *
+     * @autor : Rafael Erthal
+     * @since : 2012-08
+     *
+     * @description : implementa a tag select
+     * @param label : id do objeto a ser criado
+     * @param value : valor padrão do input
+     */
+    var InputOption = function (params) {
+        var input = new Element('form-' + params.name, 'option');
+
+        /* Publicando métodos privados */
+        this.add = input.add;
+        this.remove = input.remove;
+        this.label = input.value;
+        this.value = function (value) {
+            if (value) {
+                input.attributes.remove('value');
+                input.attributes.add({name : 'value', value : value});
+            } else {
+                if (input.attributes.get('value')) {
+                    return input.attributes.get('value').value;
+                }
+            }
+        };
+
+        /* Seta valor da tag */
+        this.label(params.label);
+        this.value(params.value);
     };
 
     /** Input
@@ -811,62 +1304,175 @@ sdk.modules.ui = function (app) {
      * @param id : id do objeto a ser criado
      */
     var Input = function (params) {
-        var element= new Element(params.id, 'textarea'),
+        var element = new Element(undefined, 'dl'),
+            dt = new Element(undefined, 'dt'),
             label = new Element(undefined, 'label'),
-            input,
-            i;
+            input;
 
-        label.value(params.label);
-        label.attributes.add({name : 'for', value : params.id});
+        dt.childs.add(label);
 
-        if (params.type === 'textarea') {
-            input = new Element(undefined, 'textarea');
-            input.attributes.add({name : 'name', value : params.id});
-            input.value(params.value);
-            element.childs.add(input);
-        } else if (params.type === 'select') {
-            input = new Element(undefined, 'select');
-            input.attributes.add({name : 'name', value : params.id});
-            for (i in params.options) {
-                var option = new Element(undefined, 'option');
-                option.attributes.add({name : 'name', value : i});
-                option.value(params.options[i]);
-                input.childs.add(option);
-            }
-            element.childs.add(input);
-        } else if (params.type === 'radio') {
-            for (i in params.options) {
-                var option = new Element(undefined, 'input');
-                option.attributes.add({name : 'type', value : 'radio'});
-                option.attributes.add({name : 'name', value : params.id});
-                option.attributes.add({name : 'value', value : i});
-                element.childs.add(option);
-                element.value(params.options[i], "after")
-            }
-        } else if (params.type === 'text') {
-            input = new Element(undefined, 'input');
-            option.attributes.add({name : 'type', value : 'text'});
-            input.attributes.add({name : 'name', value : params.id});
-            input.attributes.add({name : 'value', value : params.value});
-            element.childs.add(input);
-        } else if (params.type === 'passowrd') {
-            input = new Element(undefined, 'input');
-            option.attributes.add({name : 'type', value : 'password'});
-            input.attributes.add({name : 'name', value : params.id});
-            input.attributes.add({name : 'value', value : params.value});
-            element.childs.add(input);
-        } else if (params.type === 'checkbox') {
-            input = new Element(undefined, 'input');
-            option.attributes.add({name : 'type', value : 'checkbox'});
-            input.attributes.add({name : 'name', value : params.id});
-            input.attributes.add({name : 'value', value : params.value});
-            element.childs.add(input);
-        } else {
-            throw 'invalid input type'
+        /* Montando inputs */
+        switch (params.type) {
+            case 'text' :
+                /* Input text */
+                input = new InputText({
+                    name : params.name,
+                    value : params.value
+                });
+                element.childs.add([dt,input]);
+
+                /* Publicando métodos privados */
+                this.name = function (value) {
+                    if (value) {
+                        input.name(value);
+                        label.attributes.remove('for');
+                        label.attributes.add({name : 'for', value : 'form-' + value});
+                    } else {
+                        return input.name();
+                    }
+                };
+                this.value = input.value;
+                this.name(params.name);
+                break;
+
+            case 'textarea' :
+                /* Input text */
+                input = new InputTextArea({
+                    name : params.name,
+                    value : params.value
+                });
+                element.childs.add([dt,input]);
+
+                /* Publicando métodos privados */
+                this.name = function (value) {
+                    if (value) {
+                        input.name(value);
+                        label.attributes.remove('for');
+                        label.attributes.add({name : 'for', value : 'form-' + value});
+                    } else {
+                        return input.name();
+                    }
+                };
+                this.value = input.value;
+                this.name(params.name);
+                break;
+
+            case 'password':
+                /* Input password */
+                input = new InputPassword({
+                    name : params.name,
+                    value : params.value
+                });
+                element.childs.add([dt,input]);
+
+                /* Publicando métodos privados */
+                this.name = function (value) {
+                    if (value) {
+                        input.name(value);
+                        label.attributes.remove('for');
+                        label.attributes.add({name : 'for', value : 'form-' + value});
+                    } else {
+                        return input.name();
+                    }
+                };
+                this.value = input.value;
+                this.name(params.name);
+                break;
+
+            case 'checkbox' :
+                /* Input checkbox */
+                element.childs.add(dt);
+
+                /* Publicando métodos privados */
+                this.checkboxes = {
+                    get : element.childs.get,
+                    remove : element.childs.remove,
+                    add : function (obj) {
+                        var i;
+
+                        if (obj) {
+                            if (obj.constructor === Array) {
+                                /* Se for um array inserir cada um dos elementos */
+                                for (i = 0; i < obj.length; i++) {
+                                    this.add(obj[i]);
+                                }
+                            } else if (obj.constructor === InputCheckbox) {
+                                /* Objeto já construido simplesmente adiciona-o */
+                                element.childs.add(obj)
+                            } else {
+                                /* Cria input */
+                                element.childs.add(new InputCheckbox(obj));
+                            }
+                        }
+                    }
+                };
+
+                this.checkboxes.add(params.checkboxes);
+                break;
+
+            case 'radio' :
+                /* Input checkbox */
+                element.childs.add(dt);
+
+                /* Publicando métodos privados */
+                this.radios = {
+                    get : element.childs.get,
+                    remove : element.childs.remove,
+                    add : function (obj) {
+                        var i;
+
+                        if (obj) {
+                            if (obj.constructor === Array) {
+                                /* Se for um array inserir cada um dos elementos */
+                                for (i = 0; i < obj.length; i++) {
+                                    this.add(obj[i]);
+                                }
+                            } else if (obj.constructor === InputRadio) {
+                                /* Objeto já construido simplesmente adiciona-o */
+                                element.childs.add(obj)
+                            } else {
+                                /* Cria input */
+                                element.childs.add(new InputRadio(obj));
+                            }
+                        }
+                    }
+                };
+
+                this.radios.add(params.radios);
+                break;
+
+            case 'select':
+                /* Input select */
+                input = new InputSelect({
+                    name : params.name,
+                    optgroups : params.optgroups
+                });
+                element.childs.add([dt,input]);
+
+                /* Publicando métodos privados */
+                this.name = function (value) {
+                    if (value) {
+                        input.name(value);
+                        label.attributes.remove('for');
+                        label.attributes.add({name : 'for', value : 'form-' + value});
+                    } else {
+                        return input.name();
+                    }
+                };
+                this.optgroups = input.optgroups;
+                this.name(params.name);
+                break;
+
+            default :
+                throw 'invalid input type'
         }
 
+        /* Publicando métodos privados */
         this.add = element.add;
         this.remove = element.remove;
+        this.label = label.value;
+
+        this.label(params.label);
     };
 
     /** MenuOption
@@ -891,6 +1497,7 @@ sdk.modules.ui = function (app) {
         element.childs.add([image, description]);
         element.events.add({event : 'click', callback : params.click});
 
+        /* Publicando métodos privados */
         this.add = element.add;
         this.remove = element.remove;
         this.src = image.src;
@@ -917,6 +1524,7 @@ sdk.modules.ui = function (app) {
         element.childs.add([image, title, description]);
         element.events.add({event : 'click', callback : params.click});
 
+        /* Publicando métodos privados */
         this.add = element.add;
         this.remove = element.remove;
         this.src = image.src;
@@ -932,8 +1540,8 @@ sdk.modules.ui = function (app) {
      * @description :
      * @param id : id do objeto a ser criado
      * @param src : url do icone
-     * @param
-     * @param
+     * @param description : descrição do item
+     * @param value : valor que aparece na aba
      */
     var tabOption = function (params, contentContainer) {
         var element = new Element(params.id, 'li'),
@@ -942,17 +1550,25 @@ sdk.modules.ui = function (app) {
 
         element.childs.add([image, description]);
 
+        /* Bindando clique da aba para exibir conteudo */
+        element.events.add({event : 'click', callback : function () {
+            contentContainer.value(' ');
+            if (params.value) {
+                if (params.value.constructor === Div) {
+                    contentContainer.childs.add(params.value);
+                } else {
+                    contentContainer.childs.add(new Div({
+                        content : params.value
+                    }));
+                }
+            }
+        }});
+
+        /* Publicando métodos privados */
         this.add = element.add;
         this.remove = element.remove;
         this.src = image.src;
         this.description = description.value;
-
-        element.events.add({event : 'click', callback : function () {
-            contentContainer.value(' ');
-            contentContainer.childs.add(new Div({
-                content : params.value
-            }));
-        }});
     };
 
     /** Menu
@@ -969,9 +1585,11 @@ sdk.modules.ui = function (app) {
 
         element.childs.add([navigation, actions]);
 
+        /* Publicando métodos privados */
         this.add = element.add;
         this.remove = element.remove;
 
+        /* Ítens de navegação do menu */
         this.navigation = {
             get    : navigation.childs.get,
             remove : navigation.childs.remove,
@@ -989,7 +1607,7 @@ sdk.modules.ui = function (app) {
                 }
             }
         };
-
+        /* Ítens de cadastro de menu */
         this.actions = {
             get    : actions.childs.get,
             remove : actions.childs.remove,
@@ -1018,15 +1636,53 @@ sdk.modules.ui = function (app) {
      */
     List = function () {
         var element = new Element('list', 'div'),
+            filter = new Form({
+                id : 'filter',
+                submit : function () {
+                    return false;
+                },
+                submitLabel : 'filtrar',
+                fieldsets : {legend : 'filtrar'}
+
+            }),
             browse = new Element('browse', 'ul'),
             count = new Element('count', 'li');
 
         browse.childs.add([count]);
-        element.childs.add([browse]);
+        element.childs.add([filter, browse]);
 
+        count.value('nenhum resultado encontrado');
+
+        /* Publicando métodos privados */
         this.add = element.add;
         this.remove = element.remove;
 
+        /* Filtro dos resultados */
+        this.filter = {
+            get : filter.fieldsets.get()[0].inputs.get,
+            remove : filter.fieldsets.get()[0].inputs.remove,
+            add : function (obj) {
+                var i;
+
+                if (obj) {
+                    if (obj.constructor === Array) {
+                        /* Se for um array inserir cada um dos elementos */
+                        for (i = 0; i < obj.length; i++) {
+                            this.add(obj[i]);
+                        }
+                    } else if (obj.constructor === InputRadio) {
+                        /* Objeto já construido simplesmente adiciona-o */
+
+                        filter.fieldsets.get()[0].inputs.add(obj);
+                    } else {
+                        /* Cria input */
+                        filter.fieldsets.get()[0].inputs.add(new Input(obj));
+                    }
+                }
+            }
+        };
+
+        /* Barra de elementos encontrados */
         this.browse = {
             get    : browse.childs.get,
             remove : function (ids) {
@@ -1048,8 +1704,6 @@ sdk.modules.ui = function (app) {
                 }
             }
         };
-
-        count.value('nenhum resultado encontrado');
     };
 
     /** Frame
@@ -1070,13 +1724,16 @@ sdk.modules.ui = function (app) {
         head.childs.add([title,subtitle, tabs]);
         element.childs.add([head, content]);
 
+        /* Publicando métodos privados */
         this.add = element.add;
         this.remove = element.remove;
 
+        /* Cabeçalho do frame */
         this.head = {
             title    : title.value,
             subtitle : subtitle.value
         };
+        /* Abas */
         this.tabs = {
             get : tabs.childs.get,
             remove : function () {
@@ -1089,11 +1746,27 @@ sdk.modules.ui = function (app) {
         };
     };
 
-    /*Montando o namespace da UI*/
+    /* Montando o namespace da UI */
+
+    /* Objetos do namespace */
     this.menu = new Menu();
     this.list = new List();
     this.frame = new Frame();
 
+    /* Construtores */
+    this.img = Image;
+    this.a = Anchor;
+    this.b = Strong;
+    this.i = Italic;
+    this.p = Paragraph;
+    this.h = Heading;
+    this.div = Div;
+    this.form = Form;
+    this.fieldset = Fieldset;
+    this.input = Input;
+    this.span = Span;
+
+    /* Montando interface */
     this.menu.add(document.getElementById('app_container'));
     this.list.add(document.getElementById('app_container'));
     this.frame.add(document.getElementById('app_container'));
