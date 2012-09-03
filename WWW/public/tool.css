@@ -1,0 +1,109 @@
+/* -------------------------------------------------------------------------- */
+/* Header                                                                     */
+/* -------------------------------------------------------------------------- */
+#tool-header {
+    position: relative;
+    height: 60px;
+    padding: 10px 10px 5px 10px;
+    background-color: #eee;
+}
+
+#tool-name {
+    color: #0C478A;
+    font-weight: bold;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 16px;
+    width: 250px;
+    margin-top: 18px;
+}
+
+#tool-name h2 {
+    margin: 0;
+}
+
+/* -------------------------------------------------------------------------- */
+/* Menu                                                                       */
+/* -------------------------------------------------------------------------- */
+
+#tool-menu {
+    height: 40px;
+    padding: 5px 10px 10px 10px;
+    background-color: #eee;
+}
+
+#tool-menu menu {
+    float: left;
+    padding: 0 10px;
+    margin: 0;
+    height: 40px;
+    border-left: 1px solid #fff;
+    border-right: 1px solid #ccc;
+}
+
+#tool-menu menu:first-child {
+    border-left: none;
+    padding-left: 0;
+}
+
+#tool-menu menu:last-child {
+    border-right: none;
+    padding-right: 0;
+}
+
+#tool-menu menu li {
+    position: relative;
+    float: left;
+    list-style: none;
+    margin: 0 10px;
+    height: 40px;
+    max-width: 140px;
+    min-width: 100px;
+}
+
+#tool-menu menu:first-child li {
+    margin-left: 0;
+}
+
+#tool-menu menu li a {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 11px;
+    color: #888;
+    text-shadow: 1px 1px 0 #fff;
+}
+
+#tool-menu menu li a .image {
+    display: block;
+    width: 40px;
+    height: 40px;
+    background-color: #000;
+}
+
+#tool-menu menu li a .legend {
+    display: block;
+    position: absolute;
+    top: 50%;
+    left: 45px;
+    margin-top: -8px;
+    line-height: 1.2em;
+    max-width: 75px;
+    min-width: 55px;
+}
+
+/* -------------------------------------------------------------------------- */
+/* List                                                                       */
+/* -------------------------------------------------------------------------- */
+
+#tool-list {
+    width: 410px;
+    float: left;
+}
+
+
+
+/* -------------------------------------------------------------------------- */
+/* Frame                                                                      */
+/* -------------------------------------------------------------------------- */
+
+#tool-frame {
+    float: left;
+}

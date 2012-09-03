@@ -3,10 +3,13 @@
     <head>
         <title>Empreendemia</title>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <link rel="stylesheet" type="text/css" href="www.css" />
+        <link rel="stylesheet" type="text/css" href="tool.css" />
+        <link rel="stylesheet" type="text/css" href="sdk.css" />
     </head>
     <body>
         <header>
-            <div class="header">
+            <div id="header">
                 <nav>
                     <div id="ee-logo">
                         <h1><a href="#">Empreendemia</a></h1>
@@ -14,7 +17,7 @@
                     </div>
                     <menu id="top-menu">
                         <li class="dropdown selected">
-                            Aplicativo 01 <div class="image arrow"></div>
+                            <a href="#">Aplicativo 01 <div class="image arrow"></div></a>
                             <menu id="top-menu-tools">
                                 <li><a href="#">Aplicativo 01</a></li>
                                 <li><a href="#">Aplicativo 02</a></li>
@@ -26,19 +29,19 @@
                     </menu>
                     <div id="user-section">
                         <!-- Usuário logado -->
-                        <a href="#">
+                        <a href="#" class="hover-dropdown">
                             <span class="welcome">
                                 Olá <span class="user-name">nome do usuário</span>
                             </span>
                             <span class="thumbnail">
                                 <img src="thumbnail.png" />
                             </span>
-                            <span class="image arrow"></div>
+                            <span class="image arrow"></span>
                         </a>
                         <menu id="user-menu">
-                            <li>Meu perfil</li>
-                            <li>Minha conta</li>
-                            <li>Sair</li>
+                            <li><a href="#">Meu perfil</a></li>
+                            <li><a href="#">Minha conta</a></li>
+                            <li><a href="#">Sair</a></li>
                         </menu>
 
                         <!-- Usuário deslogado
@@ -66,17 +69,17 @@
                     <nav>
                         <div id="tool-menu">
                             <menu id="tool-menu-navigation">
-                                <li class="selected"><a href="#"><span class="image iconname"></span>Consulta 01</a><div class="image arrow"></div></li>
-                                <li><a href="#"><span class="icon"></span>Consulta 02</a></li>
-                                <li><a href="#"><span class="icon"></span>Consulta 03</a></li>
+                                <li class="selected"><a href="#"><span class="image iconname"></span><span class="legend">Consulta 01</span></a><div class="image arrow"></div></li>
+                                <li><a href="#"><span class="image iconname"></span><span class="legend">Consulta 02 muito legal</span></a></li>
+                                <li><a href="#"><span class="image iconname"></span><span class="legend">Consulta 03</span></a></li>
                             </menu>
                             <menu id="tool-menu-actions">
-                                <li><a href="#"><span class="icon"></span>Ação 01</a></li>
-                                <li><a href="#"><span class="icon"></span>Ação 02</a></li>
-                                <li><a href="#"><span class="icon"></span>Ação 03</a></li>
+                                <li><a href="#"><span class="image iconname"></span><span class="legend">Ação 01</span></a></li>
+                                <li><a href="#"><span class="image iconname"></span><span class="legend">Ação 02 legal também</span></a></li>
+                                <li><a href="#"><span class="image iconname"></span><span class="legend">Ação 03</span></a></li>
                             </menu>
                             <menu id="tool-menu-settings">
-                                <li><a href="#"><span class="icon"></span>Configurações</a></li>
+                                <li><a href="#"><span class="image iconname"></span><span class="legend">Configurações</span></a></li>
                             </menu>
                         </div>
                     <nav>
@@ -147,11 +150,288 @@
                                             <input id="submit" type="submit" value="Filtrar" />
                                         </form>
                                     </div>
-                                    <div id="tool-list-browse"></div>
+                                    <div id="tool-list-browse">
+                                        <div id="tool-list-browse-count">
+                                            <span class="count">53</span> resultados encontrados
+                                        </div>
+                                        <div id="tool-list-browse-results">
+                                            <ol>
+                                                <li>
+                                                    <a href="#">
+                                                        <span class="thumbnail"><img src="thumbnail.png" /></span>
+                                                        <span class="title">Nome da Entidade Não Selecionada #1</span>
+                                                        <span class="subtitle">Alguma descrição pequena</span>
+                                                        <span class="description">Um texto gigante descrevendo alguma coisa muito bacana assim podemos ser felizes porque o cachorro que mijou na calçada da esquina de casa morreu de tuberculose 3 dias depois da tempestade.</span>
+                                                        <span class="subtitle">Mais algum textinho minúsculo</span>
+                                                    </a>
+                                                </li>
+                                                <li class="selected">
+                                                    <a href="#">
+                                                        <span class="thumbnail"><img src="thumbnail.png" /></span>
+                                                        <span class="title">Nome da Entidade Não Selecionada #1</span>
+                                                        <span class="subtitle">Alguma descrição pequena</span>
+                                                        <span class="description">Um texto gigante descrevendo alguma coisa muito bacana assim podemos ser felizes porque o cachorro que mijou na calçada da esquina de casa morreu de tuberculose 3 dias depois da tempestade.</span>
+                                                        <span class="subtitle">Mais algum textinho minúsculo</span>
+                                                    </a>
+                                                    <div class="image arrow"></div>
+                                                </li>
+                                                <li>
+                                                    <a href="#">
+                                                        <span class="thumbnail"><img src="thumbnail.png" /></span>
+                                                        <span class="title">Nome da Entidade Não Selecionada #1</span>
+                                                        <span class="subtitle">Alguma descrição pequena</span>
+                                                        <span class="description">Um texto gigante descrevendo alguma coisa muito bacana assim podemos ser felizes porque o cachorro que mijou na calçada da esquina de casa morreu de tuberculose 3 dias depois da tempestade.</span>
+                                                        <span class="subtitle">Mais algum textinho minúsculo</span>
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a href="#">
+                                                        <span class="thumbnail"><img src="thumbnail.png" /></span>
+                                                        <span class="title">Nome da Entidade Não Selecionada #1</span>
+                                                        <span class="subtitle">Alguma descrição pequena</span>
+                                                        <span class="description">Um texto gigante descrevendo alguma coisa muito bacana assim podemos ser felizes porque o cachorro que mijou na calçada da esquina de casa morreu de tuberculose 3 dias depois da tempestade.</span>
+                                                        <span class="subtitle">Mais algum textinho minúsculo</span>
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a href="#">
+                                                        <span class="thumbnail"><img src="thumbnail.png" /></span>
+                                                        <span class="title">Nome da Entidade Não Selecionada #1</span>
+                                                        <span class="subtitle">Alguma descrição pequena</span>
+                                                        <span class="description">Um texto gigante descrevendo alguma coisa muito bacana assim podemos ser felizes porque o cachorro que mijou na calçada da esquina de casa morreu de tuberculose 3 dias depois da tempestade.</span>
+                                                        <span class="subtitle">Mais algum textinho minúsculo</span>
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a href="#">
+                                                        <span class="thumbnail"><img src="thumbnail.png" /></span>
+                                                        <span class="title">Nome da Entidade Não Selecionada #1</span>
+                                                        <span class="subtitle">Alguma descrição pequena</span>
+                                                        <span class="description">Um texto gigante descrevendo alguma coisa muito bacana assim podemos ser felizes porque o cachorro que mijou na calçada da esquina de casa morreu de tuberculose 3 dias depois da tempestade.</span>
+                                                        <span class="subtitle">Mais algum textinho minúsculo</span>
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a href="#">
+                                                        <span class="thumbnail"><img src="thumbnail.png" /></span>
+                                                        <span class="title">Nome da Entidade Não Selecionada #1</span>
+                                                        <span class="subtitle">Alguma descrição pequena</span>
+                                                        <span class="description">Um texto gigante descrevendo alguma coisa muito bacana assim podemos ser felizes porque o cachorro que mijou na calçada da esquina de casa morreu de tuberculose 3 dias depois da tempestade.</span>
+                                                        <span class="subtitle">Mais algum textinho minúsculo</span>
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a href="#">
+                                                        <span class="thumbnail"><img src="thumbnail.png" /></span>
+                                                        <span class="title">Nome da Entidade Não Selecionada #1</span>
+                                                        <span class="subtitle">Alguma descrição pequena</span>
+                                                        <span class="description">Um texto gigante descrevendo alguma coisa muito bacana assim podemos ser felizes porque o cachorro que mijou na calçada da esquina de casa morreu de tuberculose 3 dias depois da tempestade.</span>
+                                                        <span class="subtitle">Mais algum textinho minúsculo</span>
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a href="#">
+                                                        <span class="thumbnail"><img src="thumbnail.png" /></span>
+                                                        <span class="title">Nome da Entidade Não Selecionada #1</span>
+                                                        <span class="subtitle">Alguma descrição pequena</span>
+                                                        <span class="description">Um texto gigante descrevendo alguma coisa muito bacana assim podemos ser felizes porque o cachorro que mijou na calçada da esquina de casa morreu de tuberculose 3 dias depois da tempestade.</span>
+                                                        <span class="subtitle">Mais algum textinho minúsculo</span>
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a href="#">
+                                                        <span class="thumbnail"><img src="thumbnail.png" /></span>
+                                                        <span class="title">Nome da Entidade Não Selecionada #1</span>
+                                                        <span class="subtitle">Alguma descrição pequena</span>
+                                                        <span class="description">Um texto gigante descrevendo alguma coisa muito bacana assim podemos ser felizes porque o cachorro que mijou na calçada da esquina de casa morreu de tuberculose 3 dias depois da tempestade.</span>
+                                                        <span class="subtitle">Mais algum textinho minúsculo</span>
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a href="#">
+                                                        <span class="thumbnail"><img src="thumbnail.png" /></span>
+                                                        <span class="title">Nome da Entidade Não Selecionada #1</span>
+                                                        <span class="subtitle">Alguma descrição pequena</span>
+                                                        <span class="description">Um texto gigante descrevendo alguma coisa muito bacana assim podemos ser felizes porque o cachorro que mijou na calçada da esquina de casa morreu de tuberculose 3 dias depois da tempestade.</span>
+                                                        <span class="subtitle">Mais algum textinho minúsculo</span>
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a href="#">
+                                                        <span class="thumbnail"><img src="thumbnail.png" /></span>
+                                                        <span class="title">Nome da Entidade Não Selecionada #1</span>
+                                                        <span class="subtitle">Alguma descrição pequena</span>
+                                                        <span class="description">Um texto gigante descrevendo alguma coisa muito bacana assim podemos ser felizes porque o cachorro que mijou na calçada da esquina de casa morreu de tuberculose 3 dias depois da tempestade.</span>
+                                                        <span class="subtitle">Mais algum textinho minúsculo</span>
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a href="#">
+                                                        <span class="thumbnail"><img src="thumbnail.png" /></span>
+                                                        <span class="title">Nome da Entidade Não Selecionada #1</span>
+                                                        <span class="subtitle">Alguma descrição pequena</span>
+                                                        <span class="description">Um texto gigante descrevendo alguma coisa muito bacana assim podemos ser felizes porque o cachorro que mijou na calçada da esquina de casa morreu de tuberculose 3 dias depois da tempestade.</span>
+                                                        <span class="subtitle">Mais algum textinho minúsculo</span>
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a href="#">
+                                                        <span class="thumbnail"><img src="thumbnail.png" /></span>
+                                                        <span class="title">Nome da Entidade Não Selecionada #1</span>
+                                                        <span class="subtitle">Alguma descrição pequena</span>
+                                                        <span class="description">Um texto gigante descrevendo alguma coisa muito bacana assim podemos ser felizes porque o cachorro que mijou na calçada da esquina de casa morreu de tuberculose 3 dias depois da tempestade.</span>
+                                                        <span class="subtitle">Mais algum textinho minúsculo</span>
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a href="#">
+                                                        <span class="thumbnail"><img src="thumbnail.png" /></span>
+                                                        <span class="title">Nome da Entidade Não Selecionada #1</span>
+                                                        <span class="subtitle">Alguma descrição pequena</span>
+                                                        <span class="description">Um texto gigante descrevendo alguma coisa muito bacana assim podemos ser felizes porque o cachorro que mijou na calçada da esquina de casa morreu de tuberculose 3 dias depois da tempestade.</span>
+                                                        <span class="subtitle">Mais algum textinho minúsculo</span>
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a href="#">
+                                                        <span class="thumbnail"><img src="thumbnail.png" /></span>
+                                                        <span class="title">Nome da Entidade Não Selecionada #1</span>
+                                                        <span class="subtitle">Alguma descrição pequena</span>
+                                                        <span class="description">Um texto gigante descrevendo alguma coisa muito bacana assim podemos ser felizes porque o cachorro que mijou na calçada da esquina de casa morreu de tuberculose 3 dias depois da tempestade.</span>
+                                                        <span class="subtitle">Mais algum textinho minúsculo</span>
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a href="#">
+                                                        <span class="thumbnail"><img src="thumbnail.png" /></span>
+                                                        <span class="title">Nome da Entidade Não Selecionada #1</span>
+                                                        <span class="subtitle">Alguma descrição pequena</span>
+                                                        <span class="description">Um texto gigante descrevendo alguma coisa muito bacana assim podemos ser felizes porque o cachorro que mijou na calçada da esquina de casa morreu de tuberculose 3 dias depois da tempestade.</span>
+                                                        <span class="subtitle">Mais algum textinho minúsculo</span>
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a href="#">
+                                                        <span class="thumbnail"><img src="thumbnail.png" /></span>
+                                                        <span class="title">Nome da Entidade Não Selecionada #1</span>
+                                                        <span class="subtitle">Alguma descrição pequena</span>
+                                                        <span class="description">Um texto gigante descrevendo alguma coisa muito bacana assim podemos ser felizes porque o cachorro que mijou na calçada da esquina de casa morreu de tuberculose 3 dias depois da tempestade.</span>
+                                                        <span class="subtitle">Mais algum textinho minúsculo</span>
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a href="#">
+                                                        <span class="thumbnail"><img src="thumbnail.png" /></span>
+                                                        <span class="title">Nome da Entidade Não Selecionada #1</span>
+                                                        <span class="subtitle">Alguma descrição pequena</span>
+                                                        <span class="description">Um texto gigante descrevendo alguma coisa muito bacana assim podemos ser felizes porque o cachorro que mijou na calçada da esquina de casa morreu de tuberculose 3 dias depois da tempestade.</span>
+                                                        <span class="subtitle">Mais algum textinho minúsculo</span>
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a href="#">
+                                                        <span class="thumbnail"><img src="thumbnail.png" /></span>
+                                                        <span class="title">Nome da Entidade Não Selecionada #1</span>
+                                                        <span class="subtitle">Alguma descrição pequena</span>
+                                                        <span class="description">Um texto gigante descrevendo alguma coisa muito bacana assim podemos ser felizes porque o cachorro que mijou na calçada da esquina de casa morreu de tuberculose 3 dias depois da tempestade.</span>
+                                                        <span class="subtitle">Mais algum textinho minúsculo</span>
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a href="#">
+                                                        <span class="thumbnail"><img src="thumbnail.png" /></span>
+                                                        <span class="title">Nome da Entidade Não Selecionada #1</span>
+                                                        <span class="subtitle">Alguma descrição pequena</span>
+                                                        <span class="description">Um texto gigante descrevendo alguma coisa muito bacana assim podemos ser felizes porque o cachorro que mijou na calçada da esquina de casa morreu de tuberculose 3 dias depois da tempestade.</span>
+                                                        <span class="subtitle">Mais algum textinho minúsculo</span>
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a href="#">
+                                                        <span class="thumbnail"><img src="thumbnail.png" /></span>
+                                                        <span class="title">Nome da Entidade Não Selecionada #1</span>
+                                                        <span class="subtitle">Alguma descrição pequena</span>
+                                                        <span class="description">Um texto gigante descrevendo alguma coisa muito bacana assim podemos ser felizes porque o cachorro que mijou na calçada da esquina de casa morreu de tuberculose 3 dias depois da tempestade.</span>
+                                                        <span class="subtitle">Mais algum textinho minúsculo</span>
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a href="#">
+                                                        <span class="thumbnail"><img src="thumbnail.png" /></span>
+                                                        <span class="title">Nome da Entidade Não Selecionada #1</span>
+                                                        <span class="subtitle">Alguma descrição pequena</span>
+                                                        <span class="description">Um texto gigante descrevendo alguma coisa muito bacana assim podemos ser felizes porque o cachorro que mijou na calçada da esquina de casa morreu de tuberculose 3 dias depois da tempestade.</span>
+                                                        <span class="subtitle">Mais algum textinho minúsculo</span>
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a href="#">
+                                                        <span class="thumbnail"><img src="thumbnail.png" /></span>
+                                                        <span class="title">Nome da Entidade Não Selecionada #1</span>
+                                                        <span class="subtitle">Alguma descrição pequena</span>
+                                                        <span class="description">Um texto gigante descrevendo alguma coisa muito bacana assim podemos ser felizes porque o cachorro que mijou na calçada da esquina de casa morreu de tuberculose 3 dias depois da tempestade.</span>
+                                                        <span class="subtitle">Mais algum textinho minúsculo</span>
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a href="#">
+                                                        <span class="thumbnail"><img src="thumbnail.png" /></span>
+                                                        <span class="title">Nome da Entidade Não Selecionada #1</span>
+                                                        <span class="subtitle">Alguma descrição pequena</span>
+                                                        <span class="description">Um texto gigante descrevendo alguma coisa muito bacana assim podemos ser felizes porque o cachorro que mijou na calçada da esquina de casa morreu de tuberculose 3 dias depois da tempestade.</span>
+                                                        <span class="subtitle">Mais algum textinho minúsculo</span>
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a href="#">
+                                                        <span class="thumbnail"><img src="thumbnail.png" /></span>
+                                                        <span class="title">Nome da Entidade Não Selecionada #1</span>
+                                                        <span class="subtitle">Alguma descrição pequena</span>
+                                                        <span class="description">Um texto gigante descrevendo alguma coisa muito bacana assim podemos ser felizes porque o cachorro que mijou na calçada da esquina de casa morreu de tuberculose 3 dias depois da tempestade.</span>
+                                                        <span class="subtitle">Mais algum textinho minúsculo</span>
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a href="#">
+                                                        <span class="thumbnail"><img src="thumbnail.png" /></span>
+                                                        <span class="title">Nome da Entidade Não Selecionada #1</span>
+                                                        <span class="subtitle">Alguma descrição pequena</span>
+                                                        <span class="description">Um texto gigante descrevendo alguma coisa muito bacana assim podemos ser felizes porque o cachorro que mijou na calçada da esquina de casa morreu de tuberculose 3 dias depois da tempestade.</span>
+                                                        <span class="subtitle">Mais algum textinho minúsculo</span>
+                                                    </a>
+                                                </li>
+                                            </ol>
+                                        </div>
+                                    </div>
                                 </div>
                             </nav>
                             <section>
                                 <div id="tool-frame">
+                                    <nav>
+                                        <menu id="tool-frame-navigation">
+                                            <li class="back"><a href="#">Voltar para não sei aonde</a></li>
+                                            <li class="forward"><a href="#">Avançar para não sei aonde</a></li>
+                                        </menu>
+                                    </nav>
+                                    <h3 id="tool-frame-title">Title</h3>
+                                    <h4 id="tool-frame-subtitle">Sub title</h4>
+                                    <menu id="tool-frame-actions">
+                                        <li><div class="image iconaction1"></div>botão de ação #1</li>
+                                        <li><div class="image iconaction2"></div>botão de ação #2</li>
+                                        <li><div class="image iconaction3"></div>botão de ação #3</li>
+                                    </menu>
+                                    <!--
+                                    <menu id="tool-frame-toolbar">
+                                        <li><div class="image iconaction1"></div>botão de ação #1</li>
+                                        <li><div class="image iconaction2"></div>botão de ação #2</li>
+                                        <li><div class="image iconaction3"></div>botão de ação #3</li>
+                                    </menu>
+                                    -->
+                                    <section>
+                                        <div id="tool-frame-content">
+
+                                        </div>
+                                    </section>
                                 </div>
                             </section>
                         </div>

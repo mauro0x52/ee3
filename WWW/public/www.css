@@ -1,0 +1,101 @@
+body {
+    font-family: Verdana, Helvetia, sans-serif;
+    padding: 0;
+    margin: 0;
+}
+
+a {
+    text-decoration: none;
+}
+
+/* -------------------------------------------------------------------------- */
+/* Header                                                                     */
+/* -------------------------------------------------------------------------- */
+
+#header {
+    background-color: #0C478A;
+    height: 36px;
+    border-bottom: 1px solid #236;
+    position: relative;
+    top: 0;
+}
+
+#header h1 {
+    position: absolute;
+    top: -9999px;
+}
+
+#header .image.logo {
+    position: absolute;
+    left: 10px;
+    top: 5px;
+    height: 26px;
+    width: 122px;
+    background-image: url(http://www.empreendemia.com.br/images/layout/header-logo.png);
+    background-repeat: no-repeat;
+}
+
+
+/* Top Menu */
+
+#top-menu {
+    position: relative;
+    float: left;
+    margin: 0 0 0 152px;
+    padding: 0;
+    font-size: 11px;
+}
+
+#top-menu li {
+    float: left;
+    height: 20px;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+#top-menu li a {
+    position: relative;
+    display: block;
+    color: #fff;
+    padding: 12px 10px 20px 10px;
+}
+
+#top-menu-tools {
+    position: absolute;
+    top: 37px;
+    left: 0;
+    background-color: #eee;
+    box-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+    border-radius: 0 0 12px 12px;
+    margin: 0;
+    padding: 10px;
+    width: 200px;
+    display: none;
+}
+
+#top-menu li.dropdown:hover #top-menu-tools {
+    display: block;
+}
+
+#top-menu-tools li {
+    float: none;
+    padding: 0;
+    margin: 0;
+}
+
+#top-menu-tools li a {
+    padding: 0 4px;
+    margin: 0;
+    color: #236;
+}
+
+
+/* User Section*/
+
+#user-section {
+    position: relative;
+    float: right;
+    margin: 0 10px;
+    padding: 0;
+}
