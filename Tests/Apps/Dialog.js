@@ -59,7 +59,7 @@ describe('POST /app/[slug]/version/[number]/dialog', function () {
             }, function(error, data, response) {
                 if (error) {
                     return done(error);
-                } else { 
+                } else {
                     should.exist(data.error);
                     data.should.not.have.property('_id');
                     data.should.not.have.property('name');
@@ -76,7 +76,7 @@ describe('POST /app/[slug]/version/[number]/dialog', function () {
             }, function(error, data, response) {
                 if (error) {
                     return done(error);
-                } else { 
+                } else {
                     should.exist(data.error);
                     data.should.not.have.property('_id');
                     data.should.not.have.property('name');
@@ -95,7 +95,7 @@ describe('POST /app/[slug]/version/[number]/dialog', function () {
             }, function(error, data, response) {
                 if (error) {
                     return done(error);
-                } else { 
+                } else {
                     should.exist(data.error);
                     data.should.not.have.property('_id');
                     data.should.not.have.property('name');
@@ -113,7 +113,7 @@ describe('POST /app/[slug]/version/[number]/dialog', function () {
             }, function(error, data, response) {
                 if (error) {
                     return done(error);
-                } else { 
+                } else {
                     should.exist(data.error);
                     data.should.not.have.property('_id');
                     data.should.not.have.property('name');
@@ -131,7 +131,7 @@ describe('POST /app/[slug]/version/[number]/dialog', function () {
             }, function(error, data, response) {
                 if (error) {
                     return done(error);
-                } else { 
+                } else {
                     should.exist(data.error);
                     data.should.not.have.property('_id');
                     data.should.not.have.property('name');
@@ -146,11 +146,12 @@ describe('POST /app/[slug]/version/[number]/dialog', function () {
         api.post('apps', '/app/' + slug + '/version/' + version + '/dialog', {
                 token  : token,
                 name    : 'Dialog ' + rand(),
+                slug  : 'slug-' + rand(),
                 source  : 'Código ' + rand()
             }, function(error, data, response) {
                 if (error) {
                     return done(error);
-                } else { 
+                } else {
                     should.not.exist(data.error, 'erro inesperado');
                     data.should.have.property('_id');
                     data.should.have.property('name');
@@ -191,7 +192,8 @@ describe('GET /app/[slug]/version/[number]/dialogs', function () {
                         api.post('apps', '/app/' + slug + '/version/' + version + '/dialog',  {
                             token : token,
                             name  : 'Dialog ' + rand(),
-                            source: 'Código ' + rand()
+                            source: 'Código ' + rand(),
+                            slug  : 'slug-' + rand()
                         }, function (error, data) {
                             dialogs++;
                             if (dialogs === 20) {
@@ -203,7 +205,7 @@ describe('GET /app/[slug]/version/[number]/dialogs', function () {
             });
         });
     });
-    
+
     it('url tem que existir', function(done) {
         api.get('apps', '/app/' + slug + '/version/' + version + '/dialogs', {}, function(error, data, response) {
             if (error) {
@@ -215,7 +217,7 @@ describe('GET /app/[slug]/version/[number]/dialogs', function () {
             }
         });
     });
-    
+
     it('aplicativo inexistente', function(done) {
         api.get('apps', '/app/inexistente/version/' + version + '/dialogs', {}, function(error, data, response) {
             if (error) {
@@ -226,7 +228,7 @@ describe('GET /app/[slug]/version/[number]/dialogs', function () {
             }
         });
     });
-    
+
     it('versão inexistente', function(done) {
         api.get('apps', '/app/' + slug + '/version/inexistente/dialogs', {}, function(error, data, response) {
             if (error) {
@@ -243,7 +245,7 @@ describe('GET /app/[slug]/version/[number]/dialogs', function () {
             if (error) {
                 return done(error);
             } else {
-                should.not.exist(data.error, 'erro inesperado');                
+                should.not.exist(data.error, 'erro inesperado');
                 data.length.should.be.above(19);
                 for (var i = 0 ; i < data.length; i = i + 1) {
                     data[i].should.have.property('_id');
@@ -284,9 +286,10 @@ describe('GET /app/[slug]/version/[number]/dialog/[id]', function () {
                     api.post('apps', '/app/' + slug + '/version/' + version + '/dialog',  {
                         token : token,
                         name  : 'Dialog ' + rand(),
-                        source: 'Código ' + rand()
+                        source: 'Código ' + rand(),
+                        slug  : 'slug-' + rand()
                     }, function (error, data) {
-                        dialog = data._id;
+                        dialog = data.slug;
                         done();
                     });
                 });
@@ -305,7 +308,7 @@ describe('GET /app/[slug]/version/[number]/dialog/[id]', function () {
             }
         });
     });
-    
+
     it('aplicativo inexistente', function(done) {
         api.get('apps', '/app/inexistente/version/' + version + '/dialog/' + dialog, {}, function(error, data, response) {
             if (error) {
@@ -316,7 +319,7 @@ describe('GET /app/[slug]/version/[number]/dialog/[id]', function () {
             }
         });
     });
-    
+
     it('versão inexistente', function(done) {
         api.get('apps', '/app/' + slug + '/version/inexistente/dialog/' + dialog, {}, function(error, data, response) {
             if (error) {
@@ -382,9 +385,10 @@ describe('DEL /app/[slug]/version/[number]/dialog/[id]', function () {
                     api.post('apps', '/app/' + slug + '/version/' + version + '/dialog',  {
                         token : token,
                         name  : 'Dialog ' + rand(),
-                        source: 'Código ' + rand()
+                        source: 'Código ' + rand(),
+                        slug  : 'slug-' + rand()
                     }, function (error, data) {
-                        dialog = data._id;
+                        dialog = data.slug;
                         done();
                     });
                 });
@@ -408,7 +412,7 @@ describe('DEL /app/[slug]/version/[number]/dialog/[id]', function () {
         api.del('apps', '/app/' + slug + '/version/' + version + '/dialog/' + dialog, {token : 'invalido'}, function(error, data, response) {
             if (error) {
                 return done(error);
-            } else { 
+            } else {
                 should.exist(data.error);
                 data.should.not.have.property('_id');
                 data.should.not.have.property('name');
@@ -504,9 +508,10 @@ describe('PUT /app/[slug]/version/[number]/dialog/[id]', function () {
                     api.post('apps', '/app/' + slug + '/version/' + version + '/dialog',  {
                         token : token,
                         name  : 'Dialog ' + rand(),
-                        source: 'Código ' + rand()
+                        source: 'Código ' + rand(),
+                        slug  : 'slug-' + rand()
                     }, function (error, data) {
-                        dialog = data._id;
+                        dialog = data.slug;
                         name = data.name;
                         done();
                     });
@@ -535,7 +540,7 @@ describe('PUT /app/[slug]/version/[number]/dialog/[id]', function () {
         }, function(error, data, response) {
             if (error) {
                 return done(error);
-            } else { 
+            } else {
                 should.exist(data.error);
                 data.should.not.have.property('_id');
                 data.should.not.have.property('name');

@@ -21,7 +21,7 @@ module.exports = function (app) {
      * @description : Cadastrar ferramenta
      *
      * @allowedApp : sdk
-     * @allowedUser : Logado 
+     * @allowedUser : Logado
      *
      * @request : {name,code,token}
      * @response : {confirmation}
@@ -61,6 +61,7 @@ module.exports = function (app) {
                                             tool = new Tool({
                                                 name      : request.param('name', null),
                                                 source    : request.param('source', null),
+                                                slug      : request.param('slug', null),
                                                 version   : version._id
                                             });
                                             //salva a nova ferramenta
@@ -198,7 +199,7 @@ module.exports = function (app) {
      * @description : Excluir ferramenta
      *
      * @allowedApp : sdk
-     * @allowedUser : Logado 
+     * @allowedUser : Logado
      *
      * @request : {token}
      * @response : {confirmation}
@@ -318,6 +319,7 @@ module.exports = function (app) {
                                                     } else {
                                                         //altera os dados da ferramenta
                                                         tool.name = request.param('name', tool.name);
+                                                        tool.slug = request.param('slug', tool.slug);
                                                         tool.source = request.param('source', tool.source);
                                                         //salva modificações
                                                         tool.save(function (error) {

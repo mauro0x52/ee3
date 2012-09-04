@@ -21,7 +21,7 @@ module.exports = function (app) {
      * @description : Cadastrar plugin
      *
      * @allowedApp : sdk
-     * @allowedUser : Logado 
+     * @allowedUser : Logado
      *
      * @request : {token, name,code}
      * @response : {confirmation}
@@ -60,6 +60,7 @@ module.exports = function (app) {
                                             plugin = new Plugin({
                                                 name      : request.param('name', null),
                                                 source    : request.param('source', null),
+                                                slug      : request.param('slug', null),
                                                 version   : version._id
                                             });
                                             //salva a nova plugin
@@ -195,7 +196,7 @@ module.exports = function (app) {
      * @description : Excluir plugin
      *
      * @allowedApp : sdk
-     * @allowedUser : Logado 
+     * @allowedUser : Logado
      *
      * @request : {token}
      * @response : {confirmation}
@@ -313,6 +314,7 @@ module.exports = function (app) {
                                                     } else {
                                                         //altera os dados da plugin
                                                         plugin.name = request.param('name', plugin.name);
+                                                        plugin.slug = request.param('slug', plugin.slug);
                                                         plugin.source = request.param('source', plugin.source);
                                                         //salva modificações
                                                         plugin.save(function (error) {

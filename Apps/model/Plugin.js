@@ -14,6 +14,7 @@ var mongoose = require('mongoose'),
 pluginSchema = new Schema({
     name      : {type : String, trim : true, required : true, unique : true},
     source    : {type : String, required : true},
+    slug    : {type : String, trim : true, unique : true},
     version   : {type : objectId}
 });
 
