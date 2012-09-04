@@ -34,7 +34,8 @@ toolSchema.methods.minify = function (cb) {
         pro = require('uglify-js').uglify,
         File = require('file-utils').File,
         folderPath, appSlug, appVersion, toolSlug, names, files,
-        fileData, source;
+        fileData, source,
+        tool = this;
 
     appSlug = 'empresas';
     appVersion = '0.1';
@@ -62,9 +63,9 @@ toolSchema.methods.minify = function (cb) {
         //source = pro.ast_squeeze(source); // get an AST with compression optimizations
         source = pro.gen_code(source); // compressed code here
 
-        this.source = source;
+        tool.source = source;
 
-        this.save(function (error) {
+        tool.save(function (error) {
             cb(error, this);
         });
     });

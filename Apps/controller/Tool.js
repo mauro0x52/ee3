@@ -149,7 +149,7 @@ module.exports = function (app) {
      * @request : {token}
      * @response : {number}
      */
-    app.get('/app/:slug/version/:number/tool/:name', function (request, response) {
+    app.get('/app/:slug/version/:number/tool/:tool_slug', function (request, response) {
         response.contentType('json');
         response.header('Access-Control-Allow-Origin', '*');
 
@@ -171,7 +171,7 @@ module.exports = function (app) {
                             if (version === null) {
                                 response.send({error : 'version not found'});
                             } else {
-                                version.findTool(request.params.name, function (error, tool) {
+                                version.findTool(request.params.tool_slug, function (error, tool) {
                                     if (error) {
                                         response.send({error : error});
                                     } else {
