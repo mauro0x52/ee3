@@ -31,7 +31,7 @@
                         <!-- Usuário logado -->
                         <a href="#" class="hover-dropdown">
                             <span class="welcome">
-                                Olá <span class="user-name">nome do usuário</span>
+                                Olá <span class="user-name">Usuário</span>!
                             </span>
                             <span class="thumbnail">
                                 <img src="thumbnail.png" />
@@ -70,34 +70,39 @@
                         <div id="tool-menu">
                             <menu id="tool-menu-navigation">
                                 <li class="selected"><a href="#"><span class="image iconname"></span><span class="legend">Consulta 01</span></a><div class="image arrow"></div></li>
-                                <li><a href="#"><span class="image iconname"></span><span class="legend">Consulta 02 muito legal</span></a></li>
-                                <li><a href="#"><span class="image iconname"></span><span class="legend">Consulta 03</span></a></li>
+                                <li><a href="#"><span class="image iconname"></span><span class="legend">Consulta 02 muito legal</span></a><div class="image arrow"></div></li>
+                                <li><a href="#"><span class="image iconname"></span><span class="legend">Consulta 03</span></a><div class="image arrow"></div></li>
                             </menu>
                             <menu id="tool-menu-actions">
-                                <li><a href="#"><span class="image iconname"></span><span class="legend">Ação 01</span></a></li>
-                                <li><a href="#"><span class="image iconname"></span><span class="legend">Ação 02 legal também</span></a></li>
-                                <li><a href="#"><span class="image iconname"></span><span class="legend">Ação 03</span></a></li>
+                                <li><a href="#"><span class="image iconname"></span><span class="legend">Ação 01</span></a><div class="image arrow"></div></li>
+                                <li><a href="#"><span class="image iconname"></span><span class="legend">Ação 02 legal também</span></a><div class="image arrow"></div></li>
+                                <li><a href="#"><span class="image iconname"></span><span class="legend">Ação 03</span></a><div class="image arrow"></div></li>
                             </menu>
                             <menu id="tool-menu-settings">
-                                <li><a href="#"><span class="image iconname"></span><span class="legend">Configurações</span></a></li>
+                                <li><a href="#"><span class="image iconname"></span><span class="legend">Configurações</span></a><div class="image arrow"></div></li>
                             </menu>
                         </div>
                     <nav>
                     <section>
                         <div id="tool-content">
                             <nav>
-                                <div id="tool-list">
+                                <div id="tool-list" class="collapsed">
                                     <div id="tool-list-filter">
+                                        <div class="image filter"></div>
                                         <form>
                                             <fieldset>
                                                 <legend>Filtro</legend>
                                                 <dl>
                                                     <dt><label for="form-inputa">Input A</label></dt>
                                                     <dd><input id="form-inputa" type="text" name="inputa" /></dd>
+                                                </dl>
 
+                                                <dl>
                                                     <dt><label for="form-inputb">Input B</label></dt>
                                                     <dd><input id="form-inputb" type="text" name="inputa" /></dd>
+                                                </dl>
 
+                                                <dl>
                                                     <dt><label>Radio</label></dt>
                                                     <dd class="radio">
                                                         <input id="form-radio-a" type="radio" name="radio" />
@@ -111,7 +116,9 @@
                                                         <input id="form-radio-c" type="radio" name="radio" />
                                                         <label for="form-radio-c">Opção C</label>
                                                     </dd>
+                                                </dl>
 
+                                                <dl>
                                                     <dt><label>Checkbox</label></dt>
                                                     <dd class="checkbox">
                                                         <input id="form-checkbox-a" type="checkbox" name="checkbox" />
@@ -125,7 +132,9 @@
                                                         <input id="form-checkbox-c" type="checkbox" name="checkbox" />
                                                         <label for="form-checkbox-c">Opção C</label>
                                                     </dd>
+                                                </dl>
 
+                                                <dl>
                                                     <dt><label for="form-select">Select</label></dt>
                                                     <dd>
                                                         <select name="select">
@@ -147,15 +156,17 @@
                                                     </dd>
                                                 </dl>
                                             </fieldset>
-                                            <input id="submit" type="submit" value="Filtrar" />
+                                            <div class="submit">
+                                                <input id="submit" type="submit" value="Filtrar" />
+                                            </div>
                                         </form>
                                     </div>
                                     <div id="tool-list-browse">
                                         <div id="tool-list-browse-count">
-                                            <span class="count">53</span> resultados encontrados
+                                            <span class="count">53</span> <span class="legend">resultados encontrados</span>
                                         </div>
                                         <div id="tool-list-browse-results">
-                                            <ol>
+                                            <ol class="no-selected">
                                                 <li>
                                                     <a href="#">
                                                         <span class="thumbnail"><img src="thumbnail.png" /></span>
@@ -183,6 +194,7 @@
                                                         <span class="description">Um texto gigante descrevendo alguma coisa muito bacana assim podemos ser felizes porque o cachorro que mijou na calçada da esquina de casa morreu de tuberculose 3 dias depois da tempestade.</span>
                                                         <span class="subtitle">Mais algum textinho minúsculo</span>
                                                     </a>
+                                                    <div class="image arrow"></div>
                                                 </li>
                                                 <li>
                                                     <a href="#">
@@ -192,6 +204,7 @@
                                                         <span class="description">Um texto gigante descrevendo alguma coisa muito bacana assim podemos ser felizes porque o cachorro que mijou na calçada da esquina de casa morreu de tuberculose 3 dias depois da tempestade.</span>
                                                         <span class="subtitle">Mais algum textinho minúsculo</span>
                                                     </a>
+                                                    <div class="image arrow"></div>
                                                 </li>
                                                 <li>
                                                     <a href="#">
@@ -201,6 +214,7 @@
                                                         <span class="description">Um texto gigante descrevendo alguma coisa muito bacana assim podemos ser felizes porque o cachorro que mijou na calçada da esquina de casa morreu de tuberculose 3 dias depois da tempestade.</span>
                                                         <span class="subtitle">Mais algum textinho minúsculo</span>
                                                     </a>
+                                                    <div class="image arrow"></div>
                                                 </li>
                                                 <li>
                                                     <a href="#">
@@ -210,6 +224,7 @@
                                                         <span class="description">Um texto gigante descrevendo alguma coisa muito bacana assim podemos ser felizes porque o cachorro que mijou na calçada da esquina de casa morreu de tuberculose 3 dias depois da tempestade.</span>
                                                         <span class="subtitle">Mais algum textinho minúsculo</span>
                                                     </a>
+                                                    <div class="image arrow"></div>
                                                 </li>
                                                 <li>
                                                     <a href="#">
@@ -219,6 +234,7 @@
                                                         <span class="description">Um texto gigante descrevendo alguma coisa muito bacana assim podemos ser felizes porque o cachorro que mijou na calçada da esquina de casa morreu de tuberculose 3 dias depois da tempestade.</span>
                                                         <span class="subtitle">Mais algum textinho minúsculo</span>
                                                     </a>
+                                                    <div class="image arrow"></div>
                                                 </li>
                                                 <li>
                                                     <a href="#">
@@ -228,6 +244,7 @@
                                                         <span class="description">Um texto gigante descrevendo alguma coisa muito bacana assim podemos ser felizes porque o cachorro que mijou na calçada da esquina de casa morreu de tuberculose 3 dias depois da tempestade.</span>
                                                         <span class="subtitle">Mais algum textinho minúsculo</span>
                                                     </a>
+                                                    <div class="image arrow"></div>
                                                 </li>
                                                 <li>
                                                     <a href="#">
@@ -237,6 +254,7 @@
                                                         <span class="description">Um texto gigante descrevendo alguma coisa muito bacana assim podemos ser felizes porque o cachorro que mijou na calçada da esquina de casa morreu de tuberculose 3 dias depois da tempestade.</span>
                                                         <span class="subtitle">Mais algum textinho minúsculo</span>
                                                     </a>
+                                                    <div class="image arrow"></div>
                                                 </li>
                                                 <li>
                                                     <a href="#">
@@ -246,6 +264,7 @@
                                                         <span class="description">Um texto gigante descrevendo alguma coisa muito bacana assim podemos ser felizes porque o cachorro que mijou na calçada da esquina de casa morreu de tuberculose 3 dias depois da tempestade.</span>
                                                         <span class="subtitle">Mais algum textinho minúsculo</span>
                                                     </a>
+                                                    <div class="image arrow"></div>
                                                 </li>
                                                 <li>
                                                     <a href="#">
@@ -255,6 +274,7 @@
                                                         <span class="description">Um texto gigante descrevendo alguma coisa muito bacana assim podemos ser felizes porque o cachorro que mijou na calçada da esquina de casa morreu de tuberculose 3 dias depois da tempestade.</span>
                                                         <span class="subtitle">Mais algum textinho minúsculo</span>
                                                     </a>
+                                                    <div class="image arrow"></div>
                                                 </li>
                                                 <li>
                                                     <a href="#">
@@ -264,6 +284,7 @@
                                                         <span class="description">Um texto gigante descrevendo alguma coisa muito bacana assim podemos ser felizes porque o cachorro que mijou na calçada da esquina de casa morreu de tuberculose 3 dias depois da tempestade.</span>
                                                         <span class="subtitle">Mais algum textinho minúsculo</span>
                                                     </a>
+                                                    <div class="image arrow"></div>
                                                 </li>
                                                 <li>
                                                     <a href="#">
@@ -273,6 +294,7 @@
                                                         <span class="description">Um texto gigante descrevendo alguma coisa muito bacana assim podemos ser felizes porque o cachorro que mijou na calçada da esquina de casa morreu de tuberculose 3 dias depois da tempestade.</span>
                                                         <span class="subtitle">Mais algum textinho minúsculo</span>
                                                     </a>
+                                                    <div class="image arrow"></div>
                                                 </li>
                                                 <li>
                                                     <a href="#">
@@ -282,6 +304,7 @@
                                                         <span class="description">Um texto gigante descrevendo alguma coisa muito bacana assim podemos ser felizes porque o cachorro que mijou na calçada da esquina de casa morreu de tuberculose 3 dias depois da tempestade.</span>
                                                         <span class="subtitle">Mais algum textinho minúsculo</span>
                                                     </a>
+                                                    <div class="image arrow"></div>
                                                 </li>
                                                 <li>
                                                     <a href="#">
@@ -291,6 +314,7 @@
                                                         <span class="description">Um texto gigante descrevendo alguma coisa muito bacana assim podemos ser felizes porque o cachorro que mijou na calçada da esquina de casa morreu de tuberculose 3 dias depois da tempestade.</span>
                                                         <span class="subtitle">Mais algum textinho minúsculo</span>
                                                     </a>
+                                                    <div class="image arrow"></div>
                                                 </li>
                                                 <li>
                                                     <a href="#">
@@ -300,6 +324,7 @@
                                                         <span class="description">Um texto gigante descrevendo alguma coisa muito bacana assim podemos ser felizes porque o cachorro que mijou na calçada da esquina de casa morreu de tuberculose 3 dias depois da tempestade.</span>
                                                         <span class="subtitle">Mais algum textinho minúsculo</span>
                                                     </a>
+                                                    <div class="image arrow"></div>
                                                 </li>
                                                 <li>
                                                     <a href="#">
@@ -309,6 +334,7 @@
                                                         <span class="description">Um texto gigante descrevendo alguma coisa muito bacana assim podemos ser felizes porque o cachorro que mijou na calçada da esquina de casa morreu de tuberculose 3 dias depois da tempestade.</span>
                                                         <span class="subtitle">Mais algum textinho minúsculo</span>
                                                     </a>
+                                                    <div class="image arrow"></div>
                                                 </li>
                                                 <li>
                                                     <a href="#">
@@ -318,6 +344,7 @@
                                                         <span class="description">Um texto gigante descrevendo alguma coisa muito bacana assim podemos ser felizes porque o cachorro que mijou na calçada da esquina de casa morreu de tuberculose 3 dias depois da tempestade.</span>
                                                         <span class="subtitle">Mais algum textinho minúsculo</span>
                                                     </a>
+                                                    <div class="image arrow"></div>
                                                 </li>
                                                 <li>
                                                     <a href="#">
@@ -327,6 +354,7 @@
                                                         <span class="description">Um texto gigante descrevendo alguma coisa muito bacana assim podemos ser felizes porque o cachorro que mijou na calçada da esquina de casa morreu de tuberculose 3 dias depois da tempestade.</span>
                                                         <span class="subtitle">Mais algum textinho minúsculo</span>
                                                     </a>
+                                                    <div class="image arrow"></div>
                                                 </li>
                                                 <li>
                                                     <a href="#">
@@ -336,6 +364,7 @@
                                                         <span class="description">Um texto gigante descrevendo alguma coisa muito bacana assim podemos ser felizes porque o cachorro que mijou na calçada da esquina de casa morreu de tuberculose 3 dias depois da tempestade.</span>
                                                         <span class="subtitle">Mais algum textinho minúsculo</span>
                                                     </a>
+                                                    <div class="image arrow"></div>
                                                 </li>
                                                 <li>
                                                     <a href="#">
@@ -345,6 +374,7 @@
                                                         <span class="description">Um texto gigante descrevendo alguma coisa muito bacana assim podemos ser felizes porque o cachorro que mijou na calçada da esquina de casa morreu de tuberculose 3 dias depois da tempestade.</span>
                                                         <span class="subtitle">Mais algum textinho minúsculo</span>
                                                     </a>
+                                                    <div class="image arrow"></div>
                                                 </li>
                                                 <li>
                                                     <a href="#">
@@ -354,6 +384,7 @@
                                                         <span class="description">Um texto gigante descrevendo alguma coisa muito bacana assim podemos ser felizes porque o cachorro que mijou na calçada da esquina de casa morreu de tuberculose 3 dias depois da tempestade.</span>
                                                         <span class="subtitle">Mais algum textinho minúsculo</span>
                                                     </a>
+                                                    <div class="image arrow"></div>
                                                 </li>
                                                 <li>
                                                     <a href="#">
@@ -363,6 +394,7 @@
                                                         <span class="description">Um texto gigante descrevendo alguma coisa muito bacana assim podemos ser felizes porque o cachorro que mijou na calçada da esquina de casa morreu de tuberculose 3 dias depois da tempestade.</span>
                                                         <span class="subtitle">Mais algum textinho minúsculo</span>
                                                     </a>
+                                                    <div class="image arrow"></div>
                                                 </li>
                                                 <li>
                                                     <a href="#">
@@ -372,6 +404,7 @@
                                                         <span class="description">Um texto gigante descrevendo alguma coisa muito bacana assim podemos ser felizes porque o cachorro que mijou na calçada da esquina de casa morreu de tuberculose 3 dias depois da tempestade.</span>
                                                         <span class="subtitle">Mais algum textinho minúsculo</span>
                                                     </a>
+                                                    <div class="image arrow"></div>
                                                 </li>
                                                 <li>
                                                     <a href="#">
@@ -381,6 +414,7 @@
                                                         <span class="description">Um texto gigante descrevendo alguma coisa muito bacana assim podemos ser felizes porque o cachorro que mijou na calçada da esquina de casa morreu de tuberculose 3 dias depois da tempestade.</span>
                                                         <span class="subtitle">Mais algum textinho minúsculo</span>
                                                     </a>
+                                                    <div class="image arrow"></div>
                                                 </li>
                                                 <li>
                                                     <a href="#">
@@ -390,6 +424,7 @@
                                                         <span class="description">Um texto gigante descrevendo alguma coisa muito bacana assim podemos ser felizes porque o cachorro que mijou na calçada da esquina de casa morreu de tuberculose 3 dias depois da tempestade.</span>
                                                         <span class="subtitle">Mais algum textinho minúsculo</span>
                                                     </a>
+                                                    <div class="image arrow"></div>
                                                 </li>
                                                 <li>
                                                     <a href="#">
@@ -399,6 +434,7 @@
                                                         <span class="description">Um texto gigante descrevendo alguma coisa muito bacana assim podemos ser felizes porque o cachorro que mijou na calçada da esquina de casa morreu de tuberculose 3 dias depois da tempestade.</span>
                                                         <span class="subtitle">Mais algum textinho minúsculo</span>
                                                     </a>
+                                                    <div class="image arrow"></div>
                                                 </li>
                                             </ol>
                                         </div>
@@ -409,29 +445,43 @@
                                 <div id="tool-frame">
                                     <nav>
                                         <menu id="tool-frame-navigation">
-                                            <li class="back"><a href="#">Voltar para não sei aonde</a></li>
-                                            <li class="forward"><a href="#">Avançar para não sei aonde</a></li>
+                                            <li class="back"><a href="#"><span class="image back"></span> <span class="legend">Voltar para não sei aonde</span></a></li>
+                                            <li class="forward"><a href="#"><span class="legend">Avançar para não sei aonde</span> <span class="image forward"></span></a></li>
                                         </menu>
                                     </nav>
-                                    <h3 id="tool-frame-title">Title</h3>
-                                    <h4 id="tool-frame-subtitle">Sub title</h4>
-                                    <menu id="tool-frame-actions">
-                                        <li><div class="image iconaction1"></div>botão de ação #1</li>
-                                        <li><div class="image iconaction2"></div>botão de ação #2</li>
-                                        <li><div class="image iconaction3"></div>botão de ação #3</li>
-                                    </menu>
-                                    <!--
-                                    <menu id="tool-frame-toolbar">
-                                        <li><div class="image iconaction1"></div>botão de ação #1</li>
-                                        <li><div class="image iconaction2"></div>botão de ação #2</li>
-                                        <li><div class="image iconaction3"></div>botão de ação #3</li>
-                                    </menu>
-                                    -->
-                                    <section>
-                                        <div id="tool-frame-content">
+                                    <div id="tool-frame-view">
+                                        <header>
+                                            <div id="tool-frame-view-header">
+                                                <div id="tool-frame-view-header-thumbnail"></div>
+                                                <h3 id="tool-frame-view-header-title">Título da View</h3>
+                                                <h4 id="tool-frame-view-header-subtitle">Subtítulo da view</h4>
+                                                <menu id="tool-frame-view-header-actions">
+                                                    <li><a href="#"><span class="image iconaction1"></span><span class="legend">botão de ação #1</span></a></li>
+                                                    <li><a href="#"><span class="image iconaction2"></span><span class="legend">botão de ação #2</span></a></li>
+                                                    <li><a href="#"><span class="image iconaction3"></span><span class="legend">botão de ação #3</span></a></li>
+                                                </menu>
+                                            </div>
+                                            <div class="break"></div>
+                                        </header>
+                                        <nav>
+                                            <!--
+                                            <menu id="tool-frame-view-toolbar">
+                                            </menu>
+                                            -->
+                                            <menu id="tool-frame-view-tabs">
+                                                <li><a href="#">primeira</a></li>
+                                                <li class="selected"><a href="#">segunda</a></li>
+                                                <li><a href="#">terceira</a></li>
+                                                <li><a href="#">quarta</a></li>
+                                            </menu>
+                                            <div class="break"></div>
+                                        </nav>
+                                        <section>
+                                            <div id="tool-frame-view-content">
 
-                                        </div>
-                                    </section>
+                                            </div>
+                                        </section>
+                                    </div>
                                 </div>
                             </section>
                         </div>
