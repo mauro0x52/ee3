@@ -27,7 +27,7 @@ versionSchema = new Schema({
  */
 versionSchema.pre('save', function (next, done) {
     "use strict";
-    
+
     //Verifica se já existe esta versão para o mesmo APP
     var query = Version.findOne({number : this.number, app : this.app});
     query.where("_id");
@@ -66,13 +66,13 @@ versionSchema.methods.tools = function (cb) {
  * @since : 2012-07
  *
  * @description : Busca uma ferramenta pelo nome
- * @param name : nome da ferramenta
+ * @param slug : slug da ferramenta
  * @param cb : callback a ser chamado após achada a ferramenta
  */
-versionSchema.methods.findTool = function (name, cb) {
+versionSchema.methods.findTool = function (slug, cb) {
     "use strict";
 
-    Tool.findOne({version : this._id, _id : name}, cb);
+    Tool.findOne({version : this._id, slug : slug}, cb);
 };
 
 /** Plugins
@@ -93,14 +93,13 @@ versionSchema.methods.plugins = function (cb) {
  * @since : 2012-07
  *
  * @description : Busca um plugin pelo nome
- * @param name : nome do plugin
+ * @param slug : slug do plugin
  * @param cb : callback a ser chamado após achado o plugin
  */
-versionSchema.methods.findPlugin = function (name, cb) {
+versionSchema.methods.findPlugin = function (slug, cb) {
     "use strict";
 
-    console.log(name);
-    Plugin.findOne({version : this._id, _id : name}, cb);
+    Plugin.findOne({version : this._id, slug : slug}, cb);
 };
 
 /** Dialogs
@@ -121,13 +120,13 @@ versionSchema.methods.dialogs = function (cb) {
  * @since : 2012-07
  *
  * @description : Busca um dialogo pelo nome
- * @param name : nome do dialogo
+ * @param slug : slug do dialogo
  * @param cb : callback a ser chamado após achado o dialogo
  */
-versionSchema.methods.findDialog = function (name, cb) {
+versionSchema.methods.findDialog = function (slug, cb) {
     "use strict";
 
-    Dialog.findOne({version : this._id, _id : name}, cb);
+    Dialog.findOne({version : this._id, slug : slug}, cb);
 };
 
 /*  Exportando o pacote  */

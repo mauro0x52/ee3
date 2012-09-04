@@ -841,9 +841,9 @@ sdk.modules.ui = function (app) {
 
         /* Seta valor da tag */
         this.fieldsets.add(params.fieldsets);
+        element.childs.add(submit);
         this.submitLabel(params.submitLabel);
         this.submit(params.submit);
-        element.childs.add(submit);
     };
 
     /** Fieldset
@@ -1486,22 +1486,44 @@ sdk.modules.ui = function (app) {
      * @param description : descrição do icone
      */
     var MenuOption = function (params) {
-        var element = new Element(params.id, 'span'),
-            image = new Image({src : params.src, alt : params.description}),
-            description = new Span({value : params.description});
+        var element = new Element(params.id, 'li'),
+            anchor = new Element(undefined, 'a'),
+            icon = new Element(undefined, 'span'),
+            legend = new Element(undefined, 'span'),
+            arrow = new Div({});
+
+        element.childs.add(anchor);
+        anchor.childs.add([icon, legend, arrow]);
+
+        legend.attributes.add({name : 'class', value : 'legend'});
+        icon.attributes.add({name : 'class', value : 'image'});
+        icon.attributes.add({name : 'class', value : 'image arrow'});
 
         if (!params.click) {
             throw 'click callback is required';
         }
 
-        element.childs.add([image, description]);
-        element.events.add({event : 'click', callback : params.click});
+        /* Bindando clique da ancora */
+        anchor.events.add({event : 'click', callback : function () {
+            params.click.apply(app);
+        }});
 
         /* Publicando métodos privados */
         this.add = element.add;
         this.remove = element.remove;
-        this.src = image.src;
-        this.description = description.value;
+        this.description = legend.value;
+        this.image = function (value) {
+            if (value) {
+                icon.attributes.remove('class');
+                icon.attributes.add({name : 'class', value : 'image ' + value});
+            } else {
+                if (icon.attributes.get('class')) {
+                    return icon.attributes.get('class').value;
+                }
+            }
+        }
+        this.image(params.image);
+        this.description(params.description);
     };
 
     /** BrowseOption
@@ -1516,20 +1538,46 @@ sdk.modules.ui = function (app) {
      * @param description : descrição do item
      */
     var browseOption = function (params) {
-        var element = new Element(params.id, 'li'),
-            image = new Image({src : params.src, alt : params.title}),
-            title = new Span({value : params.title}),
-            description = new Span({value : params.description});
+        var element = new Element(undefined, 'li'),
+            anchor = new Element(undefined, 'a'),
+            thumbnail = new Element(undefined, 'span'),
+            title = new Element(undefined, 'span'),
+            subtitle = new Element(undefined, 'span'),
+            description = new Element(undefined, 'span'),
+            footer = new Element(undefined, 'span'),
+            arrow = new Element(undefined, 'div');
 
-        element.childs.add([image, title, description]);
-        element.events.add({event : 'click', callback : params.click});
+        element.childs.add([anchor, arrow]);
+        anchor.childs.add([thumbnail, title, subtitle, description, footer]);
+
+        title.value(params.title);
+        subtitle.value(params.subtitle);
+        description.value(params.description);
+        footer.value(params.footer);
+
+        thumbnail.attributes.add({name : 'class', value : 'thumbnail'});
+        title.attributes.add({name : 'class', value : 'title'});
+        subtitle.attributes.add({name : 'class', value : 'subtitle'});
+        description.attributes.add({name : 'class', value : 'description'});
+        footer.attributes.add({name : 'class', value : 'footer'});
+        arrow.attributes.add({name : 'class', value : 'image arrow'});
+
+        if (!params.click) {
+            throw 'click callback is required';
+        }
+
+        /* Bindando clique da ancora */
+        anchor.events.add({event : 'click', callback : function () {
+            params.click.apply(app);
+        }});
 
         /* Publicando métodos privados */
         this.add = element.add;
         this.remove = element.remove;
-        this.src = image.src;
         this.title = title.value;
+        this.subtitle = subtitle.value;
         this.description = description.value;
+        this.footer = footer.value;
     };
 
     /** TabOption
@@ -1544,14 +1592,14 @@ sdk.modules.ui = function (app) {
      * @param value : valor que aparece na aba
      */
     var tabOption = function (params, contentContainer) {
-        var element = new Element(params.id, 'li'),
-            image = new Image({src : params.src, alt : params.description}),
-            description = new Span({value : params.description});
+        var element = new Element(undefined, 'li'),
+            anchor = new Element(undefined, 'a')
 
-        element.childs.add([image, description]);
+        element.childs.add(anchor);
+        anchor.value(params.description);
 
         /* Bindando clique da aba para exibir conteudo */
-        element.events.add({event : 'click', callback : function () {
+        anchor.events.add({event : 'click', callback : function () {
             contentContainer.value(' ');
             if (params.value) {
                 if (params.value.constructor === Div) {
@@ -1567,8 +1615,7 @@ sdk.modules.ui = function (app) {
         /* Publicando métodos privados */
         this.add = element.add;
         this.remove = element.remove;
-        this.src = image.src;
-        this.description = description.value;
+        this.description = anchor.value;
     };
 
     /** Menu
@@ -1579,11 +1626,14 @@ sdk.modules.ui = function (app) {
      * @description : implmenta o menu principal da UI
      */
     Menu = function () {
-        var element = new Element('menu', 'div'),
-            navigation = new Element('navigation', 'div'),
-            actions = new Element('actions', 'div');
+        var element = new Element(undefined, 'nav'),
+            div = new Element('tool-menu', 'div'),
+            navigation = new Element('tool-menu-navigation', 'menu'),
+            actions = new Element('tool-menu-actions', 'menu'),
+            settings = new Element('tool-menu-settings', 'menu');
 
-        element.childs.add([navigation, actions]);
+        div.childs.add([navigation, actions, settings]);
+        element.childs.add(div);
 
         /* Publicando métodos privados */
         this.add = element.add;
@@ -1625,6 +1675,24 @@ sdk.modules.ui = function (app) {
                 }
             }
         };
+        /* Ítens de configuração de menu */
+        this.actions = {
+            get    : settings.childs.get,
+            remove : settings.childs.remove,
+            add    : function (obj) {
+                var i;
+
+                if (obj) {
+                    if (obj.constructor === Array) {
+                        for (i = 0; i < obj.length; i++) {
+                            this.add(obj[i]);
+                        }
+                    } else {
+                        settings.childs.add(new MenuOption(obj));
+                    }
+                }
+            }
+        };
     };
 
     /** List
@@ -1635,23 +1703,37 @@ sdk.modules.ui = function (app) {
      * @description : implmenta lista de elementos da UI
      */
     List = function () {
-        var element = new Element('list', 'div'),
-            filter = new Form({
+        var element = new Element(undefined, 'nav'),
+            div = new Element('tool-list', 'div'),
+            filter = new Element('tool-list-filter', 'div'),
+            imageFilter = new Element(undefined, 'div'),
+            filterForm = new Form({
                 id : 'filter',
                 submit : function () {
                     return false;
                 },
-                submitLabel : 'filtrar',
-                fieldsets : {legend : 'filtrar'}
-
+                submitLabel : 'Filtrar',
+                fieldsets : {legend : 'Filtro'}
             }),
-            browse = new Element('browse', 'ul'),
-            count = new Element('count', 'li');
+            browse = new Element('tool-list-browse', 'div'),
+            count = new Element('tool-list-browse-count', 'div'),
+            results = new Element('tool-list-browse-results', 'div'),
+            ol = new Element(undefined, 'ol'),
+            countSpan = new Element(undefined, 'span'),
+            countLegend = new Element(undefined, 'span');
 
-        browse.childs.add([count]);
-        element.childs.add([filter, browse]);
+        element.childs.add(div);
+        div.childs.add([filter, browse]);
+        filter.childs.add([imageFilter, filterForm]);
+        browse.childs.add([count, results]);
+        results.childs.add(ol);
+        count.childs.add([countSpan, countLegend]);
 
-        count.value('nenhum resultado encontrado');
+        countSpan.value('0');
+        countSpan.attributes.add({name : 'class', value : 'count'});
+        countLegend.value(' resultados encontrados');
+        countLegend.attributes.add({name : 'class', value : 'legend'});
+
 
         /* Publicando métodos privados */
         this.add = element.add;
@@ -1659,8 +1741,8 @@ sdk.modules.ui = function (app) {
 
         /* Filtro dos resultados */
         this.filter = {
-            get : filter.fieldsets.get()[0].inputs.get,
-            remove : filter.fieldsets.get()[0].inputs.remove,
+            //get : filterForm.fieldsets.get()[0].inputs.get,
+            //remove : filterForm.fieldsets.get()[0].inputs.remove,
             add : function (obj) {
                 var i;
 
@@ -1670,13 +1752,12 @@ sdk.modules.ui = function (app) {
                         for (i = 0; i < obj.length; i++) {
                             this.add(obj[i]);
                         }
-                    } else if (obj.constructor === InputRadio) {
+                    } else if (obj.constructor === Input) {
                         /* Objeto já construido simplesmente adiciona-o */
-
-                        filter.fieldsets.get()[0].inputs.add(obj);
+                        filterForm.fieldsets.get()[0].inputs.add(obj);
                     } else {
                         /* Cria input */
-                        filter.fieldsets.get()[0].inputs.add(new Input(obj));
+                        filterForm.fieldsets.get()[0].inputs.add(new Input(obj));
                     }
                 }
             }
@@ -1684,10 +1765,10 @@ sdk.modules.ui = function (app) {
 
         /* Barra de elementos encontrados */
         this.browse = {
-            get    : browse.childs.get,
+            get    : ol.childs.get,
             remove : function (ids) {
-                browse.childs.remove(ids);
-                count.value(browse.childs.get().length - 1 + " resultados encontrados");
+                ol.childs.remove(ids);
+                countSpan.value(browse.childs.get().length - 1 + " resultados encontrados");
             },
             add    : function (obj) {
                 var i;
@@ -1698,8 +1779,8 @@ sdk.modules.ui = function (app) {
                             this.add(obj[i]);
                         }
                     } else {
-                        browse.childs.add(new browseOption(obj));
-                        count.value(browse.childs.get().length - 1 + " resultados encontrados");
+                        ol.childs.add(new browseOption(obj));
+                        countSpan.value(browse.childs.get().length - 1 + " resultados encontrados");
                     }
                 }
             }
@@ -1714,15 +1795,34 @@ sdk.modules.ui = function (app) {
      * @description : implmenta a janela principal da UI
      */
     Frame = function () {
-        var element = new Element('frame', 'div'),
-            title = new Heading({type : 1}),
-            subtitle = new Heading({type : 2}),
-            head = new Element('head', 'div'),
-            tabs = new Element('tabs', 'ul'),
-            content = new Element('content', 'div');
+        var element = new Element(undefined, 'section'),
+            div = new Element('tool-frame', 'div'),
+            navigation = new Element('tool-frame-navigation', 'menu'),
+            view = new Element('tool-frame-view', 'div'),
+            header = new Element(undefined, 'header'),
+            headerDiv = new Element('tool-frame-view-header', 'div'),
+            thumbnail = new Element('tool-frame-view-header-thumbnail', 'div'),
+            title = new Heading({type : '3', id : 'tool-frame-view-header-title'}),
+            subtitle = new Heading({type : '3', id : 'tool-frame-view-header-subtitle'}),
+            actions = new Element('tool-frame-view-header-actions', 'menu'),
+            headerSpacer = new Element(undefined, 'div'),
+            tabs = new Element(undefined, 'nav'),
+            tabsMenu = new Element('tool-frame-view-tabs', 'menu'),
+            tabsSpacer = new Element(undefined, 'div'),
+            content = new Element(undefined, 'section'),
+            contentDiv = new Element('tool-frame-view-content', 'div');
 
-        head.childs.add([title,subtitle, tabs]);
-        element.childs.add([head, content]);
+
+        element.childs.add(div);
+        div.childs.add([navigation,view]);
+        view.childs.add([header, tabs, content]);
+        header.childs.add([headerDiv, headerSpacer]);
+        headerDiv.childs.add([thumbnail, title, subtitle, actions]);
+        tabs.childs.add([tabsMenu, tabsSpacer]);
+        content.childs.add(contentDiv);
+
+        headerSpacer.attributes.add({name : 'class', value : 'break'});
+        tabsSpacer.attributes.add({name : 'class', value : 'break'});
 
         /* Publicando métodos privados */
         this.add = element.add;
@@ -1735,13 +1835,13 @@ sdk.modules.ui = function (app) {
         };
         /* Abas */
         this.tabs = {
-            get : tabs.childs.get,
+            get : tabsMenu.childs.get,
             remove : function () {
-                content.value(' ');
-                tabs.childs.remove()
+                contentDiv.value(' ');
+                tabsMenu.childs.remove()
             },
             add : function (params) {
-                tabs.childs.add(new tabOption(params, content));
+                tabsMenu.childs.add(new tabOption(params, contentDiv));
             }
         };
     };
@@ -1766,8 +1866,14 @@ sdk.modules.ui = function (app) {
     this.input = Input;
     this.span = Span;
 
+    /* Elementos intermediários da interface */
+    var section = new Element(undefined, 'section'),
+        toolcontent = new Element('tool-content', 'div');
+
+    section.childs.add(toolcontent);
+    toolcontent.childs.add([this.list, this.frame])
+
     /* Montando interface */
-    this.menu.add(document.getElementById('app_container'));
-    this.list.add(document.getElementById('app_container'));
-    this.frame.add(document.getElementById('app_container'));
+    this.menu.add(document.getElementById('tool'));
+    section.add(document.getElementById('tool'));
 };

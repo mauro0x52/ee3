@@ -59,7 +59,7 @@ describe('POST /app/[slug]/version/[number]/plugin', function () {
             }, function(error, data, response) {
                 if (error) {
                     return done(error);
-                } else { 
+                } else {
                     should.exist(data.error);
                     data.should.not.have.property('_id');
                     data.should.not.have.property('name');
@@ -76,7 +76,7 @@ describe('POST /app/[slug]/version/[number]/plugin', function () {
             }, function(error, data, response) {
                 if (error) {
                     return done(error);
-                } else { 
+                } else {
                     should.exist(data.error);
                     data.should.not.have.property('_id');
                     data.should.not.have.property('name');
@@ -90,12 +90,13 @@ describe('POST /app/[slug]/version/[number]/plugin', function () {
     it('token errado', function(done) {
         api.post('apps', '/app/' + slug + '/version/' + version + '/plugin', {
                 token   : 'tokeninvalido',
+                slug  : 'slug-' + rand(),
                 name    : 'Plugin ' + rand(),
                 source  : 'Código ' + rand()
             }, function(error, data, response) {
                 if (error) {
                     return done(error);
-                } else { 
+                } else {
                     should.exist(data.error);
                     data.should.not.have.property('_id');
                     data.should.not.have.property('name');
@@ -109,11 +110,12 @@ describe('POST /app/[slug]/version/[number]/plugin', function () {
     it('nome em branco', function(done) {
         api.post('apps', '/app/' + slug + '/version/' + version + '/plugin', {
                 token   : token,
+                slug  : 'slug-' + rand(),
                 source  : 'Código ' + rand()
             }, function(error, data, response) {
                 if (error) {
                     return done(error);
-                } else { 
+                } else {
                     should.exist(data.error);
                     data.should.not.have.property('_id');
                     data.should.not.have.property('name');
@@ -127,11 +129,12 @@ describe('POST /app/[slug]/version/[number]/plugin', function () {
     it('código em branco', function(done) {
         api.post('apps', '/app/' + slug + '/version/' + version + '/plugin', {
                 token   : token,
+                slug  : 'slug-' + rand(),
                 name    : 'Plugin ' + rand()
             }, function(error, data, response) {
                 if (error) {
                     return done(error);
-                } else { 
+                } else {
                     should.exist(data.error);
                     data.should.not.have.property('_id');
                     data.should.not.have.property('name');
@@ -146,11 +149,12 @@ describe('POST /app/[slug]/version/[number]/plugin', function () {
         api.post('apps', '/app/' + slug + '/version/' + version + '/plugin', {
                 token  : token,
                 name    : 'Plugin ' + rand(),
+                slug  : 'slug-' + rand(),
                 source  : 'Código ' + rand()
             }, function(error, data, response) {
                 if (error) {
                     return done(error);
-                } else { 
+                } else {
                     should.not.exist(data.error, 'erro inesperado');
                     data.should.have.property('_id');
                     data.should.have.property('name');
@@ -191,7 +195,8 @@ describe('GET /app/[slug]/version/[number]/plugins', function () {
                         api.post('apps', '/app/' + slug + '/version/' + version + '/plugin',  {
                             token : token,
                             name  : 'Plugin ' + rand(),
-                            source: 'Código ' + rand()
+                            source: 'Código ' + rand(),
+                            slug  : 'slug-' + rand()
                         }, function (error, data) {
                             plugins++;
                             if (plugins === 20) {
@@ -203,7 +208,7 @@ describe('GET /app/[slug]/version/[number]/plugins', function () {
             });
         });
     });
-    
+
     it('url tem que existir', function(done) {
         api.get('apps', '/app/' + slug + '/version/' + version + '/plugins', {}, function(error, data, response) {
             if (error) {
@@ -215,7 +220,7 @@ describe('GET /app/[slug]/version/[number]/plugins', function () {
             }
         });
     });
-    
+
     it('aplicativo inexistente', function(done) {
         api.get('apps', '/app/inexistente/version/' + version + '/plugins', {}, function(error, data, response) {
             if (error) {
@@ -226,7 +231,7 @@ describe('GET /app/[slug]/version/[number]/plugins', function () {
             }
         });
     });
-    
+
     it('versão inexistente', function(done) {
         api.get('apps', '/app/' + slug + '/version/inexistente/plugins', {}, function(error, data, response) {
             if (error) {
@@ -243,7 +248,7 @@ describe('GET /app/[slug]/version/[number]/plugins', function () {
             if (error) {
                 return done(error);
             } else {
-                should.not.exist(data.error, 'erro inesperado');                
+                should.not.exist(data.error, 'erro inesperado');
                 data.length.should.be.above(19);
                 for (var i = 0 ; i < data.length; i = i + 1) {
                     data[i].should.have.property('_id');
@@ -284,9 +289,10 @@ describe('GET /app/[slug]/version/[number]/plugin/[id]', function () {
                     api.post('apps', '/app/' + slug + '/version/' + version + '/plugin',  {
                         token : token,
                         name  : 'Plugin ' + rand(),
-                        source: 'Código ' + rand()
+                        source: 'Código ' + rand(),
+                        slug  : 'slug-' + rand()
                     }, function (error, data) {
-                        plugin = data._id;
+                        plugin = data.slug;
                         done();
                     });
                 });
@@ -305,7 +311,7 @@ describe('GET /app/[slug]/version/[number]/plugin/[id]', function () {
             }
         });
     });
-    
+
     it('aplicativo inexistente', function(done) {
         api.get('apps', '/app/inexistente/version/' + version + '/plugin/' + plugin, {}, function(error, data, response) {
             if (error) {
@@ -316,7 +322,7 @@ describe('GET /app/[slug]/version/[number]/plugin/[id]', function () {
             }
         });
     });
-    
+
     it('versão inexistente', function(done) {
         api.get('apps', '/app/' + slug + '/version/inexistente/plugin/' + plugin, {}, function(error, data, response) {
             if (error) {
@@ -382,9 +388,10 @@ describe('DEL /app/[slug]/version/[number]/plugin/[id]', function () {
                     api.post('apps', '/app/' + slug + '/version/' + version + '/plugin',  {
                         token : token,
                         name  : 'Plugin ' + rand(),
-                        source: 'Código ' + rand()
+                        source: 'Código ' + rand(),
+                        slug  : 'slug-' + rand()
                     }, function (error, data) {
-                        plugin = data._id;
+                        plugin = data.slug;
                         done();
                     });
                 });
@@ -408,7 +415,7 @@ describe('DEL /app/[slug]/version/[number]/plugin/[id]', function () {
         api.del('apps', '/app/' + slug + '/version/' + version + '/plugin/' + plugin, {token : 'invalido'}, function(error, data, response) {
             if (error) {
                 return done(error);
-            } else { 
+            } else {
                 should.exist(data.error);
                 data.should.not.have.property('_id');
                 data.should.not.have.property('name');
@@ -504,9 +511,10 @@ describe('PUT /app/[slug]/version/[number]/plugin/[id]', function () {
                     api.post('apps', '/app/' + slug + '/version/' + version + '/plugin',  {
                         token : token,
                         name  : 'Plugin ' + rand(),
-                        source: 'Código ' + rand()
+                        source: 'Código ' + rand(),
+                        slug  : 'slug-' + rand()
                     }, function (error, data) {
-                        plugin = data._id;
+                        plugin = data.slug;
                         name = data.name;
                         done();
                     });
@@ -535,7 +543,7 @@ describe('PUT /app/[slug]/version/[number]/plugin/[id]', function () {
         }, function(error, data, response) {
             if (error) {
                 return done(error);
-            } else { 
+            } else {
                 should.exist(data.error);
                 data.should.not.have.property('_id');
                 data.should.not.have.property('name');

@@ -21,7 +21,7 @@ module.exports = function (app) {
      * @description : Cadastrar dialogo
      *
      * @allowedApp : sdk
-     * @allowedUser : Logado 
+     * @allowedUser : Logado
      *
      * @request : {name,code,token}
      * @response : {confirmation}
@@ -60,6 +60,7 @@ module.exports = function (app) {
                                             dialog = new Dialog({
                                                 name      : request.param('name', null),
                                                 source    : request.param('source', null),
+                                                slug      : request.param('slug', null),
                                                 version   : version._id
                                             });
                                             //salva a nova dialogo
@@ -195,7 +196,7 @@ module.exports = function (app) {
      * @description : Excluir dialogo
      *
      * @allowedApp : sdk
-     * @allowedUser : Logado 
+     * @allowedUser : Logado
      *
      * @request : {token}
      * @response : {confirmation}
@@ -313,6 +314,7 @@ module.exports = function (app) {
                                                     } else {
                                                         //altera os dados da dialogo
                                                         dialog.name = request.param('name', dialog.name);
+                                                        dialog.slug = request.param('slug', dialog.slug);
                                                         dialog.source = request.param('source', dialog.source);
                                                         //salva modificações
                                                         dialog.save(function (error) {

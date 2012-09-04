@@ -14,29 +14,8 @@ var mongoose = require('mongoose'),
 dialogSchema = new Schema({
     name      : {type : String, trim : true, required : true, unique : true},
     source    : {type : String, required : true},
+    slug    : {type : String, trim : true, unique : true},
     version   : {type : objectId}
-});
-
-/** pre('save')
- * @author : Rafael Erthal
- * @since : 2012-08
- *
- * @description : verifica se dialog ja existe
- */
-dialogSchema.pre('save', function (next) {
-    "use strict";
-
-    Dialog.findOne({name : this.name, versionId : this.versionId, _id : {$ne : this._id}}, function (error, dialog) {
-        if (error) {
-            next(error);
-        } else {
-            if (dialog === null) {
-                next();
-            } else {
-                next('dialog already exists');
-            }
-        }
-    });
 });
 
 /*  Exportando o pacote  */
