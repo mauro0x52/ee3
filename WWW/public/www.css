@@ -8,6 +8,10 @@ a {
     text-decoration: none;
 }
 
+.break {
+    clear: both;
+}
+
 /* -------------------------------------------------------------------------- */
 /* Header                                                                     */
 /* -------------------------------------------------------------------------- */
@@ -48,30 +52,79 @@ a {
 
 #top-menu li {
     float: left;
-    height: 20px;
     list-style: none;
     padding: 0;
-    margin: 0;
+    margin: 0 1px 0 0;
 }
+
 
 #top-menu li a {
     position: relative;
     display: block;
+    margin-top: 4px;
+    height: 25px;
     color: #fff;
-    padding: 12px 10px 20px 10px;
+    padding: 9px 10px 0 10px;
+    border-radius: 8px 8px 0 0;
+    border-top: 1px solid #0C478A;
+    border-left: 1px solid #0C478A;
+    border-right: 1px solid #0C478A;
+}
+
+#top-menu li.selected a {
+    color: #0C478A;
+    border-top: 1px solid #fff;
+    border-left: 1px solid #fff;
+    border-right: 1px solid #fff;
+    background-color: #eee;
+    background: -moz-linear-gradient(top, #ffffff, #eeeeee);
+    background: -webkit-gradient(linear, top, bottom, from(#ffffff), to(#eeeeee));
+    background: filter:progid:DXImageTransform.Microsoft.Gradient(GradientType=0, StartColorStr='#ffffff', EndColorStr='#eeeeee');
+}
+
+#top-menu li.selected:hover a,
+#top-menu li:hover a {
+    color: #0C478A;
+    z-index: 20000;
+    background-color: #fff;
+    background: -moz-linear-gradient(top, #eeeeee, #ffffff);
+    background: -webkit-gradient(linear, top, bottom, from(#eeeeee), to(#ffffff));
+    background: filter:progid:DXImageTransform.Microsoft.Gradient(GradientType=0, StartColorStr='#eeeeee', EndColorStr='#ffffff');
+    border-top: 1px solid #fff;
+    border-left: 1px solid #fff;
+    border-right: 1px solid #fff;
+}
+
+
+#top-menu li.dropdown a {
+    padding-right: 30px;
+}
+
+#top-menu li.dropdown .image.arrow {
+    position: absolute;
+    top: 14px;
+    right: 10px;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-top: 5px solid #fff;
+}
+
+#top-menu li.dropdown.selected .image.arrow {
+    border-top: 5px solid #0C478A;
 }
 
 #top-menu-tools {
     position: absolute;
     top: 37px;
     left: 0;
-    background-color: #eee;
+    background-color: #fff;
     box-shadow: 2px 2px 4px rgba(0,0,0,0.2);
-    border-radius: 0 0 12px 12px;
+    border-radius: 0 0 8px 8px;
     margin: 0;
     padding: 10px;
-    width: 200px;
+    min-width: 160px;
     display: none;
+    z-index: 10000;
 }
 
 #top-menu li.dropdown:hover #top-menu-tools {
@@ -80,14 +133,24 @@ a {
 
 #top-menu-tools li {
     float: none;
+    height: 20px;
     padding: 0;
     margin: 0;
 }
 
+#top-menu li.selected #top-menu-tools a,
+#top-menu li.selected:hover #top-menu-tools a,
+#top-menu li:hover #top-menu-tools a,
 #top-menu-tools li a {
     padding: 0 4px;
     margin: 0;
     color: #236;
+    background: none;
+    background-color: #fff;
+}
+
+#top-menu-tools li a:hover {
+
 }
 
 
@@ -98,4 +161,115 @@ a {
     float: right;
     margin: 0 10px;
     padding: 0;
+    text-align: right;
+    width: 150px;
+}
+
+
+#user-section a {
+    position: relative;
+    display: block;
+    margin-top: 2px;
+    height: 32px;
+    color: #fff;
+    padding: 2px 25px 0 10px;
+    border-radius: 8px 8px 0 0;
+    border-top: 1px solid #0C478A;
+    border-left: 1px solid #0C478A;
+    border-right: 1px solid #0C478A;
+}
+
+#user-section:hover a {
+    color: #0C478A;
+    z-index: 20000;
+    background-color: #fff;
+    background: -moz-linear-gradient(top, #eeeeee, #ffffff);
+    background: -webkit-gradient(linear, top, bottom, from(#eeeeee), to(#ffffff));
+    background: filter:progid:DXImageTransform.Microsoft.Gradient(GradientType=0, StartColorStr='#eeeeee', EndColorStr='#ffffff');
+    border-top: 1px solid #fff;
+    border-left: 1px solid #fff;
+    border-right: 1px solid #fff;
+}
+
+#user-section a .welcome {
+    display: inline-block;
+    vertical-align: top;
+    font-size: 11px;
+    margin-top: 9px;
+    margin-right: 2px;
+}
+
+#user-section a .welcome .user-name {
+    font-weight: bold;
+}
+
+#user-section a .thumbnail {
+    display: inline-block;
+    width: 28px;
+    height: 28px;
+    vertical-align: top;
+}
+
+#user-section a .arrow {
+    position: absolute;
+    top: 15px;
+    right: 10px;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-top: 5px solid #fff;
+}
+
+#user-section:hover a .arrow {
+    border-top: 5px solid #0C478A;
+}
+
+
+#user-section:hover #user-menu {
+    display: block;
+}
+
+#user-menu {
+    display: none;
+    position: absolute;
+    top: 37px;
+    right: 0;
+    background-color: #fff;
+    box-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+    border-radius: 0 0 8px 8px;
+    margin: 0;
+    padding: 10px;
+    width: 130px;
+    z-index: 10000;
+}
+
+#user-menu li {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+#user-menu a {
+    border: none;
+    padding: 5px;
+    margin: 0;
+}
+
+#user-menu li {
+    padding: 0;
+    margin: 0;
+}
+
+#user-section #user-menu a,
+#user-section a:hover #user-menu a,
+#user-menu li a,
+#user-menu li a:hover{
+    padding: 4px 0;
+    margin: 0;
+    color: #236;
+    border: none;
+    height: auto;
+    font-size: 11px;
+    background: none;
+    background-color: #fff;
+    text-align: right;
 }
