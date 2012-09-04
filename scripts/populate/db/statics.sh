@@ -6,8 +6,6 @@
 # Script para popular o banco de dados
 # ------------------------------------------------------------------------------
 
-# Arquivo de configuracao
-source config.sh
 
 # Funcao principal
 populate() {
@@ -18,22 +16,22 @@ populate() {
     echo "------------------------------------------------------------"
     echo ""
 
-    cd ../populate/db
+    cd statics
 
-    echo "- location.regions"
-    mongoimport -d location -c regions --file regions.json
     echo
+    echo "- location"
 
-    echo "- location.countries"
-    mongoimport -d countries -c countries --file countries.json
-    echo
+    echo "-- regions"
+    mongoimport -d location -c regions --file location/regions.json
 
-    echo "- location.states"
-    mongoimport -d location -c states --file states.json
-    echo
+    echo "-- countries"
+    mongoimport -d countries -c countries --file location/countries.json
 
-    echo "- location.cities"
-    mongoimport -d location -c cities --file cities.json
+    echo "-- states"
+    mongoimport -d location -c states --file location/states.json
+
+    echo "-- cities"
+    mongoimport -d location -c cities --file location/cities.json
 
 }
 

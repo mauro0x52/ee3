@@ -16,10 +16,10 @@ ListCompanies: function(){
         var companies, i;
 
         eval('companies = ' + data);
-        
+
         /* Carrega uma empresa na tela */
         this.ShowCompany(companies[0]);
-        
+
         for(i in companies) {
             this.ShowCompany(companies[i]);
         }
@@ -93,10 +93,10 @@ ProductsTab : function (company) {
         /* Verifica se o Produto tem Thumbnail, se não adiciona uma imagem padrão. */
         /* Adiciona um HTML P com negrito informando o nome e imagem do produto. */
         tab.push({p : {a : company.products[i].name, url : company.slug + '/produto/' + company.products[i].slug, click : function(data){
-		
+
 			console.log('ok');
-			
-			
+
+
 		}}});
     };
 
@@ -105,31 +105,31 @@ ProductsTab : function (company) {
 },
 
 ShowProduct : function (company, product) {
-	
+
 },
 
 ContactTab : function (company) {
 	var tab = [], i, address;
-	
+
 	tab.push({title : 'Contato'});
-	
+
 	/* Pega todos os contatos da empresa e adiciona na aba Contato */
     for (i in company.contacts) {
         tab.push({p : {b : company.contacts[i].type+' : '+company.contacts[i].address}});
     };
-	
+
 	/* Pega todos os Endereços da empresa e adiciona na aba Contato */
 	for (i in company.addresses) {
 		this.ajax.get({url : 'http://' + this.config.location.host + ':' + this.config.location.port + '/city/' + company.addresses[i].city}, function (data) {
 			var city;
-		    
+
 		    /* Adiciona a variavel data na variável city */
 	        eval('city = ' + data);
-		    
+
 	        tab.push({p : {b : company.addresses[i].street + ', ' + company.addresses[i].number + ' ' + company.addresses[i].complement + ' - ' + city.name + ', ' + city.state}});
         });
 	}
-	
+
 	/* adiciona a aba */
     this.ui.frame.tabs.add({id : 'productTab', src : 'http://dicsin.com.br/css/images/icone_livro.jpg', description : 'Contatos', value : tab});
 }

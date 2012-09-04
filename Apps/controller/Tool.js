@@ -21,7 +21,7 @@ module.exports = function (app) {
      * @description : Cadastrar ferramenta
      *
      * @allowedApp : sdk
-     * @allowedUser : Logado 
+     * @allowedUser : Logado
      *
      * @request : {name,code,token}
      * @response : {confirmation}
@@ -178,7 +178,13 @@ module.exports = function (app) {
                                         if (tool === null) {
                                             response.send({error : 'tool not found'});
                                         } else {
-                                            response.send(tool);
+                                            tool.minify(function (error) {
+                                                if (error) {
+                                                    response.send({error : 'tool construction error'});
+                                                } else {
+                                                    response.send(tool);
+                                                }
+                                            });
                                         }
                                     }
                                 });
@@ -198,7 +204,7 @@ module.exports = function (app) {
      * @description : Excluir ferramenta
      *
      * @allowedApp : sdk
-     * @allowedUser : Logado 
+     * @allowedUser : Logado
      *
      * @request : {token}
      * @response : {confirmation}
