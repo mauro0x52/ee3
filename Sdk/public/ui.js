@@ -793,6 +793,7 @@ sdk.modules.ui = function (app) {
                 cb();
             }
         }});
+        element.childs.add(submit);
 
         /* Publicando métodos privados */
         this.add = element.add;
@@ -843,7 +844,6 @@ sdk.modules.ui = function (app) {
         this.fieldsets.add(params.fieldsets);
         this.submitLabel(params.submitLabel);
         this.submit(params.submit);
-        element.childs.add(submit);
     };
 
     /** Fieldset
