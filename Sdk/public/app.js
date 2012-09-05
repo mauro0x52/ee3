@@ -16,10 +16,10 @@ sdk.modules.app = function (sdk) {
         ajax.get({url : 'http://' + sdk.config.apps.host + ':' + sdk.config.apps.port + '/app/' + app + '/version/' + version + '/tool/' + tool}, function (data) {
             var response;
             eval("response = " + data);
-            if (response.error && response.error !== '') {
+            if (response.error) {
                 console.error(response.error);
             } else {
-                this.load(response.tool.source);
+                this.load(response.source);
             }
         });
     };
