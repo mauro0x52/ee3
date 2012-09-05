@@ -101,8 +101,6 @@ var console = {
         var element = document.getElementById('console');
         if (element) {
             element.innerHTML = document.getElementById('console').innerHTML + data + '<br />';
-        } else {
-            alert(data);
         }
     },
 
