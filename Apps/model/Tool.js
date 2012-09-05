@@ -15,7 +15,7 @@ var config = require('../config.js'),
 toolSchema = new Schema({
     name      : {type : String, trim : true, required : true, unique : true},
     source    : {type : String, required : true},
-    slug    : {type : String, trim : true, unique : true},
+    slug      : {type : String, trim : true, unique : true},
     version   : {type : objectId}
 });
 
@@ -26,7 +26,7 @@ toolSchema = new Schema({
  *
  * @description : Minifica o código da ferramenta
  */
-toolSchema.methods.minify = function (cb) {
+toolSchema.methods.minify = function (app, version, cb) {
     "use strict";
 
     var fs = require('fs'),
@@ -37,9 +37,9 @@ toolSchema.methods.minify = function (cb) {
         fileData, source,
         tool = this;
 
-    appSlug = 'empresas';
-    appVersion = '0.1';
-    toolSlug = 'lista-de-empresas';
+    appSlug = app.slug;
+    appVersion = version.number;
+    toolSlug = this.slug;
 
     names = [];
     files = [];
@@ -50,24 +50,33 @@ toolSchema.methods.minify = function (cb) {
         files.push(path);
         return true;
     }, function () {
-        source = 'var app = function () { \n';
-        for (var i in names) {
-            source += names[i] + ' = function () {\n';
+        source = 'var app = { ';
+        for (var i = 0; i < names.length; i++) {
+            source += names[i].substring(0, names[i].length - 3) + ' : function () {';
+            if (names[i] === 'load.js' && config.host.debuglevel > 0) {
+                source += 'debugger;'
+            }
             source += fs.readFileSync(files[i], 'utf-8');
-            source += '}\n'
+            source += '}'
+            if (i !== names.length - 1) {
+                source += ',';
+            }
         }
         source += '}';
 
-        source = jsp.parse(source); // parse code and get the initial AST
-        //source = pro.ast_mangle(source); // get a new AST with mangled names
-        //source = pro.ast_squeeze(source); // get an AST with compression optimizations
-        source = pro.gen_code(source); // compressed code here
+        try {
+            source = jsp.parse(source); // parse code and get the initial AST
+            source = pro.gen_code(source); // compressed code here
 
-        tool.source = source;
+            tool.source = source;
 
-        tool.save(function (error) {
-            cb(error, this);
-        });
+            tool.save(function (error) {
+                cb(error, this);
+            });
+        }
+        catch (error) {
+            cb(error);
+        }
     });
 
 };

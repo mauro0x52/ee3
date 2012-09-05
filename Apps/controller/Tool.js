@@ -179,9 +179,9 @@ module.exports = function (app) {
                                         if (tool === null) {
                                             response.send({error : 'tool not found'});
                                         } else {
-                                            tool.minify(function (error) {
+                                            tool.minify(app, version, function (error) {
                                                 if (error) {
-                                                    response.send({error : 'tool construction error'});
+                                                    response.send({error : error});
                                                 } else {
                                                     response.send(tool);
                                                 }
