@@ -11,13 +11,9 @@
 #tool-name {
     color: #0C478A;
     font-family: Arial, Helvetica, sans-serif;
-    font-size: 16px;
+    font-size: 22px;
     width: 250px;
-    margin-top: 18px;
-}
-
-#tool-name h2 {
-    margin: 0;
+    margin: 18px 0 0 0;
 }
 
 /* -------------------------------------------------------------------------- */
@@ -261,6 +257,8 @@
     color: #666;
 }
 
+#tool-list-browse-results .no-selected:hover li .footer,
+#tool-list-browse-results li .footer,
 #tool-list-browse-results .no-selected:hover li .subtitle,
 #tool-list-browse-results li .subtitle {
     display: block;

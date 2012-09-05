@@ -367,6 +367,7 @@ sdk.modules.ui = function (app) {
             if (HTMLobject && element && element.event && element.callback) {
                 HTMLobject.addEventListener(element.event, function () {
                     element.callback.apply(app);
+                    return false;
                 }, true);
             }
         };
@@ -775,6 +776,7 @@ sdk.modules.ui = function (app) {
      */
     var Form = function (params) {
         var element = new Element(params.id, 'form'),
+            submitDiv = new Element(undefined, 'div'),
             submit = new Element(undefined, 'input'),
             cb;
 
@@ -787,6 +789,7 @@ sdk.modules.ui = function (app) {
         }
 
         /* Seta atributos do submit */
+        submitDiv.attributes.add({name : 'class', value : 'submit'});
         submit.attributes.add({name : 'type', value : 'submit'});
         element.events.add({event : 'submit', callback : function () {
             if (cb) {
@@ -841,7 +844,8 @@ sdk.modules.ui = function (app) {
 
         /* Seta valor da tag */
         this.fieldsets.add(params.fieldsets);
-        element.childs.add(submit);
+        element.childs.add(submitDiv);
+        submitDiv.childs.add(submit);
         this.submitLabel(params.submitLabel);
         this.submit(params.submit);
     };
@@ -1438,6 +1442,10 @@ sdk.modules.ui = function (app) {
                     }
                 };
 
+                for (var i = 0; i < params.radios.length; i++) {
+                    params.radios[i].name = params.name;
+                }
+
                 this.radios.add(params.radios);
                 break;
 
@@ -1482,7 +1490,8 @@ sdk.modules.ui = function (app) {
      *
      * @description : implementa uma opção do menu principal
      * @param id : id do objeto a ser criado
-     * @param src : url do icone
+     * @param image : classe do icone
+     * @param url : url do link
      * @param description : descrição do icone
      */
     var MenuOption = function (params) {
@@ -1494,6 +1503,7 @@ sdk.modules.ui = function (app) {
 
         element.childs.add(anchor);
         anchor.childs.add([icon, legend, arrow]);
+        anchor.attributes.add({name : 'href' , value : params.url});
 
         legend.attributes.add({name : 'class', value : 'legend'});
         icon.attributes.add({name : 'class', value : 'image'});
@@ -1720,7 +1730,8 @@ sdk.modules.ui = function (app) {
             results = new Element('tool-list-browse-results', 'div'),
             ol = new Element(undefined, 'ol'),
             countSpan = new Element(undefined, 'span'),
-            countLegend = new Element(undefined, 'span');
+            countLegend = new Element(undefined, 'span'),
+            total = 0;
 
         element.childs.add(div);
         div.childs.add([filter, browse]);
@@ -1741,8 +1752,8 @@ sdk.modules.ui = function (app) {
 
         /* Filtro dos resultados */
         this.filter = {
-            //get : filterForm.fieldsets.get()[0].inputs.get,
-            //remove : filterForm.fieldsets.get()[0].inputs.remove,
+            get : filterForm.fieldsets.get()[0].inputs.get,
+            remove : filterForm.fieldsets.get()[0].inputs.remove,
             add : function (obj) {
                 var i;
 
@@ -1767,8 +1778,9 @@ sdk.modules.ui = function (app) {
         this.browse = {
             get    : ol.childs.get,
             remove : function (ids) {
+                total-= ids.length;
                 ol.childs.remove(ids);
-                countSpan.value(browse.childs.get().length - 1 + " resultados encontrados");
+                countSpan.value(total + " resultados encontrados");
             },
             add    : function (obj) {
                 var i;
@@ -1779,8 +1791,9 @@ sdk.modules.ui = function (app) {
                             this.add(obj[i]);
                         }
                     } else {
+                        total++;
                         ol.childs.add(new browseOption(obj));
-                        countSpan.value(browse.childs.get().length - 1 + " resultados encontrados");
+                        countSpan.value(total + " resultados encontrados");
                     }
                 }
             }
@@ -1870,12 +1883,14 @@ sdk.modules.ui = function (app) {
     var section = new Element(undefined, 'section'),
         toolcontent = new Element('tool-content', 'div'),
         header = new Element(undefined, 'header'),
-        toolName = new Element('tool-header', 'h2');
+        toolHeader = new Element('tool-header', 'div'),
+        toolName = new Element('tool-name', 'h2');
 
     section.childs.add(toolcontent);
     toolcontent.childs.add([this.list, this.frame]);
 
-    header.childs.add(toolName);
+    header.childs.add(toolHeader);
+    toolHeader.childs.add(toolName);
 
     /* Montando interface */
     header.add(document.getElementById('tool'));

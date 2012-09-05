@@ -533,7 +533,7 @@ module.exports = function (app) {
                             if (!company.isOwner(user._id)) {
                                 response.send({error : 'permission denied'});
                             } else {
-                                company.thumbnail = undefined;
+                                company.thumbnail = null;
                                 company.save(function (error) {
                                     if (error) {
                                         response.send({error: error});

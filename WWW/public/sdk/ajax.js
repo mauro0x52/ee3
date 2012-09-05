@@ -43,7 +43,7 @@ sdk.modules.ajax = function (app) {
      *
      * @description : realiza chamada CORS
      */
-    call = function (cb) {
+    call = function (cb, JSON) {
         var invocation;
 
         try {
@@ -57,7 +57,11 @@ sdk.modules.ajax = function (app) {
                     if (app.cb) {
                         app.cb(invocation.responseText);
                     } else {
-                        cb.apply(app, [invocation.responseText]);
+                        if (JSON) {
+                            cb.apply(app, [eval(invocation.responseText)]);
+                        } else {
+                            cb.apply(app, [invocation.responseText]);
+                        }
                     }
                 };
                 invocation.onerror = function (error) {
@@ -86,6 +90,20 @@ sdk.modules.ajax = function (app) {
         caller.send();
     };
 
+    /** getJSON
+     *
+     * @autor : Rafael Erthal
+     * @since : 2012-08
+     *
+     * @description : realiza chamada CORS com método GET
+     */
+    this.getJSON = function (path, cb) {
+        var caller = call(cb, true);
+
+        caller.open('GET', path.url + "?" + parseQuery(path.data), true);
+        caller.send();
+    };
+
     /** post
      *
      * @autor : Rafael Erthal
@@ -95,6 +113,20 @@ sdk.modules.ajax = function (app) {
      */
     this.post = function (path, cb) {
         var caller = call(cb);
+
+        caller.open('POST', path.url + "?" + parseQuery(path.data), true);
+        caller.send();
+    };
+
+    /** postJSON
+     *
+     * @autor : Rafael Erthal
+     * @since : 2012-08
+     *
+     * @description : realiza chamada CORS com método POST
+     */
+    this.postJSON = function (path, cb) {
+        var caller = call(cb, true);
 
         caller.open('POST', path.url + "?" + parseQuery(path.data), true);
         caller.send();
@@ -114,6 +146,20 @@ sdk.modules.ajax = function (app) {
         caller.send();
     };
 
+    /** putJSON
+     *
+     * @autor : Rafael Erthal
+     * @since : 2012-08
+     *
+     * @description : realiza chamada CORS com método PUT
+     */
+    this.putJSON = function (path, cb) {
+        var caller = call(cb, true);
+
+        caller.open('PUT', path.url + "?" + parseQuery(path.data), true);
+        caller.send();
+    };
+
     /** del
      *
      * @autor : Rafael Erthal
@@ -123,6 +169,20 @@ sdk.modules.ajax = function (app) {
      */
     this.del = function (path, cb) {
         var caller = call(cb);
+
+        caller.open('DELETE', path.url + "?" + parseQuery(path.data), true);
+        caller.send();
+    };
+
+    /** delJSON
+     *
+     * @autor : Rafael Erthal
+     * @since : 2012-08
+     *
+     * @description : realiza chamada CORS com método DELETE
+     */
+    this.delJSON = function (path, cb) {
+        var caller = call(cb, true);
 
         caller.open('DELETE', path.url + "?" + parseQuery(path.data), true);
         caller.send();

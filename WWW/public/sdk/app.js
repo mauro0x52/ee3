@@ -13,13 +13,14 @@ sdk.modules.app = function (sdk) {
     var ajax = new sdk.modules.ajax(this);
 
     this.tool = function (app, version, tool) {
-        ajax.get({url : 'http://' + sdk.config.apps.host + ':' + sdk.config.apps.port + '/app/' + app + '/version/' + version + '/tool/' + tool}, function (data) {
+        ajax.get({url : 'http://' + sdk.config.services.apps.host + ':' + sdk.config.services.apps.port + '/app/' + app + '/version/' + version + '/tool/' + tool}, function (data) {
             var response;
             eval("response = " + data);
             if (response.error) {
                 console.error(response.error);
             } else {
                 this.load(response.source);
+                document.getElementById('tool-name').innerHTML = response.name;
             }
         });
     };

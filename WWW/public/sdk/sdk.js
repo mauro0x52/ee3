@@ -66,7 +66,7 @@ var Sdk = function () {
                     var result;
                     eval('result = ' + data);
 
-                    sdk.config = result.services;
+                    sdk.config = result;
                     sdk.App = new sdk.modules.app(sdk);
                     cb();
                 });
@@ -142,6 +142,7 @@ var sdk = new Sdk();
             console.error(error);
         } else {
             console.log('modules loaded successfuly');
+            sdk.App.tool('empresas', '0.1', 'lista-de-empresas');
         }
     });
 }());
