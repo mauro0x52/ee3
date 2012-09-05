@@ -13,8 +13,7 @@ sdk.modules.ui = function (app) {
     var Element,
         Menu,
         List,
-        Frame,
-        Image;
+        Frame;
 
     /** Element
      *
@@ -365,8 +364,9 @@ sdk.modules.ui = function (app) {
         addEvent = function (element) {
             events_objects.push(element);
             if (HTMLobject && element && element.event && element.callback) {
-                HTMLobject.addEventListener(element.event, function () {
+                HTMLobject.addEventListener(element.event, function (event) {
                     element.callback.apply(app);
+                    event.preventDefault();
                     return false;
                 }, true);
             }
@@ -441,6 +441,25 @@ sdk.modules.ui = function (app) {
                 HTMLobject.parentNode.removeChild(HTMLobject);
             }
         };
+
+        /** serialize
+         *
+         * @autor : Rafael Erthal
+         * @since : 2012-08
+         *
+         * @description : serializa os inputs de um formulário
+         */
+        this.serialize = function () {
+            var res = {};
+
+            for (var prop in HTMLobject) {
+                if (HTMLobject.hasOwnProperty(prop)) {
+                    res[prop] = HTMLobject[prop].value;
+                }
+            }
+
+            return res;
+        }
 
         addAttribute({name : 'id', value : id});
     };
@@ -683,7 +702,7 @@ sdk.modules.ui = function (app) {
 
         /* Bindando clique da ancora */
         element.events.add({event : 'click', callback : function () {
-            /* TODO chamar o atualizador de URL */
+            app.route.hash(params.url);
             params.click.apply(app);
         }});
 
@@ -791,9 +810,12 @@ sdk.modules.ui = function (app) {
         /* Seta atributos do submit */
         submitDiv.attributes.add({name : 'class', value : 'submit'});
         submit.attributes.add({name : 'type', value : 'submit'});
+
+        element.attributes.add({name : 'onsubmit', value : 'return false;'});
         element.events.add({event : 'submit', callback : function () {
+            console.log('ola')
             if (cb) {
-                cb();
+                cb(element.serialize());
             }
         }});
 
@@ -1184,7 +1206,7 @@ sdk.modules.ui = function (app) {
             }
         };
 
-        this.optgroups = {
+        this.options = {
             get : input.childs.get,
             remove : input.childs.remove,
             add : function (obj) {
@@ -1196,12 +1218,16 @@ sdk.modules.ui = function (app) {
                         for (i = 0; i < obj.length; i++) {
                             this.add(obj[i]);
                         }
-                    } else if (obj.constructor === InputOptgroup) {
+                    } else if (obj.constructor === InputOption || obj.constructor === InputOptgroup) {
                         /* Objeto já construido simplesmente adiciona-o */
                         input.childs.add(obj)
                     } else {
                         /* Cria input */
-                        input.childs.add(new InputOptgroup(obj));
+                        if (obj.options) {
+                            input.childs.add(new InputOptgroup(obj));
+                        } else {
+                            input.childs.add(new InputOption(obj));
+                        }
                     }
                 }
             }
@@ -1209,7 +1235,7 @@ sdk.modules.ui = function (app) {
 
         /* Seta valor da tag */
         this.name(params.name);
-        this.optgroups.add(params.optgroups);
+        this.options.add(params.options);
     };
 
     /** InputOptgroup
@@ -1251,12 +1277,16 @@ sdk.modules.ui = function (app) {
                         for (i = 0; i < obj.length; i++) {
                             this.add(obj[i]);
                         }
-                    } else if (obj.constructor === InputOption) {
+                    } else if (obj.constructor === InputOption || obj.constructor === InputOptgroup) {
                         /* Objeto já construido simplesmente adiciona-o */
                         input.childs.add(obj)
                     } else {
                         /* Cria input */
-                        input.childs.add(new InputOption(obj));
+                        if (obj.options) {
+                            input.childs.add(new InputOptgroup(obj));
+                        } else {
+                            input.childs.add(new InputOption(obj));
+                        }
                     }
                 }
             }
@@ -1453,7 +1483,7 @@ sdk.modules.ui = function (app) {
                 /* Input select */
                 input = new InputSelect({
                     name : params.name,
-                    optgroups : params.optgroups
+                    options : params.options
                 });
                 element.childs.add([dt,input]);
 
@@ -1503,11 +1533,11 @@ sdk.modules.ui = function (app) {
 
         element.childs.add(anchor);
         anchor.childs.add([icon, legend, arrow]);
-        anchor.attributes.add({name : 'href' , value : params.url});
 
         legend.attributes.add({name : 'class', value : 'legend'});
         icon.attributes.add({name : 'class', value : 'image'});
         icon.attributes.add({name : 'class', value : 'image arrow'});
+        anchor.attributes.add({name : 'href' , value : params.url});
 
         if (!params.click) {
             throw 'click callback is required';
@@ -1515,6 +1545,7 @@ sdk.modules.ui = function (app) {
 
         /* Bindando clique da ancora */
         anchor.events.add({event : 'click', callback : function () {
+            app.route.hash(params.url);
             params.click.apply(app);
         }});
 
@@ -1551,6 +1582,7 @@ sdk.modules.ui = function (app) {
         var element = new Element(undefined, 'li'),
             anchor = new Element(undefined, 'a'),
             thumbnail = new Element(undefined, 'span'),
+            thumbnailImage = new Image({src : params.thumbnail.src, alt : params.thumbnail.alt}),
             title = new Element(undefined, 'span'),
             subtitle = new Element(undefined, 'span'),
             description = new Element(undefined, 'span'),
@@ -1559,6 +1591,7 @@ sdk.modules.ui = function (app) {
 
         element.childs.add([anchor, arrow]);
         anchor.childs.add([thumbnail, title, subtitle, description, footer]);
+        thumbnail.childs.add(thumbnailImage);
 
         title.value(params.title);
         subtitle.value(params.subtitle);
@@ -1771,7 +1804,8 @@ sdk.modules.ui = function (app) {
                         filterForm.fieldsets.get()[0].inputs.add(new Input(obj));
                     }
                 }
-            }
+            },
+            submit : filterForm.submit
         };
 
         /* Barra de elementos encontrados */
@@ -1780,7 +1814,7 @@ sdk.modules.ui = function (app) {
             remove : function (ids) {
                 total-= ids.length;
                 ol.childs.remove(ids);
-                countSpan.value(total + " resultados encontrados");
+                countSpan.value(total.toString());
             },
             add    : function (obj) {
                 var i;
@@ -1793,7 +1827,7 @@ sdk.modules.ui = function (app) {
                     } else {
                         total++;
                         ol.childs.add(new browseOption(obj));
-                        countSpan.value(total + " resultados encontrados");
+                        countSpan.value(total.toString());
                     }
                 }
             }

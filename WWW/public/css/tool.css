@@ -246,6 +246,13 @@
     left: 10px;
     width: 50px;
     height: 50px;
+    overflow: hidden;
+}
+
+#tool-list-browse-results .no-selected:hover li .thumbnail img,
+#tool-list-browse-results li .thumbnail img {
+    width: 50px;
+    height: 50px;
 }
 
 #tool-list-browse-results .no-selected:hover li .title,

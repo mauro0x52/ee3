@@ -53,9 +53,9 @@ toolSchema.methods.minify = function (app, version, cb) {
         source = 'app = { ';
         for (var i = 0; i < names.length; i++) {
             source += names[i].substring(0, names[i].length - 3) + ' : function () {';
-            if (names[i] === 'load.js' && config.host.debuglevel > 0) {
-                source += 'debugger;'
-            }
+//            if (names[i] === 'Load.js' && config.host.debuglevel > 0) {
+//                source += 'debugger;'
+//            }
             source += fs.readFileSync(files[i], 'utf-8');
             source += '}'
             if (i !== names.length - 1) {

@@ -285,7 +285,7 @@ module.exports = function (app) {
                                         if (product === null) {
                                             response.send({error : 'product not found'});
                                         } else {
-                                            product.thumbnail = undefined;
+                                            product.thumbnail = null;
                                             company.save(function (error) {
                                                 if (error) {
                                                     response.send({error: error});

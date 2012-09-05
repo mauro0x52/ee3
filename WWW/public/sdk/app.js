@@ -19,13 +19,13 @@ sdk.modules.app = function (sdk) {
             if (response.error) {
                 console.error(response.error);
             } else {
-                this.load(response.source, response.name);
+                this.load(response.source, response.slug);
                 document.getElementById('tool-name').innerHTML = response.name;
             }
         });
     };
 
-    this.load = function (source, name) {
+    this.load = function (source, slug) {
         var document = undefined,
             window = undefined,
             navigator = undefined,
@@ -36,18 +36,19 @@ sdk.modules.app = function (sdk) {
             prompt = undefined,
             confirm = undefined,
             sdk = undefined,
+            header = undefined,
             app;
 
         console.spacer();
         console.log("Building app");
         eval(source);
-        app.name = name;
+        app.slug = slug;
         this.build(app);
         console.log("Loading app");
         try {
-            if (app.load) {
-                app.load();
-                app.route.hash("");
+            if (app.Load) {
+                app.Load();
+                //app.route.hash(" ");
             } else {
                 console.error('loader undefined');
             }

@@ -29,7 +29,8 @@ module.exports = function (app) {
         var plugin;
 
         response.contentType('json');
-        
+        response.header('Access-Control-Allow-Origin', '*');
+
         Sector.find({}, function (error, sectors) {
             if (error) {
                 response.send({error : error});
@@ -55,6 +56,7 @@ module.exports = function (app) {
      */
     app.get('/sector/:id', function (request,response) {
         response.contentType('json');
+        response.header('Access-Control-Allow-Origin', '*');
 
         Sector.findByIdentity(request.params.id, function (error, sector) {
             if (error) {

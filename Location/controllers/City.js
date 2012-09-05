@@ -33,6 +33,7 @@ module.exports = function (app) {
             limit, order, query, from;
 
         response.contentType('json');
+        response.header('Access-Control-Allow-Origin', '*');
 
         //Valida o slug do país
         Country.findByIdentity(request.params.slugCountry, function (error, country) {
@@ -111,6 +112,7 @@ module.exports = function (app) {
     	var filter;
 
         response.contentType('json');
+        response.header('Access-Control-Allow-Origin', '*');
 
         Country.findByIdentity(request.params.slugCountry, function (error, country) {
             if (error) {
@@ -146,7 +148,7 @@ module.exports = function (app) {
             }
         });
     });
-    
+
     /** GET /city/:idCity
      *
      * @autor : Lucas Kalado
@@ -165,7 +167,7 @@ module.exports = function (app) {
 
         response.contentType('json');
         response.header('Access-Control-Allow-Origin', '*');
-        
+
         City.findById(request.params.idCity, function (error, city) {
             if (error) {
                 response.send({error : error});
