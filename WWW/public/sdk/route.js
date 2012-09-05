@@ -43,7 +43,9 @@ sdk.modules.route = function (app) {
         if (value) {
             location.hash = '!/' + app.slug + '/' + value;
         } else {
-            return location.hash.replace(/\#\!\/[a-z,A-Z,0-9,\-]+\//, '').replace(/\?.+/, '').split('/');
+            var regex = /#!\/[a-z,0-9,-]+\/([a-z,0-9,\-,\/]+[a-z,0-9])/;
+            return regex.exec(location.hash)[1];
+            //return location.hash.replace(/\#\!\/[a-z,A-Z,0-9,\-]+\//, '').replace(/\?.+/, '').split('/');
         }
     };
 
@@ -57,10 +59,13 @@ sdk.modules.route = function (app) {
      */
     this.query = function (value) {
         if (value) {
-            this.path(this.path().join('/') + '?' + parseQuery(value));
+            this.path(this.path() + '?' + parseQuery(value));
         } else {
             var res = {};
-            location.hash.replace(/.+\?/, '').replace(new RegExp("([^?=&]+)(=([^&]*))?", "g"), function ($0, $1, $2, $3) {res[$1] = $3;});
+            location.hash.replace(/#!\/[a-z,0-9,-]+\/[a-z,0-9,\-,\/]+[a-z,0-9]\/?\??/, '')
+                .replace(new RegExp("([^?=&]+)(=([^&]*))?", "g"),
+                    function ($0, $1, $2, $3) {res[$1] = $3;}
+                );
             return res;
         }
     };
