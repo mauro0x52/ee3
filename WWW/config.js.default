@@ -1,18 +1,8 @@
 module.exports = {
     host : {
-        port : 38803,
+        port : 38880,
         url  : 'localhost',
         debuglevel : 1 // 0 sem erros, 1 com erros
-    },
-    files : {
-        folder : '/home/user/path/to/tools/'
-    },
-    mongodb : {
-        port : 27017,
-        url : 'localhost',
-        username : undefined,
-        password : undefined,
-        db : 'apps'
     },
     services : {
         auth : {
