@@ -1868,12 +1868,17 @@ sdk.modules.ui = function (app) {
 
     /* Elementos intermediários da interface */
     var section = new Element(undefined, 'section'),
-        toolcontent = new Element('tool-content', 'div');
+        toolcontent = new Element('tool-content', 'div'),
+        header = new Element(undefined, 'header'),
+        toolName = new Element('tool-header', 'h2');
 
     section.childs.add(toolcontent);
-    toolcontent.childs.add([this.list, this.frame])
+    toolcontent.childs.add([this.list, this.frame]);
+
+    header.childs.add(toolName);
 
     /* Montando interface */
+    header.add(document.getElementById('tool'));
     this.menu.add(document.getElementById('tool'));
     section.add(document.getElementById('tool'));
 };
