@@ -44,7 +44,7 @@ sdk.modules.route = function (app) {
             location.hash = '!/' + app.slug + '/' + value;
         } else {
             var regex = /#!\/[a-z,0-9,-]+\/([a-z,0-9,\-,\/]+[a-z,0-9])/;
-            return regex.exec(location.hash)[1];
+            return regex.exec(location.hash)[1].split('/');
             //return location.hash.replace(/\#\!\/[a-z,A-Z,0-9,\-]+\//, '').replace(/\?.+/, '').split('/');
         }
     };
@@ -59,7 +59,7 @@ sdk.modules.route = function (app) {
      */
     this.query = function (value) {
         if (value) {
-            this.path(this.path() + '?' + parseQuery(value));
+            this.path(this.path().join('/') + '?' + parseQuery(value));
         } else {
             var res = {};
             location.hash.replace(/#!\/[a-z,0-9,-]+\/[a-z,0-9,\-,\/]+[a-z,0-9]\/?\??/, '')
