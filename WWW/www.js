@@ -36,5 +36,11 @@ app.get('/ping', function (request, response) {
     response.send(true);
 });
 
+app.get('/config', function (request, response) {
+    "use strict";
+
+    response.send({services : config.services});
+});
+
 /*  Ativando o server */
 app.listen(config.host.port);

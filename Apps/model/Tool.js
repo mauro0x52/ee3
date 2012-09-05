@@ -50,7 +50,7 @@ toolSchema.methods.minify = function (app, version, cb) {
         files.push(path);
         return true;
     }, function () {
-        source = 'var app = { ';
+        source = 'app = { ';
         for (var i = 0; i < names.length; i++) {
             source += names[i].substring(0, names[i].length - 3) + ' : function () {';
             if (names[i] === 'load.js' && config.host.debuglevel > 0) {

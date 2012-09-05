@@ -1,1 +1,1 @@
-var b = 1;
+this.ui.menu.navigation.add()

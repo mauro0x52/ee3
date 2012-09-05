@@ -139,7 +139,7 @@ var sdk = new Sdk();
     "use strict";
 
     console.log('loading sdk modules');
-    sdk.loadModules(['/ajax.js', '/tracker.js', '/ui.js', '/app.js'], function (error) {
+    sdk.loadModules(['sdk/ajax.js', 'sdk/tracker.js', 'sdk/ui.js', 'sdk/app.js'], function (error) {
         if (error) {
             console.error(error);
         } else {

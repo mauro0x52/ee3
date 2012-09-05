@@ -34,7 +34,8 @@ sdk.modules.app = function (sdk) {
             alert = undefined,
             prompt = undefined,
             confirm = undefined,
-            sdk = undefined;
+            sdk = undefined,
+            app;
 
         console.spacer();
         console.log("Building app");
