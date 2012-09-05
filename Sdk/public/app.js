@@ -9,11 +9,11 @@
  */
 sdk.modules.app = function (sdk) {
     "use strict";
- 
+
     var ajax = new sdk.modules.ajax(this);
- 
+
     this.tool = function (app, version, tool) {
-        ajax.get({url : 'http://' + sdk.config.apps.host + ':' + sdk.config.apps.port + '/app/' + app + '/version/' + version + '/tool/' + tool}, function (data) {             
+        ajax.get({url : 'http://' + sdk.config.apps.host + ':' + sdk.config.apps.port + '/app/' + app + '/version/' + version + '/tool/' + tool}, function (data) {
             var response;
             eval("response = " + data);
             if (response.error && response.error !== '') {
@@ -34,12 +34,11 @@ sdk.modules.app = function (sdk) {
             alert = undefined,
             prompt = undefined,
             confirm = undefined,
-            sdk = undefined,
-            app;
+            sdk = undefined;
 
         console.spacer();
         console.log("Building app");
-        app = eval('({'+ source + '})');
+        eval(source);
         this.build(app);
         console.log("Loading app");
         try {
