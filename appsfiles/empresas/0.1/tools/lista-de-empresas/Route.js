@@ -1,7 +1,7 @@
-var route = this.route.path();
+this.route.fit('/', function (params, query) {
+    console.log('home');
+});
 
-console.log(route);
-
-if (!route || !route[0] || route[0] === 'buscar') {
-    this.Filter();
-}
+this.route.fit('/buscar', function (params, query) {
+    console.log('buscar');
+});

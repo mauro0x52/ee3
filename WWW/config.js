@@ -1,36 +1,36 @@
 module.exports = {
     host : {
         port : 38880,
-        url  : '192.168.0.98',
+        url  : 'localhost',
         debuglevel : 1 // 0 sem erros, 1 com erros
     },
     services : {
         auth : {
-            host : '192.168.0.98',
+            host : 'localhost',
             port : 38800
         },
         files : {
-            host : '192.168.0.98',
+            host : 'localhost',
             port : 38801
         },
         companies : {
-            host : '192.168.0.98',
+            host : 'localhost',
             port : 38802
         },
         apps : {
-            host : '192.168.0.98',
+            host : 'localhost',
             port : 38803
         },
         profiles : {
-            host : '192.168.0.98',
+            host : 'localhost',
             port : 38804
         },
         talk : {
-            host : '192.168.0.98',
+            host : 'localhost',
             port : 38805
         },
         location : {
-            host : '192.168.0.98',
+            host : 'localhost',
             port : 38806
         }
     },

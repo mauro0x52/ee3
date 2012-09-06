@@ -8,6 +8,57 @@
  * @description : implementa a biblioteca de rotas do navegador
  */
 sdk.modules.route = function (app) {
+    var routes = [];
+
+    /** match
+     *
+     * @autor : Rafael Erthal
+     * @since : 2012-08
+     *
+     * @description : verifica se a url bate com a mascara
+     * @param url : url a ser checada
+     * @param mask : mascara da url
+     */
+    var match = function (url, mask) {
+        var maskSlices = mask.split('/'),
+            urlSlices = url.split('/');
+
+        if (maskSlices.length === urlSlices) {
+            for (var i = 0; i < maskSlices.length ; i++) {
+                if (maskSlices[i] !== urlSlices[i] && maskSlices[i].substring(0, 1) !== ':') {
+                    return false;
+                }
+            }
+        } else {
+            return false;
+        }
+
+        return true;
+    };
+
+    /** params
+     *
+     * @autor : Rafael Erthal
+     * @since : 2012-08
+     *
+     * @description : pega os parâmetros de uma mascara na url
+     * @param url : url a ser checada
+     * @param mask : mascara da url
+     */
+    var params = function (url, mask) {
+        var maskSlices = mask.split('/'),
+            urlSlices = url.split('/'),
+            params = {};
+
+        for (var i = 0; i < maskSlices.length ; i++) {
+            if (maskSlices[i].substring(0, 1) === ':') {
+                params[maskSlices[i].substring(0, 1)] = urlSlices[i]
+            }
+        }
+
+        return params;
+    };
+
     /** parseQuery
      *
      * @autor : Rafael Erthal
@@ -39,7 +90,7 @@ sdk.modules.route = function (app) {
      * @description : seta ou retorna a parte da url após o #!/app-name/*
      * @param value : valor a ser setado
      */
-    this.path = function (value) {
+    var path = function (value) {
         if (value) {
             location.hash = '!/' + app.slug + '/' + value;
         } else {
@@ -49,7 +100,7 @@ sdk.modules.route = function (app) {
         }
     };
 
-    /** path
+    /** query
      *
      * @autor : Rafael Erthal
      * @since : 2012-08
@@ -57,7 +108,7 @@ sdk.modules.route = function (app) {
      * @description : seta ou retorna a parte da url após o #!/app-name/*
      * @param value : valor a ser setado
      */
-    this.query = function (value) {
+    var query = function (value) {
         if (value) {
             this.path(this.path().join('/') + '?' + parseQuery(value));
         } else {
@@ -68,5 +119,35 @@ sdk.modules.route = function (app) {
                 );
             return res;
         }
+    };
+
+    /** find
+     *
+     * @autor : Rafael Erthal
+     * @since : 2012-08
+     *
+     * @description : busca a rota que bata com a url atual
+     */
+    var find = function () {
+        var url = path();
+        for (var i = 0; i < routes.length; i++) {
+            if (match(url, routes[i].route)) {
+                routes[i].callback.apply(app, [params(url, routes[i].route), query]);
+            }
+        }
+    };
+
+    /** fit
+     *
+     * @autor : Rafael Erthal
+     * @since : 2012-09
+     *
+     * @description : coloca na pilha uma rota com url e callback
+     * @param route : rota a ser colocada
+     * @param callback : função a ser chamada caso a url bata
+     */
+    this.fit = function (route, callback) {
+        routes.push({route : route, callback : callback});
+        find();
     };
 };
