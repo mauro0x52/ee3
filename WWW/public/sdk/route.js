@@ -52,7 +52,7 @@ sdk.modules.route = function (app) {
 
         for (var i = 0; i < maskSlices.length ; i++) {
             if (maskSlices[i].substring(0, 1) === ':') {
-                params[maskSlices[i].substring(0, 1)] = urlSlices[i]
+                params[maskSlices[i].substring(1)] = urlSlices[i]
             }
         }
 
@@ -95,7 +95,7 @@ sdk.modules.route = function (app) {
             location.hash = '!/' + app.slug + '/' + value;
         } else {
             var regex = /#!\/[a-z,0-9,-]+\/([a-z,0-9,\-,\/]+[a-z,0-9])/;
-            return regex.exec(location.hash)[1].split('/');
+            return regex.exec(location.hash)[1];
             //return location.hash.replace(/\#\!\/[a-z,A-Z,0-9,\-]+\//, '').replace(/\?.+/, '').split('/');
         }
     };
@@ -110,7 +110,7 @@ sdk.modules.route = function (app) {
      */
     var query = function (value) {
         if (value) {
-            this.path(this.path().join('/') + '?' + parseQuery(value));
+            this.path(path() + '?' + parseQuery(value));
         } else {
             var res = {};
             location.hash.replace(/#!\/[a-z,0-9,-]+\/[a-z,0-9,\-,\/]+[a-z,0-9]\/?\??/, '')
@@ -118,22 +118,6 @@ sdk.modules.route = function (app) {
                     function ($0, $1, $2, $3) {res[$1] = $3;}
                 );
             return res;
-        }
-    };
-
-    /** find
-     *
-     * @autor : Rafael Erthal
-     * @since : 2012-08
-     *
-     * @description : busca a rota que bata com a url atual
-     */
-    var find = function () {
-        var url = path();
-        for (var i = 0; i < routes.length; i++) {
-            if (match(url, routes[i].route)) {
-                routes[i].callback.apply(app, [params(url, routes[i].route), query]);
-            }
         }
     };
 
@@ -147,7 +131,33 @@ sdk.modules.route = function (app) {
      * @param callback : função a ser chamada caso a url bata
      */
     this.fit = function (route, callback) {
+        var url = path();
+
         routes.push({route : route, callback : callback});
-        find();
+        if (match(url, route)) {
+            callback.apply(app, [params(url, route), query]);
+        }
+    };
+
+    /** go
+     *
+     * @autor : Rafael Erthal
+     * @since : 2012-09
+     *
+     * @description : go
+     * @param route : rota a ser colocada
+     * @param data : dados a serem postos na query string
+     */
+    this.go = function (url, data) {
+        path(url);
+        query(data);
+
+        for (var i = 0; i < routes.length; i++) {
+            if (match(url, routes[i].route)) {
+                return routes[i].callback.apply(app, [params(url, routes[i].route), query]);
+            }
+        }
+
+        throw 'not found';
     };
 };
