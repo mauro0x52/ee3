@@ -29,11 +29,12 @@ module.exports = function (app) {
     */
     app.get('/regions', function (request, response) {
         response.contentType('json');
+        response.header('Access-Control-Allow-Origin', '*');
 
         var limit, order, findRegion;
 
         findRegion = Region.find();
-        
+
         limit = request.param('limit');
         findRegion.limit(limit);
 
@@ -74,6 +75,7 @@ module.exports = function (app) {
     */
     app.get('/region/:slug', function (request, response) {
         response.contentType('json');
+        response.header('Access-Control-Allow-Origin', '*');
 
         //Localiza a região informada através do Slug
         Region.findByIdentity(request.params.slug, function (error, region) {
@@ -108,6 +110,7 @@ module.exports = function (app) {
             limit, order, query, from;
 
         response.contentType('json');
+        response.header('Access-Control-Allow-Origin', '*');
 
         //Localiza a Região pelo nome
         Region.findByIdentity(request.params.slugRegion, function (error, region) {
@@ -172,6 +175,7 @@ module.exports = function (app) {
             limit, order, query, from;
 
         response.contentType('json');
+        response.header('Access-Control-Allow-Origin', '*');
 
         //Localiza a Região pelo nome
         Region.findByIdentity(request.params.slugRegion, function (error, region) {
@@ -236,6 +240,7 @@ module.exports = function (app) {
             limit, order, query, from;
 
         response.contentType('json');
+        response.header('Access-Control-Allow-Origin', '*');
 
         //Localiza a Região pelo nome
         Region.findByIdentity(request.params.slugRegion, function (error, region) {

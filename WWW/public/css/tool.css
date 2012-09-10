@@ -382,6 +382,10 @@
     margin-bottom: 20px;
     margin-top: -10px;
 }
+#tool-frame-view-header-thumbnail img  {
+    width: 120px;
+    height: 120px;
+}
 
 #tool-frame-view-header-title  {
     font-family: Arial, Helvetica, sans-serif;

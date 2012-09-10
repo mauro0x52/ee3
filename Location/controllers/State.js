@@ -27,6 +27,7 @@ module.exports = function (app) {
      */
     app.get('/country/:slug/states', function (request, response) {
         response.contentType('json');
+        response.header('Access-Control-Allow-Origin', '*');
         var filter = {},
             limit, order, query, from;
 
@@ -94,6 +95,7 @@ module.exports = function (app) {
         var filter;
 
         response.contentType('json');
+        response.header('Access-Control-Allow-Origin', '*');
 
         //Localiza o País enviado por slug
         Country.findByIdentity(request.params.slugCountry, function (error, country) {

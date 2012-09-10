@@ -62,7 +62,6 @@ sdk.modules.ui = function (app) {
             get : function (ids) {
                 var i,
                     res;
-
                 if (ids === undefined) {
                     res = childs_objects;
                 } else if (ids.constructor === Array) {
@@ -72,7 +71,7 @@ sdk.modules.ui = function (app) {
                     }
                 } else if (ids.constructor === String) {
                     for (i = 0; i < childs_objects.length; i = i + 1) {
-                        if (childs_objects[i].id === ids) {
+                        if (childs_objects[i].getID() === ids) {
                             res = childs_objects[i];
                         }
                     }
@@ -411,7 +410,11 @@ sdk.modules.ui = function (app) {
                     HTMLobject.innerHTML = value;
                 }
             } else {
-                return HTMLobject.innerHTML;
+                if (type === 'select') {
+                    return HTMLobject.options[HTMLobject.selectedIndex].value;
+                } else {
+                    return HTMLobject.innerHTML;
+                }
             }
         };
 
@@ -461,6 +464,17 @@ sdk.modules.ui = function (app) {
             return res;
         }
 
+        /** getId
+         *
+         * @autor : Rafael Erthal
+         * @since : 2012-08
+         *
+         * @description : retorna id do objeto
+         */
+        this.getID = function () {
+            return id;
+        }
+
         addAttribute({name : 'id', value : id});
     };
 
@@ -477,17 +491,10 @@ sdk.modules.ui = function (app) {
     var Image = function (params) {
         var element = new Element(params.id, 'img');
 
-        if (!params.src) {
-            throw 'image source is required';
-        }
-
-        if (!params.alt) {
-            throw 'alt is required';
-        }
-
         /* Publicando métodos privados */
         this.add = element.add;
         this.remove = element.remove;
+        this.getID = element.getID;
         this.src = function (value) {
             if (value) {
                 element.attributes.remove('src');
@@ -530,6 +537,7 @@ sdk.modules.ui = function (app) {
         element.value(params.value);
 
         /* Publicando métodos privados */
+        this.getID = element.getID;
         this.add = element.add;
         this.remove = element.remove;
         this.value = element.value;
@@ -551,6 +559,7 @@ sdk.modules.ui = function (app) {
         element.value(params.value);
 
         /* Publicando métodos privados */
+        this.getID = element.getID;
         this.add = element.add;
         this.remove = element.remove;
         this.value = element.value;
@@ -572,6 +581,7 @@ sdk.modules.ui = function (app) {
         element.value(params.value);
 
         /* Publicando métodos privados */
+        this.getID = element.getID;
         this.add = element.add;
         this.remove = element.remove;
         this.value = element.value;
@@ -590,6 +600,7 @@ sdk.modules.ui = function (app) {
         var element = new Element(params.id, 'p');
 
         /* Publicando métodos privados */
+        this.getID = element.getID;
         this.add = element.add;
         this.remove = element.remove;
 
@@ -677,6 +688,7 @@ sdk.modules.ui = function (app) {
         this.add = element.add;
         this.remove = element.remove;
         this.value = element.value;
+        this.getID = element.getID;
     };
 
     /** Achor
@@ -691,7 +703,8 @@ sdk.modules.ui = function (app) {
      * @param click : callback a ser chamado após click
      */
     var Anchor = function (params) {
-        var element = new Element(params.id, 'a');
+        var element = new Element(params.id, 'a'),
+            clickCallback = params.click;
 
         if (!params.click) {
             throw 'click callback is required';
@@ -702,14 +715,24 @@ sdk.modules.ui = function (app) {
 
         /* Bindando clique da ancora */
         element.events.add({event : 'click', callback : function () {
-            app.route.hash(params.url);
-            params.click.apply(app);
+            app.route.path(params.url);
+            if (clickCallback) {
+                clickCallback.apply(app);
+            }
         }});
 
         /* Publicando métodos privados */
         this.add = element.add;
         this.remove = element.remove;
         this.value = element.value;
+        this.getID = element.getID;
+        this.click = function (cb) {
+            if (cb) {
+                clickCallback = cb;
+            } else {
+                return clickCallback;
+            }
+        }
     };
 
     /** Div
@@ -727,6 +750,7 @@ sdk.modules.ui = function (app) {
         /* Publicando métodos privados */
         this.add = element.add;
         this.remove = element.remove;
+        this.getID = element.getID;
 
         /* Controle de conteudo do div */
         this.content = {
@@ -797,7 +821,7 @@ sdk.modules.ui = function (app) {
         var element = new Element(params.id, 'form'),
             submitDiv = new Element(undefined, 'div'),
             submit = new Element(undefined, 'input'),
-            cb;
+            submitCallback = params.submit;
 
         if (!params.submitLabel) {
             throw 'submitLabel is required';
@@ -813,15 +837,15 @@ sdk.modules.ui = function (app) {
 
         element.attributes.add({name : 'onsubmit', value : 'return false;'});
         element.events.add({event : 'submit', callback : function () {
-            console.log('ola')
-            if (cb) {
-                cb(element.serialize());
+            if (submitCallback) {
+                submitCallback.apply(app, [element.serialize()]);
             }
         }});
 
         /* Publicando métodos privados */
         this.add = element.add;
         this.remove = element.remove;
+        this.getID = element.getID;
 
         /* Controle dos fieldsets do form */
         this.fieldsets = {
@@ -858,9 +882,9 @@ sdk.modules.ui = function (app) {
         };
         this.submit = function (value) {
             if (value) {
-                cb = value;
+                submitCallback = value;
             } else {
-                return cb;
+                return submitCallback;
             }
         };
 
@@ -869,7 +893,6 @@ sdk.modules.ui = function (app) {
         element.childs.add(submitDiv);
         submitDiv.childs.add(submit);
         this.submitLabel(params.submitLabel);
-        this.submit(params.submit);
     };
 
     /** Fieldset
@@ -891,6 +914,7 @@ sdk.modules.ui = function (app) {
         this.add = element.add;
         this.remove = element.remove;
         this.legend = legend.value;
+        this.getID = element.getID;
 
         /* Controle dos inputs do fieldset */
         this.inputs = {
@@ -932,13 +956,20 @@ sdk.modules.ui = function (app) {
      */
     var InputText = function (params) {
         var input = new Element('form-' + params.name, 'input'),
-            dd = new Element(undefined, 'dd');
+            dd = new Element(undefined, 'dd'),
+            change;
 
         dd.childs.add(input);
+        input.events.add({event : 'change', callback : function () {
+            if (change) {
+                change.apply(app);
+            }
+        }});
 
         /* Publicando métodos privados */
         this.add = dd.add;
         this.remove = dd.remove;
+        this.getID = input.getID;
         this.name = function (value) {
             if (value) {
                 /* Seta o atributo name */
@@ -965,9 +996,18 @@ sdk.modules.ui = function (app) {
             }
         };
 
+        this.change = function (cb) {
+            if (cb) {
+                change = cb;
+            } else {
+                return change;
+            }
+        }
+
         /* Seta valor da tag */
         this.name(params.name);
         this.value(params.value);
+        this.change(params.change);
         input.attributes.add({name : 'type', value : 'text'});
     };
 
@@ -982,13 +1022,20 @@ sdk.modules.ui = function (app) {
      */
     var InputTextArea = function (params) {
         var input = new Element('form-' + params.name, 'textarea'),
-            dd = new Element(undefined, 'dd');
+            dd = new Element(undefined, 'dd'),
+            change;
 
         dd.childs.add(input);
+        input.events.add({event : 'change', callback : function () {
+            if (change) {
+                change.apply(app);
+            }
+        }});
 
         /* Publicando métodos privados */
         this.add = dd.add;
         this.remove = dd.remove;
+        this.getID = input.getID;
         this.name = function (value) {
             if (value) {
                 /* Seta o atributo name */
@@ -1006,9 +1053,18 @@ sdk.modules.ui = function (app) {
 
         this.value = input.value;
 
+        this.change = function (cb) {
+            if (cb) {
+                change = cb;
+            } else {
+                return change;
+            }
+        }
+
         /* Seta valor da tag */
         this.name(params.name);
         this.value(params.value);
+        this.change(params.change);
     };
 
     /** InputPassword
@@ -1022,13 +1078,20 @@ sdk.modules.ui = function (app) {
      */
     var InputPassword = function (params) {
         var input = new Element('form-' + params.name, 'input'),
-            dd = new Element(undefined, 'dd');
+            dd = new Element(undefined, 'dd'),
+            change;
 
         dd.childs.add(input);
+        input.events.add({event : 'change', callback : function () {
+            if (change) {
+                change.apply(app);
+            }
+        }});
 
         /* Publicando métodos privados */
         this.add = dd.add;
         this.remove = dd.remove;
+        this.getID = input.getID;
         this.name = function (value) {
             if (value) {
                 /* Seta o atributo name */
@@ -1055,9 +1118,18 @@ sdk.modules.ui = function (app) {
             }
         };
 
+        this.change = function (cb) {
+            if (cb) {
+                change = cb;
+            } else {
+                return change;
+            }
+        }
+
         /* Seta valor da tag */
         this.name(params.name);
         this.value(params.value);
+        this.change(params.change);
         input.attributes.add({name : 'type', value : 'password'});
     };
 
@@ -1073,13 +1145,20 @@ sdk.modules.ui = function (app) {
     var InputCheckbox = function (params) {
         var input = new Element('form-' + params.name, 'input'),
             label = new Element(undefined, 'label'),
-            dd = new Element(undefined, 'dd');
+            dd = new Element(undefined, 'dd'),
+            change;
 
         dd.childs.add([input, label]);
+        input.events.add({event : 'change', callback : function () {
+            if (change) {
+                change.apply(app);
+            }
+        }});
 
         /* Publicando métodos privados */
         this.add = dd.add;
         this.remove = dd.remove;
+        this.getID = input.getID;
         this.name = function (value) {
             if (value) {
                 /* Seta o atributo name */
@@ -1097,6 +1176,7 @@ sdk.modules.ui = function (app) {
                 }
             }
         };
+
         this.value = function (value) {
             if (value) {
                 input.attributes.remove('value');
@@ -1107,12 +1187,21 @@ sdk.modules.ui = function (app) {
                 }
             }
         };
+
+        this.change = function (cb) {
+            if (cb) {
+                change = cb;
+            } else {
+                return change;
+            }
+        }
         this.label = label.value
 
         /* Seta valor da tag */
         this.name(params.name);
         this.label(params.label);
         this.value(params.value);
+        this.change(params.change);
         input.attributes.add({name : 'type', value : 'checkbox'});
         label.attributes.add({name : 'for', value : 'form-' + params.name})
     };
@@ -1129,13 +1218,20 @@ sdk.modules.ui = function (app) {
     var InputRadio = function (params) {
         var input = new Element('form-' + params.name, 'input'),
             label = new Element(undefined, 'label'),
-            dd = new Element(undefined, 'dd');
+            dd = new Element(undefined, 'dd'),
+            change;
 
         dd.childs.add([input, label]);
+        input.events.add({event : 'change', callback : function () {
+            if (change) {
+                change.apply(app);
+            }
+        }});
 
         /* Publicando métodos privados */
         this.add = dd.add;
         this.remove = dd.remove;
+        this.getID = input.getID;
         this.name = function (value) {
             if (value) {
                 /* Seta o atributo name */
@@ -1164,12 +1260,21 @@ sdk.modules.ui = function (app) {
             }
         };
 
+        this.change = function (cb) {
+            if (cb) {
+                change = cb;
+            } else {
+                return change;
+            }
+        }
+
         this.label = label.value;
 
         /* Seta valor da tag */
         this.name(params.name);
         this.label(params.label);
         this.value(params.value);
+        this.change(params.change);
         input.attributes.add({name : 'type', value : 'radio'});
     };
 
@@ -1184,13 +1289,20 @@ sdk.modules.ui = function (app) {
      */
     var InputSelect = function (params) {
         var input = new Element('form-' + params.name, 'select'),
-            dd = new Element(undefined, 'dd');
+            dd = new Element(undefined, 'dd'),
+            change;
 
         dd.childs.add(input);
+        input.events.add({event : 'change', callback : function () {
+            if (change) {
+                change.apply(app, [input.value()]);
+            }
+        }});
 
         /* Publicando métodos privados */
         this.add = dd.add;
         this.remove = dd.remove;
+        this.getID = input.getID;
         this.name = function (value) {
             if (value) {
                 /* Seta o atributo name */
@@ -1233,9 +1345,18 @@ sdk.modules.ui = function (app) {
             }
         };
 
+        this.change = function (cb) {
+            if (cb) {
+                change = cb;
+            } else {
+                return change;
+            }
+        }
+
         /* Seta valor da tag */
         this.name(params.name);
         this.options.add(params.options);
+        this.change(params.change);
     };
 
     /** InputOptgroup
@@ -1253,6 +1374,7 @@ sdk.modules.ui = function (app) {
         /* Publicando métodos privados */
         this.add = input.add;
         this.remove = input.remove;
+        this.getID = input.getID;
         this.label = function (value) {
             if (value) {
                 /* Seta o atributo name */
@@ -1309,10 +1431,15 @@ sdk.modules.ui = function (app) {
     var InputOption = function (params) {
         var input = new Element('form-' + params.name, 'option');
 
+        if (params.selected) {
+            input.attributes.add({name : 'selected', value : 'selected'});
+        }
+
         /* Publicando métodos privados */
         this.add = input.add;
         this.remove = input.remove;
         this.label = input.value;
+        this.getID = input.getID;
         this.value = function (value) {
             if (value) {
                 input.attributes.remove('value');
@@ -1326,7 +1453,7 @@ sdk.modules.ui = function (app) {
 
         /* Seta valor da tag */
         this.label(params.label);
-        this.value(params.value);
+        this.value(params.value || 'undefined');
     };
 
     /** Input
@@ -1338,7 +1465,7 @@ sdk.modules.ui = function (app) {
      * @param id : id do objeto a ser criado
      */
     var Input = function (params) {
-        var element = new Element(undefined, 'dl'),
+        var element = new Element(params.id, 'dl'),
             dt = new Element(undefined, 'dt'),
             label = new Element(undefined, 'label'),
             input;
@@ -1351,7 +1478,8 @@ sdk.modules.ui = function (app) {
                 /* Input text */
                 input = new InputText({
                     name : params.name,
-                    value : params.value
+                    value : params.value,
+                    change : params.change
                 });
                 element.childs.add([dt,input]);
 
@@ -1367,13 +1495,16 @@ sdk.modules.ui = function (app) {
                 };
                 this.value = input.value;
                 this.name(params.name);
+                this.getID = input.getID;
+                this.change = input.change;
                 break;
 
             case 'textarea' :
                 /* Input text */
                 input = new InputTextArea({
                     name : params.name,
-                    value : params.value
+                    value : params.value,
+                    change : params.change
                 });
                 element.childs.add([dt,input]);
 
@@ -1389,13 +1520,16 @@ sdk.modules.ui = function (app) {
                 };
                 this.value = input.value;
                 this.name(params.name);
+                this.getID = input.getID;
+                this.change = input.change;
                 break;
 
             case 'password':
                 /* Input password */
                 input = new InputPassword({
                     name : params.name,
-                    value : params.value
+                    value : params.value,
+                    change : params.change
                 });
                 element.childs.add([dt,input]);
 
@@ -1411,6 +1545,8 @@ sdk.modules.ui = function (app) {
                 };
                 this.value = input.value;
                 this.name(params.name);
+                this.getID = input.getID;
+                this.change = input.change;
                 break;
 
             case 'checkbox' :
@@ -1483,7 +1619,8 @@ sdk.modules.ui = function (app) {
                 /* Input select */
                 input = new InputSelect({
                     name : params.name,
-                    options : params.options
+                    options : params.options,
+                    change : params.change
                 });
                 element.childs.add([dt,input]);
 
@@ -1499,6 +1636,8 @@ sdk.modules.ui = function (app) {
                 };
                 this.optgroups = input.optgroups;
                 this.name(params.name);
+                this.getID = input.getID;
+                this.change = input.change;
                 break;
 
             default :
@@ -1529,7 +1668,8 @@ sdk.modules.ui = function (app) {
             anchor = new Element(undefined, 'a'),
             icon = new Element(undefined, 'span'),
             legend = new Element(undefined, 'span'),
-            arrow = new Div({});
+            arrow = new Div({}),
+            clickCallback = params.click;
 
         element.childs.add(anchor);
         anchor.childs.add([icon, legend, arrow]);
@@ -1545,8 +1685,8 @@ sdk.modules.ui = function (app) {
 
         /* Bindando clique da ancora */
         anchor.events.add({event : 'click', callback : function () {
-            app.route.hash(params.url);
-            params.click.apply(app);
+            app.route.path(params.url);
+            clickCallback.apply(app);
         }});
 
         /* Publicando métodos privados */
@@ -1565,6 +1705,13 @@ sdk.modules.ui = function (app) {
         }
         this.image(params.image);
         this.description(params.description);
+        this.click = function (cb) {
+            if (cb) {
+                clickCallback = cb;
+            } else {
+                return cb;
+            }
+        };
     };
 
     /** BrowseOption
@@ -1579,7 +1726,7 @@ sdk.modules.ui = function (app) {
      * @param description : descrição do item
      */
     var browseOption = function (params) {
-        var element = new Element(undefined, 'li'),
+        var element = new Element(params.id, 'li'),
             anchor = new Element(undefined, 'a'),
             thumbnail = new Element(undefined, 'span'),
             thumbnailImage = new Image({src : params.thumbnail.src, alt : params.thumbnail.alt}),
@@ -1587,7 +1734,8 @@ sdk.modules.ui = function (app) {
             subtitle = new Element(undefined, 'span'),
             description = new Element(undefined, 'span'),
             footer = new Element(undefined, 'span'),
-            arrow = new Element(undefined, 'div');
+            arrow = new Element(undefined, 'div'),
+            clickCallback = params.click;
 
         element.childs.add([anchor, arrow]);
         anchor.childs.add([thumbnail, title, subtitle, description, footer]);
@@ -1611,7 +1759,7 @@ sdk.modules.ui = function (app) {
 
         /* Bindando clique da ancora */
         anchor.events.add({event : 'click', callback : function () {
-            params.click.apply(app);
+            clickCallback.apply(app);
         }});
 
         /* Publicando métodos privados */
@@ -1621,6 +1769,13 @@ sdk.modules.ui = function (app) {
         this.subtitle = subtitle.value;
         this.description = description.value;
         this.footer = footer.value;
+        this.click = function (cb) {
+            if (cb) {
+                clickCallback = cb;
+            } else {
+                return cb;
+            }
+        };
     };
 
     /** TabOption
@@ -1634,31 +1789,30 @@ sdk.modules.ui = function (app) {
      * @param description : descrição do item
      * @param value : valor que aparece na aba
      */
-    var tabOption = function (params, contentContainer) {
-        var element = new Element(undefined, 'li'),
-            anchor = new Element(undefined, 'a')
+    var tabOption = function (params) {
+        var element = new Element(params.id, 'li'),
+            anchor = new Element(undefined, 'a'),
+            clickCallback = params.click;
 
         element.childs.add(anchor);
         anchor.value(params.description);
 
         /* Bindando clique da aba para exibir conteudo */
         anchor.events.add({event : 'click', callback : function () {
-            contentContainer.value(' ');
-            if (params.value) {
-                if (params.value.constructor === Div) {
-                    contentContainer.childs.add(params.value);
-                } else {
-                    contentContainer.childs.add(new Div({
-                        content : params.value
-                    }));
-                }
-            }
+            clickCallback.apply(app);
         }});
 
         /* Publicando métodos privados */
         this.add = element.add;
         this.remove = element.remove;
         this.description = anchor.value;
+        this.click = function (cb) {
+            if (cb) {
+                clickCallback = cb;
+            } else {
+                return cb;
+            }
+        };
     };
 
     /** Menu
@@ -1812,7 +1966,11 @@ sdk.modules.ui = function (app) {
         this.browse = {
             get    : ol.childs.get,
             remove : function (ids) {
-                total-= ids.length;
+                if (ids) {
+                    total-= ids.length;
+                } else {
+                    total = 0;
+                }
                 ol.childs.remove(ids);
                 countSpan.value(total.toString());
             },
@@ -1849,6 +2007,7 @@ sdk.modules.ui = function (app) {
             header = new Element(undefined, 'header'),
             headerDiv = new Element('tool-frame-view-header', 'div'),
             thumbnail = new Element('tool-frame-view-header-thumbnail', 'div'),
+            thumbnailImg = new Image({}),
             title = new Heading({type : '3', id : 'tool-frame-view-header-title'}),
             subtitle = new Heading({type : '3', id : 'tool-frame-view-header-subtitle'}),
             actions = new Element('tool-frame-view-header-actions', 'menu'),
@@ -1865,6 +2024,7 @@ sdk.modules.ui = function (app) {
         view.childs.add([header, tabs, content]);
         header.childs.add([headerDiv, headerSpacer]);
         headerDiv.childs.add([thumbnail, title, subtitle, actions]);
+        thumbnail.childs.add(thumbnailImg);
         tabs.childs.add([tabsMenu, tabsSpacer]);
         content.childs.add(contentDiv);
 
@@ -1876,9 +2036,13 @@ sdk.modules.ui = function (app) {
         this.remove = element.remove;
 
         /* Cabeçalho do frame */
-        this.head = {
+        this.header = {
             title    : title.value,
-            subtitle : subtitle.value
+            subtitle : subtitle.value,
+            thumbnail : {
+                src : thumbnailImg.src,
+                alt : thumbnailImg.alt
+            }
         };
         /* Abas */
         this.tabs = {
@@ -1888,9 +2052,10 @@ sdk.modules.ui = function (app) {
                 tabsMenu.childs.remove()
             },
             add : function (params) {
-                tabsMenu.childs.add(new tabOption(params, contentDiv));
+                tabsMenu.childs.add(new tabOption(params));
             }
         };
+        this.content = contentDiv.childs;
     };
 
     /* Montando o namespace da UI */

@@ -27,9 +27,9 @@ sdk.modules.ajax = function (app) {
         for (key in obj) {
             if (obj.hasOwnProperty(key)) {
                 if (typeof obj[key] !== 'object') {
-                    query_string += (label ? label + "." : "") + escape(key) + '=' + escape(obj[key]) + '&';
+                    query_string += (label ? label + "[" + escape(key) + "]" : escape(key)) + '=' + escape(obj[key]) + '&';
                 } else {
-                    query_string += parseQuery(obj[key], (label ? label + "." : "") + key) + '&';
+                    query_string += parseQuery(obj[key], (label ? label + "[" + key + "]" : key)) + '&';
                 }
             }
         }
@@ -58,7 +58,7 @@ sdk.modules.ajax = function (app) {
                         app.cb(invocation.responseText);
                     } else {
                         if (JSON) {
-                            cb.apply(app, [eval(invocation.responseText)]);
+                            cb.apply(app, [eval("(" + invocation.responseText + ")")]);
                         } else {
                             cb.apply(app, [invocation.responseText]);
                         }

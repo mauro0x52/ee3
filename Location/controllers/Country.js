@@ -27,6 +27,7 @@ module.exports = function (app) {
     */
     app.get('/countries', function (request, response) {
         response.contentType('json');
+        response.header('Access-Control-Allow-Origin', '*');
         var limit, order, query, from;
 
         //Cria o objeto query
@@ -78,6 +79,7 @@ module.exports = function (app) {
      */
     app.get('/country/:slug', function (request, response) {
         response.contentType('json');
+        response.header('Access-Control-Allow-Origin', '*');
 
         //Localiza o País desejado e retorna os dados informados
         Country.findByIdentity(request.params.slug, function (error, country) {
