@@ -125,6 +125,44 @@ module.exports = function (app) {
         });
     });
 
+    /** GET /user/:login/apps
+     *
+     * @autor : Rafael Erthal
+     * @since : 2012-09
+     *
+     * @description : lista aplicativos autorizados pelo usuário
+     *
+     * @allowedApp : WWW, pagamento, appFinder
+     * @allowedUser : Logado
+     *
+     * @request : {token}
+     * @response : {[thirdPartyLogins]}
+     */
+    app.get('/user/:login/apps', function (request, response) {
+        response.contentType('json');
+
+        //localiza o usuário
+        User.findByIdentity(request.params.login, function (error, user) {
+            if (error) {
+                response.send({error : error});
+            } else {
+                //verifica se o usuario foi encontrado
+                if (user === null) {
+                    response.send({error : 'user not found'});
+                } else {
+                    //verifica o token do usuário
+                    user.checkToken(request.param('token', null), function (valid) {
+                        if (!valid) {
+                            response.send({error : 'invalid token'});
+                        } else {
+                            response.send(user.authorizedApps)
+                        }
+                    });
+                }
+            }
+        });
+    });
+
     /** GET /user/:login/app/:app_id
      *
      * @autor : Rafael Erthal
