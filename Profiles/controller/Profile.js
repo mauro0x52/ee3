@@ -32,7 +32,7 @@ module.exports = function (app) {
                 response.send({error: error});
             } else {
                 if (profile === null) {
-                    response.send({error : 'profile not found'});
+                    response.send({error : { message : 'profile not found', name : 'NotFoundError', id : request.params.slug, model : 'profile'}});
                 } else {
                     response.send(profile);
                 }
@@ -112,7 +112,7 @@ module.exports = function (app) {
                     } else {
                         //Verifica se o Profile foi encontrado
                         if (profile === null) {
-                            response.send({error : "profile not found"});
+                            response.send({error : { message : 'profile not found', name : 'NotFoundError', id : request.params.profile_id, model : 'profile'}});
                         } else {
                             if (!profile.isOwner(user._id)) {
                                 response.send({ error : { message : 'permission denied', name : 'PermissionDeniedError'}});
@@ -166,7 +166,7 @@ module.exports = function (app) {
                     } else {
                         //verifica se o profile foi encontrado
                         if (profile === null) {
-                            response.send({error : 'profile not found'});
+                            response.send({error : { message : 'profile not found', name : 'NotFoundError', id : request.params.slug, model : 'profile'}});
                         } else {
                             //remove o profile
                             profile.remove(function (error) {

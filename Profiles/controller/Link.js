@@ -40,7 +40,7 @@ module.exports = function (app) {
                     } else {
                         //verifica se o perfil foi encontrado
                         if (profile === null) {
-                            response.send({error : 'profile not found'});
+                            response.send({error : { message : 'profile not found', name : 'NotFoundError', id : request.params.slug, model : 'profile'}});
                         } else {
                             //verifica se o usuário é dono da compania
                             if (! profile.isOwner(user._id)) {
@@ -90,7 +90,7 @@ module.exports = function (app) {
             } else {
                 //verifica se o perfil foi encontrada
                 if (profile === null) {
-                    response.send({error : 'profile not found'});
+                    response.send({error : { message : 'profile not found', name : 'NotFoundError', id : request.params.slug, model : 'profile'}});
                 } else {
                     response.send(profile.links);
                 }
@@ -121,7 +121,7 @@ module.exports = function (app) {
             } else {
                 //verifica se o perfil foi encontrado
                 if (profile === null) {
-                    response.send({error : 'profile not found'});
+                    response.send({error : { message : 'profile not found', name : 'NotFoundError', id : request.params.slug, model : 'profile'}});
                 } else {
                     //busca link
                     profile.findLink(request.params.id, function (error, link) {
@@ -130,7 +130,7 @@ module.exports = function (app) {
                         } else {
                             //verifica se link foi encontrado
                             if (link === null) {
-                                response.send({error : 'link not found'});
+                                response.send({error : { message : 'link not found', name : 'NotFoundError', id : request.params.id, model : 'link'}});
                             } else {
                                 response.send(link);
                             }
@@ -169,7 +169,7 @@ module.exports = function (app) {
                     } else {
                         //verifica se o perfil foi encontrada
                         if (profile === null) {
-                            response.send({error : 'profile not found'});
+                            response.send({error : { message : 'profile not found', name : 'NotFoundError', id : request.params.slug, model : 'profile'}});
                         } else {
                             //verifica se o usuário é dono do perfil
                             if (! profile.isOwner(user._id)) {
@@ -182,7 +182,7 @@ module.exports = function (app) {
                                     } else {
                                         //verifica se o link foi encontrado
                                         if (link === null) {
-                                            response.send({error : 'link not found'});
+                                            response.send({error : { message : 'link not found', name : 'NotFoundError', id : request.params.id, model : 'link'}});
                                         } else {
                                             //altera os dados do link
                                             link.type = request.param('type', link.type);
@@ -234,7 +234,7 @@ module.exports = function (app) {
                     } else {
                         //verifica se o perfil foi encontrada
                         if (profile === null) {
-                            response.send({error : 'profile not found'});
+                            response.send({error : { message : 'profile not found', name : 'NotFoundError', id : request.params.slug, model : 'profile'}});
                         } else {
                             //verifica se o usuário é dono do perfil
                             if (! profile.isOwner(user._id)) {
@@ -247,7 +247,7 @@ module.exports = function (app) {
                                     } else {
                                         //verifica se link foi encontrado
                                         if (link === null) {
-                                            response.send({error : 'link not found'});
+                                            response.send({error : { message : 'link not found', name : 'NotFoundError', id : request.params.id, model : 'link'}});
                                         } else {
                                             //remove o link
                                             link.remove();

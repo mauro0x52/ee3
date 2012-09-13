@@ -41,7 +41,7 @@ module.exports = function (app) {
                     } else {
                         //verifica se o perfil foi encontrado
                         if (profile === null) {
-                            response.send({error : 'profile not found'});
+                            response.send({error : { message : 'profile not found', name : 'NotFoundError', id : request.params.slug, model : 'profile'}});
                         } else {
                             //verifica se o usuário é dono do perfil
                             if (!profile.isOwner(user._id)) {
@@ -49,7 +49,7 @@ module.exports = function (app) {
                             } else {
                                 // verifica se foi enviado algum arquivo
                                 if (!request.files || !request.files.file) {
-                                    response.send({error : 'no selected file'});
+                                    response.send({error : {message : 'no selected file', name : 'ValidationError', errors : {file : {message : 'no selected file', name : 'ValidatorError', path : 'file', type : 'required'}}}});
                                 } else {
                                     // faz upload dos thumbnails
                                     files.image.thumbnail.upload(
@@ -128,7 +128,7 @@ module.exports = function (app) {
             } else {
                 //verifica se o perfil foi encontrada
                 if (profile === null) {
-                    response.send({error : 'profile not found'});
+                    response.send({error : { message : 'profile not found', name : 'NotFoundError', id : request.params.slug, model : 'profile'}});
                 } else {
                     response.send(profile.thumbnail);
                 }
@@ -164,7 +164,7 @@ module.exports = function (app) {
             } else {
                 //verifica se o perfil foi encontrado
                 if (profile === null) {
-                    response.send({error : 'profile not found'});
+                    response.send({error : { message : 'profile not found', name : 'NotFoundError', id : request.params.slug, model : 'profile'}});
                 } else {
                     if (profile.thumbnail[size] && profile.thumbnail[size].url) {
                         response.send(profile.thumbnail[size]);
@@ -221,7 +221,7 @@ module.exports = function (app) {
                     } else {
                         //verifica se o perfil foi encontrada
                         if (profile === null) {
-                            response.send({error : 'profile not found'});
+                            response.send({error : { message : 'profile not found', name : 'NotFoundError', id : request.params.slug, model : 'profile'}});
                         } else {
                             //verifica se o usuário é dono do perfil
                             if (!profile.isOwner(user._id)) {

@@ -40,7 +40,7 @@ module.exports = function (app) {
                     } else {
                         //verifica se o perfil foi encontrado
                         if (profile === null) {
-                            response.send({error : 'profile not found'});
+                            response.send({error : { message : 'profile not found', name : 'NotFoundError', id : request.params.slug, model : 'profile'}});
                         } else {
                             //verifica se o usuário é dono da compania
                             if (! profile.isOwner(user._id)) {
@@ -94,7 +94,7 @@ module.exports = function (app) {
             } else {
                 //verifica se o perfil foi encontrada
                 if (profile === null) {
-                    response.send({error : 'profile not found'});
+                    response.send({error : { message : 'profile not found', name : 'NotFoundError', id : request.params.slug, model : 'profile'}});
                 } else {
                     response.send(profile.jobs);
                 }
@@ -125,7 +125,7 @@ module.exports = function (app) {
             } else {
                 //verifica se o perfil foi encontrado
                 if (profile === null) {
-                    response.send({error : 'profile not found'});
+                    response.send({error : { message : 'profile not found', name : 'NotFoundError', id : request.params.slug, model : 'profile'}});
                 } else {
                     //busca trabalho
                     profile.findJob(request.params.id, function (error, job) {
@@ -134,7 +134,7 @@ module.exports = function (app) {
                         } else {
                             //verifica se trabalho foi encontrado
                             if (job === null) {
-                                response.send({error : 'job not found'});
+                                response.send({error : { message : 'job not found', name : 'NotFoundError', id : request.params.id, model : 'job'}});
                             } else {
                                 response.send(job);
                             }
@@ -173,7 +173,7 @@ module.exports = function (app) {
                     } else {
                         //verifica se o perfil foi encontrada
                         if (profile === null) {
-                            response.send({error : 'profile not found'});
+                            response.send({error : { message : 'profile not found', name : 'NotFoundError', id : request.params.slug, model : 'profile'}});
                         } else {
                             //verifica se o usuário é dono do perfil
                             if (! profile.isOwner(user._id)) {
@@ -186,7 +186,7 @@ module.exports = function (app) {
                                     } else {
                                         //verifica se o trabalho foi encontrado
                                         if (job === null) {
-                                            response.send({error : 'job not found'});
+                                            response.send({error : { message : 'job not found', name : 'NotFoundError', id : request.params.id, model : 'job'}});
                                         } else {
                                             //altera os dados do trabalho
                                             job.company = request.param('company', job.company);
@@ -242,7 +242,7 @@ module.exports = function (app) {
                     } else {
                         //verifica se o perfil foi encontrada
                         if (profile === null) {
-                            response.send({error : 'profile not found'});
+                            response.send({error : { message : 'profile not found', name : 'NotFoundError', id : request.params.slug, model : 'profile'}});
                         } else {
                             //verifica se o usuário é dono do perfil
                             if (! profile.isOwner(user._id)) {
@@ -255,7 +255,7 @@ module.exports = function (app) {
                                     } else {
                                         //verifica se trabalho foi encontrado
                                         if (job === null) {
-                                            response.send({error : 'job not found'});
+                                            response.send({error : { message : 'job not found', name : 'NotFoundError', id : request.params.id, model : 'job'}});
                                         } else {
                                             //remove o trabalho
                                             job.remove();
