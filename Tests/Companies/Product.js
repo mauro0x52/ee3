@@ -27,7 +27,7 @@ describe('POST /company/[slug]/product', function () {
             password : 'testando',
             password_confirmation : 'testando'
         }, function(error, data) {
-            user.token = data.token;
+            user.token = data.user.token;
             api.post('companies', '/company', {
                 token : user.token,
                 name : 'Empresa ' + random,
@@ -36,7 +36,7 @@ describe('POST /company/[slug]/product', function () {
                 profile : 'all',
                 active : 1
             }, function(error, data, response) {
-                company = data;
+                company = data.company;
                 done();
             });
         });
@@ -83,9 +83,9 @@ describe('POST /company/[slug]/product', function () {
                 if (error) return done(error);
                 else {
                     data.should.not.have.property('error');
-                    data.should.have.property('slug').equal('produto-muito-bonitao-' + random);
-                    data.should.have.property('name').equal('Produto muito bonitão! ' + random);
-                    product = data;
+                    data.should.have.property('product').have.property('slug').equal('produto-muito-bonitao-' + random);
+                    data.should.have.property('product').have.property('name').equal('Produto muito bonitão! ' + random);
+                    product = data.product;
                     done();
                 }
             }
@@ -101,7 +101,7 @@ describe('POST /company/[slug]/product', function () {
                 if (error) return done(error);
                 else {
                     data.should.not.have.property('error');
-                    data.should.have.property('slug')
+                    data.should.have.property('product').have.property('slug')
                         .match(/[a-z,0-9,\-]+\-[0-9,a-f]{2,}/)
                         .not.equal(product.slug);
                     done();
@@ -134,7 +134,7 @@ describe('GET /company/:company_id/products', function() {
             password : 'testando',
             password_confirmation : 'testando'
         }, function(error, data) {
-            user2.token = data.token;
+            user2.token = data.user.token;
             api.post('companies', '/company', {
                 token : user2.token,
                 name : 'Empresa 2 ' + random,
@@ -143,7 +143,7 @@ describe('GET /company/:company_id/products', function() {
                 profile : 'all',
                 active : 1
             }, function(error, data, response) {
-                company2 = data;
+                company2 = data.company;
                 createCompany = true;
                 if (countProducts >= 10) {
                     done();
@@ -173,16 +173,14 @@ describe('GET /company/:company_id/products', function() {
         });
     });
     it('lista de produtos', function(done) {
-    	console.log(company.slug);
         api.get('companies', '/company/'+company.slug+'/products', {}, function (error, data, response) {
             if (error) done(error);
             else {
                 data.should.not.have.property('error');
-                data.length.should.be.above(5);
-                for (var i = 0; i < data.length; i++) {
-                    data[i].should.have.property('_id');
-                    data[i].should.have.property('slug');
-                    data[i].should.have.property('name');
+                for (var i = 0; i < data.products.length; i++) {
+                    data.products[i].should.have.property('_id');
+                    data.products[i].should.have.property('slug');
+                    data.products[i].should.have.property('name');
                 }
                 done();
             }
@@ -229,9 +227,9 @@ describe('GET /company/:company_id/product/:product_id', function() {
             else {
                 should.exist(data);
                 data.should.not.have.property('error');
-                data.should.have.property('_id').equal(product._id);
-                data.should.have.property('slug').equal(product.slug);
-                data.should.have.property('name').equal(product.name);
+                data.should.have.property('product').have.property('_id').equal(product._id);
+                data.should.have.property('product').have.property('slug').equal(product.slug);
+                data.should.have.property('product').have.property('name').equal(product.name);
                 done();
             }
         });
@@ -242,9 +240,9 @@ describe('GET /company/:company_id/product/:product_id', function() {
             else {
                 should.exist(data);
                 data.should.not.have.property('error');
-                data.should.have.property('_id').equal(product._id);
-                data.should.have.property('slug').equal(product.slug);
-                data.should.have.property('name').equal(product.name);
+                data.should.have.property('product').have.property('_id').equal(product._id);
+                data.should.have.property('product').have.property('slug').equal(product.slug);
+                data.should.have.property('product').have.property('name').equal(product.name);
                 done();
             }
         });
@@ -326,17 +324,17 @@ describe('PUT /company/:company_id/product/:product_id', function() {
             if (error) done(error);
             else {
                 data.should.not.have.property('error');
-                data.should.have.property('_id').equal(product._id);
-                data.should.have.property('slug').equal(product.slug);
-                data.should.have.property('name').equal(product.name + '!@$#%');
-                product = data;
+                data.should.have.property('product').have.property('_id').equal(product._id);
+                data.should.have.property('product').have.property('slug').equal(product.slug);
+                data.should.have.property('product').have.property('name').equal(product.name + '!@$#%');
+                product = data.product;
                 api.get('companies', '/company/' + company.slug + '/product/' + product.slug, {}, function (error, data, response) {
                     if (error) done(error);
                     else {
                         data.should.not.have.property('error');
-                        data.should.have.property('_id').equal(product._id);
-                        data.should.have.property('slug').equal(product.slug);
-                        data.should.have.property('name').equal(product.name);
+                        data.should.have.property('product').have.property('_id').equal(product._id);
+                        data.should.have.property('product').have.property('slug').equal(product.slug);
+                        data.should.have.property('product').have.property('name').equal(product.name);
                         done();
                     }
                 });
@@ -351,17 +349,17 @@ describe('PUT /company/:company_id/product/:product_id', function() {
             if (error) done(error);
             else {
                 data.should.not.have.property('error');
-                data.should.have.property('_id').equal(product._id);
-                data.should.have.property('slug').equal('vou-mudar-o-nome-'+random);
-                data.should.have.property('name').equal('Vou mudar o nome '+random);
-                product = data;
+                data.should.have.property('product').have.property('_id').equal(product._id);
+                data.should.have.property('product').have.property('slug').equal('vou-mudar-o-nome-'+random);
+                data.should.have.property('product').have.property('name').equal('Vou mudar o nome '+random);
+                product = data.product;
                 api.get('companies', '/company/' + company.slug + '/product/' + product.slug, {}, function (error, data, response) {
                     if (error) done(error);
                     else {
                         data.should.not.have.property('error');
-                        data.should.have.property('_id').equal(product._id);
-                        data.should.have.property('slug').equal('vou-mudar-o-nome-'+random);
-                        data.should.have.property('name').equal('Vou mudar o nome '+random);
+                        data.should.have.property('product').have.property('_id').equal(product._id);
+                        data.should.have.property('product').have.property('slug').equal('vou-mudar-o-nome-'+random);
+                        data.should.have.property('product').have.property('name').equal('Vou mudar o nome '+random);
                         done();
                     }
                 });
