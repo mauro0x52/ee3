@@ -37,12 +37,12 @@ module.exports = function (app) {
             } else {
                 //verifica se o usuario foi encontrado
                 if (user === null) {
-                    response.send({error : 'user not found'});
+                    response.send({error : {message :  'user not found', name : 'NotFoundError', id : request.params.login, model : 'user' }});
                 } else {
                     //verifica o token do usuário
                     user.checkToken(request.param('token', null), function (valid) {
                         if (!valid) {
-                            response.send({error : 'invalid token'});
+                            response.send({error : {message : 'invalid token', name : 'InvalidToken'}});
                         } else {
                             //gera o token
                             token = crypto.createHash('md5').update(user.login + user.password + request.params.app_id).digest('hex');
@@ -90,12 +90,12 @@ module.exports = function (app) {
             } else {
                 //verifica se o usuario foi encontrado
                 if (user === null) {
-                    response.send({error : 'user not found'});
+                    response.send({error : {message :  'user not found', name : 'NotFoundError', id : request.params.login, model : 'user' }});
                 } else {
                     //verifica o token do usuário
                     user.checkToken(request.param('token', null), function (valid) {
                         if (!valid) {
-                            response.send({error : 'invalid token'});
+                            response.send({error : {message : 'invalid token', name : 'InvalidToken'}});
                         } else {
                             //busca a autorização
                             user.findAuthorizedApp(request.params.id, function (error, app) {
@@ -148,12 +148,12 @@ module.exports = function (app) {
             } else {
                 //verifica se o usuario foi encontrado
                 if (user === null) {
-                    response.send({error : 'user not found'});
+                    response.send({error : {message :  'user not found', name : 'NotFoundError', id : request.params.login, model : 'user' }});
                 } else {
                     //verifica o token do usuário
                     user.checkToken(request.param('token', null), function (valid) {
                         if (!valid) {
-                            response.send({error : 'invalid token'});
+                            response.send({error : {message : 'invalid token', name : 'InvalidToken'}});
                         } else {
                             //busca a autorização
                             user.findAuthorizedApp(request.params.id, function (error, app) {
@@ -202,12 +202,12 @@ module.exports = function (app) {
             } else {
                 //verifica se o usuario foi encontrado
                 if (user === null) {
-                    response.send({error : 'user not found'});
+                    response.send({error : {message :  'user not found', name : 'NotFoundError', id : request.params.login, model : 'user' }});
                 } else {
                     //verifica o token do usuário
                     user.checkToken(request.param('token', null), function (valid) {
                         if (!valid) {
-                            response.send({error : 'invalid token'});
+                            response.send({error : {message : 'invalid token', name : 'InvalidToken'}});
                         } else {
                             //busca a autorização
                             user.findAuthorizedApp(request.params.id, function (error, app) {
@@ -265,7 +265,7 @@ module.exports = function (app) {
             } else {
                 //verifica se o usuario foi encontrado
                 if (user === null) {
-                    response.send({error : 'user not found'});
+                    response.send({error : {message :  'user not found', name : 'NotFoundError', id : request.params.login, model : 'user' }});
                 } else {
                     //busca a autorização
                     user.findAuthorizedApp(request.params.id, function (error, app) {
