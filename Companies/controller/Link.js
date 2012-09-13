@@ -42,7 +42,7 @@ module.exports = function (app) {
                         } else {
                             //verifica se o usuário é dono da compania
                             if (! company.isOwner(user._id)) {
-                                response.send({error : 'permission denied'});
+                                response.send({ error : { message : 'permission denied', name : 'PermissionDenied'}});
                             } else {
                                 //busca o produto
                                 company.findProduct(request.params.product_slug, function (error, product) {
@@ -207,7 +207,7 @@ module.exports = function (app) {
                         } else {
                             //verifica se o usuário é dono da compania
                             if (! company.isOwner(user._id)) {
-                                response.send({error : 'permission denied'});
+                                response.send({ error : { message : 'permission denied', name : 'PermissionDenied'}});
                             } else {
                                 //busca o produto
                                 company.findProduct(request.params.product_slug, function (error, product) {
@@ -284,7 +284,7 @@ module.exports = function (app) {
                         } else {
                             //verifica se o usuário é dono da compania
                             if (! company.isOwner(user._id)) {
-                                response.send({error : 'permission denied'});
+                                response.send({ error : { message : 'permission denied', name : 'PermissionDenied'}});
                             } else {
                                 //busca o produto
                                 company.findProduct(request.params.product_slug, function (error, product) {
@@ -358,7 +358,7 @@ module.exports = function (app) {
                         } else {
                             //verifica se o usuário é dono da compania
                             if (! company.isOwner(user._id)) {
-                                response.send({error : 'permission denied'});
+                                response.send({ error : { message : 'permission denied', name : 'PermissionDenied'}});
                             } else {
                                 //coloca os dados do post em um objeto
                                 company.links.push({
@@ -487,7 +487,7 @@ module.exports = function (app) {
                         } else {
                             //verifica se o usuário é dono da compania
                             if (! company.isOwner(user._id)) {
-                                response.send({error : 'permission denied'});
+                                response.send({ error : { message : 'permission denied', name : 'PermissionDenied'}});
                             } else {
                                 //busca o link
                                 company.findLink(request.params.id, function (error, link) {
@@ -552,7 +552,7 @@ module.exports = function (app) {
                         } else {
                             //verifica se o usuário é dono da compania
                             if (! company.isOwner(user._id)) {
-                                response.send({error : 'permission denied'});
+                                response.send({ error : { message : 'permission denied', name : 'PermissionDenied'}});
                             } else {
                                 //busca o link
                                 company.findLink(request.params.id, function (error, link) {

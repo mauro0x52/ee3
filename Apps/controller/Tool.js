@@ -42,11 +42,11 @@ module.exports = function (app) {
                     } else {
                         //verifica se o app foi encontrado
                         if (app === null) {
-                            response.send({error : 'app not found'});
+                            response.send({error : { message : 'app not found', name : 'NotFoundError', id : request.params.slug, model : 'app'}});
                         } else {
                             //verifica se o usuário é o criador do app
                             if (user._id !== app.creator) {
-                                response.send({error : 'permission denied'});
+                                response.send({error : 'permission denied', name : 'PermissionDenied'});
                             } else {
                                 //busca a versão
                                 app.findVersion(request.params.number, function (error, version) {
@@ -228,7 +228,7 @@ module.exports = function (app) {
                         } else {
                             //verifica se o usuário é o criador do app
                             if (user._id !== app.creator) {
-                                response.send({error : 'permission denied'});
+                                response.send({ error : { message : 'permission denied', name : 'PermissionDenied'}});
                             } else {
                                 //pega a versão
                                 app.findVersion(request.params.number, function (error, version) {
@@ -303,7 +303,7 @@ module.exports = function (app) {
                         } else {
                             //verifica se o usuário é o criador do app
                             if (user._id !== app.creator) {
-                                response.send({error : 'permission denied'});
+                                response.send({ error : { message : 'permission denied', name : 'PermissionDenied'}});
                             } else {
                                 //pega a versão
                                 app.findVersion(request.params.number, function (error, version) {

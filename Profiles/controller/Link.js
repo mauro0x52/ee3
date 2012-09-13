@@ -42,7 +42,7 @@ module.exports = function (app) {
                         } else {
                             //verifica se o usuário é dono da compania
                             if (! profile.isOwner(user._id)) {
-                                response.send({error : 'permission denied'});
+                                response.send({ error : { message : 'permission denied', name : 'PermissionDenied'}});
                             } else {
                                 //coloca os dados do post em um objeto
                                 profile.links.push({
@@ -171,7 +171,7 @@ module.exports = function (app) {
                         } else {
                             //verifica se o usuário é dono do perfil
                             if (! profile.isOwner(user._id)) {
-                                response.send({error : 'permission denied'});
+                                response.send({ error : { message : 'permission denied', name : 'PermissionDenied'}});
                             } else {
                                 //busca o link
                                 profile.findLink(request.params.id, function (error, link) {
@@ -236,7 +236,7 @@ module.exports = function (app) {
                         } else {
                             //verifica se o usuário é dono do perfil
                             if (! profile.isOwner(user._id)) {
-                                response.send({error : 'permission denied'});
+                                response.send({ error : { message : 'permission denied', name : 'PermissionDenied'}});
                             } else {
                                 //busca o link
                                 profile.findLink(request.params.id, function (error, link) {

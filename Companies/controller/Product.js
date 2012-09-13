@@ -42,7 +42,7 @@ module.exports = function (app) {
                         } else {
                             //verifica se o usuário é dono da compania
                             if (! company.isOwner(user._id)) {
-                                response.send({error : 'permission denied'});
+                                response.send({ error : { message : 'permission denied', name : 'PermissionDenied'}});
                             } else {
                                 //Adiciona os campos no objeto products
                                 company.products.push({
@@ -170,7 +170,7 @@ module.exports = function (app) {
                         } else {
                             //verifica se o usuário é dono da compania
                             if (! company.isOwner(user._id)) {
-                                response.send({error : 'permission denied'});
+                                response.send({ error : { message : 'permission denied', name : 'PermissionDenied'}});
                             } else {
                                 company.findProduct(request.params.product_id, function(error, product){
                                     if (!product) {
@@ -231,7 +231,7 @@ module.exports = function (app) {
                         } else {
                             //verifica se o usuário é dono da compania
                             if (! company.isOwner(user._id)) {
-                                response.send({error : 'permission denied'});
+                                response.send({ error : { message : 'permission denied', name : 'PermissionDenied'}});
                             } else {
                                 company.findProduct (request.params.product_id, function(error, product){
                                     if (error) {
