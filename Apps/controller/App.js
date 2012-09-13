@@ -31,8 +31,10 @@ module.exports = function (app) {
         response.contentType('json');
 
         //valida o token do usuário
-        auth(request.param('token', null), function (user) {
-            if (user) {
+        auth(request.param('token', null), function (error, user) {
+            if (error) {
+                response.send({error : error});
+            } else {
                 //pega os dados do post e coloca em um novo objeto
                 app = new App({
                     name    : request.param('name', null),
@@ -47,8 +49,6 @@ module.exports = function (app) {
                         response.send(app);
                     }
                 });
-            } else {
-                    response.send({error : 'invalid user or token'});
             }
         });
     });
@@ -102,7 +102,7 @@ module.exports = function (app) {
             } else {
                 //verifica se o app foi encontrado
                 if (app === null) {
-                    response.send({error : 'app not found'});
+                    response.send({error : { message : 'app not found', name : 'NotFound', errors : { message : 'app not found', name : 'NotFound', path : 'slug', value : request.params.slug }}});
                 } else {
                     response.send(app);
                 }
@@ -127,8 +127,10 @@ module.exports = function (app) {
         response.contentType('json');
 
         //valida o token do usuário
-        auth(request.param('token', null), function (user) {
-            if (user) {
+        auth(request.param('token', null), function (error, user) {
+            if (error) {
+                response.send({ error : error });
+            } else {
                 //busca o app
                 App.findOne({slug : request.params.slug}, function (error, app) {
                     if (error) {
@@ -136,11 +138,11 @@ module.exports = function (app) {
                     } else {
                         //verifica se o app foi encontrado
                         if (app === null) {
-                            response.send({error : 'app not found'});
+                            response.send({error : { message : 'app not found', name : 'NotFound', errors : { message : 'app not found', name : 'NotFound', path : 'slug', value : request.params.slug }}});
                         } else {
                             //verifica se o usuário é o criador do app
                             if (user._id !== app.creator) {
-                                response.send({error : 'permission denied'});
+                                response.send({error : { message : 'permission denied', name : 'PermissionDenied', errors : { message : 'permission denied', name : 'PermissionDenied'}}});
                             } else {
                                 //remove o aplicativo
                                 app.remove(function (error) {
@@ -154,8 +156,6 @@ module.exports = function (app) {
                         }
                     }
                 });
-            } else {
-                response.send({error : 'invalid user or token'});
             }
         });
     });
@@ -177,8 +177,10 @@ module.exports = function (app) {
         response.contentType('json');
 
         //valida o token do usuário
-        auth(request.param('token', null), function (user) {
-            if (user) {
+        auth(request.param('token', null), function (error, user) {
+            if (error) {
+                response.send({ error : error });
+            } else {
                 //busca o app
                 App.findOne({slug : request.params.slug}, function (error, app) {
                     if (error) {
@@ -186,11 +188,11 @@ module.exports = function (app) {
                     } else {
                         //verifica se o app foi encontrado
                         if (app === null) {
-                            response.send({error : 'app not found'});
+                            response.send({error : { message : 'app not found', name : 'NotFound', errors : { message : 'app not found', name : 'NotFound', path : 'slug', value : request.params.slug }}});
                         } else {
                             //verifica se o usuário é o criador do app
                             if (user._id !== app.creator) {
-                                response.send({error : 'permission denied'});
+                                response.send({error : { message : 'permission denied', name : 'PermissionDenied', errors : { message : 'permission denied', name : 'PermissionDenied'}}});
                             } else {
                                 //altera os dados do aplicativo
                                 app.name = request.param('name', app.name);
@@ -207,8 +209,6 @@ module.exports = function (app) {
                         }
                     }
                 });
-            } else {
-                response.send({error : 'invalid user or token'});
             }
         });
     });
