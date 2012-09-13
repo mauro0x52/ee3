@@ -305,7 +305,7 @@ module.exports = function (app) {
                         } else {
                             //verifica se o usuário é dono da compania
                             if (!company.isOwner(user._id)) {
-                                response.send({ error : { message : 'permission denied', name : 'PermissionDenied'}});
+                                response.send({ error : { message : 'permission denied', name : 'PermissionDeniedError'}});
                             } else {
                                 //Valida cada campo para ver se existe e trata para adicionar no Model
                                 company.slug        = request.param("slug", company.slug);
@@ -379,7 +379,7 @@ module.exports = function (app) {
                         } else {
                             //verifica se o usuário é dono da compania
                             if (! company.isOwner(user._id)) {
-                                response.send({ error : { message : 'permission denied', name : 'PermissionDenied'}});
+                                response.send({ error : { message : 'permission denied', name : 'PermissionDeniedError'}});
                             } else {
                                 //remove a compania
                                 company.remove(function (error) {

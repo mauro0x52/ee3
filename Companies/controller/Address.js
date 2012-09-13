@@ -45,7 +45,7 @@ module.exports = function (app) {
                         } else {
                             //verifica se o usuário é dono da compania
                             if (! company.isOwner(user._id)) {
-                                response.send({ error : { message : 'permission denied', name : 'PermissionDenied'}});
+                                response.send({ error : { message : 'permission denied', name : 'PermissionDeniedError'}});
                             } else {
                                 //coloca os dados do post em um objeto
                                 company.addresses.push({
@@ -177,7 +177,7 @@ module.exports = function (app) {
                         } else {
                             //verifica se o usuário é dono da compania
                             if (! company.isOwner(user._id)) {
-                                response.send({ error : { message : 'permission denied', name : 'PermissionDenied'}});
+                                response.send({ error : { message : 'permission denied', name : 'PermissionDeniedError'}});
                             } else {
                                 //busca o endereço
                                 company.findAddress(request.params.id, function (error, address) {
@@ -245,7 +245,7 @@ module.exports = function (app) {
                         } else {
                             //verifica se o usuário é dono da compania
                             if (! company.isOwner(user._id)) {
-                                response.send({ error : { message : 'permission denied', name : 'PermissionDenied'}});
+                                response.send({ error : { message : 'permission denied', name : 'PermissionDeniedError'}});
                             } else {
                                 //busca o endereço
                                 company.findAddress(request.params.id, function (error, address) {

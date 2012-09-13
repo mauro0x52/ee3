@@ -48,7 +48,7 @@ module.exports = function (app) {
                         } else {
                             //verifica se o usuário é o criador do app
                             if (user._id !== app.creator) {
-                                response.send({error : {message : 'permission denied', name : 'PermissionDenied'}});
+                                response.send({error : {message : 'permission denied', name : 'PermissionDeniedError'}});
                             } else {
                                 //busca a versão
                                 app.findVersion(request.params.number, function (error, version) {
@@ -230,7 +230,7 @@ module.exports = function (app) {
                         } else {
                             //verifica se o usuário é o criador do app
                             if (user._id !== app.creator) {
-                                response.send({ error : { message : 'permission denied', name : 'PermissionDenied'}});
+                                response.send({ error : { message : 'permission denied', name : 'PermissionDeniedError'}});
                             } else {
                                 //pega a versão
                                 app.findVersion(request.params.number, function (error, version) {
@@ -305,7 +305,7 @@ module.exports = function (app) {
                         } else {
                             //verifica se o usuário é o criador do app
                             if (user._id !== app.creator) {
-                                response.send({ error : { message : 'permission denied', name : 'PermissionDenied'}});
+                                response.send({ error : { message : 'permission denied', name : 'PermissionDeniedError'}});
                             } else {
                                 //pega a versão
                                 app.findVersion(request.params.number, function (error, version) {

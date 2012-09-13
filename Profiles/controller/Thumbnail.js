@@ -45,7 +45,7 @@ module.exports = function (app) {
                         } else {
                             //verifica se o usuário é dono do perfil
                             if (!profile.isOwner(user._id)) {
-                                response.send({ error : { message : 'permission denied', name : 'PermissionDenied'}});
+                                response.send({ error : { message : 'permission denied', name : 'PermissionDeniedError'}});
                             } else {
                                 // verifica se foi enviado algum arquivo
                                 if (!request.files || !request.files.file) {
@@ -225,7 +225,7 @@ module.exports = function (app) {
                         } else {
                             //verifica se o usuário é dono do perfil
                             if (!profile.isOwner(user._id)) {
-                                response.send({ error : { message : 'permission denied', name : 'PermissionDenied'}});
+                                response.send({ error : { message : 'permission denied', name : 'PermissionDeniedError'}});
                             } else {
                                 profile.thumbnail = null;
                                 profile.save(function (error) {

@@ -115,7 +115,7 @@ module.exports = function (app) {
                             response.send({error : "profile not found"});
                         } else {
                             if (!profile.isOwner(user._id)) {
-                                response.send({ error : { message : 'permission denied', name : 'PermissionDenied'}});
+                                response.send({ error : { message : 'permission denied', name : 'PermissionDeniedError'}});
                             } else {
                                 profile.name        = request.param('name', profile.name);
                                 profile.surname     = request.param('surname', profile.surname);
