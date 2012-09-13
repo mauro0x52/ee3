@@ -1,5 +1,4 @@
 var data = arguments[0] || {},
-    app = this,
     state = data.state,
     city = data.city,
     sector = data.sector,
@@ -11,7 +10,7 @@ if (sector) {
     query.filterBySectors = { sectors : [sector._id] };
 }
 
-this.ui.list.browse.remove();
+app.ui.list.browse.remove();
 
 var findCompanies = function(cities) {
     if (cities) {
@@ -26,7 +25,7 @@ var findCompanies = function(cities) {
             for (var i in companies) {
                 var company = companies[i];
 
-                this.Browse(company);
+                app.Browse(company);
             }
         }
     );
@@ -35,8 +34,8 @@ var findCompanies = function(cities) {
 if (city) {
     findCompanies([city._id]);
 } else if (state) {
-    this.ajax.getJSON({
-       url : 'http://' + this.config.services.location.host + ':' + this.config.services.location.port + '/country/brasil/state/'+state._id+'/cities'
+    app.ajax.getJSON({
+       url : 'http://' + app.config.services.location.host + ':' + app.config.services.location.port + '/country/brasil/state/'+state._id+'/cities'
     },
     function (cities) {
         var citiesList = [];

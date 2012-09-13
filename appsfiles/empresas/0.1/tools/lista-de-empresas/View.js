@@ -1,12 +1,8 @@
-var companySlug = arguments[0];
+var company = arguments[0];
 
-new this.ajax.getJSON({
-    url : 'http://' + this.config.services.companies.host + ':' + this.config.services.companies.port + '/company/' + companySlug
-}, function (company) {
-    this.route.path('/empresa/'+company.slug);
-    this.ui.frame.header.title(company.name);
-    this.ui.frame.header.subtitle(company.activity);
-
+app.Utils().getCompany(company, function(company) {
+    app.ui.frame.header.title(company.name);
+    app.ui.frame.header.subtitle(company.activity);
 
     if (!company.thumbnail || !company.thumbnail.large || !company.thumbnail.large.url) {
         company.thumbnail = { large :
@@ -17,5 +13,20 @@ new this.ajax.getJSON({
         }
     }
 
-    this.ui.frame.header.thumbnail.src(company.thumbnail.large.url);
-})
+    app.ui.frame.header.thumbnail.src(company.thumbnail.large.url);
+
+    app.ui.frame.tabs.remove();
+
+    app.ui.frame.tabs.add({ description : 'principal', click : function() {
+        this.route.path('/empresa/'+company.slug);
+        app.ViewMain(company);
+    } });
+    app.ui.frame.tabs.add({ description : 'produtos', click : function() {
+        this.route.path('/empresa/'+company.slug+'/produtos/');
+        app.ViewProducts(company);
+    } });
+    app.ui.frame.tabs.add({ description : 'contatos', click : function() {
+        this.route.path('/empresa/'+company.slug+'/contatos/');
+        app.ViewContacts(company);
+    } });
+});

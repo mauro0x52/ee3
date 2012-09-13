@@ -1,15 +1,15 @@
 var params = arguments[0] || {},
-    query = arguments[1] || {},
-    app = this;
+    query = arguments[1] || {};
 
-this.ui.list.filter.remove();
+app.ui.list.filter.remove();
 
-/**
- * Select box de setores
- */
-this.ajax.getJSON(
+// -----------------------------------------------------------------------------
+// Selectbox de setores
+// -----------------------------------------------------------------------------
+
+app.ajax.getJSON(
     {
-        url : 'http://' + this.config.services.companies.host + ':' + this.config.services.companies.port + '/sectors'
+        url : 'http://' + app.config.services.companies.host + ':' + app.config.services.companies.port + '/sectors'
     },
     function (sectors) {
         var sectors_list = [];
@@ -22,19 +22,20 @@ this.ajax.getJSON(
                 sectors_list.push({label : sectors[i].name, value : sectors[i].slug});
             }
         }
-        this.ui.list.filter.add(
+        app.ui.list.filter.add(
             {type : 'select', name : 'sector', label : 'Setor', options : sectors_list}
         );
     }
 );
 
 
-/**
- * Select box de estados
- */
-this.ajax.getJSON(
+// -----------------------------------------------------------------------------
+// Selectbox de estados
+// -----------------------------------------------------------------------------
+
+app.ajax.getJSON(
     {
-        url : 'http://' + this.config.services.location.host + ':' + this.config.services.location.port + '/country/brasil/states/'
+        url : 'http://' + app.config.services.location.host + ':' + app.config.services.location.port + '/country/brasil/states/'
     },
     function (states) {
         var states_list = [];
@@ -47,7 +48,7 @@ this.ajax.getJSON(
                 states_list.push({label : states[i].name, value : states[i].slug});
             }
         }
-        this.ui.list.filter.add(
+        app.ui.list.filter.add(
             {type : 'select', name : 'state', label : 'Estado', options : states_list, change : function (value) {
                 if (value !== 'undefined') selectCity(value);
             }}
@@ -56,9 +57,10 @@ this.ajax.getJSON(
     }
 );
 
-/**
- * Select box de cidades
- */
+// -----------------------------------------------------------------------------
+// Selectbox de cidades
+// -----------------------------------------------------------------------------
+
 var selectCity = function (state) {
     var selectedState;
     if (state) selectedState = state;
@@ -86,8 +88,8 @@ var selectCity = function (state) {
                         cities_list.push({label : cities[i].name, value : cities[i].slug});
                     }
                 }
-                this.ui.list.filter.remove('form-city');
-                this.ui.list.filter.add(
+                app.ui.list.filter.remove('form-city');
+                app.ui.list.filter.add(
                     {type : 'select', name : 'city', label : 'Cidade', options : cities_list}
                 );
             }
@@ -96,23 +98,21 @@ var selectCity = function (state) {
 }
 
 
-this.ui.list.filter.submit(function (data) {
-    var url = '/';
-    this.Utils().getParams(data, function(data) {
+// -----------------------------------------------------------------------------
+// Quando der submit no filtro
+// -----------------------------------------------------------------------------
+
+app.ui.list.filter.submit(function (data) {
+    var url = '';
+    app.Utils().getParams(data, function(data) {
         if (data.state) {
-            url += data.state.slug + '/';
+            url += '/estado/' + data.state.slug;
             if (data.city) {
-                url += data.city.slug + '/';
+                url += '/cidade/' + data.city.slug;
             }
-            else {
-                url += 'todas-as-cidades/';
-            }
-        }
-        else {
-            url += 'todos-os-estados/todas-as-cidades/';
         }
         if (data.sector) {
-            url += data.sector.slug + '/';
+            url += '/setor/' + data.sector.slug;
         }
         app.route.path(url);
 

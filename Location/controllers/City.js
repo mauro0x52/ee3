@@ -149,7 +149,7 @@ module.exports = function (app) {
         });
     });
 
-    /** GET /city/:idCity
+    /** GET /city/:id
      *
      * @autor : Lucas Kalado
      * @since : 2012-07
@@ -159,21 +159,26 @@ module.exports = function (app) {
      * @allowedApp : Qualquer app
      * @allowedUser : Público
      *
-     * @request : {idCity}
+     * @request : {id}
      * @response : {Name, DDD, Slug}
      */
-    app.get('/city/:idCity', function (request, response) {
-    	var filter;
-
+    app.get('/city/:id', function (request, response) {
         response.contentType('json');
         response.header('Access-Control-Allow-Origin', '*');
 
-        City.findById(request.params.idCity, function (error, city) {
+        City.findById(request.params.id, function (error, city) {
             if (error) {
                 response.send({error : error});
             } else {
                 if (city) {
-                    response.send(city);
+                    State.findById(city.state, function(error, state) {
+                        if (state) {
+                            response.send({city : city, state : state});
+                        }
+                        else {
+                            response.send({error : "state not found."});
+                        }
+                    })
                 } else {
                     response.send({error : "city not found."});
                 };

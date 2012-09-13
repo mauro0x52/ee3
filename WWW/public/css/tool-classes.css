@@ -1,0 +1,138 @@
+
+/* -------------------------------------------------------------------------- */
+/* Margins                                                                    */
+/* -------------------------------------------------------------------------- */
+
+#tool-frame-view-content .margin-1 { margin: 1px; }
+#tool-frame-view-content .margin-2 { margin: 2px; }
+#tool-frame-view-content .margin-4 { margin: 4px; }
+#tool-frame-view-content .margin-8 { margin: 8px; }
+#tool-frame-view-content .margin-10 { margin: 10px; }
+#tool-frame-view-content .margin-12 { margin: 12px; }
+#tool-frame-view-content .margin-16 { margin: 16px; }
+#tool-frame-view-content .margin-20 { margin: 20px; }
+
+
+/* -------------------------------------------------------------------------- */
+/* Dimensions                                                                 */
+/* -------------------------------------------------------------------------- */
+
+#tool-frame-view-content .width-16 { display: inline-block; width: 16px; height: auto; height: auto; vertical-align: top; }
+#tool-frame-view-content .width-20 { display: inline-block; width: 20px; height: auto; height: auto; vertical-align: top; }
+#tool-frame-view-content .width-24 { display: inline-block; width: 24px; height: auto; height: auto; vertical-align: top; }
+#tool-frame-view-content .width-32 { display: inline-block; width: 32px; height: auto; height: auto; vertical-align: top; }
+#tool-frame-view-content .width-40 { display: inline-block; width: 40px; height: auto; height: auto; vertical-align: top; }
+#tool-frame-view-content .width-50 { display: inline-block; width: 50px; height: auto; height: auto; vertical-align: top; }
+#tool-frame-view-content .width-60 { display: inline-block; width: 60px; height: auto; height: auto; vertical-align: top; }
+#tool-frame-view-content .width-80 { display: inline-block; width: 80px; height: auto; height: auto; vertical-align: top; }
+#tool-frame-view-content .width-100 { display: inline-block; width: 100px; height: auto; height: auto; vertical-align: top; }
+#tool-frame-view-content .width-120 { display: inline-block; width: 120px; height: auto; height: auto; vertical-align: top; }
+#tool-frame-view-content .width-140 { display: inline-block; width: 140px; height: auto; height: auto; vertical-align: top; }
+#tool-frame-view-content .width-160 { display: inline-block; width: 160px; height: auto; height: auto; vertical-align: top; }
+#tool-frame-view-content .width-180 { display: inline-block; width: 180px; height: auto; height: auto; vertical-align: top; }
+#tool-frame-view-content .width-200 { display: inline-block; width: 200px; height: auto; height: auto; vertical-align: top; }
+#tool-frame-view-content .width-220 { display: inline-block; width: 220px; height: auto; height: auto; vertical-align: top; }
+#tool-frame-view-content .width-240 { display: inline-block; width: 240px; height: auto; height: auto; vertical-align: top; }
+#tool-frame-view-content .width-250 { display: inline-block; width: 250px; height: auto; height: auto; vertical-align: top; }
+#tool-frame-view-content .width-280 { display: inline-block; width: 280px; height: auto; height: auto; vertical-align: top; }
+#tool-frame-view-content .width-300 { display: inline-block; width: 300px; height: auto; height: auto; vertical-align: top; }
+#tool-frame-view-content .width-320 { display: inline-block; width: 320px; height: auto; height: auto; vertical-align: top; }
+#tool-frame-view-content .width-400 { display: inline-block; width: 400px; height: auto; height: auto; vertical-align: top; }
+#tool-frame-view-content .width-480 { display: inline-block; width: 480px; height: auto; height: auto; vertical-align: top; }
+#tool-frame-view-content .width-500 { display: inline-block; width: 500px; height: auto; height: auto; vertical-align: top; }
+#tool-frame-view-content .width-600 { display: inline-block; width: 600px; height: auto; height: auto; vertical-align: top; }
+#tool-frame-view-content .width-640 { display: inline-block; width: 640px; height: auto; height: auto; vertical-align: top; }
+#tool-frame-view-content .width-680 { display: inline-block; width: 680px; height: auto; height: auto; vertical-align: top; }
+#tool-frame-view-content .width-700 { display: inline-block; width: 700px; height: auto; height: auto; vertical-align: top; }
+#tool-frame-view-content .width-720 { display: inline-block; width: 720px; height: auto; height: auto; vertical-align: top; }
+#tool-frame-view-content .width-800 { display: inline-block; width: 800px; height: auto; height: auto; vertical-align: top; }
+
+#tool-frame-view-content .height-16 { display: inline-block; height: 16px; width: auto; vertical-align: top; }
+#tool-frame-view-content .height-20 { display: inline-block; height: 20px; width: auto; vertical-align: top; }
+#tool-frame-view-content .height-24 { display: inline-block; height: 24px; width: auto; vertical-align: top; }
+#tool-frame-view-content .height-32 { display: inline-block; height: 32px; width: auto; vertical-align: top; }
+#tool-frame-view-content .height-40 { display: inline-block; height: 40px; width: auto; vertical-align: top; }
+#tool-frame-view-content .height-50 { display: inline-block; height: 50px; width: auto; vertical-align: top; }
+#tool-frame-view-content .height-60 { display: inline-block; height: 60px; width: auto; vertical-align: top; }
+#tool-frame-view-content .height-80 { display: inline-block; height: 80px; width: auto; vertical-align: top; }
+#tool-frame-view-content .height-100 { display: inline-block; height: 100px; width: auto; vertical-align: top; }
+#tool-frame-view-content .height-120 { display: inline-block; height: 120px; width: auto; vertical-align: top; }
+#tool-frame-view-content .height-140 { display: inline-block; height: 140px; width: auto; vertical-align: top; }
+#tool-frame-view-content .height-160 { display: inline-block; height: 160px; width: auto; vertical-align: top; }
+#tool-frame-view-content .height-180 { display: inline-block; height: 180px; width: auto; vertical-align: top; }
+#tool-frame-view-content .height-200 { display: inline-block; height: 200px; width: auto; vertical-align: top; }
+#tool-frame-view-content .height-220 { display: inline-block; height: 220px; width: auto; vertical-align: top; }
+#tool-frame-view-content .height-240 { display: inline-block; height: 240px; width: auto; vertical-align: top; }
+#tool-frame-view-content .height-250 { display: inline-block; height: 250px; width: auto; vertical-align: top; }
+#tool-frame-view-content .height-280 { display: inline-block; height: 280px; width: auto; vertical-align: top; }
+#tool-frame-view-content .height-300 { display: inline-block; height: 300px; width: auto; vertical-align: top; }
+#tool-frame-view-content .height-320 { display: inline-block; height: 320px; width: auto; vertical-align: top; }
+#tool-frame-view-content .height-400 { display: inline-block; height: 400px; width: auto; vertical-align: top; }
+#tool-frame-view-content .height-480 { display: inline-block; height: 480px; width: auto; vertical-align: top; }
+#tool-frame-view-content .height-500 { display: inline-block; height: 500px; width: auto; vertical-align: top; }
+#tool-frame-view-content .height-600 { display: inline-block; height: 600px; width: auto; vertical-align: top; }
+#tool-frame-view-content .height-640 { display: inline-block; height: 640px; width: auto; vertical-align: top; }
+#tool-frame-view-content .height-680 { display: inline-block; height: 680px; width: auto; vertical-align: top; }
+#tool-frame-view-content .height-700 { display: inline-block; height: 700px; width: auto; vertical-align: top; }
+#tool-frame-view-content .height-720 { display: inline-block; height: 720px; width: auto; vertical-align: top; }
+#tool-frame-view-content .height-800 { display: inline-block; height: 800px; width: auto; vertical-align: top; }
+
+#tool-frame-view-content .max-width-16 { display: inline-block; max-width: 16px; height: auto; vertical-align: top; }
+#tool-frame-view-content .max-width-20 { display: inline-block; max-width: 20px; height: auto; vertical-align: top; }
+#tool-frame-view-content .max-width-24 { display: inline-block; max-width: 24px; height: auto; vertical-align: top; }
+#tool-frame-view-content .max-width-32 { display: inline-block; max-width: 32px; height: auto; vertical-align: top; }
+#tool-frame-view-content .max-width-40 { display: inline-block; max-width: 40px; height: auto; vertical-align: top; }
+#tool-frame-view-content .max-width-50 { display: inline-block; max-width: 50px; height: auto; vertical-align: top; }
+#tool-frame-view-content .max-width-60 { display: inline-block; max-width: 60px; height: auto; vertical-align: top; }
+#tool-frame-view-content .max-width-80 { display: inline-block; max-width: 80px; height: auto; vertical-align: top; }
+#tool-frame-view-content .max-width-100 { display: inline-block; max-width: 100px; height: auto; vertical-align: top; }
+#tool-frame-view-content .max-width-120 { display: inline-block; max-width: 120px; height: auto; vertical-align: top; }
+#tool-frame-view-content .max-width-140 { display: inline-block; max-width: 140px; height: auto; vertical-align: top; }
+#tool-frame-view-content .max-width-160 { display: inline-block; max-width: 160px; height: auto; vertical-align: top; }
+#tool-frame-view-content .max-width-180 { display: inline-block; max-width: 180px; height: auto; vertical-align: top; }
+#tool-frame-view-content .max-width-200 { display: inline-block; max-width: 200px; height: auto; vertical-align: top; }
+#tool-frame-view-content .max-width-220 { display: inline-block; max-width: 220px; height: auto; vertical-align: top; }
+#tool-frame-view-content .max-width-240 { display: inline-block; max-width: 240px; height: auto; vertical-align: top; }
+#tool-frame-view-content .max-width-250 { display: inline-block; max-width: 250px; height: auto; vertical-align: top; }
+#tool-frame-view-content .max-width-280 { display: inline-block; max-width: 280px; height: auto; vertical-align: top; }
+#tool-frame-view-content .max-width-300 { display: inline-block; max-width: 300px; height: auto; vertical-align: top; }
+#tool-frame-view-content .max-width-320 { display: inline-block; max-width: 320px; height: auto; vertical-align: top; }
+#tool-frame-view-content .max-width-400 { display: inline-block; max-width: 400px; height: auto; vertical-align: top; }
+#tool-frame-view-content .max-width-480 { display: inline-block; max-width: 480px; height: auto; vertical-align: top; }
+#tool-frame-view-content .max-width-500 { display: inline-block; max-width: 500px; height: auto; vertical-align: top; }
+#tool-frame-view-content .max-width-600 { display: inline-block; max-width: 600px; height: auto; vertical-align: top; }
+#tool-frame-view-content .max-width-640 { display: inline-block; max-width: 640px; height: auto; vertical-align: top; }
+#tool-frame-view-content .max-width-680 { display: inline-block; max-width: 680px; height: auto; vertical-align: top; }
+#tool-frame-view-content .max-width-700 { display: inline-block; max-width: 700px; height: auto; vertical-align: top; }
+#tool-frame-view-content .max-width-720 { display: inline-block; max-width: 720px; height: auto; vertical-align: top; }
+#tool-frame-view-content .max-width-800 { display: inline-block; max-width: 800px; height: auto; vertical-align: top; }
+
+#tool-frame-view-content .max-height-16 { display: inline-block; max-height: 16px; width: auto; vertical-align: top; }
+#tool-frame-view-content .max-height-20 { display: inline-block; max-height: 20px; width: auto; vertical-align: top; }
+#tool-frame-view-content .max-height-24 { display: inline-block; max-height: 24px; width: auto; vertical-align: top; }
+#tool-frame-view-content .max-height-32 { display: inline-block; max-height: 32px; width: auto; vertical-align: top; }
+#tool-frame-view-content .max-height-40 { display: inline-block; max-height: 40px; width: auto; vertical-align: top; }
+#tool-frame-view-content .max-height-50 { display: inline-block; max-height: 50px; width: auto; vertical-align: top; }
+#tool-frame-view-content .max-height-60 { display: inline-block; max-height: 60px; width: auto; vertical-align: top; }
+#tool-frame-view-content .max-height-80 { display: inline-block; max-height: 80px; width: auto; vertical-align: top; }
+#tool-frame-view-content .max-height-100 { display: inline-block; max-height: 100px; width: auto; vertical-align: top; }
+#tool-frame-view-content .max-height-120 { display: inline-block; max-height: 120px; width: auto; vertical-align: top; }
+#tool-frame-view-content .max-height-140 { display: inline-block; max-height: 140px; width: auto; vertical-align: top; }
+#tool-frame-view-content .max-height-160 { display: inline-block; max-height: 160px; width: auto; vertical-align: top; }
+#tool-frame-view-content .max-height-180 { display: inline-block; max-height: 180px; width: auto; vertical-align: top; }
+#tool-frame-view-content .max-height-200 { display: inline-block; max-height: 200px; width: auto; vertical-align: top; }
+#tool-frame-view-content .max-height-220 { display: inline-block; max-height: 220px; width: auto; vertical-align: top; }
+#tool-frame-view-content .max-height-240 { display: inline-block; max-height: 240px; width: auto; vertical-align: top; }
+#tool-frame-view-content .max-height-250 { display: inline-block; max-height: 250px; width: auto; vertical-align: top; }
+#tool-frame-view-content .max-height-280 { display: inline-block; max-height: 280px; width: auto; vertical-align: top; }
+#tool-frame-view-content .max-height-300 { display: inline-block; max-height: 300px; width: auto; vertical-align: top; }
+#tool-frame-view-content .max-height-320 { display: inline-block; max-height: 320px; width: auto; vertical-align: top; }
+#tool-frame-view-content .max-height-400 { display: inline-block; max-height: 400px; width: auto; vertical-align: top; }
+#tool-frame-view-content .max-height-480 { display: inline-block; max-height: 480px; width: auto; vertical-align: top; }
+#tool-frame-view-content .max-height-500 { display: inline-block; max-height: 500px; width: auto; vertical-align: top; }
+#tool-frame-view-content .max-height-600 { display: inline-block; max-height: 600px; width: auto; vertical-align: top; }
+#tool-frame-view-content .max-height-640 { display: inline-block; max-height: 640px; width: auto; vertical-align: top; }
+#tool-frame-view-content .max-height-680 { display: inline-block; max-height: 680px; width: auto; vertical-align: top; }
+#tool-frame-view-content .max-height-700 { display: inline-block; max-height: 700px; width: auto; vertical-align: top; }
+#tool-frame-view-content .max-height-720 { display: inline-block; max-height: 720px; width: auto; vertical-align: top; }
+#tool-frame-view-content .max-height-800 { display: inline-block; max-height: 800px; width: auto; vertical-align: top; }

@@ -515,10 +515,27 @@ sdk.modules.ui = function (app) {
                 }
             }
         };
+        this.style = function (value) {
+            if (value) {
+                element.attributes.remove('class');
+                if (value.constructor === Array) {
+                    element.attributes.add({name : 'class', value : value.join(' ')});
+                } else {
+                    element.attributes.add({name : 'class', value : value});
+                }
+            } else {
+                var classes = element.attributes.get('class');
+
+                if (classes) {
+                    return classes.value.split(' ');
+                }
+            }
+        };
 
         /* Seta atributos da imagem */
         this.src(params.src);
         this.alt(params.alt);
+        this.style(params.style);
     };
 
     /** Strong
@@ -533,14 +550,31 @@ sdk.modules.ui = function (app) {
     var Strong = function (params) {
         var element = new Element(params.id, 'b');
 
-        /* Seta valor da tag */
-        element.value(params.value);
-
         /* Publicando métodos privados */
         this.getID = element.getID;
         this.add = element.add;
         this.remove = element.remove;
         this.value = element.value;
+        this.style = function (value) {
+            if (value) {
+                element.attributes.remove('class');
+                if (value.constructor === Array) {
+                    element.attributes.add({name : 'class', value : value.join(' ')});
+                } else {
+                    element.attributes.add({name : 'class', value : value});
+                }
+            } else {
+                var classes = element.attributes.get('class');
+
+                if (classes) {
+                    return classes.value.split(' ');
+                }
+            }
+        };
+
+        /* Seta valor da tag */
+        this.value(params.value);
+        this.style(params.style);
     };
 
     /** Span
@@ -555,14 +589,31 @@ sdk.modules.ui = function (app) {
     var Span = function (params) {
         var element = new Element(params.id, 'span');
 
-        /* Seta valor da tag */
-        element.value(params.value);
-
         /* Publicando métodos privados */
         this.getID = element.getID;
         this.add = element.add;
         this.remove = element.remove;
         this.value = element.value;
+        this.style = function (value) {
+            if (value) {
+                element.attributes.remove('class');
+                if (value.constructor === Array) {
+                    element.attributes.add({name : 'class', value : value.join(' ')});
+                } else {
+                    element.attributes.add({name : 'class', value : value});
+                }
+            } else {
+                var classes = element.attributes.get('class');
+
+                if (classes) {
+                    return classes.value.split(' ');
+                }
+            }
+        };
+
+        /* Seta valor da tag */
+        this.value(params.value);
+        this.style(params.style);
     };
 
     /** Italic
@@ -577,14 +628,31 @@ sdk.modules.ui = function (app) {
     var Italic = function (params) {
         var element = new Element(params.id, 'i');
 
-        /* Seta valor da tag */
-        element.value(params.value);
-
         /* Publicando métodos privados */
         this.getID = element.getID;
         this.add = element.add;
         this.remove = element.remove;
         this.value = element.value;
+        this.style = function (value) {
+            if (value) {
+                element.attributes.remove('class');
+                if (value.constructor === Array) {
+                    element.attributes.add({name : 'class', value : value.join(' ')});
+                } else {
+                    element.attributes.add({name : 'class', value : value});
+                }
+            } else {
+                var classes = element.attributes.get('class');
+
+                if (classes) {
+                    return classes.value.split(' ');
+                }
+            }
+        };
+
+        /* Seta valor da tag */
+        this.value(params.value);
+        this.style(params.style);
     };
 
     /** Paragraph
@@ -624,40 +692,66 @@ sdk.modules.ui = function (app) {
                         /* Cria uma imagem */
                         element.childs.add(new Image({
                             id    : obj.id,
-                            url   : obj.img,
-                            alt   : obj.alt
+                            src   : obj.img,
+                            alt   : obj.alt,
+                            style : obj.style
                         }));
                     } else if (obj.b) {
                         /* Texto em negrito */
                         element.childs.add(new Strong({
                             id    : obj.id,
-                            value : obj.b
+                            value : obj.b,
+                            style : obj.style
                         }));
                     } else if (obj.i) {
                         /* Texto em itálico */
                         element.childs.add(new Italic({
                             id    : obj.id,
-                            value : obj.i
+                            value : obj.i,
+                            style : obj.style
                         }));
                     } else if (obj.a) {
                         /* Cria uma ancora */
                         element.childs.add(new Anchor({
                             id    : obj.id,
                             value : obj.a,
-                            click : obj.click
+                            click : obj.click,
+                            style : obj.style
                         }));
-                    } else if (obj.constructor === Anchor || obj.constructor === Italic || obj.constructor === Strong || obj.constructor === Image) {
+                    } else if (obj.span) {
+                        /* Cria um span */
+                        element.childs.add(new Span({
+                            id    : obj.id,
+                            value : obj.span,
+                            style : obj.style
+                        }));
+                    } else if (obj.constructor === Anchor || obj.constructor === Italic || obj.constructor === Strong || obj.constructor === Image || obj.constructor === Span) {
                         /* Objeto já construido simplesmente adiciona-o */
                         element.childs.add(obj);
-                    } else {
-                        throw 'invalid object';
                     }
+                }
+            }
+        };
+        this.style = function (value) {
+            if (value) {
+                element.attributes.remove('class');
+                if (value.constructor === Array) {
+                    element.attributes.add({name : 'class', value : value.join(' ')});
+                } else {
+                    element.attributes.add({name : 'class', value : value});
+                }
+            } else {
+                var classes = element.attributes.get('class');
+
+                if (classes) {
+                    return classes.value.split(' ');
                 }
             }
         };
 
         /* Seta valor da tag */
         this.content.add(params.content);
+        this.style(params.style);
     };
 
     /** Heading
@@ -681,14 +775,31 @@ sdk.modules.ui = function (app) {
             throw 'invalid heading type';
         }
 
-        /* Seta valor da tag */
-        element.value(params.value);
-
         /* Publicando métodos privados */
         this.add = element.add;
         this.remove = element.remove;
         this.value = element.value;
         this.getID = element.getID;
+        this.style = function (value) {
+            if (value) {
+                element.attributes.remove('class');
+                if (value.constructor === Array) {
+                    element.attributes.add({name : 'class', value : value.join(' ')});
+                } else {
+                    element.attributes.add({name : 'class', value : value});
+                }
+            } else {
+                var classes = element.attributes.get('class');
+
+                if (classes) {
+                    return classes.value.split(' ');
+                }
+            }
+        };
+
+        /* Seta valor da tag */
+        this.value(params.value);
+        this.style(params.style);
     };
 
     /** Achor
@@ -724,7 +835,58 @@ sdk.modules.ui = function (app) {
         /* Publicando métodos privados */
         this.add = element.add;
         this.remove = element.remove;
-        this.value = element.value;
+        this.content = {
+            get : element.childs.get,
+            remove : element.childs.remove,
+            add : function (obj) {
+                var i;
+
+                if (obj) {
+                    if (obj.constructor === String) {
+                        /* Se for texto, simplesmente colocar na tag */
+                        element.value(element.value() + obj, "after");
+                    } else if (obj.constructor === Array) {
+                        /* Se for um array inserir cada um dos elementos */
+                        for (i = 0; i < obj.length; i = i + 1) {
+                            this.add(obj[i]);
+                        }
+                    } else if (obj.img) {
+                        /* Cria uma imagem */
+                        element.childs.add(new Image({
+                            id    : obj.id,
+                            src   : obj.img,
+                            alt   : obj.alt,
+                            style : obj.style
+                        }));
+                    } else if (obj.b) {
+                        /* Texto em negrito */
+                        element.childs.add(new Strong({
+                            id    : obj.id,
+                            value : obj.b,
+                            style : obj.style
+                        }));
+                    } else if (obj.i) {
+                        /* Texto em itálico */
+                        element.childs.add(new Italic({
+                            id    : obj.id,
+                            value : obj.i,
+                            style : obj.style
+                        }));
+                    } else if (obj.span) {
+                        /* Cria um span */
+                        element.childs.add(new Span({
+                            id    : obj.id,
+                            value : obj.span,
+                            style : obj.style
+                        }));
+                    } else if (obj.constructor === Italic || obj.constructor === Strong || obj.constructor === Image || obj.constructor === Span) {
+                        /* Objeto já construido simplesmente adiciona-o */
+                        element.childs.add(obj);
+                    }
+                }
+            }
+        };
+
         this.getID = element.getID;
         this.click = function (cb) {
             if (cb) {
@@ -733,6 +895,25 @@ sdk.modules.ui = function (app) {
                 return clickCallback;
             }
         }
+        this.style = function (value) {
+            if (value) {
+                element.attributes.remove('class');
+                if (value.constructor === Array) {
+                    element.attributes.add({name : 'class', value : value.join(' ')});
+                } else {
+                    element.attributes.add({name : 'class', value : value});
+                }
+            } else {
+                var classes = element.attributes.get('class');
+
+                if (classes) {
+                    return classes.value.split(' ');
+                }
+            }
+        };
+
+        this.content.add(params.content);
+        this.style(params.style);
     };
 
     /** Div
@@ -769,41 +950,90 @@ sdk.modules.ui = function (app) {
                         /* Cria um parágrafo */
                         element.childs.add(new Paragraph({
                             id : obj.id,
-                            content : obj.p
+                            content : obj.p,
+                            style : obj.style
                         }));
                     } else if (obj.title) {
                         /* Cria um titulo */
                         element.childs.add(new Heading({
                             id : obj.id,
                             type : 3,
-                            value : obj.title
+                            value : obj.title,
+                            style : obj.style
                         }));
                     } else if (obj.subtitle) {
                         /* Cria um subtitulo */
                         element.childs.add(new Heading({
                             id : obj.id,
                             type : 4,
-                            value : obj.subtitle
+                            value : obj.subtitle,
+                            style : obj.style
+                        }));
+                    } else if (obj.div) {
+                        /* Cria um subtitulo */
+                        element.childs.add(new Div({
+                            id : obj.id,
+                            content : obj.div,
+                            style : obj.style
+                        }));
+                    } else if (obj.img) {
+                        /* Cria uma imagem */
+                        element.childs.add(new Image({
+                            id    : obj.id,
+                            src   : obj.img,
+                            alt   : obj.alt,
+                            style : obj.style
                         }));
                     } else if (obj.form) {
                         /* Cria um subtitulo */
                         element.childs.add(new Heading({
                             id : obj.id,
                             type : 4,
-                            value : obj.subtitle
+                            value : obj.subtitle,
+                            style : obj.style
                         }));
-                    } else if (obj.constructor === Paragraph || obj.constructor === Heading || obj.constructor === Form) {
+                    } else if (obj.span) {
+                        /* Cria um span */
+                        element.childs.add(new Span({
+                            id    : obj.id,
+                            value : obj.span,
+                            style : obj.style
+                        }));
+                    } else if (obj.a) {
+                        /* Cria uma ancora */
+                        element.childs.add(new Anchor({
+                            id    : obj.id,
+                            content : obj.a,
+                            click : obj.click,
+                            style : obj.style
+                        }));
+                    } else if (obj.constructor === Paragraph || obj.constructor === Heading || obj.constructor === Form || obj.constructor === Div || obj.constructor === Image || obj.constructor === Span || obj.constructor === Anchor) {
                         /* Objeto já construido simplesmente adiciona-o */
                         element.childs.add(obj);
-                    } else {
-                        throw 'invalid object';
                     }
+                }
+            }
+        };
+        this.style = function (value) {
+            if (value) {
+                element.attributes.remove('class');
+                if (value.constructor === Array) {
+                    element.attributes.add({name : 'class', value : value.join(' ')});
+                } else {
+                    element.attributes.add({name : 'class', value : value});
+                }
+            } else {
+                var classes = element.attributes.get('class');
+
+                if (classes) {
+                    return classes.value.split(' ');
                 }
             }
         };
 
         /* Seta valor da tag */
         this.content.add(params.content);
+        this.style(params.style);
     };
 
     /** Form
@@ -846,6 +1076,22 @@ sdk.modules.ui = function (app) {
         this.add = element.add;
         this.remove = element.remove;
         this.getID = element.getID;
+        this.style = function (value) {
+            if (value) {
+                element.attributes.remove('class');
+                if (value.constructor === Array) {
+                    element.attributes.add({name : 'class', value : value.join(' ')});
+                } else {
+                    element.attributes.add({name : 'class', value : value});
+                }
+            } else {
+                var classes = element.attributes.get('class');
+
+                if (classes) {
+                    return classes.value.split(' ');
+                }
+            }
+        };
 
         /* Controle dos fieldsets do form */
         this.fieldsets = {
@@ -893,6 +1139,7 @@ sdk.modules.ui = function (app) {
         element.childs.add(submitDiv);
         submitDiv.childs.add(submit);
         this.submitLabel(params.submitLabel);
+        this.style(params.style);
     };
 
     /** Fieldset
@@ -915,6 +1162,22 @@ sdk.modules.ui = function (app) {
         this.remove = element.remove;
         this.legend = legend.value;
         this.getID = element.getID;
+        this.style = function (value) {
+            if (value) {
+                element.attributes.remove('class');
+                if (value.constructor === Array) {
+                    element.attributes.add({name : 'class', value : value.join(' ')});
+                } else {
+                    element.attributes.add({name : 'class', value : value});
+                }
+            } else {
+                var classes = element.attributes.get('class');
+
+                if (classes) {
+                    return classes.value.split(' ');
+                }
+            }
+        };
 
         /* Controle dos inputs do fieldset */
         this.inputs = {
@@ -943,6 +1206,7 @@ sdk.modules.ui = function (app) {
         /* Seta valor da tag */
         this.inputs.add(params.inputs);
         this.legend(params.legend);
+        this.style(params.style);
     };
 
     /** InputText
@@ -1648,8 +1912,25 @@ sdk.modules.ui = function (app) {
         this.add = element.add;
         this.remove = element.remove;
         this.label = label.value;
+        this.style = function (value) {
+            if (value) {
+                element.attributes.remove('class');
+                if (value.constructor === Array) {
+                    element.attributes.add({name : 'class', value : value.join(' ')});
+                } else {
+                    element.attributes.add({name : 'class', value : value});
+                }
+            } else {
+                var classes = element.attributes.get('class');
+
+                if (classes) {
+                    return classes.value.split(' ');
+                }
+            }
+        };
 
         this.label(params.label);
+        this.style(params.style);
     };
 
     /** MenuOption
@@ -1982,6 +2263,10 @@ sdk.modules.ui = function (app) {
                         for (i = 0; i < obj.length; i++) {
                             this.add(obj[i]);
                         }
+                    } else if (obj.constructor === browseOption) {
+                        total++;
+                        ol.childs.add(obj);
+                        countSpan.value(total.toString());
                     } else {
                         total++;
                         ol.childs.add(new browseOption(obj));
@@ -2055,7 +2340,25 @@ sdk.modules.ui = function (app) {
                 tabsMenu.childs.add(new tabOption(params));
             }
         };
-        this.content = contentDiv.childs;
+        this.content = {
+            get : contentDiv.childs.get,
+            remove : contentDiv.childs.remove,
+            add : function (obj) {
+                var i;
+
+                if (obj) {
+                    if (obj.constructor === Array) {
+                        for (i = 0; i < obj.length; i++) {
+                            this.add(obj[i]);
+                        }
+                    } else if (obj.constructor === Div) {
+                        contentDiv.childs.add(obj);
+                    } else {
+                        contentDiv.childs.add(new Div(obj));
+                    }
+                }
+            }
+        }
     };
 
     /* Montando o namespace da UI */
@@ -2077,6 +2380,7 @@ sdk.modules.ui = function (app) {
     this.fieldset = Fieldset;
     this.input = Input;
     this.span = Span;
+    this.browseOption = browseOption;
 
     /* Elementos intermediários da interface */
     var section = new Element(undefined, 'section'),

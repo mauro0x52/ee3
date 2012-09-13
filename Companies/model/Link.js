@@ -12,7 +12,7 @@ var mongoose = require('mongoose'),
 
 linkStruct = {
     url  : {type : String, trim : true, required : true},
-    type : {type : String, trim : true, required : true, enum : ['Youtube', 'Facebook', 'Vimeo', 'Slideshare', 'Blog', 'Website']}
+    type : {type : String, trim : true, required : true, enum : ['youtube', 'facebook', 'vimeo', 'slideshare', 'blog', 'website']}
 };
 
 linkSchema = new Schema(linkStruct);

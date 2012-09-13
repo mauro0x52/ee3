@@ -268,8 +268,8 @@ describe('GET /city/[idCity]', function () {
             function(error, data, response) {
                 if (error) return done(error);
                 else {
-                    data.should.have.property('_id', dt.city.id, 'os ids devem ser iguais');
-                    data.should.have.property('slug', dt.city.slug, 'os slugs devem ser iguais');
+                    data.should.have.property('city').have.property('slug').equal(dt.city.slug);
+                    data.should.have.property('state').have.property('slug').equal(dt.state.slug);
                     done();
                 }
             }

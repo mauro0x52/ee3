@@ -1,13 +1,13 @@
-this.ui.menu.navigation.add(
+app.ui.menu.navigation.add(
     {
         image : '',
         description : 'buscar',
         click : function() {
-            this.Filter();
-            this.Find();
+            app.Filter();
+            app.Find();
         }//,
         //url : '/buscar'
     }
 );
 
-this.Route();
+app.Route();

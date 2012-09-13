@@ -12,7 +12,7 @@ var mongoose = require('mongoose'),
 
 contactSchema = new Schema({
     address : {type : String, trim : true, required : true},
-    type    : {type : String, trim : true, required : true, enum : ['Twitter', 'Msn', 'Email', 'Skype', 'GTalk']}
+    type    : {type : String, trim : true, required : true, enum : ['twitter', 'msn', 'email', 'skype', 'gtalk']}
 });
 
 exports.Contact = contactSchema;
