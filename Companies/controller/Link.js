@@ -40,7 +40,7 @@ module.exports = function (app) {
                     } else {
                         //verifica se a compania foi encontrada
                         if (company === null) {
-                            response.send({error : 'company not found'});
+                            response.send({error : {message :  'company not found', name : 'NotFoundError', id : request.params.company_slug, model : 'company'}});
                         } else {
                             //verifica se o usuário é dono da compania
                             if (! company.isOwner(user._id)) {
@@ -53,7 +53,7 @@ module.exports = function (app) {
                                     } else {
                                         //verifica se o produto foi encontrado
                                         if (product === null) {
-                                            response.send({error : 'product not found'});
+                                            response.send({error : {message :  'product not found', name : 'NotFoundError', id : request.params.product_slug, model : 'product'}});
                                         } else {
                                             //coloca os dados do post em um objeto
                                             product.links.push({
@@ -102,7 +102,7 @@ module.exports = function (app) {
             } else {
                 //verifica se a compania foi encontrada
                 if (company === null) {
-                    response.send({error : 'company not found'});
+                    response.send({error : {message :  'company not found', name : 'NotFoundError', id : request.params.company_slug, model : 'company'}});
                 } else {
                     //busca o produto
                     company.findProduct(request.params.product_slug, function (error, product) {
@@ -111,7 +111,7 @@ module.exports = function (app) {
                         } else {
                             //verifica se o produto foi encontrado
                             if (product === null) {
-                                response.send({error : 'product not found'});
+                                response.send({error : {message :  'product not found', name : 'NotFoundError', id : request.params.product_slug, model : 'product'}});
                             } else {
                                 response.send(product.links);
                             }
@@ -145,7 +145,7 @@ module.exports = function (app) {
             } else {
                 //verifica se a compania foi encontrada
                 if (company === null) {
-                    response.send({error : 'company not found'});
+                    response.send({error : {message :  'company not found', name : 'NotFoundError', id : request.params.company_slug, model : 'company'}});
                 } else {
                     //busca o produto
                     company.findProduct(request.params.product_slug, function (error, product) {
@@ -154,7 +154,7 @@ module.exports = function (app) {
                         } else {
                             //verifica se o produto foi encontrado
                             if (product === null) {
-                                response.send({error : 'product not found'});
+                                response.send({error : {message :  'product not found', name : 'NotFoundError', id : request.params.product_slug, model : 'product'}});
                             } else {
                                 //busca o link
                                 product.findLink(request.params.id, function (error, link) {
@@ -163,7 +163,7 @@ module.exports = function (app) {
                                     } else {
                                         //verifica se o link foi encontrada
                                         if (link === null) {
-                                            response.send({error : 'link not found'});
+                                            response.send({error : {message :  'link not found', name : 'NotFoundError', id : request.params.id, model : 'link'}});
                                         } else {
                                             response.send(link);
                                         }
@@ -205,7 +205,7 @@ module.exports = function (app) {
                     } else {
                         //verifica se a compania foi encontrada
                         if (company === null) {
-                            response.send({error : 'company not found'});
+                            response.send({error : {message :  'company not found', name : 'NotFoundError', id : request.params.company_slug, model : 'company'}});
                         } else {
                             //verifica se o usuário é dono da compania
                             if (! company.isOwner(user._id)) {
@@ -218,7 +218,7 @@ module.exports = function (app) {
                                     } else {
                                         //verifica se o produto foi encontrado
                                         if (product === null) {
-                                            response.send({error : 'product not found'});
+                                            response.send({error : {message :  'product not found', name : 'NotFoundError', id : request.params.product_slug, model : 'product'}});
                                         } else {
                                             //busca o link
                                             product.findLink(request.params.id, function (error, link) {
@@ -227,7 +227,7 @@ module.exports = function (app) {
                                                 } else {
                                                     //verifica se o link foi encontrada
                                                     if (link === null) {
-                                                        response.send({error : 'link not found'});
+                                                        response.send({error : {message :  'link not found', name : 'NotFoundError', id : request.params.id, model : 'link'}});
                                                     } else {
                                                         //altera os dados do link
                                                         link.type = request.param('type', link.type);
@@ -282,7 +282,7 @@ module.exports = function (app) {
                     } else {
                         //verifica se a compania foi encontrada
                         if (company === null) {
-                            response.send({error : 'company not found'});
+                            response.send({error : {message :  'company not found', name : 'NotFoundError', id : request.params.company_slug, model : 'company'}});
                         } else {
                             //verifica se o usuário é dono da compania
                             if (! company.isOwner(user._id)) {
@@ -295,7 +295,7 @@ module.exports = function (app) {
                                     } else {
                                         //verifica se o produto foi encontrado
                                         if (product === null) {
-                                            response.send({error : 'product not found'});
+                                            response.send({error : {message :  'product not found', name : 'NotFoundError', id : request.params.product_slug, model : 'product'}});
                                         } else {
                                             //busca o link
                                             product.findLink(request.params.id, function (error, link) {
@@ -304,7 +304,7 @@ module.exports = function (app) {
                                                 } else {
                                                     //verifica se o link foi encontrada
                                                     if (link === null) {
-                                                        response.send({error : 'link not found'});
+                                                        response.send({error : {message :  'link not found', name : 'NotFoundError', id : request.params.id, model : 'link'}});
                                                     } else {
                                                         //remove o link
                                                         link.remove(function (error) {
@@ -356,7 +356,7 @@ module.exports = function (app) {
                     } else {
                         //verifica se a compania foi encontrada
                         if (company === null) {
-                            response.send({error : 'company not found'});
+                            response.send({error : {message :  'company not found', name : 'NotFoundError', id : request.params.slug, model : 'company'}});
                         } else {
                             //verifica se o usuário é dono da compania
                             if (! company.isOwner(user._id)) {
@@ -406,7 +406,7 @@ module.exports = function (app) {
             } else {
                 //verifica se a compania foi encontrada
                 if (company === null) {
-                    response.send({error : 'company not found'});
+                    response.send({error : {message :  'company not found', name : 'NotFoundError', id : request.params.slug, model : 'company'}});
                 } else {
                     response.send(company.links);
                 }
@@ -437,7 +437,7 @@ module.exports = function (app) {
             } else {
                 //verifica se a compania foi encontrada
                 if (company === null) {
-                    response.send({error : 'company not found'});
+                    response.send({error : {message :  'company not found', name : 'NotFoundError', id : request.params.slug, model : 'company'}});
                 } else {
                     //busca o link
                     company.findLink(request.params.id, function (error, link) {
@@ -446,7 +446,7 @@ module.exports = function (app) {
                         } else {
                             //verifica se o link foi encontrada
                             if (link === null) {
-                                response.send({error : 'link not found'});
+                                response.send({error : {message :  'link not found', name : 'NotFoundError', id : request.params.id, model : 'link'}});
                             } else {
                                 response.send(link);
                             }
@@ -485,7 +485,7 @@ module.exports = function (app) {
                     } else {
                         //verifica se a compania foi encontrada
                         if (company === null) {
-                            response.send({error : 'company not found'});
+                            response.send({error : {message :  'company not found', name : 'NotFoundError', id : request.params.slug, model : 'company'}});
                         } else {
                             //verifica se o usuário é dono da compania
                             if (! company.isOwner(user._id)) {
@@ -498,7 +498,7 @@ module.exports = function (app) {
                                     } else {
                                         //verifica se o link foi encontrada
                                         if (link === null) {
-                                            response.send({error : 'link not found'});
+                                            response.send({error : {message :  'link not found', name : 'NotFoundError', id : request.params.id, model : 'link'}});
                                         } else {
                                             //altera os dados do link
                                             link.type = request.param('type', link.type);
@@ -550,7 +550,7 @@ module.exports = function (app) {
                     } else {
                         //verifica se a compania foi encontrada
                         if (company === null) {
-                            response.send({error : 'company not found'});
+                            response.send({error : {message :  'company not found', name : 'NotFoundError', id : request.params.slug, model : 'company'}});
                         } else {
                             //verifica se o usuário é dono da compania
                             if (! company.isOwner(user._id)) {
@@ -563,7 +563,7 @@ module.exports = function (app) {
                                 } else {
                                     //verifica se o link foi encontrada
                                     if (link === null) {
-                                        response.send({error : 'link not found'});
+                                        response.send({error : {message :  'link not found', name : 'NotFoundError', id : request.params.id, model : 'link'}});
                                     } else {
                                         //remove o link
                                         link.remove();
@@ -581,7 +581,7 @@ module.exports = function (app) {
                         }
                     }
                 });
-            } 
+            }
         });
     });
 };
