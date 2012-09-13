@@ -84,12 +84,12 @@ module.exports = function (app) {
                                     }
                                 });
                             } else {
-                                response.send({error : "state not found."});
+                                response.send({error : { message : 'state not found', name : 'NotFoundError', id : request.params.stateSlug, model : 'state'}});
                             }
                         }
                     });
                 } else {
-                    response.send({error : "country not found."});
+                    response.send({error : { message : 'country not found', name : 'NotFoundError', id : request.params.countrySlug, model : 'country'}});
                 }
             }
         });
@@ -133,17 +133,17 @@ module.exports = function (app) {
                                         if (city) {
                                             response.send(city);
                                         } else {
-                                            response.send({error : "city not found."});
+                                            response.send({error : { message : 'city not found', name : 'NotFoundError', id : request.params.citySlug, model : 'city'}});
                                         };
                                     }
                                 });
                             } else {
-                                response.send({error : "state not found."});
+                                response.send({error : { message : 'state not found', name : 'NotFoundError', id : request.params.stateSlug, model : 'state'}});
                             }
                         }
                     });
                 } else {
-                    response.send({error : "country not found."});
+                    response.send({error : { message : 'country not found', name : 'NotFoundError', id : request.params.countrySlug, model : 'country'}});
                 }
             }
         });
@@ -176,11 +176,11 @@ module.exports = function (app) {
                             response.send({city : city, state : state});
                         }
                         else {
-                            response.send({error : "state not found."});
+                            response.send({error : { message : 'state not found', name : 'NotFoundError', id : request.params.stateSlug, model : 'state'}});
                         }
                     })
                 } else {
-                    response.send({error : "city not found."});
+                    response.send({error : { message : 'city not found', name : 'NotFoundError', id : request.params.citySlug, model : 'city'}});
                 };
             }
         });

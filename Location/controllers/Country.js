@@ -89,7 +89,7 @@ module.exports = function (app) {
                 if (country) {
                     response.send(country);
                 } else {
-                    response.send({error : "country not found."});
+                    response.send({error : { message : 'country not found', name : 'NotFoundError', id : request.params.slug, model : 'country'}});
                 }
             }
         });
