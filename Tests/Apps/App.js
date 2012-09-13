@@ -47,7 +47,7 @@ describe('POST /app', function () {
                 if (error) {
                     return done(error);
                 } else {
-                    data.should.have.property('error').have.property('name', 'InvalidToken');
+                    data.should.have.property('error').have.property('name', 'InvalidTokenError');
                     data.should.not.have.property('_id');
                     data.should.not.have.property('slug');
                     data.should.not.have.property('name');
@@ -270,7 +270,7 @@ describe('GET /app/[slug]', function () {
             if (error) {
                 return done(error);
             } else {
-                data.should.have.property('error').have.property('name', 'NotFound');
+                data.should.have.property('error').have.property('name', 'NotFoundError');
                 data.should.not.have.property('_id');
                 data.should.not.have.property('slug');
                 data.should.not.have.property('name');
@@ -343,7 +343,7 @@ describe('DEL /app/[slug]', function () {
             if (error) {
                 return done(error);
             } else {
-                data.should.have.property('error').have.property('name', 'InvalidToken');
+                data.should.have.property('error').have.property('name', 'InvalidTokenError');
                 data.should.not.have.property('_id');
                 data.should.not.have.property('slug');
                 data.should.not.have.property('name');
@@ -355,11 +355,11 @@ describe('DEL /app/[slug]', function () {
     });
 
     it('app inexistente', function(done) {
-        api.del('apps', '/app/inexistente', {}, function(error, data, response) {
+        api.del('apps', '/app/inexistente', {token : token}, function(error, data, response) {
             if (error) {
                 return done(error);
             } else {
-                data.should.have.property('error').have.property('name', 'NotFound');
+                data.should.have.property('error').have.property('name', 'NotFoundError');
                 data.should.not.have.property('_id');
                 data.should.not.have.property('slug');
                 data.should.not.have.property('name');
@@ -436,7 +436,7 @@ describe('PUT /app/[slug]', function () {
             if (error) {
                 return done(error);
             } else {
-                data.should.have.property('error').have.property('name', 'InvalidToken');
+                data.should.have.property('error').have.property('name', 'InvalidTokenError');
                 data.should.not.have.property('_id');
                 data.should.not.have.property('slug');
                 data.should.not.have.property('name');
@@ -498,7 +498,7 @@ describe('PUT /app/[slug]', function () {
             if (error) {
                 return done(error);
             } else {
-                data.should.have.property('error').have.property('name', 'NotFound');
+                data.should.have.property('error').have.property('name', 'NotFoundError');
                 data.should.not.have.property('_id');
                 data.should.not.have.property('slug');
                 data.should.not.have.property('name');

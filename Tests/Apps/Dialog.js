@@ -152,6 +152,7 @@ describe('POST /app/[slug]/version/[number]/dialog', function () {
                 if (error) {
                     return done(error);
                 } else {
+                    console.log(data);
                     should.not.exist(data.error, 'erro inesperado');
                     data.should.have.property('_id');
                     data.should.have.property('name');

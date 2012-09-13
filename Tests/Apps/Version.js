@@ -52,8 +52,8 @@ describe('POST /app/[slug]/version', function () {
             }, function(error, data, response) {
                 if (error) {
                     return done(error);
-                } else { 
-                    should.exist(data.error);
+                } else {
+                    data.should.have.property('error').have.property('name', 'NotFoundError');
                     data.should.not.have.property('_id');
                     data.should.not.have.property('number');
                     done();
@@ -69,8 +69,8 @@ describe('POST /app/[slug]/version', function () {
             }, function(error, data, response) {
                 if (error) {
                     return done(error);
-                } else { 
-                    should.exist(data.error);
+                } else {
+                    data.should.have.property('error').have.property('name', 'InvalidTokenError');
                     data.should.not.have.property('_id');
                     data.should.not.have.property('number');
                     done();
@@ -85,8 +85,8 @@ describe('POST /app/[slug]/version', function () {
             }, function(error, data, response) {
                 if (error) {
                     return done(error);
-                } else { 
-                    should.exist(data.error);
+                } else {
+                    data.should.have.property('error').have.property('name', 'ValidationError');
                     data.should.not.have.property('_id');
                     data.should.not.have.property('number');
                     done();
@@ -102,7 +102,7 @@ describe('POST /app/[slug]/version', function () {
             }, function(error, data, response) {
                 if (error) {
                     return done(error);
-                } else { 
+                } else {
                     should.not.exist(data.error, 'erro inesperado');
                     data.should.have.property('_id');
                     data.should.have.property('number');
@@ -146,7 +146,7 @@ describe('GET /app/[slug]/versions', function () {
             });
         });
     });
-    
+
     it('url tem que existir', function(done) {
         api.get('apps', '/app/' + slug + '/versions', {}, function(error, data, response) {
             if (error) {
@@ -160,11 +160,11 @@ describe('GET /app/[slug]/versions', function () {
     });
 
     it('app inexistente', function(done) {
-        api.get('apps', '/app/inexistente/versions', {}, function(error, data, response) {
+        api.get('apps', '/app/inexistente/versions', {token : token}, function(error, data, response) {
             if (error) {
                 return done(error);
             } else {
-                should.exist(data.error);
+                    data.should.have.property('error').have.property('name', 'NotFoundError');
                 done();
             }
         });
@@ -175,7 +175,7 @@ describe('GET /app/[slug]/versions', function () {
             if (error) {
                 return done(error);
             } else {
-                should.not.exist(data.error, 'erro inesperado');                
+                should.not.exist(data.error, 'erro inesperado');
                 data.length.should.be.above(19);
                 for (var i = 0 ; i < data.length; i = i + 1) {
                     data[i].should.have.property('_id');
@@ -229,11 +229,11 @@ describe('GET /app/[slug]/version/[slug]', function () {
     });
 
     it('app inexistente', function(done) {
-        api.get('apps', '/app/inexistente/version/' + version, {}, function(error, data, response) {
+        api.get('apps', '/app/inexistente/version/' + version, {token : token}, function(error, data, response) {
             if (error) {
                 return done(error);
             } else {
-                should.exist(data.error);
+                data.should.have.property('error').have.property('name', 'NotFoundError');
                 data.should.not.have.property('_id');
                 data.should.not.have.property('number');
                 done();
@@ -246,7 +246,7 @@ describe('GET /app/[slug]/version/[slug]', function () {
             if (error) {
                 return done(error);
             } else {
-                should.exist(data.error);
+                data.should.have.property('error').have.property('name', 'NotFoundError');
                 data.should.not.have.property('_id');
                 data.should.not.have.property('number');
                 done();
@@ -314,8 +314,8 @@ describe('DEL /app/[slug]/version/[number]', function () {
         api.del('apps', '/app/' + slug + '/version/' + version, {token : 'invalido'}, function(error, data, response) {
             if (error) {
                 return done(error);
-            } else { 
-                should.exist(data.error);
+            } else {
+                    data.should.have.property('error').have.property('name', 'InvalidTokenError');
                 data.should.not.have.property('_id');
                 data.should.not.have.property('number');
                 done();
@@ -324,11 +324,11 @@ describe('DEL /app/[slug]/version/[number]', function () {
     });
 
     it('app inexistente', function(done) {
-        api.del('apps', '/app/inexistente/version/' + version, {token : 'invalido'}, function(error, data, response) {
+        api.del('apps', '/app/inexistente/version/' + version, {token : token}, function(error, data, response) {
             if (error) {
                 return done(error);
             } else {
-                should.exist(data.error);
+                data.should.have.property('error').have.property('name', 'NotFoundError');
                 data.should.not.have.property('_id');
                 data.should.not.have.property('number');
                 done();
@@ -337,11 +337,11 @@ describe('DEL /app/[slug]/version/[number]', function () {
     });
 
     it('versão inexistente', function(done) {
-        api.del('apps', '/app/' + slug + '/version/inexistente', {}, function(error, data, response) {
+        api.del('apps', '/app/' + slug + '/version/inexistente', {token : token}, function(error, data, response) {
             if (error) {
                 return done(error);
             } else {
-                should.exist(data.error);
+                data.should.have.property('error').have.property('name', 'NotFoundError');
                 data.should.not.have.property('_id');
                 data.should.not.have.property('number');
                 done();
@@ -356,7 +356,7 @@ describe('DEL /app/[slug]/version/[number]', function () {
             } else {
                 should.not.exist(data, 'erro inesperado');
                 api.get('apps', '/app/' + slug + '/version/' + version, {token : token}, function (error, data) {
-                    should.exist(data.error, 'não exclui');
+                    should.exist(data, 'não exclui');
                     done();
                 });
             }
@@ -413,8 +413,8 @@ describe('PUT /app/[slug]/version/[numer]', function () {
             }, function(error, data, response) {
             if (error) {
                 return done(error);
-            } else { 
-                should.exist(data.error);
+            } else {
+                    data.should.have.property('error').have.property('name', 'InvalidTokenError');
                 should.not.exist(data.slug);
                 data.should.not.have.property('_id');
                 data.should.not.have.property('number');
@@ -447,7 +447,7 @@ describe('PUT /app/[slug]/version/[numer]', function () {
             if (error) {
                 return done(error);
             } else {
-                should.exist(data.error);
+                data.should.have.property('error').have.property('name', 'NotFoundError');
                 data.should.not.have.property('_id');
                 data.should.not.have.property('number');
                 done();
@@ -463,7 +463,7 @@ describe('PUT /app/[slug]/version/[numer]', function () {
             if (error) {
                 return done(error);
             } else {
-                should.exist(data.error);
+                data.should.have.property('error').have.property('name', 'NotFoundError');
                 data.should.not.have.property('_id');
                 data.should.not.have.property('number');
                 done();
