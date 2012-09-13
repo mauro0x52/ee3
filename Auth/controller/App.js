@@ -57,7 +57,7 @@ module.exports = function (app) {
                                 if (error) {
                                     response.send({error : error});
                                 } else {
-                                    response.send(user.authorizedApps.pop());
+                                    response.send({authorizedApp : user.authorizedApps.pop()});
                                 }
                             });
                         }
@@ -125,6 +125,44 @@ module.exports = function (app) {
         });
     });
 
+    /** GET /user/:login/apps
+     *
+     * @autor : Rafael Erthal
+     * @since : 2012-09
+     *
+     * @description : lista aplicativos autorizados pelo usuário
+     *
+     * @allowedApp : WWW, pagamento, appFinder
+     * @allowedUser : Logado
+     *
+     * @request : {token}
+     * @response : {[thirdPartyLogins]}
+     */
+    app.get('/user/:login/apps', function (request, response) {
+        response.contentType('json');
+
+        //localiza o usuário
+        User.findByIdentity(request.params.login, function (error, user) {
+            if (error) {
+                response.send({error : error});
+            } else {
+                //verifica se o usuario foi encontrado
+                if (user === null) {
+                    response.send({error : 'user not found'});
+                } else {
+                    //verifica o token do usuário
+                    user.checkToken(request.param('token', null), function (valid) {
+                        if (!valid) {
+                            response.send({error : 'invalid token'});
+                        } else {
+                            response.send({authorizedApps : user.authorizedApps});
+                        }
+                    });
+                }
+            }
+        });
+    });
+
     /** GET /user/:login/app/:app_id
      *
      * @autor : Rafael Erthal
@@ -156,15 +194,20 @@ module.exports = function (app) {
                             response.send({error : {message : 'invalid token', name : 'InvalidToken'}});
                         } else {
                             //busca a autorização
-                            user.findAuthorizedApp(request.params.id, function (error, app) {
+                            user.findAuthorizedApp(request.params.id, function (error, authorizedApp) {
                                 if (error) {
                                     response.send({error : error});
                                 } else {
                                     //verifica se a autorização foi encontrada
+<<<<<<< HEAD
                                     if (app === null) {
                                         response.send({error : { message : 'app not found', name : 'NotFoundError', id : request.params.id, model : 'app'}});
+=======
+                                    if (authorizedApp === null) {
+                                        response.send({error : 'app not found'});
+>>>>>>> 2d28e37e0632690fd7093c1ccade6c78c67c2f1f
                                     } else {
-                                        response.send(app);
+                                        response.send({authorizedApp : authorizedApp});
                                     }
                                 }
                             });
@@ -210,23 +253,28 @@ module.exports = function (app) {
                             response.send({error : {message : 'invalid token', name : 'InvalidToken'}});
                         } else {
                             //busca a autorização
-                            user.findAuthorizedApp(request.params.id, function (error, app) {
+                            user.findAuthorizedApp(request.params.id, function (error, authorizedApp) {
                                 if (error) {
                                     response.send({error : error});
                                 } else {
                                     //verifica se a autorização foi encontrada
+<<<<<<< HEAD
                                     if (app === null) {
                                         response.send({error : { message : 'app not found', name : 'NotFoundError', id : request.params.id, model : 'app'}});
+=======
+                                    if (authorizedApp === null) {
+                                        response.send({error : 'app not found'});
+>>>>>>> 2d28e37e0632690fd7093c1ccade6c78c67c2f1f
                                     } else {
                                         //edita dados da autorização
-                                        app.authorizationDate = request.param('authorizationDate', app.authorizationDate);
-                                        app.expirationDate = request.param('expirationDate', app.expirationDate);
+                                        authorizedApp.authorizationDate = request.param('authorizationDate', authorizedApp.authorizationDate);
+                                        authorizedApp.expirationDate = request.param('expirationDate', authorizedApp.expirationDate);
                                         //salva dados da autorização
                                         user.save(function (error) {
                                             if (error) {
                                                 response.send({error : error});
                                             } else {
-                                                response.send(app);
+                                                response.send({authorizedApp : authorizedApp});
                                             }
                                         });
                                     }

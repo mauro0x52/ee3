@@ -26,7 +26,7 @@ describe('GET /regions', function () {
                 else {
                     response.should.have.status(200);
                     should.not.exist(data.error, 'erro inesperado');
-                    data.length.should.be.below(11);
+                    data.regions.length.should.be.below(11);
                     done();
                 }
             }
@@ -41,7 +41,7 @@ describe('GET /regions', function () {
                 if (error) return done(error);
                 else {
                     should.not.exist(data.error, 'erro inesperado');
-                    data.length.should.be.below(19);
+                    data.regions.length.should.be.below(19);
                     done();
                 }
             }
@@ -52,18 +52,18 @@ describe('GET /regions', function () {
                 if (error) return done(error);
                 else {
                     should.not.exist(data.error);
-                    data.length.should.be.below(5);
-                    var regions = data;
-                    if (data.length == 4){
+                    data.regions.length.should.be.below(5);
+                    var regions = data.regions;
+                    if (data.regions.length == 4){
 	                    api.get('location', '/regions', {limit : 2, page : 2}, function(error, data, response) {
 	                            if (error) return done(error);
 	                            else {
 	                                should.not.exist(data.error, 'erro inesperado');
-	                                data.length.should.be.below(3);
+	                                data.regions.length.should.be.below(3);
 	                                JSON.stringify(regions)
-	                                    .should.include(JSON.stringify(data[0]), 'resultado menor tem que está dentro do resultado maior');
+	                                    .should.include(JSON.stringify(data.regions[0]), 'resultado menor tem que está dentro do resultado maior');
 	                                JSON.stringify(regions)
-	                                    .should.include(JSON.stringify(data[1]), 'resultado menor tem que está dentro do resultado maior');
+	                                    .should.include(JSON.stringify(data.regions[1]), 'resultado menor tem que está dentro do resultado maior');
 	                                done();
 	                            }
 	                        }
@@ -82,9 +82,9 @@ describe('GET /regions', function () {
                 if (error) return done(error);
                 else {
                     should.not.exist(data.error, 'erro inesperado');
-                    data.length.should.be.below(11);
-                    for (var i = 1; i < data.length; i++) {
-                        data[i].name.should.be.above(data[i-1].name, 'não ordenou');
+                    data.regions.length.should.be.below(11);
+                    for (var i = 1; i < data.regions.length; i++) {
+                        data[i].name.should.be.above(data.regions[i-1].name, 'não ordenou');
                     }
                     done();
                 }
@@ -100,9 +100,9 @@ describe('GET /regions', function () {
                 if (error) return done(error);
                 else {
                     should.not.exist(data.error, 'erro inesperado');
-                    data.length.should.be.below(11);
-                    for (var i = 1; i < data.length; i++) {
-                        data[i-1].slug.should.be.above(data[i].slug, 'n√£o ordenou');
+                    data.regions.length.should.be.below(11);
+                    for (var i = 1; i < data.regions.length; i++) {
+                        data.regions[i-1].slug.should.be.above(data.regions[i].slug, 'n√£o ordenou');
                     }
                     done();
                 }
@@ -146,8 +146,8 @@ describe('GET /region/:region_id', function () {
             function(error, data, response) {
                 if (error) return done(error);
                 else {
-                    data.should.have.property('_id', dt.region.id, 'os ids devem ser iguais');
-                    data.should.have.property('slug', dt.region.slug, 'os slugs devem ser iguais');
+                    data.should.have.property('region').have.property('_id', dt.region.id, 'os ids devem ser iguais');
+                    data.should.have.property('region').have.property('slug', dt.region.slug, 'os slugs devem ser iguais');
                     done();
                 }
             }
@@ -159,8 +159,8 @@ describe('GET /region/:region_id', function () {
             function(error, data, response) {
                 if (error) return done(error);
                 else {
-                    data.should.have.property('_id', dt.region.id, 'os ids devem ser iguais');
-                    data.should.have.property('slug', dt.region.slug, 'os slugs devem ser iguais');
+                    data.should.have.property('region').have.property('_id', dt.region.id, 'os ids devem ser iguais');
+                    data.should.have.property('region').have.property('slug', dt.region.slug, 'os slugs devem ser iguais');
                     done();
                 }
             }

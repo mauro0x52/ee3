@@ -60,7 +60,7 @@ module.exports = function (app) {
                                     if (error) {
                                         response.send({error : error});
                                     } else {
-                                        response.send(profile.jobs.pop());
+                                        response.send({job : profile.jobs.pop()});
                                     }
                                 });
                             }
@@ -96,7 +96,7 @@ module.exports = function (app) {
                 if (profile === null) {
                     response.send({error : { message : 'profile not found', name : 'NotFoundError', id : request.params.slug, model : 'profile'}});
                 } else {
-                    response.send(profile.jobs);
+                    response.send({jobs : profile.jobs});
                 }
             }
         });
@@ -136,7 +136,7 @@ module.exports = function (app) {
                             if (job === null) {
                                 response.send({error : { message : 'job not found', name : 'NotFoundError', id : request.params.id, model : 'job'}});
                             } else {
-                                response.send(job);
+                                response.send({job : job});
                             }
                         }
                     });
@@ -200,7 +200,7 @@ module.exports = function (app) {
                                                 if (error) {
                                                     response.send({error : error});
                                                 } else {
-                                                    response.send(job);
+                                                    response.send({job : job});
                                                 }
                                             });
                                         }

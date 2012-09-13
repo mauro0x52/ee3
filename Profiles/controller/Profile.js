@@ -34,7 +34,7 @@ module.exports = function (app) {
                 if (profile === null) {
                     response.send({error : { message : 'profile not found', name : 'NotFoundError', id : request.params.slug, model : 'profile'}});
                 } else {
-                    response.send(profile);
+                    response.send({profile : profile});
                 }
             }
         });
@@ -77,7 +77,7 @@ module.exports = function (app) {
                     if (error) {
                         response.send({error : error});
                     } else {
-                        response.send(profile);
+                        response.send({profile : profile});
                     }
                 });
             }
@@ -127,7 +127,7 @@ module.exports = function (app) {
                                     if (error) {
                                         response.send({error : error});
                                     } else {
-                                        response.send(profile);
+                                        response.send({profile : profile});
                                     }
                                 });
                             }
@@ -173,7 +173,7 @@ module.exports = function (app) {
                                 if (error) {
                                     response.send({error : error});
                                 } else {
-                                    response.send({error : ''});
+                                    response.send(null);
                                 }
                             });
                         }

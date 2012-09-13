@@ -24,16 +24,16 @@ describe('POST /user/[login]/app/[app_id]', function () {
                 password : 'testando',
                 password_confirmation : 'testando'
         }, function(error, data) {
-            token = data.token;
-            userId = data._id;
+            token = data.user.token;
+            userId = data.user._id;
             // cria um app
             api.post('apps','/app', {
                 token : token,
                 name  : 'App ' + rand(),
                 type  : 'free'
             }, function(error, data) {
-                tokenApp = data.token;
-                appId = data._id;
+                tokenApp = data.app.token;
+                appId = data.app._id;
                 done();
             });
         });
@@ -56,8 +56,7 @@ describe('POST /user/[login]/app/[app_id]', function () {
             if (error) {
                 return done(error);
             } else {
-                should.exist(data.error);
-                should.not.exist(data.token);
+                should.exist(data.error, "deveria retornar error");
                 done();
             }
         });
@@ -70,8 +69,7 @@ describe('POST /user/[login]/app/[app_id]', function () {
             if (error) {
                 return done(error);
             } else {
-                should.exist(data.error);
-                should.not.exist(data.token);
+                should.exist(data.error, "deveria retornar error");
                 done();
             }
         });
@@ -84,8 +82,7 @@ describe('POST /user/[login]/app/[app_id]', function () {
             if (error) {
                 return done(error);
             } else {
-                should.exist(data.error);
-                should.not.exist(data.token);
+                should.exist(data.error, "deveria retornar error");
                 done();
             }
         });
@@ -98,8 +95,10 @@ describe('POST /user/[login]/app/[app_id]', function () {
             if (error) {
                 return done(error);
             } else {
-                should.exist(data, "não retornou o token");
                 should.not.exist(data.error);
+                data.should.have.property('authorizedApp').have.property('_id');
+                data.should.have.property('authorizedApp').have.property('appId');
+                data.should.have.property('authorizedApp').have.property('token');
                 done();
             }
         });
@@ -120,16 +119,16 @@ describe('DEL /user/[login]/app/[app_id]', function () {
                 password : 'testando',
                 password_confirmation : 'testando'
         }, function(error, data) {
-            token = data.token;
-            userId = data._id;
+            token = data.user.token;
+            userId = data.user._id;
             // cria um app
             api.post('apps','/app', {
                 token : token,
                 name  : 'App ' + rand(),
                 type  : 'free'
             }, function(error, data) {
-                tokenApp = data.token;
-                appId = data._id;
+                tokenApp = data.app.token;
+                appId = data.app._id;
                 api.post('auth', '/user/' + userId + '/app/' + appId, {token : token}, function (error, data) {
                     auth = data.token;
                     done();
@@ -219,16 +218,16 @@ describe('GET /user/[login]/app/[app_id]', function () {
                 password : 'testando',
                 password_confirmation : 'testando'
         }, function(error, data) {
-            token = data.token;
-            userId = data._id;
+            token = data.user.token;
+            userId = data.user._id;
             // cria um app
             api.post('apps','/app', {
                 token : token,
                 name  : 'App ' + rand(),
                 type  : 'free'
             }, function(error, data) {
-                tokenApp = data.token;
-                appId = data._id;
+                tokenApp = data.app.token;
+                appId = data.app._id;
                 api.post('auth', '/user/' + userId + '/app/' + appId, {token : token}, function (error, data) {
                     auth = data.token;
                     done();
@@ -295,8 +294,8 @@ describe('GET /user/[login]/app/[app_id]', function () {
                 return done(error);
             } else {
                 should.not.exist(data.error);
-                data.should.have.property('appId');
-                data.should.have.property('token');
+                data.should.have.property('authorizedApp').have.property('appId');
+                data.should.have.property('authorizedApp').have.property('token');
                 done();
             }
         });
@@ -317,16 +316,16 @@ describe('PUT /user/[login]/app/[app_id]', function () {
                 password : 'testando',
                 password_confirmation : 'testando'
         }, function(error, data) {
-            token = data.token;
-            userId = data._id;
+            token = data.user.token;
+            userId = data.user._id;
             // cria um app
             api.post('apps','/app', {
                 token : token,
                 name  : 'App ' + rand(),
                 type  : 'free'
             }, function(error, data) {
-                tokenApp = data.token;
-                appId = data._id;
+                tokenApp = data.app.token;
+                appId = data.app._id;
                 api.post('auth', '/user/' + userId + '/app/' + appId, {token : token}, function (error, data) {
                     auth = data.token;
                     done();
@@ -397,9 +396,9 @@ describe('PUT /user/[login]/app/[app_id]', function () {
                 should.not.exist(data.error);
                 api.get('auth', '/user/'+userId+'/app/'+appId, {token : token}, function (error, data) {
                     should.not.exist(data.error, 'algo deu errado');
-                    data.should.have.property('_id');
-                    data.should.have.property('appId');
-                    data.should.have.property('token');
+                    data.should.have.property('authorizedApp').have.property('_id');
+                    data.should.have.property('authorizedApp').have.property('appId');
+                    data.should.have.property('authorizedApp').have.property('token');
                     done();
                 });
             }

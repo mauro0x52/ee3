@@ -24,7 +24,7 @@ describe('POST /company/[slug]/address', function () {
             password : 'testando',
             password_confirmation : 'testando'
         }, function(error, data) {
-            token = data.token;
+            token = data.user.token;
             api.post('companies', '/company', {
                 token : token,
                 name : 'Compania ' + rand(),
@@ -34,7 +34,7 @@ describe('POST /company/[slug]/address', function () {
                 active : 1,
                 about: 'sobre'
             }, function(error, data, response) {
-                company = data.slug;
+                company = data.company.slug;
                 done();
             });
         });
@@ -176,10 +176,10 @@ describe('POST /company/[slug]/address', function () {
                 } else {
                     should.exist(data);
                     should.not.exist(data.error);
-                    data.should.have.property('_id');
-                    data.should.have.property('street', street);
-                    data.should.have.property('number', number);
-                    data.should.have.property('complement', complement);
+                    data.should.have.property('address').have.property('_id');
+                    data.should.have.property('address').have.property('street', street);
+                    data.should.have.property('address').have.property('number', number);
+                    data.should.have.property('address').have.property('complement', complement);
                     done();
                 }
             }
@@ -201,7 +201,7 @@ describe('GET /company/[slug]/addresses', function () {
             password : 'testando',
             password_confirmation : 'testando'
         }, function(error, data) {
-            token = data.token;
+            token = data.user.token;
             api.post('companies', '/company', {
                 token : token,
                 name : 'Compania ' + rand(),
@@ -211,7 +211,7 @@ describe('GET /company/[slug]/addresses', function () {
                 active : 1,
                 about: 'sobre'
             }, function(error, data, response) {
-                company = data.slug;
+                company = data.company.slug;
                 for (var i = 0; i < 20; i = i + 1) {
                     api.post('companies', '/company/' + company + '/address', {
                         token   : token,
@@ -260,14 +260,13 @@ describe('GET /company/[slug]/addresses', function () {
                 return done(error);
             } else {
                 should.not.exist(data.error, 'erro inesperado');
-                data.length.should.be.above(19);
-                for (var i = 0 ; i < data.length; i = i + 1) {
-                    data[i].should.have.property('_id');
-                    data[i].should.have.property('street');
-                    data[i].should.have.property('number');
-                    data[i].should.have.property('complement');
-                    data[i].should.have.property('city');
-                    data[i].should.have.property('headQuarters');
+                for (var i = 0 ; i < data.addresses.length; i = i + 1) {
+                    data.addresses[i].should.have.property('_id');
+                    data.addresses[i].should.have.property('street');
+                    data.addresses[i].should.have.property('number');
+                    data.addresses[i].should.have.property('complement');
+                    data.addresses[i].should.have.property('city');
+                    data.addresses[i].should.have.property('headQuarters');
                 }
                 done();
             }
@@ -289,7 +288,7 @@ describe('GET /company/[slug]/address/[id]', function () {
             password : 'testando',
             password_confirmation : 'testando'
         }, function(error, data) {
-            token = data.token;
+            token = data.user.token;
             api.post('companies', '/company', {
                 token : token,
                 name : 'Compania ' + rand(),
@@ -299,7 +298,7 @@ describe('GET /company/[slug]/address/[id]', function () {
                 active : 1,
                 about: 'sobre'
             }, function(error, data, response) {
-                company = data.slug;
+                company = data.company.slug;
                 api.post('companies', '/company/' + company + '/address', {
                     token   : token,
                     street : "Rua " + rand(),
@@ -308,7 +307,7 @@ describe('GET /company/[slug]/address/[id]', function () {
                     city : "Cidade " + rand(),
                     headQuarters : true
                 }, function(error, data, response) {
-                    address = data._id
+                    address = data.address._id
                     done();
                 });
             });
@@ -344,12 +343,12 @@ describe('GET /company/[slug]/address/[id]', function () {
                 return done(error);
             } else {
                 should.not.exist(data.error, 'erro inesperado');
-                data.should.have.property('_id');
-                data.should.have.property('street');
-                data.should.have.property('number');
-                data.should.have.property('complement');
-                data.should.have.property('city');
-                data.should.have.property('headQuarters');
+                data.should.have.property('address').have.property('_id');
+                data.should.have.property('address').have.property('street');
+                data.should.have.property('address').have.property('number');
+                data.should.have.property('address').have.property('complement');
+                data.should.have.property('address').have.property('city');
+                data.should.have.property('address').have.property('headQuarters');
                 done();
             }
         });
@@ -370,7 +369,7 @@ describe('DEL /company/[slug]/address/[id]', function () {
             password : 'testando',
             password_confirmation : 'testando'
         }, function(error, data) {
-            token = data.token;
+            token = data.user.token;
             api.post('companies', '/company', {
                 token : token,
                 name : 'Compania ' + rand(),
@@ -380,7 +379,7 @@ describe('DEL /company/[slug]/address/[id]', function () {
                 active : 1,
                 about: 'sobre'
             }, function(error, data, response) {
-                company = data.slug;
+                company = data.company.slug;
                 api.post('companies', '/company/' + company + '/address', {
                     token   : token,
                     street : "Rua " + rand(),
@@ -389,7 +388,7 @@ describe('DEL /company/[slug]/address/[id]', function () {
                     city : "Cidade " + rand(),
                     headQuarters : true
                 }, function(error, data, response) {
-                    address = data._id
+                    address = data.address._id
                     done();
                 });
             });
@@ -460,7 +459,7 @@ describe('PUT /company/[slug]/address/[id]', function () {
             password : 'testando',
             password_confirmation : 'testando'
         }, function(error, data) {
-            token = data.token;
+            token = data.user.token;
             api.post('companies', '/company', {
                 token : token,
                 name : 'Compania ' + rand(),
@@ -470,7 +469,7 @@ describe('PUT /company/[slug]/address/[id]', function () {
                 active : 1,
                 about: 'sobre'
             }, function(error, data, response) {
-                company = data.slug;
+                company = data.company.slug;
                 api.post('companies', '/company/' + company + '/address', {
                     token   : token,
                     street : "Rua " + rand(),
@@ -479,8 +478,8 @@ describe('PUT /company/[slug]/address/[id]', function () {
                     city : "Cidade " + rand(),
                     headQuarters : true
                 }, function(error, data, response) {
-                    address = data._id;
-                    obj = data;
+                    address = data.address._id;
+                    obj = data.address;
                     done();
                 });
             });
@@ -546,10 +545,10 @@ describe('PUT /company/[slug]/address/[id]', function () {
             if (error) {
                 return done(error);
             } else {
-                obj = data;
+                obj = data.address;
                 should.not.exist(data.error);
-                data.should.have.property('_id');
-                data.should.have.property('street', obj.street);
+                data.should.have.property('address').have.property('_id');
+                data.should.have.property('address').have.property('street', obj.street);
                 done();
             }
         });
@@ -566,10 +565,10 @@ describe('PUT /company/[slug]/address/[id]', function () {
             if (error) {
                 return done(error);
             } else {
-                obj = data;
+                obj = data.address;
                 should.not.exist(data.error);
-                data.should.have.property('_id');
-                data.should.have.property('number', obj.number);
+                data.should.have.property('address').have.property('_id');
+                data.should.have.property('address').have.property('number', obj.number);
                 done();
             }
         });
@@ -586,10 +585,10 @@ describe('PUT /company/[slug]/address/[id]', function () {
             if (error) {
                 return done(error);
             } else {
-                obj = data;
+                obj = data.address;
                 should.not.exist(data.error);
-                data.should.have.property('_id');
-                data.should.have.property('complement', obj.complement);
+                data.should.have.property('address').have.property('_id');
+                data.should.have.property('address').have.property('complement', obj.complement);
                 done();
             }
         });
@@ -606,10 +605,10 @@ describe('PUT /company/[slug]/address/[id]', function () {
             if (error) {
                 return done(error);
             } else {
-                obj = data;
+                obj = data.address;
                 should.not.exist(data.error);
-                data.should.have.property('_id');
-                data.should.have.property('headQuarters', obj.headQuarters);
+                data.should.have.property('address').have.property('_id');
+                data.should.have.property('address').have.property('headQuarters', obj.headQuarters);
                 done();
             }
         });
@@ -632,10 +631,10 @@ describe('PUT /company/[slug]/address/[id]', function () {
                 return done(error);
             } else {
                 should.not.exist(data.error);
-                data.should.have.property('_id');
-                data.should.have.property('street', street);
-                data.should.have.property('number', number);
-                data.should.have.property('complement', complement);
+                data.should.have.property('address').have.property('_id');
+                data.should.have.property('address').have.property('street', street);
+                data.should.have.property('address').have.property('number', number);
+                data.should.have.property('address').have.property('complement', complement);
                 done();
             }
         });

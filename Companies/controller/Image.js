@@ -80,7 +80,7 @@ module.exports = function (app) {
                                                                 if (error) {
                                                                     response.send({error : error});
                                                                 } else {
-                                                                    response.send(product.images.pop());
+                                                                    response.send({image : product.images.pop()});
                                                                 }
                                                             });
                                                         }
@@ -136,7 +136,7 @@ module.exports = function (app) {
                                     response.send(null);
                                 }
                                 else {
-                                    response.send(product.images);
+                                    response.send({images : product.images});
                                 }
                             }
                         }
@@ -189,7 +189,7 @@ module.exports = function (app) {
                                         if (image === null) {
                                             response.send({error : { message : 'image not found'});
                                         } else {
-                                            response.send(image);
+                                            response.send({image : image});
                                         }
                                     }
                                 });
@@ -261,7 +261,7 @@ module.exports = function (app) {
                                                             if (error) {
                                                                 response.send({error : error});
                                                             } else {
-                                                                response.send(image);
+                                                                response.send({image : image});
                                                             }
                                                         });
                                                     }

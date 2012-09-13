@@ -24,7 +24,7 @@ describe('POST /profile/[slug]/phone', function () {
             password : 'testando',
             password_confirmation : 'testando'
         }, function(error, data) {
-            token = data.token;
+            token = data.user.token;
             api.post('profiles', '/profile', {
                 token : token,
                 name : 'Compania ' + rand(),
@@ -34,7 +34,7 @@ describe('POST /profile/[slug]/phone', function () {
                 active : 1,
                 about: 'sobre'
             }, function(error, data, response) {
-                profile = data.slug;
+                profile = data.profile.slug;
                 done();
             });
         });
@@ -212,12 +212,12 @@ describe('POST /profile/[slug]/phone', function () {
                 } else { 
                     should.exist(data);
                     should.not.exist(data.error);
-                    data.should.have.property('_id');
-                    data.should.have.property('number', number);
-                    data.should.have.property('extension', extension);
-                    data.should.have.property('areaCode', areaCode);
-                    data.should.have.property('intCode', intCode);
-                    data.should.have.property('type', type);
+                    data.should.have.property('phone').have.property('_id');
+                    data.should.have.property('phone').have.property('number', number);
+                    data.should.have.property('phone').have.property('extension', extension);
+                    data.should.have.property('phone').have.property('areaCode', areaCode);
+                    data.should.have.property('phone').have.property('intCode', intCode);
+                    data.should.have.property('phone').have.property('type', type);
                     done();
                 }
             }
@@ -239,7 +239,7 @@ describe('GET /profile/[slug]/phonees', function () {
             password : 'testando',
             password_confirmation : 'testando'
         }, function(error, data) {
-            token = data.token;
+            token = data.user.token;
             api.post('profiles', '/profile', {
                 token : token,
                 name : 'Compania ' + rand(),
@@ -249,7 +249,7 @@ describe('GET /profile/[slug]/phonees', function () {
                 active : 1,
                 about: 'sobre'
             }, function(error, data, response) {
-                profile = data.slug;
+                profile = data.profile.slug;
                 for (var i = 0; i < 20; i = i + 1) {
                     api.post('profiles', '/profile/' + profile + '/phone', {
                         token   : token,
@@ -298,14 +298,14 @@ describe('GET /profile/[slug]/phonees', function () {
                 return done(error);
             } else {
                 should.not.exist(data.error, 'erro inesperado');                
-                data.length.should.be.above(19);
-                for (var i = 0 ; i < data.length; i = i + 1) {
-                    data[i].should.have.property('_id');
-                    data[i].should.have.property('number');
-                    data[i].should.have.property('extension');
-                    data[i].should.have.property('areaCode');
-                    data[i].should.have.property('intCode');
-                    data[i].should.have.property('type');
+                data.phones.length.should.be.above(19);
+                for (var i = 0 ; i < data.phones.length; i = i + 1) {
+                    data.phones[i].should.have.property('_id');
+                    data.phones[i].should.have.property('number');
+                    data.phones[i].should.have.property('extension');
+                    data.phones[i].should.have.property('areaCode');
+                    data.phones[i].should.have.property('intCode');
+                    data.phones[i].should.have.property('type');
                 }
                 done();
             }
@@ -327,7 +327,7 @@ describe('GET /profile/[slug]/phone/[id]', function () {
             password : 'testando',
             password_confirmation : 'testando'
         }, function(error, data) {
-            token = data.token;
+            token = data.user.token;
             api.post('profiles', '/profile', {
                 token : token,
                 name : 'Compania ' + rand(),
@@ -337,7 +337,7 @@ describe('GET /profile/[slug]/phone/[id]', function () {
                 active : 1,
                 about: 'sobre'
             }, function(error, data, response) {
-                profile = data.slug;
+                profile = data.profile.slug;
                 api.post('profiles', '/profile/' + profile + '/phone', {
                     token   : token,
                     number    : 'Number ' + rand(),
@@ -346,7 +346,7 @@ describe('GET /profile/[slug]/phone/[id]', function () {
                     intCode   : 'intCode ' + rand(),
                     type      : 'home'
                 }, function(error, data, response) {
-                    phone = data._id
+                    phone = data.phone._id
                     done();
                 });
             });
@@ -382,12 +382,12 @@ describe('GET /profile/[slug]/phone/[id]', function () {
                 return done(error);
             } else {
                 should.not.exist(data.error, 'erro inesperado');    
-                data.should.have.property('_id');
-                data.should.have.property('number');
-                data.should.have.property('extension');
-                data.should.have.property('areaCode');
-                data.should.have.property('intCode');
-                data.should.have.property('type');
+                data.should.have.property('phone').have.property('_id');
+                data.should.have.property('phone').have.property('number');
+                data.should.have.property('phone').have.property('extension');
+                data.should.have.property('phone').have.property('areaCode');
+                data.should.have.property('phone').have.property('intCode');
+                data.should.have.property('phone').have.property('type');
                 done();
             }
         });
@@ -408,7 +408,7 @@ describe('DEL /profile/[slug]/phone/[id]', function () {
             password : 'testando',
             password_confirmation : 'testando'
         }, function(error, data) {
-            token = data.token;
+            token = data.user.token;
             api.post('profiles', '/profile', {
                 token : token,
                 name : 'Compania ' + rand(),
@@ -418,7 +418,7 @@ describe('DEL /profile/[slug]/phone/[id]', function () {
                 active : 1,
                 about: 'sobre'
             }, function(error, data, response) {
-                profile = data.slug;
+                profile = data.profile.slug;
                 api.post('profiles', '/profile/' + profile + '/phone', {
                     token   : token,
                     number    : 'Number ' + rand(),
@@ -427,7 +427,7 @@ describe('DEL /profile/[slug]/phone/[id]', function () {
                     intCode   : 'intCode ' + rand(),
                     type      : 'home'
                 }, function(error, data, response) {
-                    phone = data._id
+                    phone = data.phone._id
                     done();
                 });
             });
@@ -498,7 +498,7 @@ describe('PUT /profile/[slug]/phone/[id]', function () {
             password : 'testando',
             password_confirmation : 'testando'
         }, function(error, data) {
-            token = data.token;
+            token = data.user.token;
             api.post('profiles', '/profile', {
                 token : token,
                 name : 'Compania ' + rand(),
@@ -508,7 +508,7 @@ describe('PUT /profile/[slug]/phone/[id]', function () {
                 active : 1,
                 about: 'sobre'
             }, function(error, data, response) {
-                profile = data.slug;
+                profile = data.profile.slug;
                 api.post('profiles', '/profile/' + profile + '/phone', {
                     token   : token,
                     number    : 'Number ' + rand(),
@@ -517,8 +517,8 @@ describe('PUT /profile/[slug]/phone/[id]', function () {
                     intCode   : 'intCode ' + rand(),
                     type      : 'home'
                 }, function(error, data, response) {
-                    phone = data._id;
-                    obj = data;
+                    phone = data.phone._id;
+                    obj = data.phone;
                     done();
                 });
             });
@@ -584,10 +584,10 @@ describe('PUT /profile/[slug]/phone/[id]', function () {
             if (error) {
                 return done(error);
             } else {
-                obj = data;
+                obj = data.phone;
                 should.not.exist(data.error);
-                data.should.have.property('_id');
-                data.should.have.property('number', obj.number);
+                data.should.have.property('phone').have.property('_id');
+                data.should.have.property('phone').have.property('number', obj.number);
                 done();
             }
         });
@@ -604,10 +604,10 @@ describe('PUT /profile/[slug]/phone/[id]', function () {
             if (error) {
                 return done(error);
             } else {
-                obj = data;
+                obj = data.phone;
                 should.not.exist(data.error);
-                data.should.have.property('_id');
-                data.should.have.property('extension', obj.extension);
+                data.should.have.property('phone').have.property('_id');
+                data.should.have.property('phone').have.property('extension', obj.extension);
                 done();
             }
         });
@@ -624,10 +624,10 @@ describe('PUT /profile/[slug]/phone/[id]', function () {
             if (error) {
                 return done(error);
             } else {
-                obj = data;
+                obj = data.phone;
                 should.not.exist(data.error);
-                data.should.have.property('_id');
-                data.should.have.property('areaCode', obj.areaCode);
+                data.should.have.property('phone').have.property('_id');
+                data.should.have.property('phone').have.property('areaCode', obj.areaCode);
                 done();
             }
         });
@@ -644,10 +644,10 @@ describe('PUT /profile/[slug]/phone/[id]', function () {
             if (error) {
                 return done(error);
             } else {
-                obj = data;
+                obj = data.phone;
                 should.not.exist(data.error);
-                data.should.have.property('_id');
-                data.should.have.property('intCode', obj.intCode);
+                data.should.have.property('phone').have.property('_id');
+                data.should.have.property('phone').have.property('intCode', obj.intCode);
                 done();
             }
         });
@@ -664,10 +664,10 @@ describe('PUT /profile/[slug]/phone/[id]', function () {
             if (error) {
                 return done(error);
             } else {
-                obj = data;
+                obj = data.phone;
                 should.not.exist(data.error);
-                data.should.have.property('_id');
-                data.should.have.property('type', obj.type);
+                data.should.have.property('phone').have.property('_id');
+                data.should.have.property('phone').have.property('type', obj.type);
                 done();
             }
         });
@@ -693,12 +693,12 @@ describe('PUT /profile/[slug]/phone/[id]', function () {
                 should.not.exist(data.error);
                 api.get('profiles', '/profile/' + profile + '/phone/' + phone, {token : token}, function (error, data) {
                     should.not.exist(data.error, 'algo deu errado');
-                    data.should.have.property('_id');
-                    data.should.have.property('number', number);
-                    data.should.have.property('extension', extension);
-                    data.should.have.property('areaCode', areaCode);
-                    data.should.have.property('intCode', intCode);
-                    data.should.have.property('type', type);
+                    data.should.have.property('phone').have.property('_id');
+                    data.should.have.property('phone').have.property('number', number);
+                    data.should.have.property('phone').have.property('extension', extension);
+                    data.should.have.property('phone').have.property('areaCode', areaCode);
+                    data.should.have.property('phone').have.property('intCode', intCode);
+                    data.should.have.property('phone').have.property('type', type);
                     done();
                 });
             }

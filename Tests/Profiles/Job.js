@@ -24,7 +24,7 @@ describe('POST /profile/[slug]/job', function () {
             password : 'testando',
             password_confirmation : 'testando'
         }, function(error, data) {
-            token = data.token;
+            token = data.user.token;
             api.post('profiles', '/profile', {
                 token : token,
                 name : 'Compania ' + rand(),
@@ -34,7 +34,7 @@ describe('POST /profile/[slug]/job', function () {
                 active : 1,
                 about: 'sobre'
             }, function(error, data, response) {
-                profile = data.slug;
+                profile = data.profile.slug;
                 done();
             });
         });
@@ -117,12 +117,12 @@ describe('POST /profile/[slug]/job', function () {
                 } else { 
                     should.exist(data);
                     should.not.exist(data.error);
-                    data.should.have.property('_id');
-                    data.should.have.property('name');
-                    data.should.have.property('companyName');
-                    data.should.have.property('description');
-                    data.should.have.property('dateStart');
-                    data.should.have.property('dateEnd');
+                    data.should.have.property('job').have.property('_id');
+                    data.should.have.property('job').have.property('name');
+                    data.should.have.property('job').have.property('companyName');
+                    data.should.have.property('job').have.property('description');
+                    data.should.have.property('job').have.property('dateStart');
+                    data.should.have.property('job').have.property('dateEnd');
                     done();
                 }
             }
@@ -144,7 +144,7 @@ describe('GET /profile/[slug]/jobes', function () {
             password : 'testando',
             password_confirmation : 'testando'
         }, function(error, data) {
-            token = data.token;
+            token = data.user.token;
             api.post('profiles', '/profile', {
                 token : token,
                 name : 'Compania ' + rand(),
@@ -154,7 +154,7 @@ describe('GET /profile/[slug]/jobes', function () {
                 active : 1,
                 about: 'sobre'
             }, function(error, data, response) {
-                profile = data.slug;
+                profile = data.profile.slug;
                 for (var i = 0; i < 20; i = i + 1) {
                     api.post('profiles', '/profile/' + profile + '/job', {
                         token   : token,
@@ -203,14 +203,14 @@ describe('GET /profile/[slug]/jobes', function () {
                 return done(error);
             } else {
                 should.not.exist(data.error, 'erro inesperado');                
-                data.length.should.be.above(19);
-                for (var i = 0 ; i < data.length; i = i + 1) {
-                    data[i].should.have.property('_id');
-                    data[i].should.have.property('name');
-                    data[i].should.have.property('companyName');
-                    data[i].should.have.property('description');
-                    data[i].should.have.property('dateStart');
-                    data[i].should.have.property('dateEnd');
+                data.jobs.length.should.be.above(19);
+                for (var i = 0 ; i < data.jobs.length; i = i + 1) {
+                    data.jobs[i].should.have.property('_id');
+                    data.jobs[i].should.have.property('name');
+                    data.jobs[i].should.have.property('companyName');
+                    data.jobs[i].should.have.property('description');
+                    data.jobs[i].should.have.property('dateStart');
+                    data.jobs[i].should.have.property('dateEnd');
                 }
                 done();
             }
@@ -232,7 +232,7 @@ describe('GET /profile/[slug]/job/[id]', function () {
             password : 'testando',
             password_confirmation : 'testando'
         }, function(error, data) {
-            token = data.token;
+            token = data.user.token;
             api.post('profiles', '/profile', {
                 token : token,
                 name : 'Compania ' + rand(),
@@ -242,7 +242,7 @@ describe('GET /profile/[slug]/job/[id]', function () {
                 active : 1,
                 about: 'sobre'
             }, function(error, data, response) {
-                profile = data.slug;
+                profile = data.profile.slug;
                 api.post('profiles', '/profile/' + profile + '/job', {
                     token   : token,
                     name        : 'Nome ' + rand(),
@@ -251,7 +251,7 @@ describe('GET /profile/[slug]/job/[id]', function () {
                     dateStart   : new Date(),
                     dateEnd     : new Date()
                 }, function(error, data, response) {
-                    job = data._id
+                    job = data.job._id
                     done();
                 });
             });
@@ -287,12 +287,12 @@ describe('GET /profile/[slug]/job/[id]', function () {
                 return done(error);
             } else {
                 should.not.exist(data.error, 'erro inesperado');    
-                data.should.have.property('_id');
-                data.should.have.property('name');
-                data.should.have.property('companyName');
-                data.should.have.property('description');
-                data.should.have.property('dateStart');
-                data.should.have.property('dateEnd');
+                data.should.have.property('job').have.property('_id');
+                data.should.have.property('job').have.property('name');
+                data.should.have.property('job').have.property('companyName');
+                data.should.have.property('job').have.property('description');
+                data.should.have.property('job').have.property('dateStart');
+                data.should.have.property('job').have.property('dateEnd');
                 done();
             }
         });
@@ -313,7 +313,7 @@ describe('DEL /profile/[slug]/job/[id]', function () {
             password : 'testando',
             password_confirmation : 'testando'
         }, function(error, data) {
-            token = data.token;
+            token = data.user.token;
             api.post('profiles', '/profile', {
                 token : token,
                 name : 'Compania ' + rand(),
@@ -323,7 +323,7 @@ describe('DEL /profile/[slug]/job/[id]', function () {
                 active : 1,
                 about: 'sobre'
             }, function(error, data, response) {
-                profile = data.slug;
+                profile = data.profile.slug;
                 api.post('profiles', '/profile/' + profile + '/job', {
                     token   : token,
                     name        : 'Nome ' + rand(),
@@ -332,7 +332,7 @@ describe('DEL /profile/[slug]/job/[id]', function () {
                     dateStart   : new Date(),
                     dateEnd     : new Date()
                 }, function(error, data, response) {
-                    job = data._id
+                    job = data.job._id
                     done();
                 });
             });
@@ -403,7 +403,7 @@ describe('PUT /profile/[slug]/job/[id]', function () {
             password : 'testando',
             password_confirmation : 'testando'
         }, function(error, data) {
-            token = data.token;
+            token = data.user.token;
             api.post('profiles', '/profile', {
                 token : token,
                 name : 'Compania ' + rand(),
@@ -413,7 +413,7 @@ describe('PUT /profile/[slug]/job/[id]', function () {
                 active : 1,
                 about: 'sobre'
             }, function(error, data, response) {
-                profile = data.slug;
+                profile = data.profile.slug;
                 api.post('profiles', '/profile/' + profile + '/job', {
                     token   : token,
                     name        : 'Nome ' + rand(),
@@ -422,8 +422,8 @@ describe('PUT /profile/[slug]/job/[id]', function () {
                     dateStart   : new Date(),
                     dateEnd     : new Date()
                 }, function(error, data, response) {
-                    job = data._id;
-                    obj = data;
+                    job = data.job._id;
+                    obj = data.job;
                     done();
                 });
             });
@@ -491,8 +491,8 @@ describe('PUT /profile/[slug]/job/[id]', function () {
             } else {
                 obj = data;
                 should.not.exist(data.error);
-                data.should.have.property('_id');
-                data.should.have.property('name', obj.name);
+                data.should.have.property('job').have.property('_id');
+                data.should.have.property('job').have.property('name', obj.name);
                 done();
             }
         });
@@ -516,10 +516,10 @@ describe('PUT /profile/[slug]/job/[id]', function () {
                 should.not.exist(data.error);
                 api.get('profiles', '/profile/' + profile + '/job/' + job, {token : token}, function (error, data) {
                     should.not.exist(data.error, 'algo deu errado');
-                    data.should.have.property('_id');
-                    data.should.have.property('name', name);
-                    data.should.have.property('companyName', companyName);
-                    data.should.have.property('description', description);
+                    data.should.have.property('job').have.property('_id');
+                    data.should.have.property('job').have.property('name', name);
+                    data.should.have.property('job').have.property('companyName', companyName);
+                    data.should.have.property('job').have.property('description', description);
                     done();
                 });
             }

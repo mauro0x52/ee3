@@ -47,7 +47,7 @@ module.exports = function (app) {
                         if (error) {
                             response.send({error : error});
                         } else {
-                            response.send(user);
+                            response.send({user : user});
                         }
                     });
                 }
@@ -92,7 +92,7 @@ module.exports = function (app) {
                                 if (error) {
                                     response.send({error : error});
                                 } else {
-                                    response.send(null);
+                                    response.send({user : user});
                                 }
                             });
                         }
@@ -137,7 +137,7 @@ module.exports = function (app) {
                                 if (error) {
                                     response.send({error : error});
                                 } else {
-                                    response.send(null);
+                                    response.send({user : user});
                                 }
                             });
                         }
@@ -189,7 +189,7 @@ module.exports = function (app) {
                                             if (error) {
                                                 response.send({error : error});
                                             } else {
-                                                response.send(user);
+                                                response.send({user : user});
                                             }
                                         });
                                     }
@@ -317,7 +317,7 @@ module.exports = function (app) {
                 if (user === null) {
                     response.send({ error : { message : 'Invalid token', name : 'InvalidTokenError'}});
                 } else {
-                    response.send({ user : user });
+                    response.send({user : user});
                 }
             }
         });

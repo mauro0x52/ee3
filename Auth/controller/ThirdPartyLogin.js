@@ -52,7 +52,7 @@ module.exports = function (app) {
                                 if (error) {
                                     response.send({error : error});
                                 } else {
-                                    response.send(user.thirdPartyLogins.pop());
+                                    response.send({thirdPartyLogin : user.thirdPartyLogins.pop()});
                                 }
                             });
                         }
@@ -92,7 +92,7 @@ module.exports = function (app) {
                         if (!valid) {
                             response.send({error : {message : 'invalid token', name : 'InvalidToken'}});
                         } else {
-                            response.send(user.thirdPartyLogins);
+                            response.send({thirdPartyLogins : user.thirdPartyLogins});
                         }
                     });
                 }
@@ -139,7 +139,7 @@ module.exports = function (app) {
                                     if (thirdPartyLogin === null) {
                                         response.send({error : { message : 'third-party-login not found', name : 'NotFoundError', id : request.params.id, model : 'third-party-login'}});
                                     } else {
-                                        response.send(thirdPartyLogin);
+                                        response.send({thirdPartyLogin : thirdPartyLogin});
                                     }
                                 }
                             });

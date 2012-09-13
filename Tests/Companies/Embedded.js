@@ -24,7 +24,7 @@ describe('POST /company/[slug]/embedded', function () {
             password : 'testando',
             password_confirmation : 'testando'
         }, function(error, data) {
-            token = data.token;
+            token = data.user.token;
             api.post('companies', '/company', {
                 token : token,
                 name : 'Compania ' + rand(),
@@ -34,7 +34,7 @@ describe('POST /company/[slug]/embedded', function () {
                 active : 1,
                 about: 'sobre'
             }, function(error, data, response) {
-                company = data.slug;
+                company = data.company.slug;
                 done();
             });
         });
@@ -175,10 +175,10 @@ describe('POST /company/[slug]/embedded', function () {
                 } else { 
                     should.exist(data);
                     should.not.exist(data.error);
-                    data.should.have.property('_id');
-                    data.should.have.property('embed', embed);
-                    data.should.have.property('link').property('url', url);
-                    data.should.have.property('link').property('type', type);
+                    data.should.have.property('embedded').have.property('_id');
+                    data.should.have.property('embedded').have.property('embed', embed);
+                    data.should.have.property('embedded').have.property('link').property('url', url);
+                    data.should.have.property('embedded').have.property('link').property('type', type);
                     done();
                 }
             }
@@ -200,7 +200,7 @@ describe('GET /company/[slug]/embeddedes', function () {
             password : 'testando',
             password_confirmation : 'testando'
         }, function(error, data) {
-            token = data.token;
+            token = data.user.token;
             api.post('companies', '/company', {
                 token : token,
                 name : 'Compania ' + rand(),
@@ -210,7 +210,7 @@ describe('GET /company/[slug]/embeddedes', function () {
                 active : 1,
                 about: 'sobre'
             }, function(error, data, response) {
-                company = data.slug;
+                company = data.company.slug;
                 for (var i = 0; i < 20; i = i + 1) {
                     api.post('companies', '/company/' + company + '/embedded', {
                         token   : token,
@@ -259,12 +259,11 @@ describe('GET /company/[slug]/embeddedes', function () {
                 return done(error);
             } else {
                 should.not.exist(data.error, 'erro inesperado');                
-                data.length.should.be.above(19);
-                for (var i = 0 ; i < data.length; i = i + 1) {
-                    data[i].should.have.property('_id');
-                    data[i].should.have.property('embed');
-                    data[i].should.have.property('link').property('url');
-                    data[i].should.have.property('link').property('type');
+                for (var i = 0 ; i < data.embeddeds.length; i = i + 1) {
+                    data.embeddeds[i].should.have.property('_id');
+                    data.embeddeds[i].should.have.property('embed');
+                    data.embeddeds[i].should.have.property('link').property('url');
+                    data.embeddeds[i].should.have.property('link').property('type');
                 }
                 done();
             }
@@ -286,7 +285,7 @@ describe('GET /company/[slug]/embedded/[id]', function () {
             password : 'testando',
             password_confirmation : 'testando'
         }, function(error, data) {
-            token = data.token;
+            token = data.user.token;
             api.post('companies', '/company', {
                 token : token,
                 name : 'Compania ' + rand(),
@@ -296,7 +295,7 @@ describe('GET /company/[slug]/embedded/[id]', function () {
                 active : 1,
                 about: 'sobre'
             }, function(error, data, response) {
-                company = data.slug;
+                company = data.company.slug;
                 api.post('companies', '/company/' + company + '/embedded', {
                     token   : token,
                     embed     : 'Embedded ' + rand(),
@@ -305,7 +304,7 @@ describe('GET /company/[slug]/embedded/[id]', function () {
                         type : 'Youtube'
                     }
                 }, function(error, data, response) {
-                    embedded = data._id
+                    embedded = data.embedded._id
                     done();
                 });
             });
@@ -341,9 +340,9 @@ describe('GET /company/[slug]/embedded/[id]', function () {
                 return done(error);
             } else {
                 should.not.exist(data.error, 'erro inesperado');    
-                data.should.have.property('_id');
-                data.should.have.property('link').property('url');
-                data.should.have.property('link').property('type');
+                data.should.have.property('embedded').have.property('_id');
+                data.should.have.property('embedded').have.property('link').property('url');
+                data.should.have.property('embedded').have.property('link').property('type');
                 done();
             }
         });
@@ -364,7 +363,7 @@ describe('DEL /company/[slug]/embedded/[id]', function () {
             password : 'testando',
             password_confirmation : 'testando'
         }, function(error, data) {
-            token = data.token;
+            token = data.user.token;
             api.post('companies', '/company', {
                 token : token,
                 name : 'Compania ' + rand(),
@@ -374,7 +373,7 @@ describe('DEL /company/[slug]/embedded/[id]', function () {
                 active : 1,
                 about: 'sobre'
             }, function(error, data, response) {
-                company = data.slug;
+                company = data.company.slug;
                 api.post('companies', '/company/' + company + '/embedded', {
                     token   : token,
                     embed     : 'Embedded ' + rand(),
@@ -383,7 +382,7 @@ describe('DEL /company/[slug]/embedded/[id]', function () {
                         type : 'Youtube'
                     }
                 }, function(error, data, response) {
-                    embedded = data._id
+                    embedded = data.embedded._id
                     done();
                 });
             });
@@ -454,7 +453,7 @@ describe('PUT /company/[slug]/embedded/[id]', function () {
             password : 'testando',
             password_confirmation : 'testando'
         }, function(error, data) {
-            token = data.token;
+            token = data.user.token;
             api.post('companies', '/company', {
                 token : token,
                 name : 'Compania ' + rand(),
@@ -464,7 +463,7 @@ describe('PUT /company/[slug]/embedded/[id]', function () {
                 active : 1,
                 about: 'sobre'
             }, function(error, data, response) {
-                company = data.slug;
+                company = data.company.slug;
                 api.post('companies', '/company/' + company + '/embedded', {
                     token   : token,
                     embed     : 'Embedded ' + rand(),
@@ -473,7 +472,7 @@ describe('PUT /company/[slug]/embedded/[id]', function () {
                         type : 'Youtube'
                     }
                 }, function(error, data, response) {
-                    embedded = data._id;
+                    embedded = data.embedded._id;
                     obj = data;
                     done();
                 });
@@ -542,8 +541,8 @@ describe('PUT /company/[slug]/embedded/[id]', function () {
             } else {
                 obj = data;
                 should.not.exist(data.error);
-                data.should.have.property('_id');
-                data.should.have.property('embed', obj.embed);
+                data.should.have.property('embedded').have.property('_id');
+                data.should.have.property('embedded').have.property('embed', obj.embed);
                 done();
             }
         });
@@ -565,9 +564,9 @@ describe('PUT /company/[slug]/embedded/[id]', function () {
                 return done(error);
             } else {
                 should.not.exist(data.error);
-                data.should.have.property('_id');
-                data.should.have.property('embed', embed);
-                data.should.have.property('link').property('type', type);
+                data.should.have.property('embedded').have.property('_id');
+                data.should.have.property('embedded').have.property('embed', embed);
+                data.should.have.property('embedded').have.property('link').property('type', type);
                 done();
             }
         });

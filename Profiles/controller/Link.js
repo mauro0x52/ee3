@@ -56,7 +56,7 @@ module.exports = function (app) {
                                     if (error) {
                                         response.send({error : error});
                                     } else {
-                                        response.send(profile.links.pop());
+                                        response.send({link : profile.links.pop()});
                                     }
                                 });
                             }
@@ -92,7 +92,7 @@ module.exports = function (app) {
                 if (profile === null) {
                     response.send({error : { message : 'profile not found', name : 'NotFoundError', id : request.params.slug, model : 'profile'}});
                 } else {
-                    response.send(profile.links);
+                    response.send({links : profile.links});
                 }
             }
         });
@@ -132,7 +132,7 @@ module.exports = function (app) {
                             if (link === null) {
                                 response.send({error : { message : 'link not found', name : 'NotFoundError', id : request.params.id, model : 'link'}});
                             } else {
-                                response.send(link);
+                                response.send({link : link});
                             }
                         }
                     });
@@ -192,7 +192,7 @@ module.exports = function (app) {
                                                 if (error) {
                                                     response.send({error : error});
                                                 } else {
-                                                    response.send(link);
+                                                    response.send({link : link});
                                                 }
                                             });
                                         }

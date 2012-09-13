@@ -59,7 +59,7 @@ module.exports = function (app) {
                                     if (error) {
                                         response.send({error : error});
                                     } else {
-                                        response.send(profile.phones.pop());
+                                        response.send({phone : profile.phones.pop()});
                                     }
                                 });
                             }
@@ -95,7 +95,7 @@ module.exports = function (app) {
                 if (profile === null) {
                     response.send({error : { message : 'profile not found', name : 'NotFoundError', id : request.params.slug, model : 'profile'}});
                 } else {
-                    response.send(profile.phones);
+                    response.send({phones : profile.phones});
                 }
             }
         });
@@ -135,7 +135,7 @@ module.exports = function (app) {
                             if (phone === null) {
                                 response.send({error : { message : 'phone not found', name : 'NotFoundError', id : request.params.id, model : 'phone'}});
                             } else {
-                                response.send(phone);
+                                response.send({phone : phone});
                             }
                         }
                     });
@@ -194,7 +194,7 @@ module.exports = function (app) {
                                             if (error) {
                                                 response.send({error : error});
                                             } else {
-                                                response.send(phone);
+                                                response.send({phone : phone});
                                             }
                                         });
                                     }

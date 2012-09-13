@@ -35,7 +35,7 @@ module.exports = function (app) {
             if (error) {
                 response.send({error : error});
             } else {
-                response.send(sectors);
+                response.send({sectors : sectors});
             }
         })
     });
@@ -62,7 +62,7 @@ module.exports = function (app) {
             if (error) {
                 response.send({error : error});
             } else {
-                response.send(sector);
+                response.send({sector : sector});
             }
         })
     });

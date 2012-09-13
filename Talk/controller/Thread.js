@@ -62,7 +62,7 @@ module.exports = function (app) {
                                         if (error) {
                                             response.send({error : error});
                                         } else {
-                                            response.send(thread);
+                                            response.send({thread : thread});
                                         }
                                     });
                                 }
@@ -120,7 +120,7 @@ module.exports = function (app) {
                                             if (error) {
                                                 response.send({error : error});
                                             } else {
-                                                response.send(thread);
+                                                response.send({thread : thread});
                                             }
                                         });
                                     }
@@ -168,7 +168,7 @@ module.exports = function (app) {
                                 if (error) {
                                     response.send({error : error});
                                 } else {
-                                    response.send(threads);
+                                    response.send({threads : threads});
                                 }
                             });
                         }
@@ -228,7 +228,7 @@ module.exports = function (app) {
                                             if (error) {
                                                 response.send({error : error});
                                             } else {
-                                                response.send(thread.messages.pop());
+                                                response.send({message : thread.messages.pop()});
                                             }
                                         });
                                     }
@@ -280,7 +280,7 @@ module.exports = function (app) {
                                     if (thread === null) {
                                         response.send({error : {message :  'thread not found', name : 'NotFoundError', id : request.params.slug, model : 'thread'}});
                                     } else {
-                                        response.send(thread.messages);
+                                        response.send({messages : thread.messages});
                                     }
                                 }
                             });
@@ -338,7 +338,7 @@ module.exports = function (app) {
                                             } else {
                                                 //busca as mensagens não lidas pelo usuário na thread
                                                 thread.unreadMessages(conversant, function (messages) {
-                                                    response.send(messages);
+                                                    response.send({messages : messages});
                                                 });
                                             }
                                         });

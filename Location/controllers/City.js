@@ -59,16 +59,16 @@ module.exports = function (app) {
                                 query.limit(limit);
 
                                 // order : padrao = dateCreated descending
-						        order = request.param('order', [{name:1}]);
-						        if (!(order instanceof Array)) order = [order];
+                                order = request.param('order', [{name:1}]);
+                                if (!(order instanceof Array)) order = [order];
 
-						        var sort = {};
-						        for (var i = 0; i < order.length; i++) {
-						            for (var name in order[i]) {
-						                sort[name] = order[i][name];
-						            }
-						        }
-						        query.sort(sort);
+                                var sort = {};
+                                for (var i = 0; i < order.length; i++) {
+                                    for (var name in order[i]) {
+                                        sort[name] = order[i][name];
+                                    }
+                                }
+                                query.sort(sort);
 
                                 // from : padrao = 0, min = 0
                                 from = limit * (request.param('page', 1) - 1);
@@ -80,7 +80,7 @@ module.exports = function (app) {
                                     if (error) {
                                         response.send({error : error});
                                     } else {
-                                        response.send(cities);
+                                        response.send({cities : cities});
                                     }
                                 });
                             } else {
@@ -131,7 +131,7 @@ module.exports = function (app) {
                                         response.send({error : error});
                                     } else {
                                         if (city) {
-                                            response.send(city);
+                                            response.send({city : city});
                                         } else {
                                             response.send({error : { message : 'city not found', name : 'NotFoundError', id : request.params.citySlug, model : 'city'}});
                                         };

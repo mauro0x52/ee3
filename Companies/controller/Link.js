@@ -65,7 +65,7 @@ module.exports = function (app) {
                                                 if (error) {
                                                     response.send({error : error});
                                                 } else {
-                                                    response.send(product.pop());
+                                                    response.send({link : product.links.pop()});
                                                 }
                                             });
                                         }
@@ -113,7 +113,7 @@ module.exports = function (app) {
                             if (product === null) {
                                 response.send({error : {message :  'product not found', name : 'NotFoundError', id : request.params.product_slug, model : 'product'}});
                             } else {
-                                response.send(product.links);
+                                response.send({links : product.links});
                             }
                         }
                     });
@@ -165,7 +165,7 @@ module.exports = function (app) {
                                         if (link === null) {
                                             response.send({error : {message :  'link not found', name : 'NotFoundError', id : request.params.id, model : 'link'}});
                                         } else {
-                                            response.send(link);
+                                            response.send({link : link});
                                         }
                                     }
                                 });
@@ -237,7 +237,7 @@ module.exports = function (app) {
                                                             if (error) {
                                                                 response.send({error : error});
                                                             } else {
-                                                                response.send(link);
+                                                                response.send({link : link});
                                                             }
                                                         });
                                                     }
@@ -372,7 +372,7 @@ module.exports = function (app) {
                                     if (error) {
                                         response.send({error : error});
                                     } else {
-                                        response.send(company.links.pop());
+                                        response.send({link : company.links.pop()});
                                     }
                                 });
                             }
@@ -408,7 +408,7 @@ module.exports = function (app) {
                 if (company === null) {
                     response.send({error : {message :  'company not found', name : 'NotFoundError', id : request.params.slug, model : 'company'}});
                 } else {
-                    response.send(company.links);
+                    response.send({links : company.links});
                 }
             }
         });
@@ -448,7 +448,7 @@ module.exports = function (app) {
                             if (link === null) {
                                 response.send({error : {message :  'link not found', name : 'NotFoundError', id : request.params.id, model : 'link'}});
                             } else {
-                                response.send(link);
+                                response.send({link : link});
                             }
                         }
                     });
@@ -508,7 +508,7 @@ module.exports = function (app) {
                                                 if (error) {
                                                     response.send({error : error});
                                                 } else {
-                                                    response.send(link);
+                                                    response.send({link : link});
                                                 }
                                             });
                                         }

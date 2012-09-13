@@ -21,7 +21,7 @@ describe('POST /conversant', function () {
             password : 'testando',
             password_confirmation : 'testando'
         }, function(error, data) {
-            token = data.token;
+            token = data.user.token;
             done();
         });
     });
@@ -47,9 +47,6 @@ describe('POST /conversant', function () {
                     return done(error);
                 } else { 
                     should.exist(data.error);
-                    data.should.not.have.property('_id');
-                    data.should.not.have.property('label');
-                    data.should.not.have.property('user');
                     done();
                 }
             }
@@ -64,9 +61,6 @@ describe('POST /conversant', function () {
                     return done(error);
                 } else { 
                     should.exist(data.error);
-                    data.should.not.have.property('_id');
-                    data.should.not.have.property('label');
-                    data.should.not.have.property('user');
                     done();
                 }
             }
@@ -81,9 +75,9 @@ describe('POST /conversant', function () {
                     return done(error);
                 } else { 
                     should.not.exist(data.error, 'erro inesperado');
-                    data.should.have.property('_id');
-                    data.should.have.property('label');
-                    data.should.have.property('user');
+                    data.should.have.property('conversant').have.property('_id');
+                    data.should.have.property('conversant').have.property('label');
+                    data.should.have.property('conversant').have.property('user');
                     done();
                 }
             }
@@ -103,13 +97,13 @@ describe('PUT /conversant/[id]/change-label', function () {
             password : 'testando',
             password_confirmation : 'testando'
         }, function(error, data) {
-            token = data.token;
+            token = data.user.token;
             api.post('talk', '/conversant', {
                 token : token,
                 label : 'Label ' + rand()
             }, function (error, data, response) {
-                conversant = data._id;
-                obj = data
+                conversant = data.conversant._id;
+                obj = data.conversant
                 done();
             });
         });
@@ -136,9 +130,6 @@ describe('PUT /conversant/[id]/change-label', function () {
                     return done(error);
                 } else { 
                     should.exist(data.error);
-                    data.should.not.have.property('_id');
-                    data.should.not.have.property('label');
-                    data.should.not.have.property('user');
                     done();
                 }
             }
@@ -154,8 +145,8 @@ describe('PUT /conversant/[id]/change-label', function () {
                 } else { 
                     obj = data;
                     should.not.exist(data.error);
-                    data.should.have.property('_id');
-                    data.should.have.property('label', obj.label);
+                    data.should.have.property('conversant').have.property('_id');
+                    data.should.have.property('conversant').have.property('label', obj.label);
                     done();
                 }
             }
@@ -172,9 +163,9 @@ describe('PUT /conversant/[id]/change-label', function () {
                     return done(error);
                 } else { 
                     should.not.exist(data.error, 'erro inesperado');
-                    data.should.have.property('_id');
-                    data.should.have.property('label', new_label);
-                    data.should.have.property('user');
+                    data.should.have.property('conversant').have.property('_id');
+                    data.should.have.property('conversant').have.property('label', new_label);
+                    data.should.have.property('conversant').have.property('user');
                     done();
                 }
             }

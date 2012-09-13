@@ -60,7 +60,7 @@ module.exports = function (app) {
                                     if (error) {
                                         response.send({error : error});
                                     } else {
-                                        response.send(company.addresses.pop());
+                                        response.send({address : company.addresses.pop()});
                                     }
                                 });
                             }
@@ -96,7 +96,7 @@ module.exports = function (app) {
                 if (company === null) {
                     response.send({error : {message :  'company not found', name : 'NotFoundError', id : request.params.slug, model : 'company'}});
                 } else {
-                    response.send(company.addresses);
+                    response.send({addresses : company.addresses});
                 }
             }
         });
@@ -136,7 +136,7 @@ module.exports = function (app) {
                             if (address === null) {
                                 response.send({error : {message :  'address not found', name : 'NotFoundError', id : request.params.id, model : 'address'}});
                             } else {
-                                response.send(address);
+                                response.send({address : address});
                             }
                         }
                     });
@@ -199,7 +199,7 @@ module.exports = function (app) {
                                                 if (error) {
                                                     response.send({error : error});
                                                 } else {
-                                                    response.send(address);
+                                                    response.send({address : address});
                                                 }
                                             });
                                         }

@@ -70,7 +70,7 @@ module.exports = function (app) {
                                                 if (error) {
                                                     response.send({error : error});
                                                 } else {
-                                                    response.send(dialog);
+                                                    response.send({dialog : dialog});
                                                 }
                                             });
                                         }
@@ -123,7 +123,7 @@ module.exports = function (app) {
                                     if (error) {
                                         response.send({error : error});
                                     } else {
-                                        response.send(dialogs);
+                                        response.send({dialogs : dialogs});
                                     }
                                 });
                             }
@@ -176,7 +176,7 @@ module.exports = function (app) {
                                         if (dialog === null) {
                                             response.send({error : { message : 'dialog not found', name : 'NotFoundError', id : request.params.name, model : 'dialog'}});
                                         } else {
-                                            response.send(dialog);
+                                            response.send({dialog : dialog});
                                         }
                                     }
                                 });
@@ -323,7 +323,7 @@ module.exports = function (app) {
                                                             if (error) {
                                                                 response.send({error : error});
                                                             } else {
-                                                                response.send(dialog);
+                                                                response.send({dialog : dialog});
                                                             }
                                                         });
                                                     }

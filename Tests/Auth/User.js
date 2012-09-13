@@ -65,24 +65,6 @@ describe('POST /user', function () {
             }
         });
     });
-    it('retorna token se o cadastro for sucesso', function(done) {
-        api.post('auth', '/user', {
-            username : 'testes+' + rand() + '@empreendemia.com.br',
-            password : 'testando',
-            password_confirmation : 'testando',
-            status : 'active'
-        }, function(error, data, response) {
-            should.exist(data, 'não retornou dado nenhum');
-            should.not.exist(data.error, "precisava retornar error");
-            should.exist(data.token, "não retornou o token");
-            should.exist(data.username, "não retornou o username");
-            should.exist(data.password, "não retornou o password");
-            should.exist(data.status, "não retornou o status");
-            should.exist(data.thirdPartyLogins, "não retornou o thirdPartyLogins");
-            should.exist(data.authorizedApps, "não retornou o authorizedApps");
-            done();
-        });
-    });
     it('retorna erro se tenta cadastrar username que já existe', function(done) {
         var username = 'testes+' + rand() + '@empreendemia.com.br';
         api.post('auth', '/user', {
@@ -97,10 +79,26 @@ describe('POST /user', function () {
                 password_confirmation : 'testando',
                 status : 'active'
             }, function (error, data, response) {
-                should.exist(data, 'não retornou dado nenhum');
                 should.exist(data.error, 'precisa retornar erro');
                 done();
             });
+        });
+    });
+    it('cadastra usuário', function(done) {
+        api.post('auth', '/user', {
+            username : 'testes+' + rand() + '@empreendemia.com.br',
+            password : 'testando',
+            password_confirmation : 'testando',
+            status : 'active'
+        }, function(error, data, response) {
+            should.not.exist(data.error, "precisava retornar error");
+            data.should.have.property('user').have.property('token');
+            data.should.have.property('user').have.property('username');
+            data.should.have.property('user').have.property('password');
+            data.should.have.property('user').have.property('status');
+            data.should.have.property('user').have.property('thirdPartyLogins');
+            data.should.have.property('user').have.property('authorizedApps');
+            done();
         });
     });
 });
@@ -116,8 +114,8 @@ describe('PUT /user/[login]/deactivate', function () {
             password_confirmation : 'testando',
             satus : 'active'
         }, function(error, data) {
-            token = data.token;
-            userId = data._id;
+            token = data.user.token;
+            userId = data.user._id;
             done();
         });
     });
@@ -133,8 +131,13 @@ describe('PUT /user/[login]/deactivate', function () {
         api.put('auth', '/user/'+userId+"/deactivate", {
             token : token
         }, function (error, data, response) {
-            //console.log(data.error);
-            should.not.exist(data, 'erro inexperado');
+            should.not.exist(data.error, "precisava retornar error");
+            data.should.have.property('user').have.property('token');
+            data.should.have.property('user').have.property('username');
+            data.should.have.property('user').have.property('password');
+            data.should.have.property('user').have.property('status');
+            data.should.have.property('user').have.property('thirdPartyLogins');
+            data.should.have.property('user').have.property('authorizedApps');
             done();
         });
     });
@@ -142,7 +145,7 @@ describe('PUT /user/[login]/deactivate', function () {
         api.put('auth', '/user/'+userId+"/deactivate", {
             //token : token
         }, function (error, data, response) {
-            should.exist(data, 'deveria retornar erro');
+            should.exist(data.error, 'deveria retornar erro');
             done();
         });
     });
@@ -150,7 +153,7 @@ describe('PUT /user/[login]/deactivate', function () {
         api.put('auth', '/user/'+userId+"/deactivate", {
             token : token+"asdasdasdas"
         }, function (error, data, response) {
-            should.exist(data, 'deveria retornar erro');
+            should.exist(data.error, 'deveria retornar erro');
             done();
         });
     });
@@ -168,8 +171,8 @@ describe('PUT /user/[login]/activate', function () {
             password_confirmation : 'testando',
             satus : 'active'
         }, function(error, data) {
-            token = data.token;
-            userId = data._id;
+            token = data.user.token;
+            userId = data.user._id;
             done();
         });
     });
@@ -185,7 +188,13 @@ describe('PUT /user/[login]/activate', function () {
         api.put('auth', '/user/'+userId+"/activate", {
             token : token
         }, function (error, data, response) {
-            should.not.exist(data, 'não deveria retornar erro');
+            should.not.exist(data.error, "precisava retornar error");
+            data.should.have.property('user').have.property('token');
+            data.should.have.property('user').have.property('username');
+            data.should.have.property('user').have.property('password');
+            data.should.have.property('user').have.property('status');
+            data.should.have.property('user').have.property('thirdPartyLogins');
+            data.should.have.property('user').have.property('authorizedApps');
             done();
         });
     });
@@ -193,7 +202,7 @@ describe('PUT /user/[login]/activate', function () {
         api.put('auth', '/user/'+userId+"/activate", {
             //token : token
         }, function (error, data, response) {
-            should.exist(data, 'deveria retornar erro');
+            should.exist(data.error, 'deveria retornar erro');
             done();
         });
     });
@@ -201,7 +210,7 @@ describe('PUT /user/[login]/activate', function () {
         api.put('auth', '/user/'+userId+"/activate", {
             token : token+"asdasdasdas"
         }, function (error, data, response) {
-            should.exist(data, 'deveria retornar erro');
+            should.exist(data.error, 'deveria retornar erro');
             done();
         });
     });
@@ -209,7 +218,7 @@ describe('PUT /user/[login]/activate', function () {
         api.put('auth', '/user/'+userId+"223das123asd/activate", {
             token : token
         }, function (error, data, response) {
-            should.exist(data, 'deveria retornar erro');
+            should.exist(data.error, 'deveria retornar erro');
             done();
         });
     });
@@ -227,8 +236,8 @@ describe('PUT /user/[login]/password-recovery', function () {
             password_confirmation : 'testando',
             satus : 'active'
         }, function(error, data) {
-            token = data.token;
-            userId = data._id;
+            token = data.user.token;
+            userId = data.user._id;
             done();
         });
     });
@@ -249,13 +258,13 @@ describe('PUT /user/[login]/password-recovery', function () {
             if (error) {
                 done(error);
             } else {
-                should.not.exist(data.error, "não era para retornar erro");
-                data.should.have.property('token');
-                data.should.have.property('username');
-                data.should.have.property('password');
-                data.should.have.property('status');
-                data.should.have.property('thirdPartyLogins');
-                data.should.have.property('authorizedApps');
+                should.not.exist(data.error, "precisava retornar error");
+                data.should.have.property('user').have.property('token');
+                data.should.have.property('user').have.property('username');
+                data.should.have.property('user').have.property('password');
+                data.should.have.property('user').have.property('status');
+                data.should.have.property('user').have.property('thirdPartyLogins');
+                data.should.have.property('user').have.property('authorizedApps');
                 done();
             }
         });
@@ -263,12 +272,12 @@ describe('PUT /user/[login]/password-recovery', function () {
     it('token em branco', function(done) {
         api.put('auth', '/user/'+userId+"/password-recovery", {
             newpassword : 'testando',
-            newpasswordconfirmation : 'testando',
+            newpasswordconfirmation : 'testando'
         }, function(error, data, response) {
             if (error) {
                 done(error);
             } else {
-                should.exist(data.error, "era para retornar erro");
+                should.exist(data.error, 'deveria retornar erro');
                 done();
             }
         });
@@ -279,7 +288,7 @@ describe('PUT /user/[login]/password-recovery', function () {
             newpasswordconfirmation : 'testando',
             token : token
         }, function(error, data, response) {
-            should.exist(data.error, "era para retornar erro");
+            should.exist(data.error, 'deveria retornar erro');
             done();
         });
     });
@@ -289,7 +298,7 @@ describe('PUT /user/[login]/password-recovery', function () {
             newpasswordconfirmation : 'testando',
             token : token+"asdad123123asd"
         }, function(error, data, response) {
-            should.exist(data.error, "era para retornar erro");
+            should.exist(data.error, 'deveria retornar erro');
             done();
         });
     });
@@ -299,7 +308,7 @@ describe('PUT /user/[login]/password-recovery', function () {
             newpasswordconfirmation : 'testando123123123123',
             token : token
         }, function(error, data, response) {
-            should.exist(data.error, "era para retornar erro");
+            should.exist(data.error, 'deveria retornar erro');
             done();
         });
     });
@@ -309,7 +318,7 @@ describe('PUT /user/[login]/password-recovery', function () {
             newpasswordconfirmation : '',
             token : token
         }, function(error, data, response) {
-            should.exist(data.error, "era para retornar erro");
+            should.exist(data.error, 'deveria retornar erro');
             done();
         });
     });
@@ -327,8 +336,8 @@ describe('PUT /user/[login]/login', function() {
             password_confirmation : 'testando',
             satus : 'active'
         }, function(error, data) {
-            token = data.token;
-            userId = data._id;
+            token = data.user.token;
+            userId = data.user._id;
             done();
         });
     });
@@ -400,8 +409,8 @@ describe('PUT /user/[login]/logout', function() {
             password_confirmation : 'testando',
             satus : 'active'
         }, function(error, data) {
-            token = data.token;
-            userId = data._id;
+            token = data.user.token;
+            userId = data.user._id;
             done();
         });
     });
@@ -469,8 +478,8 @@ describe('GET /user/validate', function() {
             password_confirmation : 'testando',
             satus : 'active'
         }, function(error, data) {
-            token = data.token;
-            userId = data._id;
+            token = data.user.token;
+            userId = data.user._id;
             done();
         });
     });
@@ -489,9 +498,12 @@ describe('GET /user/validate', function() {
             token : token
         },
         function(error, data, response) {
-            should.exist(data, 'não retornou dado nenhum');
-            data.should.not.have.property('error');
-            data.should.have.property('user').have.property('_id');
+            should.not.exist(data.error, "precisava retornar error");
+            data.should.have.property('user').have.property('token');
+            data.should.have.property('user').have.property('username');
+            data.should.have.property('user').have.property('status');
+            data.should.have.property('user').have.property('thirdPartyLogins');
+            data.should.have.property('user').have.property('authorizedApps');
             done();
         }
         );

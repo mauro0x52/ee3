@@ -46,7 +46,7 @@ module.exports = function (app) {
                     if (error) {
                         response.send({error : error});
                     } else {
-                        response.send(app);
+                        response.send({app : app});
                     }
                 });
             }
@@ -74,7 +74,7 @@ module.exports = function (app) {
             if (error) {
                 response.send({error : error});
             } else {
-                response.send(apps);
+                response.send({apps : apps});
             }
         });
     });
@@ -104,7 +104,7 @@ module.exports = function (app) {
                 if (app === null) {
                     response.send({error : { message : 'app not found', name : 'NotFoundError', id : request.params.slug, model : 'app'}});
                 } else {
-                    response.send(app);
+                    response.send({app : app});
                 }
             }
         });
@@ -202,7 +202,7 @@ module.exports = function (app) {
                                     if (error) {
                                         response.send({error : error});
                                     } else {
-                                        response.send(app);
+                                        response.send({app : app});
                                     }
                                 });
                             }

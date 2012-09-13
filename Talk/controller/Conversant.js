@@ -46,7 +46,7 @@ module.exports = function (app) {
                     if (error) {
                         response.send({error : error});
                     } else {
-                        response.send(conversant);
+                        response.send({conversant : conversant});
                     }
                 });
             }
@@ -90,7 +90,7 @@ module.exports = function (app) {
                                 if (error) {
                                     response.send({error : error});
                                 } else {
-                                    response.send(conversant);
+                                    response.send({conversant : conversant});
                                 }
                             });
                         }

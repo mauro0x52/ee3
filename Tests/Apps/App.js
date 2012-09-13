@@ -21,7 +21,7 @@ describe('POST /app', function () {
             password : 'testando',
             password_confirmation : 'testando'
         }, function(error, data) {
-            token = data.token;
+            token = data.user.token;
             done();
         });
     });
@@ -48,11 +48,6 @@ describe('POST /app', function () {
                     return done(error);
                 } else {
                     data.should.have.property('error').have.property('name', 'InvalidTokenError');
-                    data.should.not.have.property('_id');
-                    data.should.not.have.property('slug');
-                    data.should.not.have.property('name');
-                    data.should.not.have.property('type');
-                    data.should.not.have.property('creator');
                     done();
                 }
             }
@@ -69,11 +64,6 @@ describe('POST /app', function () {
                     return done(error);
                 } else {
                     data.should.have.property('error').have.property('name', 'ValidationError');
-                    data.should.not.have.property('_id');
-                    data.should.not.have.property('slug');
-                    data.should.not.have.property('name');
-                    data.should.not.have.property('type');
-                    data.should.not.have.property('creator');
                     done();
                 }
             }
@@ -90,11 +80,6 @@ describe('POST /app', function () {
                     return done(error);
                 } else {
                     data.should.have.property('error').have.property('name', 'ValidationError');
-                    data.should.not.have.property('_id');
-                    data.should.not.have.property('slug');
-                    data.should.not.have.property('name');
-                    data.should.not.have.property('type');
-                    data.should.not.have.property('creator');
                     done();
                 }
             }
@@ -110,12 +95,12 @@ describe('POST /app', function () {
                 if (error) {
                     return done(error);
                 } else {
-                    data.should.not.have.property('error');
-                    data.should.have.property('_id');
-                    data.should.have.property('slug');
-                    data.should.have.property('name');
-                    data.should.have.property('type');
-                    data.should.have.property('creator');
+                    should.not.exist(data.error, 'erro inesperado');
+                    data.should.have.property('app').have.property('_id');
+                    data.should.have.property('app').have.property('slug');
+                    data.should.have.property('app').have.property('name');
+                    data.should.have.property('app').have.property('type');
+                    data.should.have.property('app').have.property('creator');
                     done();
                 }
             }
@@ -131,12 +116,12 @@ describe('POST /app', function () {
                 if (error) {
                     return done(error);
                 } else {
-                    data.should.not.have.property('error');
-                    data.should.have.property('_id');
-                    data.should.have.property('slug');
-                    data.should.have.property('name');
-                    data.should.have.property('type');
-                    data.should.have.property('creator');
+                    should.not.exist(data.error, 'erro inesperado');
+                    data.should.have.property('app').have.property('_id');
+                    data.should.have.property('app').have.property('slug');
+                    data.should.have.property('app').have.property('name');
+                    data.should.have.property('app').have.property('type');
+                    data.should.have.property('app').have.property('creator');
                     done();
                 }
             }
@@ -152,12 +137,12 @@ describe('POST /app', function () {
                 if (error) {
                     return done(error);
                 } else {
-                    data.should.not.have.property('error');
-                    data.should.have.property('_id');
-                    data.should.have.property('slug');
-                    data.should.have.property('name');
-                    data.should.have.property('type');
-                    data.should.have.property('creator');
+                    should.not.exist(data.error, 'erro inesperado');
+                    data.should.have.property('app').have.property('_id');
+                    data.should.have.property('app').have.property('slug');
+                    data.should.have.property('app').have.property('name');
+                    data.should.have.property('app').have.property('type');
+                    data.should.have.property('app').have.property('creator');
                     done();
                 }
             }
@@ -176,7 +161,7 @@ describe('GET /apps', function () {
             password_confirmation : 'testando'
         }, function(error, data) {
             var apps = 0;
-            token = data.token;
+            token = data.user.token;
             //cria 20 aplicativos
             for (var i = 0; i < 20; i = i + 1) {
                 api.post('apps', '/app', {
@@ -210,14 +195,13 @@ describe('GET /apps', function () {
             if (error) {
                 return done(error);
             } else {
-                data.should.not.have.property('error');
-                data.length.should.be.above(19);
-                for (var i = 0 ; i < data.length; i = i + 1) {
-                    data[i].should.have.property('_id');
-                    data[i].should.have.property('slug');
-                    data[i].should.have.property('name');
-                    data[i].should.have.property('type');
-                    data[i].should.have.property('creator');
+                should.not.exist(data.error, 'erro inesperado');
+                data.should.have.property('apps');
+                for (var i = 0 ; i < data.apps.length; i = i + 1) {
+                    data.apps[i].should.have.property('_id');
+                    data.apps[i].should.have.property('slug');
+                    data.apps[i].should.have.property('name');
+                    data.apps[i].should.have.property('type');
                 }
                 done();
             }
@@ -236,7 +220,7 @@ describe('GET /app/[slug]', function () {
             password : 'testando',
             password_confirmation : 'testando'
         }, function(error, data) {
-            token = data.token;
+            token = data.user.token;
             //cria um aplicativo
             api.post('apps', '/app', {
                 token : token,
@@ -246,7 +230,7 @@ describe('GET /app/[slug]', function () {
                 if (error) {
                     done(error);
                 } else {
-                    slug = data.slug;
+                    slug = data.app.slug;
                     done();
                 }
             });
@@ -271,11 +255,6 @@ describe('GET /app/[slug]', function () {
                 return done(error);
             } else {
                 data.should.have.property('error').have.property('name', 'NotFoundError');
-                data.should.not.have.property('_id');
-                data.should.not.have.property('slug');
-                data.should.not.have.property('name');
-                data.should.not.have.property('type');
-                data.should.not.have.property('creator');
                 done();
             }
         });
@@ -286,12 +265,12 @@ describe('GET /app/[slug]', function () {
             if (error) {
                 return done(error);
             } else {
-                data.should.not.have.property('error');
-                data.should.have.property('_id');
-                data.should.have.property('slug');
-                data.should.have.property('name');
-                data.should.have.property('type');
-                data.should.have.property('creator');
+                should.not.exist(data.error, 'erro inesperado');
+                data.should.have.property('app').have.property('_id');
+                data.should.have.property('app').have.property('slug');
+                data.should.have.property('app').have.property('name');
+                data.should.have.property('app').have.property('type');
+                data.should.have.property('app').have.property('creator');
                 done();
             }
         });
@@ -309,7 +288,7 @@ describe('DEL /app/[slug]', function () {
             password : 'testando',
             password_confirmation : 'testando'
         }, function(error, data) {
-            token = data.token;
+            token = data.user.token;
             //cria um aplicativo
             api.post('apps', '/app', {
                 token : token,
@@ -319,7 +298,7 @@ describe('DEL /app/[slug]', function () {
                 if (error) {
                     done(error);
                 } else {
-                    slug = data.slug;
+                    slug = data.app.slug;
                     done();
                 }
             });
@@ -344,11 +323,6 @@ describe('DEL /app/[slug]', function () {
                 return done(error);
             } else {
                 data.should.have.property('error').have.property('name', 'InvalidTokenError');
-                data.should.not.have.property('_id');
-                data.should.not.have.property('slug');
-                data.should.not.have.property('name');
-                data.should.not.have.property('type');
-                data.should.not.have.property('creator');
                 done();
             }
         });
@@ -360,11 +334,6 @@ describe('DEL /app/[slug]', function () {
                 return done(error);
             } else {
                 data.should.have.property('error').have.property('name', 'NotFoundError');
-                data.should.not.have.property('_id');
-                data.should.not.have.property('slug');
-                data.should.not.have.property('name');
-                data.should.not.have.property('type');
-                data.should.not.have.property('creator');
                 done();
             }
         });
@@ -397,7 +366,7 @@ describe('PUT /app/[slug]', function () {
             password : 'testando',
             password_confirmation : 'testando'
         }, function(error, data) {
-            token = data.token;
+            token = data.user.token;
             //cria um aplicativo
             api.post('apps', '/app', {
                 token : token,
@@ -408,7 +377,7 @@ describe('PUT /app/[slug]', function () {
                     done(error);
                 } else {
                     app = data;
-                    slug = data.slug;
+                    slug = data.app.slug;
                     done();
                 }
             });
@@ -437,11 +406,6 @@ describe('PUT /app/[slug]', function () {
                 return done(error);
             } else {
                 data.should.have.property('error').have.property('name', 'InvalidTokenError');
-                data.should.not.have.property('_id');
-                data.should.not.have.property('slug');
-                data.should.not.have.property('name');
-                data.should.not.have.property('type');
-                data.should.not.have.property('creator');
                 done();
             }
         });
@@ -455,13 +419,12 @@ describe('PUT /app/[slug]', function () {
             if (error) {
                 return done(error);
             } else {
-                should.exist(data);
-                data.should.not.have.property('error');
-                data.should.have.property('_id');
-                data.should.have.property('slug');
-                data.should.have.property('name', app.name);
-                data.should.have.property('type', 'free');
-                data.should.have.property('creator');
+                should.not.exist(data.error, 'erro inesperado');
+                data.should.have.property('app').have.property('_id');
+                data.should.have.property('app').have.property('slug');
+                data.should.have.property('app').have.property('name', app.name);
+                data.should.have.property('app').have.property('type', 'free');
+                data.should.have.property('app').have.property('creator');
                 done();
             }
         });
@@ -479,11 +442,6 @@ describe('PUT /app/[slug]', function () {
                 return done(error);
             } else {
                 data.should.have.property('error').have.property('name', 'ValidationError');
-                data.should.not.have.property('_id');
-                data.should.not.have.property('slug');
-                data.should.not.have.property('name');
-                data.should.not.have.property('type');
-                data.should.not.have.property('creator');
                 done();
             }
         });
@@ -499,11 +457,6 @@ describe('PUT /app/[slug]', function () {
                 return done(error);
             } else {
                 data.should.have.property('error').have.property('name', 'NotFoundError');
-                data.should.not.have.property('_id');
-                data.should.not.have.property('slug');
-                data.should.not.have.property('name');
-                data.should.not.have.property('type');
-                data.should.not.have.property('creator');
                 done();
             }
         });
@@ -520,13 +473,12 @@ describe('PUT /app/[slug]', function () {
             if (error) {
                 return done(error);
             } else {
-                should.exist(data);
                 should.not.exist(data.error, 'erro inesperado');
-                data.should.have.property('_id');
-                data.should.have.property('slug');
-                data.should.have.property('name', name);
-                data.should.have.property('type', 'free');
-                data.should.have.property('creator');
+                data.should.have.property('app').have.property('_id');
+                data.should.have.property('app').have.property('slug');
+                data.should.have.property('app').have.property('name', name);
+                data.should.have.property('app').have.property('type', 'free');
+                data.should.have.property('app').have.property('creator');
                 done();
             }
         });

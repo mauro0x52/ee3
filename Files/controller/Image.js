@@ -72,7 +72,7 @@ module.exports = function (app) {
                             if (error) {
                                 response.send({error: error});
                             } else {
-                                response.send(file);
+                                response.send({image : file});
                             }
                         });
                     }
@@ -141,7 +141,7 @@ module.exports = function (app) {
                                                 if (error) {
                                                     response.send({error: error});
                                                 } else {
-                                                    response.send(file);
+                                                    response.send({image : file});
                                                 }
                                             });
                                         }
@@ -173,7 +173,7 @@ module.exports = function (app) {
                     if (!file) {
                         response.send({error: fileId + " não foi encontrado"});
                     } else {
-                        response.send(file);
+                        response.send({image : file});
                     }
                 }
             });

@@ -63,7 +63,7 @@ module.exports = function (app) {
                     if (error) {
                         response.send({error : error});
                     } else {
-                        response.send(company);
+                        response.send({company : company});
                     }
                 });
             }
@@ -142,13 +142,12 @@ module.exports = function (app) {
             }
         }
 
-
         findCompany.exec(
             function (error, companies){
                 if (error) {
                     response.send({error : error })
                 } else {
-                    response.send(companies);
+                    response.send({companies : companies});
                 }
             }
         );
@@ -264,7 +263,7 @@ module.exports = function (app) {
                         if (attributes.members) {
 
                         }
-                        response.send(company);
+                        response.send({company : company});
                     }
                 }
             });
@@ -335,7 +334,7 @@ module.exports = function (app) {
                                     if (error) {
                                         response.send({error : error});
                                     } else {
-                                        response.send(company);
+                                        response.send({company : company});
                                     }
                                 });
                             }

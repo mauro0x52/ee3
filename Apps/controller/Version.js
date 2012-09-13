@@ -59,7 +59,7 @@ module.exports = function (app) {
                                     if (error) {
                                         response.send({error : error});
                                     } else {
-                                        response.send(version);
+                                        response.send({version : version});
                                     }
                                 });
                             }
@@ -100,7 +100,7 @@ module.exports = function (app) {
                         if (error) {
                             response.send({error : error});
                         } else {
-                            response.send(versions);
+                            response.send({versions : versions});
                         }
                     });
                 }
@@ -142,7 +142,7 @@ module.exports = function (app) {
                             if (version === null) {
                                 response.send({error : { message : 'version not found', name : 'NotFoundError', id : request.params.number, model : 'version'}});
                             } else {
-                                response.send(version);
+                                response.send({version : version});
                             }
                         }
                     });
@@ -263,7 +263,7 @@ module.exports = function (app) {
                                                 if (error) {
                                                     response.send({error : error});
                                                 } else {
-                                                    response.send(version);
+                                                    response.send({version : version});
                                                 }
                                             });
                                         }

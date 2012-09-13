@@ -22,7 +22,7 @@ var Sdk = function () {
      * @param url : nome dos arquivos que contem os módulos
      * @param cb : callback a ser chamado após todos os módulos terem sido carregados
      */
-    load = function (url, cb){
+    load = function (url, cb) {
         var invocation;
 
         try {
@@ -67,7 +67,7 @@ var Sdk = function () {
                     eval('result = ' + data);
 
                     sdk.config = result;
-                    sdk.App = new sdk.modules.app(sdk);
+                    sdk.App = new sdk.modules.apps(sdk);
                     cb();
                 });
             }
@@ -137,12 +137,13 @@ var sdk = new Sdk();
     "use strict";
 
     console.log('loading sdk modules');
-    sdk.loadModules(['sdk/ajax.js', 'sdk/tracker.js', 'sdk/ui.js', 'sdk/app.js', 'sdk/route.js'], function (error) {
+    sdk.loadModules(['sdk/ajax.js', 'sdk/tracker.js', 'sdk/ui.js', 'sdk/app.js', 'sdk/route.js', 'js/empreendemia.js'], function (error) {
         if (error) {
             console.error(error);
         } else {
             console.log('modules loaded successfuly');
-            sdk.App.tool('empresas', '0.1', 'lista-de-empresas');
+            sdk.empreendemia.start();
+            //sdk.App.tool('empresas', '0.1', 'lista-de-empresas');
         }
     });
 }());

@@ -101,7 +101,7 @@ module.exports = function (app) {
                                                                     response.send({error: error});
                                                                 }
                                                                 else {
-                                                                    response.send(product.thumbnail);
+                                                                    response.send({thumbnail : product.thumbnail});
                                                                 }
                                                             });
                                                         }
@@ -158,7 +158,7 @@ module.exports = function (app) {
                                 if (!product.thumbnail || !product.thumbnail.original || !product.thumbnail.original.url) {
                                     response.send(null);
                                 } else {
-                                    response.send(product.thumbnail);
+                                    response.send({thumbnail : product.thumbnail});
                                 }
                             }
                         }
@@ -208,13 +208,13 @@ module.exports = function (app) {
                                     response.send(null);
                                 } else {
                                     if (request.params.size === 'original') {
-                                        response.send(product.thumbnail.original);
+                                        response.send({original : product.thumbnail.original});
                                     } else if (request.params.size === 'large') {
-                                        response.send(product.thumbnail.large);
+                                        response.send({large : product.thumbnail.large});
                                     } else if (request.params.size === 'medium')  {
-                                        response.send(product.thumbnail.medium);
+                                        response.send({medium : product.thumbnail.medium});
                                     } else {
-                                        response.send(product.thumbnail.small);
+                                        response.send({small : product.thumbnail.small});
                                     }
                                 }
                             }
@@ -385,7 +385,7 @@ module.exports = function (app) {
                                                         response.send({error: error});
                                                     }
                                                     else {
-                                                        response.send(company.thumbnail);
+                                                        response.send({thumbnail : company.thumbnail});
                                                     }
                                                 });
                                             }
@@ -430,7 +430,7 @@ module.exports = function (app) {
                     if (!company.thumbnail || !company.thumbnail.original || !company.thumbnail.original.url) {
                         response.send(null);
                     } else {
-                        response.send(company.thumbnail);
+                        response.send({thumbnail : company.thumbnail});
                     }
                 }
             }
@@ -468,13 +468,13 @@ module.exports = function (app) {
                         response.send(null);
                     } else {
                         if (request.params.size === 'original') {
-                            response.send(company.thumbnail.original);
+                            response.send({original : company.thumbnail.original});
                         } else if (request.params.size === 'large') {
-                            response.send(company.thumbnail.large);
+                            response.send({large : company.thumbnail.large});
                         } else if (request.params.size === 'medium')  {
-                            response.send(company.thumbnail.medium);
+                            response.send({medium : company.thumbnail.medium});
                         } else {
-                            response.send(company.thumbnail.small);
+                            response.send({small : company.thumbnail.small});
                         }
                     }
                 }
