@@ -68,7 +68,7 @@ module.exports = function (app) {
                         if (error) {
                             response.send({error : error});
                         } else {
-                            response.send(states);
+                            response.send({states : states});
                         }
                     });
                 } else {
@@ -109,7 +109,7 @@ module.exports = function (app) {
                             response.send({error : error});
                         } else {
                             if (state) {
-                                response.send(state);
+                                response.send({state : state});
                             } else {
                                 response.send({error : "state not found."});
                             }

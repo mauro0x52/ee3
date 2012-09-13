@@ -67,7 +67,7 @@ var Sdk = function () {
                     eval('result = ' + data);
 
                     sdk.config = result;
-                    sdk.App = new sdk.modules.app(sdk);
+                    sdk.App = new sdk.modules.apps(sdk);
                     cb();
                 });
             }
@@ -142,8 +142,8 @@ var sdk = new Sdk();
             console.error(error);
         } else {
             console.log('modules loaded successfuly');
-            Empreendemia.start();
-            sdk.App.tool('empresas', '0.1', 'lista-de-empresas');
+            sdk.empreendemia.start();
+            //sdk.App.tool('empresas', '0.1', 'lista-de-empresas');
         }
     });
 }());

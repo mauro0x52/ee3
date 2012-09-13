@@ -22,10 +22,10 @@ describe('GET /sectors', function () {
                 else {
                     response.should.have.status(200);
                     should.not.exist(data.error, 'erro inesperado');
-                    should.exist(data[0] && data[0]._id ? true : undefined);
-                    should.exist(data[0] && data[0].slug ? true : undefined);
-                    should.exist(data[0] && data[0].name ? true : undefined);
-                    data.length.should.be.above(10);
+                    should.exist(data.sectors[0] && data.sectors[0]._id ? true : undefined);
+                    should.exist(data.sectors[0] && data.sectors[0].slug ? true : undefined);
+                    should.exist(data.sectors[0] && data.sectors[0].name ? true : undefined);
+                    data.sectors.length.should.be.above(10);
                     done();
                 }
             }
@@ -46,8 +46,8 @@ describe('GET /sector', function () {
                 else {
                     response.should.have.status(200);
                     should.not.exist(data.error, 'erro inesperado');
-                    data.should.have.property('_id');
-                    data.should.have.property('slug', 'civil');
+                    data.should.have.property('sector').have.property('_id');
+                    data.should.have.property('sector').have.property('slug', 'civil');
                     done();
                 }
             }
@@ -63,8 +63,8 @@ describe('GET /sector', function () {
                 else {
                     response.should.have.status(200);
                     should.not.exist(data.error, 'erro inesperado');
-                    data.should.have.property('_id');
-                    data.should.have.property('slug', 'industria');
+                    data.should.have.property('sector').have.property('_id');
+                    data.should.have.property('sector').have.property('slug', 'industria');
                     done();
                 }
             }

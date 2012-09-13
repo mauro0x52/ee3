@@ -63,7 +63,7 @@ describe('POST /image', function() {
                 if (error) done(error);
                 else {
                     should.exist(data, 'não retornou dado nenhum');
-                    data.should.have.property('url').include(path);
+                    data.should.have.property('image').have.property('url').include(path);
                     image = data;
                     done();
                 }
@@ -82,7 +82,7 @@ describe('POST /image', function() {
                 if (error) done(error);
                 else {
                     should.exist(data, 'não retornou dado nenhum');
-                    data.should.have.property('url')
+                    data.should.have.property('image').have.property('url')
                         .include(path)
                         .and.should.not.equal(image.url);
                     done();
@@ -135,7 +135,7 @@ describe('POST /image/resize', function() {
                 if (error) done(error);
                 else {
                     should.exist(data, 'não retornou dado nenhum');
-                    data.should.have.property('url')
+                    data.should.have.property('image').have.property('url')
                         .include(path)
                         .and.include('h200')
                         .and.include('extend');
@@ -155,7 +155,7 @@ describe('POST /image/resize', function() {
                 if (error) done(error);
                 else {
                     should.exist(data, 'não retornou dado nenhum');
-                    data.should.have.property('url')
+                    data.should.have.property('image').have.property('url')
                         .include(path)
                         .and.include('w200')
                         .and.include('extend');
@@ -176,7 +176,7 @@ describe('POST /image/resize', function() {
                 if (error) done(error);
                 else {
                     should.exist(data, 'não retornou dado nenhum');
-                    data.should.have.property('url')
+                    data.should.have.property('image').have.property('url')
                         .include(path)
                         .and.include('w200')
                         .and.include('h200')
@@ -198,7 +198,7 @@ describe('POST /image/resize', function() {
                 if (error) done(error);
                 else {
                     should.exist(data, 'não retornou dado nenhum');
-                    data.should.have.property('url')
+                    data.should.have.property('image').have.property('url')
                         .include(path)
                         .and.include('w200')
                         .and.include('fit');
@@ -219,7 +219,7 @@ describe('POST /image/resize', function() {
                 if (error) done(error);
                 else {
                     should.exist(data, 'não retornou dado nenhum');
-                    data.should.have.property('url')
+                    data.should.have.property('image').have.property('url')
                         .include(path)
                         .and.include('h200')
                         .and.include('fit');
@@ -241,7 +241,7 @@ describe('POST /image/resize', function() {
                 if (error) done(error);
                 else {
                     should.exist(data, 'não retornou dado nenhum');
-                    data.should.have.property('url')
+                    data.should.have.property('image').have.property('url')
                         .include(path)
                         .and.include('w200')
                         .and.include('h200')
@@ -264,7 +264,7 @@ describe('POST /image/resize', function() {
                 if (error) done(error);
                 else {
                     should.exist(data, 'não retornou dado nenhum');
-                    data.should.have.property('url')
+                    data.should.have.property('image').have.property('url')
                         .include(path)
                         .and.include('labeltestando');
                     done();
@@ -284,7 +284,7 @@ describe('POST /image/resize', function() {
                 if (error) done(error);
                 else {
                     should.exist(data, 'não retornou dado nenhum');
-                    data.should.have.property('path')
+                    data.should.have.property('image').have.property('path')
                         .include(path)
                         .and.include('url');
                     done();
@@ -304,7 +304,7 @@ describe('POST /image/resize', function() {
                 if (error) done(error);
                 else {
                     should.exist(data, 'não retornou dado nenhum');
-                    data.should.have.property('url')
+                    data.should.have.property('image').have.property('url')
                         .include(path)
                         .and.include('id');
                     done();
@@ -331,7 +331,7 @@ describe('GET /image/*', function() {
             if (error) done(error);
             else {
                 data.should.not.have.property('error');
-                data.should.have.property('_id').equal(w200extend._id);
+                data.should.have.property('image').have.property('_id').equal(w200extend._id);
                 done();
             }
         });
@@ -341,7 +341,7 @@ describe('GET /image/*', function() {
             if (error) done(error);
             else {
                 data.should.not.have.property('error');
-                data.should.have.property('_id').equal(w200extend._id);
+                data.should.have.property('image').have.property('_id').equal(w200extend._id);
                 done();
             }
         });
@@ -351,7 +351,7 @@ describe('GET /image/*', function() {
             if (error) done(error);
             else {
                 data.should.not.have.property('error');
-                data.should.have.property('url').equal(w200extend.url);
+                data.should.have.property('image').have.property('url').equal(w200extend.url);
                 done();
             }
         });
@@ -364,8 +364,8 @@ describe('Verificação dos resizeamentos', function() {
         imagemagick.identify(w200extend.fullPath, function (error, features) {
             if (error) done(error);
             else {
-                features.should.have.property('width').equal(200);
-                features.should.have.property('height').equal(200);
+                features.should.have.property('image').have.property('width').equal(200);
+                features.should.have.property('image').have.property('height').equal(200);
                 done();
             }
         });
@@ -374,8 +374,8 @@ describe('Verificação dos resizeamentos', function() {
         imagemagick.identify(h200extend.fullPath, function (error, features) {
             if (error) done(error);
             else {
-                features.should.have.property('width').equal(200);
-                features.should.have.property('height').equal(200);
+                features.should.have.property('image').have.property('width').equal(200);
+                features.should.have.property('image').have.property('height').equal(200);
                 done();
             }
         });
@@ -384,8 +384,8 @@ describe('Verificação dos resizeamentos', function() {
         imagemagick.identify(w200h200extend.fullPath, function (error, features) {
             if (error) done(error);
             else {
-                features.should.have.property('width').equal(200);
-                features.should.have.property('height').equal(200);
+                features.should.have.property('image').have.property('width').equal(200);
+                features.should.have.property('image').have.property('height').equal(200);
                 done();
             }
         });
@@ -394,8 +394,8 @@ describe('Verificação dos resizeamentos', function() {
         imagemagick.identify(w200fit.fullPath, function (error, features) {
             if (error) done(error);
             else {
-                features.should.have.property('width').below(201);
-                features.should.have.property('height').below(201);
+                features.should.have.property('image').have.property('width').below(201);
+                features.should.have.property('image').have.property('height').below(201);
                 done();
             }
         });
@@ -404,8 +404,8 @@ describe('Verificação dos resizeamentos', function() {
         imagemagick.identify(h200fit.fullPath, function (error, features) {
             if (error) done(error);
             else {
-                features.should.have.property('width').below(201);
-                features.should.have.property('height').below(201);
+                features.should.have.property('image').have.property('width').below(201);
+                features.should.have.property('image').have.property('height').below(201);
                 done();
             }
         });
@@ -414,8 +414,8 @@ describe('Verificação dos resizeamentos', function() {
         imagemagick.identify(w200h200fit.fullPath, function (error, features) {
             if (error) done(error);
             else {
-                features.should.have.property('width').below(201);
-                features.should.have.property('width').below(201);
+                features.should.have.property('image').have.property('width').below(201);
+                features.should.have.property('image').have.property('width').below(201);
                 done();
             }
         });

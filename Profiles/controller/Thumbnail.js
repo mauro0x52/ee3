@@ -88,7 +88,7 @@ module.exports = function (app) {
                                                         response.send({error: error});
                                                     }
                                                     else {
-                                                        response.send(profile.thumbnail);
+                                                        response.send({thumbnail : profile.thumbnail});
                                                     }
                                                 });
                                             }
@@ -130,7 +130,7 @@ module.exports = function (app) {
                 if (profile === null) {
                     response.send({error : 'profile not found'});
                 } else {
-                    response.send(profile.thumbnail);
+                    response.send({thumbnail : profile.thumbnail});
                 }
             }
         });
@@ -167,7 +167,7 @@ module.exports = function (app) {
                     response.send({error : 'profile not found'});
                 } else {
                     if (profile.thumbnail[size] && profile.thumbnail[size].url) {
-                        response.send(profile.thumbnail[size]);
+                        response.send({size : profile.thumbnail[size]});
                     } else {
                         response.send(null);
                     }

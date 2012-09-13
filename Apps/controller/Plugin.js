@@ -68,7 +68,7 @@ module.exports = function (app) {
                                                 if (error) {
                                                     response.send({error : error});
                                                 } else {
-                                                    response.send(plugin);
+                                                    response.send({plugin : plugin});
                                                 }
                                             });
                                         }
@@ -123,7 +123,7 @@ module.exports = function (app) {
                                     if (error) {
                                         response.send({error : error});
                                     } else {
-                                        response.send(plugins);
+                                        response.send({plugins : plugins});
                                     }
                                 });
                             }
@@ -176,7 +176,7 @@ module.exports = function (app) {
                                         if (plugin === null) {
                                             response.send({error : 'plugin not found'});
                                         } else {
-                                            response.send(plugin);
+                                            response.send({plugin : plugin});
                                         }
                                     }
                                 });
@@ -321,7 +321,7 @@ module.exports = function (app) {
                                                             if (error) {
                                                                 response.send({error : error});
                                                             } else {
-                                                                response.send(plugin);
+                                                                response.send({plugin : plugin});
                                                             }
                                                         });
                                                     }

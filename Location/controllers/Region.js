@@ -55,7 +55,7 @@ module.exports = function (app) {
             if (error) {
                 response.send({error : error});
             } else {
-                response.send(regions);
+                response.send({regions : regions});
             }
         });
     });
@@ -83,7 +83,7 @@ module.exports = function (app) {
                 response.send({error : error});
             } else {
                 if (region) {
-                    response.send(region);
+                    response.send({region : region});
                 } else {
                     response.send({error : "region not found."});
                 }
@@ -147,7 +147,7 @@ module.exports = function (app) {
                     if (error) {
                         response.send({error : error});
                     } else {
-                        response.send(countries);
+                        response.send({countries : countries});
                     }
                 });
             } else {
@@ -212,7 +212,7 @@ module.exports = function (app) {
                     if (error) {
                         response.send({error : error});
                     } else {
-                        response.send(states);
+                        response.send({states : states});
                     }
                 });
             } else {
@@ -277,7 +277,7 @@ module.exports = function (app) {
                     if (error) {
                         response.send({error : error});
                     } else {
-                        response.send(cities);
+                        response.send({cities : cities});
                     }
                 });
             } else {

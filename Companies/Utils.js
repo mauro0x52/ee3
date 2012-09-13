@@ -37,7 +37,7 @@ exports.auth = function (token, cb) {
         answer.on('end', function () {
             var response = JSON.parse(str);
             if (response.error) cb(undefined);
-            else cb(response);
+            else cb(response.user);
         });
     }).end();
 };

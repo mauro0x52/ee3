@@ -35,7 +35,7 @@ function setCookie(c_name,value,exdays)
  *
  * @description : javascript do corpo da empreendemia
  */
-var empreendemia = {
+sdk.empreendemia = {
 
     /** start
      *
@@ -47,7 +47,7 @@ var empreendemia = {
     start : function () {
         this.apps = new sdk.modules.apps(sdk);
         this.menu.load();
-        this.welcome.load();
+        //this.welcome.load();
     },
 
     menu : {
@@ -59,7 +59,8 @@ var empreendemia = {
          * @description : carrega aplicativos do usuário no menu principal
          */
         load : function () {
-            this.apps.list(this.user, function (apps) {
+            this.user = 'lalalalla';
+            sdk.empreendemia.apps.list(this.user, function (apps) {
                 var i;
 
                 for (i = 0; i < apps.length; i++) {
@@ -71,7 +72,7 @@ var empreendemia = {
                                 var i;
 
                                 for (i = 0; i < tools.length; i++) {
-                                    empreendemia.menu.add(tools[i]);
+                                    sdk.empreendemia.menu.add(tools[i]);
                                 }
                             });
                         }

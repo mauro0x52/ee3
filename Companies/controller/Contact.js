@@ -54,7 +54,7 @@ module.exports = function (app) {
                                     if (error) {
                                         response.send({error : error});
                                     } else {
-                                        response.send(company.contacts.pop());
+                                        response.send({contact : company.contacts.pop()});
                                     }
                                 });
                             }
@@ -92,7 +92,7 @@ module.exports = function (app) {
                 if (company === null) {
                     response.send({error : 'company not found'});
                 } else {
-                    response.send(company.contacts);
+                    response.send({contacts : company.contacts});
                 }
             }
         });
@@ -132,7 +132,7 @@ module.exports = function (app) {
                             if (contact === null) {
                                 response.send({error : 'contact not found'});
                             } else {
-                                response.send(contact);
+                                response.send({contact : contact});
                             }
                         }
                     });
@@ -190,7 +190,7 @@ module.exports = function (app) {
                                                 if (error) {
                                                     response.send({error : error});
                                                 } else {
-                                                    response.send(contact);
+                                                    response.send({contact : contact});
                                                 }
                                             });
                                         }

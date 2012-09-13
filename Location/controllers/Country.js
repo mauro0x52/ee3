@@ -59,7 +59,7 @@ module.exports = function (app) {
             if (error) {
                 response.send({error : error});
             } else {
-                response.send(countries);
+                response.send({countries : countries});
             }
         });
     });
@@ -87,7 +87,7 @@ module.exports = function (app) {
                 response.send({error : error});
             } else {
                 if (country) {
-                    response.send(country);
+                    response.send({country : country});
                 } else {
                     response.send({error : "country not found."});
                 }

@@ -57,7 +57,7 @@ module.exports = function (app) {
                                     if (error) {
                                         response.send({error : error});
                                     } else {
-                                        response.send(company.phones.pop());
+                                        response.send({phone : company.phones.pop()});
                                     }
                                 });
                             }
@@ -95,7 +95,7 @@ module.exports = function (app) {
                 if (company === null) {
                     response.send({error : 'company not found'});
                 } else {
-                    response.send(company.phones);
+                    response.send({phones : company.phones});
                 }
             }
         });
@@ -135,7 +135,7 @@ module.exports = function (app) {
                             if (phone === null) {
                                 response.send({error : 'phone not found'});
                             } else {
-                                response.send(phone);
+                                response.send({phone : phone});
                             }
                         }
                     });
@@ -196,7 +196,7 @@ module.exports = function (app) {
                                                 if (error) {
                                                     response.send({error : error});
                                                 } else {
-                                                    response.send(phone);
+                                                    response.send({phone : phone});
                                                 }
                                             });
                                         }

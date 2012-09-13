@@ -58,7 +58,7 @@ module.exports = function (app) {
                                     if (error) {
                                         response.send({error : error});
                                     } else {
-                                        response.send(company.addresses.pop());
+                                        response.send({address : company.addresses.pop()});
                                     }
                                 });
                             }
@@ -96,7 +96,7 @@ module.exports = function (app) {
                 if (company === null) {
                     response.send({error : 'company not found'});
                 } else {
-                    response.send(company.addresses);
+                    response.send({addresses : company.addresses});
                 }
             }
         });
@@ -136,7 +136,7 @@ module.exports = function (app) {
                             if (address === null) {
                                 response.send({error : 'address not found'});
                             } else {
-                                response.send(address);
+                                response.send({address : address});
                             }
                         }
                     });
@@ -197,7 +197,7 @@ module.exports = function (app) {
                                                 if (error) {
                                                     response.send({error : error});
                                                 } else {
-                                                    response.send(address);
+                                                    response.send({address : address});
                                                 }
                                             });
                                         }

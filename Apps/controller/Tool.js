@@ -69,7 +69,7 @@ module.exports = function (app) {
                                                 if (error) {
                                                     response.send({error : error});
                                                 } else {
-                                                    response.send(tool);
+                                                    response.send({tool : tool});
                                                 }
                                             });
                                         }
@@ -125,7 +125,7 @@ module.exports = function (app) {
                                     if (error) {
                                         response.send({error : error});
                                     } else {
-                                        response.send(tools);
+                                        response.send({tools : tools});
                                     }
                                 });
                             }
@@ -183,7 +183,7 @@ module.exports = function (app) {
                                                 if (error) {
                                                     response.send({error : error});
                                                 } else {
-                                                    response.send(tool);
+                                                    response.send({tool : tool});
                                                 }
                                             });
                                         }
@@ -332,7 +332,7 @@ module.exports = function (app) {
                                                             if (error) {
                                                                 response.send({error : error});
                                                             } else {
-                                                                response.send(tool);
+                                                                response.send({tool : tool});
                                                             }
                                                         });
                                                     }

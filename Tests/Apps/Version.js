@@ -22,13 +22,13 @@ describe('POST /app/[slug]/version', function () {
             password : 'testando',
             password_confirmation : 'testando'
         }, function(error, data) {
-            token = data.token;
+            token = data.user.token;
             api.post('apps', '/app', {
                 token : token,
                 name  : 'Aplicativo ' + rand(),
                 type  : 'free'
             }, function (error, data) {
-                slug = data.slug;
+                slug = data.app.slug;
                 done();
             });
         });
@@ -54,8 +54,6 @@ describe('POST /app/[slug]/version', function () {
                     return done(error);
                 } else { 
                     should.exist(data.error);
-                    data.should.not.have.property('_id');
-                    data.should.not.have.property('number');
                     done();
                 }
             }
@@ -71,8 +69,6 @@ describe('POST /app/[slug]/version', function () {
                     return done(error);
                 } else { 
                     should.exist(data.error);
-                    data.should.not.have.property('_id');
-                    data.should.not.have.property('number');
                     done();
                 }
             }
@@ -87,8 +83,6 @@ describe('POST /app/[slug]/version', function () {
                     return done(error);
                 } else { 
                     should.exist(data.error);
-                    data.should.not.have.property('_id');
-                    data.should.not.have.property('number');
                     done();
                 }
             }
@@ -104,8 +98,7 @@ describe('POST /app/[slug]/version', function () {
                     return done(error);
                 } else { 
                     should.not.exist(data.error, 'erro inesperado');
-                    data.should.have.property('_id');
-                    data.should.have.property('number');
+                    data.should.have.property('version').have.property('number');
                     done();
                 }
             }
@@ -125,13 +118,13 @@ describe('GET /app/[slug]/versions', function () {
             password : 'testando',
             password_confirmation : 'testando'
         }, function(error, data) {
-            token = data.token;
+            token = data.user.token;
             api.post('apps', '/app', {
                 token : token,
                 name  : 'Aplicativo ' + rand(),
                 type  : 'free'
             }, function (error, data) {
-                slug = data.slug;
+                slug = data.app.slug;
                 for (var i = 0; i < 20; i = i + 1) {
                     api.post('apps', '/app/' + slug + '/version', {
                         token   : token,
@@ -175,10 +168,11 @@ describe('GET /app/[slug]/versions', function () {
             if (error) {
                 return done(error);
             } else {
-                should.not.exist(data.error, 'erro inesperado');                
-                data.length.should.be.above(19);
-                for (var i = 0 ; i < data.length; i = i + 1) {
-                    data[i].should.have.property('_id');
+                should.not.exist(data.error, 'erro inesperado');           
+                data.should.have.property('versions');
+                data.versions.length.should.be.above(19);
+                for (var i = 0 ; i < data.versions.length; i = i + 1) {
+                    data.versions[i].should.have.property('_id');
                 }
                 done();
             }
@@ -198,18 +192,18 @@ describe('GET /app/[slug]/version/[slug]', function () {
             password : 'testando',
             password_confirmation : 'testando'
         }, function(error, data) {
-            token = data.token;
+            token = data.user.token;
             api.post('apps', '/app', {
                 token : token,
                 name  : 'Aplicativo ' + rand(),
                 type  : 'free'
             }, function (error, data) {
-                slug = data.slug;
+                slug = data.app.slug;
                 api.post('apps', '/app/' + slug + '/version', {
                     token   : token,
                     number  : rand()
                 }, function (error, data) {
-                    version = data.number;
+                    version = data.version.number;
                     done();
                 });
             });
@@ -234,8 +228,6 @@ describe('GET /app/[slug]/version/[slug]', function () {
                 return done(error);
             } else {
                 should.exist(data.error);
-                data.should.not.have.property('_id');
-                data.should.not.have.property('number');
                 done();
             }
         });
@@ -247,8 +239,6 @@ describe('GET /app/[slug]/version/[slug]', function () {
                 return done(error);
             } else {
                 should.exist(data.error);
-                data.should.not.have.property('_id');
-                data.should.not.have.property('number');
                 done();
             }
         });
@@ -260,8 +250,7 @@ describe('GET /app/[slug]/version/[slug]', function () {
                 return done(error);
             } else {
                 should.not.exist(data.error, 'erro inesperado');
-                data.should.have.property('_id');
-                data.should.have.property('number');
+                data.should.have.property('version');
                 done();
             }
         });
@@ -280,18 +269,18 @@ describe('DEL /app/[slug]/version/[number]', function () {
             password : 'testando',
             password_confirmation : 'testando'
         }, function(error, data) {
-            token = data.token;
+            token = data.user.token;
             api.post('apps', '/app', {
                 token : token,
                 name  : 'Aplicativo ' + rand(),
                 type  : 'free'
             }, function (error, data) {
-                slug = data.slug;
+                slug = data.app.slug;
                 api.post('apps', '/app/' + slug + '/version', {
                     token   : token,
                     number  : rand()
                 }, function (error, data) {
-                    version = data.number;
+                    version = data.version.number;
                     done();
                 });
             });
@@ -316,8 +305,6 @@ describe('DEL /app/[slug]/version/[number]', function () {
                 return done(error);
             } else { 
                 should.exist(data.error);
-                data.should.not.have.property('_id');
-                data.should.not.have.property('number');
                 done();
             }
         });
@@ -329,8 +316,6 @@ describe('DEL /app/[slug]/version/[number]', function () {
                 return done(error);
             } else {
                 should.exist(data.error);
-                data.should.not.have.property('_id');
-                data.should.not.have.property('number');
                 done();
             }
         });
@@ -342,14 +327,12 @@ describe('DEL /app/[slug]/version/[number]', function () {
                 return done(error);
             } else {
                 should.exist(data.error);
-                data.should.not.have.property('_id');
-                data.should.not.have.property('number');
                 done();
             }
         });
     });
 
-    it('versão existente', function(done) {
+    it('excluir versão', function(done) {
         api.del('apps', '/app/' + slug + '/version/' + version, {token : token}, function(error, data, response) {
             if (error) {
                 return done(error);
@@ -376,18 +359,18 @@ describe('PUT /app/[slug]/version/[numer]', function () {
             password : 'testando',
             password_confirmation : 'testando'
         }, function(error, data) {
-            token = data.token;
+            token = data.user.token;
             api.post('apps', '/app', {
                 token : token,
                 name  : 'Aplicativo ' + rand(),
                 type  : 'free'
             }, function (error, data) {
-                slug = data.slug;
+                slug = data.app.slug;
                 api.post('apps', '/app/' + slug + '/version', {
                     token   : token,
                     number  : rand()
                 }, function (error, data) {
-                    version = data.number;
+                    version = data.version.number;
                     done();
                 });
             });
@@ -415,9 +398,6 @@ describe('PUT /app/[slug]/version/[numer]', function () {
                 return done(error);
             } else { 
                 should.exist(data.error);
-                should.not.exist(data.slug);
-                data.should.not.have.property('_id');
-                data.should.not.have.property('number');
                 done();
             }
         });
@@ -431,9 +411,7 @@ describe('PUT /app/[slug]/version/[numer]', function () {
                 return done(error);
             } else {
                 should.not.exist(data.error, 'erro inesperado');
-                should.exist(data);
-                data.should.have.property('_id');
-                data.should.have.property('number', version);
+                data.should.have.property('version').have.property('number', version);
                 done();
             }
         });
@@ -448,8 +426,6 @@ describe('PUT /app/[slug]/version/[numer]', function () {
                 return done(error);
             } else {
                 should.exist(data.error);
-                data.should.not.have.property('_id');
-                data.should.not.have.property('number');
                 done();
             }
         });
@@ -464,8 +440,6 @@ describe('PUT /app/[slug]/version/[numer]', function () {
                 return done(error);
             } else {
                 should.exist(data.error);
-                data.should.not.have.property('_id');
-                data.should.not.have.property('number');
                 done();
             }
         });
@@ -482,9 +456,7 @@ describe('PUT /app/[slug]/version/[numer]', function () {
                 return done(error);
             } else {
                 should.not.exist(data.error, 'erro inesperado');
-                should.exist(data);
-                data.should.have.property('_id');
-                data.should.have.property('number', new_version);
+                data.should.have.property('version').have.property('number', new_version);
                 done();
             }
         });

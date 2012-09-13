@@ -55,7 +55,7 @@ module.exports = function (app) {
                                     if (error) {
                                         response.send({error : error});
                                     } else {
-                                        response.send(company.products.pop());
+                                        response.send({product : company.products.pop()});
                                     }
                                 })
                             }
@@ -94,7 +94,7 @@ module.exports = function (app) {
                     response.send({error : 'company not found'});
                 } else {
                     if (company.products.length > 0) {
-                        response.send(company.products);
+                        response.send({products : company.products});
                     } else {
                         response.send(null);
                     }
@@ -132,7 +132,7 @@ module.exports = function (app) {
                         if (!product) {
                             response.send({error : 'product not found'});
                         } else {
-                            response.send(product);
+                            response.send({product : product});
                         }
                     });
                 }
@@ -186,7 +186,7 @@ module.exports = function (app) {
                                             if (error) {
                                                 response.send({error : error});
                                             } else {
-                                                response.send(product);
+                                                response.send({product : product});
                                             }
                                         });
                                     }
