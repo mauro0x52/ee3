@@ -102,7 +102,7 @@ module.exports = function (app) {
             } else {
                 //verifica se o app foi encontrado
                 if (app === null) {
-                    response.send({error : { message : 'app not found', name : 'NotFound', errors : [{ id : request.params.slug, model : 'App'}]}});
+                    response.send({error : { message : 'app not found', name : 'NotFound', errors : [{ id : request.params.slug, model : 'App', message : request.params.slug + ' not found'}]}});
                 } else {
                     response.send(app);
                 }
@@ -138,7 +138,7 @@ module.exports = function (app) {
                     } else {
                         //verifica se o app foi encontrado
                         if (app === null) {
-                            response.send({error : { message : 'app not found', name : 'NotFound', errors : [{ id : request.params.slug, model : 'App'}]}});
+                            response.send({error : { message : 'app not found', name : 'NotFound', errors : [{ id : request.params.slug, model : 'App', message : request.params.slug + ' not found'}]}});
                         } else {
                             //verifica se o usuário é o criador do app
                             if (user._id !== app.creator) {
@@ -188,7 +188,7 @@ module.exports = function (app) {
                     } else {
                         //verifica se o app foi encontrado
                         if (app === null) {
-                            response.send({error : { message : 'app not found', name : 'NotFound', errors : [{ id : request.params.slug, model : 'App'}]}});
+                            response.send({error : { message : 'app not found', name : 'NotFound', errors : [{ id : request.params.slug, model : 'App', message : request.params.slug + ' not found'}]}});
                         } else {
                             //verifica se o usuário é o criador do app
                             if (user._id !== app.creator) {

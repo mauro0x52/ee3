@@ -41,7 +41,7 @@ module.exports = function (app) {
                     } else {
                         //verifica se o app foi encontrado
                         if (app === null) {
-                            response.send({error : { message : 'app not found', name : 'NotFound', errors : { message : 'app not found', name : 'NotFound', path : 'slug', value : request.params.slug }}});
+                            response.send({error : { message : 'app not found', name : 'NotFound', errors : [{ id : request.params.slug, model : 'App', message : 'app not found' }]}});
                         } else {
                             //verifica se o usuário é o criador do app
                             if (user._id !== app.creator) {
@@ -54,7 +54,7 @@ module.exports = function (app) {
                                     } else {
                                         //verifica se a versão foi encontrada
                                         if (version === null) {
-                                            response.send({error : { message : 'version not found', name : 'NotFound', errors : { message : 'version not found', name : 'NotFound', path : 'slug', value : request.params.slug }}});
+                                            response.send({error : { message : 'version not found', name : 'NotFound', errors : [{ id : request.params.slug, model : 'version', message : 'version not found' }]}});
                                         } else {
                                             //pega os dados do post e coloca em um objeto
                                             dialog = new Dialog({
