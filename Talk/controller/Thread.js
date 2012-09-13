@@ -32,8 +32,10 @@ module.exports = function (app) {
         response.contentType('json');
 
         //valida o token do usuário
-        auth(request.param('token'), function (user) {
-            if (user) {
+        auth(request.param('token'), function (error, user) {
+            if (error) {
+                response.send({error : error});
+            } else {
                 //busca o usuário
                 Conversant.findOne({user : user._id}, function (error, conversant) {
                     if (error) {
@@ -68,8 +70,6 @@ module.exports = function (app) {
                         }
                     }
                 });
-            } else {
-                response.send({error : 'invalid user or token'});
             }
         });
     });
@@ -91,8 +91,10 @@ module.exports = function (app) {
         response.contentType('json');
 
         //valida o token do usuário
-        auth(request.param('token'), function (user) {
-            if (user) {
+        auth(request.param('token'), function (error, user) {
+            if (error) {
+                response.send({error : error});
+            } else {
                 //busca o usuário
                 Conversant.findOne({user : user._id}, function (error, conversant) {
                     if (error) {
@@ -127,8 +129,6 @@ module.exports = function (app) {
                         }
                     }
                 });
-            } else {
-                response.send({error : 'invalid token'});
             }
         });
     });
@@ -150,8 +150,10 @@ module.exports = function (app) {
         response.contentType('json');
 
         //valida o token do usuário
-        auth(request.param('token'), function (user) {
-            if (user) {
+        auth(request.param('token'), function (error, user) {
+            if (error) {
+                response.send({error : error});
+            } else {
                 //busca o usuário
                 Conversant.findOne({user : user._id}, function (error, conversant) {
                     if (error) {
@@ -172,8 +174,6 @@ module.exports = function (app) {
                         }
                     }
                 });
-            } else {
-                response.send({error : 'invalid token'});
             }
         });
     });
@@ -195,8 +195,10 @@ module.exports = function (app) {
         response.contentType('json');
 
         //valida o token do usuário
-        auth(request.param('token'), function (user) {
-            if (user) {
+        auth(request.param('token'), function (error, user) {
+            if (error) {
+                response.send({error : error});
+            } else {
                 //busca o usuário
                 Conversant.findOne({user : user._id}, function (error, conversant) {
                     if (error) {
@@ -235,8 +237,6 @@ module.exports = function (app) {
                         }
                     }
                 });
-            } else {
-                response.send({error : 'invalid token'});
             }
         });
     });
@@ -258,8 +258,10 @@ module.exports = function (app) {
         response.contentType('json');
 
         //valida o token do usuário
-        auth(request.param('token'), function (user) {
-            if (user) {
+        auth(request.param('token'), function (error, user) {
+            if (error) {
+                response.send({error : error});
+            } else {
                 //busca o usuário
                 Conversant.findOne({user : user._id}, function (error, conversant) {
                     if (error) {
@@ -285,8 +287,6 @@ module.exports = function (app) {
                         }
                     }
                 });
-            } else {
-                response.send({error : 'invalid token'});
             }
         });
     });
@@ -308,8 +308,10 @@ module.exports = function (app) {
         response.contentType('json');
 
         //valida o token do usuário
-        auth(request.param('token'), function (user) {
-            if (user) {
+        auth(request.param('token'), function (error, user) {
+            if (error) {
+                response.send({error : error});
+            } else {
                 //busca o usuário
                 Conversant.findOne({user : user._id}, function (error, conversant) {
                     if (error) {
@@ -346,8 +348,6 @@ module.exports = function (app) {
                         }
                     }
                 });
-            } else {
-                response.send({error : 'invalid token'});
             }
         });
     });

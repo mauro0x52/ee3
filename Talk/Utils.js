@@ -36,7 +36,12 @@ exports.auth = function (token, cb) {
         //ao terminar o recebimentos dos dados, chamar o callback com a resposta se o usuário foi ou não autenticado
         answer.on('end', function () {
             var response = JSON.parse(str);
-            cb(response);
+            if (response.error) {
+                cb(response.error, undefined);
+            } else {
+                response.error = undefined;
+                cb(undefined, response.user);
+            }
         });
     }).end();
 };

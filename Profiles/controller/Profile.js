@@ -58,8 +58,10 @@ module.exports = function (app) {
 
         response.contentType('json');
         //Verifica se o usuário logado é válido
-        auth(request.param('token'), function (user) {
-            if (user) {
+        auth(request.param('token'), function (error, user) {
+            if (error) {
+                response.send({error : error});
+            } else {
                 //Cria o Objeto Profile para adicionar no Model
                 profile = new Profile({
                     user        : user._id,
@@ -78,8 +80,6 @@ module.exports = function (app) {
                         response.send(profile);
                     }
                 });
-            } else {
-                response.send({error : 'invalid token'});
             }
         })
     });
@@ -101,8 +101,10 @@ module.exports = function (app) {
         response.contentType('json');
 
         //Verifica se o usuário logado é válido
-        auth(request.param('token'), function (user) {
-            if (user) {
+        auth(request.param('token'), function (error, user) {
+            if (error) {
+                response.send({error : error});
+            } else {
                 //Localiza o Profile
                 Profile.findByIdentity(request.params.profile_id, function (error, profile) {
                     if (error) {
@@ -132,8 +134,6 @@ module.exports = function (app) {
                         }
                     }
                 });
-            } else {
-                response.send({error : 'invalid token'});
             }
         });
     });
@@ -155,8 +155,10 @@ module.exports = function (app) {
         response.contentType('json');
 
         //valida o token do usuário
-        auth(request.param('token', null), function (user) {
-            if (user) {
+        auth(request.param('token', null), function (error, user) {
+            if (error) {
+                response.send({error : error});
+            } else {
                 //busca o profile
                 Profile.findOne({"slugs" : request.params.slug}, function (error, profile) {
                     if (error) {
@@ -177,8 +179,6 @@ module.exports = function (app) {
                         }
                     }
                 });
-            } else {
-                response.send({error : 'invalid token'});
             }
         });
     });

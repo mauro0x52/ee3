@@ -30,8 +30,10 @@ module.exports = function (app) {
         response.contentType('json');
 
         //valida o token do usuário
-        auth(request.param('token', null), function (user) {
-            if (user) {
+        auth(request.param('token', null), function (error, user) {
+            if (error) {
+                response.send({error : error});
+            } else {
                 //busca a compania
                 Company.findByIdentity(request.params.company_id, function (error, company) {
                     if (error) {
@@ -92,8 +94,6 @@ module.exports = function (app) {
                         }
                     }
                 });
-            } else {
-                response.send({error : 'invalid token'});
             }
         });
     });
@@ -218,8 +218,10 @@ module.exports = function (app) {
         response.contentType('json');
 
         //valida o token do usuário
-        auth(request.param('token', null), function (user) {
-            if (user) {
+        auth(request.param('token', null), function (error, user) {
+            if (error) {
+                response.send({error : error});
+            } else {
                 //busca a compania
                 Company.findByIdentity(request.params.company_id, function (error, company) {
                     if (error) {
@@ -272,8 +274,6 @@ module.exports = function (app) {
                         }
                     }
                 });
-            } else {
-                response.send({error : 'invalid token'});
             }
         });
     });
@@ -295,8 +295,10 @@ module.exports = function (app) {
         response.contentType('json');
 
         //valida o token do usuário
-        auth(request.param('token', null), function (user) {
-            if (user) {
+        auth(request.param('token', null), function (error, user) {
+            if (error) {
+                response.send({error : error});
+            } else {
                 //busca a compania
                 Company.findByIdentity(request.params.company_id, function (error, company) {
                     if (error) {
@@ -347,8 +349,6 @@ module.exports = function (app) {
                         }
                     }
                 });
-            } else {
-                response.send({error : 'invalid token'});
             }
         });
     });
