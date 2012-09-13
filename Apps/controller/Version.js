@@ -245,7 +245,7 @@ module.exports = function (app) {
                         } else {
                             //verifica se o usuário é o criador do app
                             if (user._id !== app.creator) {
-                                response.send({error : 'permission denied', name : 'PermissionDenied'});
+                                response.send({error : {message : 'permission denied', name : 'PermissionDenied'}});
                             } else {
                                 //pega a versão
                                 app.findVersion(request.params.oldnumber, function (error, version) {
