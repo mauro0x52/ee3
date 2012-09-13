@@ -311,13 +311,13 @@ module.exports = function (app) {
         //localiza o usuário
         User.findOne({token : request.param('token', '')}, function (error, user) {
             if (error) {
-                response.send({error : error});
+                response.send({ error : { message : 'Invalid token', name : 'InvalidToken', errors : { message : 'Invalid token', name : 'InvalidToken', path : 'token', value : request.param('token', '') }}});
             } else {
                 //verifica se o usuario foi encontrado
                 if (user === null) {
-                    response.send({error : 'invalid token'});
+                    response.send({ error : { message : 'Invalid token', name : 'InvalidToken', errors : { message : 'Invalid token', name : 'InvalidToken', path : 'token', value : request.param('token', '') }}});
                 } else {
-                    response.send(user);
+                    response.send({ user : user });
                 }
             }
         });

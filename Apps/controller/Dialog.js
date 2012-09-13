@@ -41,7 +41,7 @@ module.exports = function (app) {
                     } else {
                         //verifica se o app foi encontrado
                         if (app === null) {
-                            response.send({error : 'app not found'});
+                            response.send({error : { message : 'app not found', name : 'NotFound', errors : { message : 'app not found', name : 'NotFound', path : 'slug', value : request.params.slug }}});
                         } else {
                             //verifica se o usuário é o criador do app
                             if (user._id !== app.creator) {

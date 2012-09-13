@@ -46,8 +46,8 @@ describe('POST /app', function () {
             }, function(error, data, response) {
                 if (error) {
                     return done(error);
-                } else { 
-                    should.exist(data.error);
+                } else {
+                    data.should.have.property('error').have.property('name', 'InvalidToken');
                     data.should.not.have.property('_id');
                     data.should.not.have.property('slug');
                     data.should.not.have.property('name');
@@ -67,8 +67,8 @@ describe('POST /app', function () {
             }, function(error, data, response) {
                 if (error) {
                     return done(error);
-                } else { 
-                    should.exist(data.error);
+                } else {
+                    data.should.have.property('error').have.property('name', 'ValidationError');
                     data.should.not.have.property('_id');
                     data.should.not.have.property('slug');
                     data.should.not.have.property('name');
@@ -88,8 +88,8 @@ describe('POST /app', function () {
             }, function(error, data, response) {
                 if (error) {
                     return done(error);
-                } else { 
-                    should.exist(data.error);
+                } else {
+                    data.should.have.property('error').have.property('name', 'ValidationError');
                     data.should.not.have.property('_id');
                     data.should.not.have.property('slug');
                     data.should.not.have.property('name');
@@ -109,8 +109,8 @@ describe('POST /app', function () {
             }, function(error, data, response) {
                 if (error) {
                     return done(error);
-                } else { 
-                    should.not.exist(data.error, 'erro inesperado');
+                } else {
+                    data.should.not.have.property('error');
                     data.should.have.property('_id');
                     data.should.have.property('slug');
                     data.should.have.property('name');
@@ -130,8 +130,8 @@ describe('POST /app', function () {
             }, function(error, data, response) {
                 if (error) {
                     return done(error);
-                } else { 
-                    should.not.exist(data.error, 'erro inesperado');
+                } else {
+                    data.should.not.have.property('error');
                     data.should.have.property('_id');
                     data.should.have.property('slug');
                     data.should.have.property('name');
@@ -151,8 +151,8 @@ describe('POST /app', function () {
             }, function(error, data, response) {
                 if (error) {
                     return done(error);
-                } else { 
-                    should.not.exist(data.error, 'erro inesperado');
+                } else {
+                    data.should.not.have.property('error');
                     data.should.have.property('_id');
                     data.should.have.property('slug');
                     data.should.have.property('name');
@@ -210,7 +210,7 @@ describe('GET /apps', function () {
             if (error) {
                 return done(error);
             } else {
-                should.not.exist(data.error, 'erro inesperado');
+                data.should.not.have.property('error');
                 data.length.should.be.above(19);
                 for (var i = 0 ; i < data.length; i = i + 1) {
                     data[i].should.have.property('_id');
@@ -270,7 +270,7 @@ describe('GET /app/[slug]', function () {
             if (error) {
                 return done(error);
             } else {
-                should.exist(data.error);
+                data.should.have.property('error').have.property('name', 'NotFound');
                 data.should.not.have.property('_id');
                 data.should.not.have.property('slug');
                 data.should.not.have.property('name');
@@ -286,7 +286,7 @@ describe('GET /app/[slug]', function () {
             if (error) {
                 return done(error);
             } else {
-                should.not.exist(data.error, 'erro inesperado');
+                data.should.not.have.property('error');
                 data.should.have.property('_id');
                 data.should.have.property('slug');
                 data.should.have.property('name');
@@ -342,8 +342,8 @@ describe('DEL /app/[slug]', function () {
         api.del('apps', '/app/' + slug, {token : 'invalido'}, function(error, data, response) {
             if (error) {
                 return done(error);
-            } else { 
-                should.exist(data.error);
+            } else {
+                data.should.have.property('error').have.property('name', 'InvalidToken');
                 data.should.not.have.property('_id');
                 data.should.not.have.property('slug');
                 data.should.not.have.property('name');
@@ -359,7 +359,7 @@ describe('DEL /app/[slug]', function () {
             if (error) {
                 return done(error);
             } else {
-                should.exist(data.error);
+                data.should.have.property('error').have.property('name', 'NotFound');
                 data.should.not.have.property('_id');
                 data.should.not.have.property('slug');
                 data.should.not.have.property('name');
@@ -375,9 +375,9 @@ describe('DEL /app/[slug]', function () {
             if (error) {
                 return done(error);
             } else {
-                should.not.exist(data, 'erro inesperado');
+                should.not.exist(data);
                 api.get('apps', '/app/' + slug, {token : token}, function (error, data) {
-                    should.exist(data.error, 'não exclui');
+                    should.not.exist(data);
                     done();
                 });
             }
@@ -435,8 +435,8 @@ describe('PUT /app/[slug]', function () {
             }, function(error, data, response) {
             if (error) {
                 return done(error);
-            } else { 
-                should.exist(data.error);
+            } else {
+                data.should.have.property('error').have.property('name', 'InvalidToken');
                 data.should.not.have.property('_id');
                 data.should.not.have.property('slug');
                 data.should.not.have.property('name');
@@ -455,8 +455,8 @@ describe('PUT /app/[slug]', function () {
             if (error) {
                 return done(error);
             } else {
-                should.not.exist(data.error, 'erro inesperado');
                 should.exist(data);
+                data.should.not.have.property('error');
                 data.should.have.property('_id');
                 data.should.have.property('slug');
                 data.should.have.property('name', app.name);
@@ -478,7 +478,7 @@ describe('PUT /app/[slug]', function () {
             if (error) {
                 return done(error);
             } else {
-                should.exist(data.error);
+                data.should.have.property('error').have.property('name', 'ValidationError');
                 data.should.not.have.property('_id');
                 data.should.not.have.property('slug');
                 data.should.not.have.property('name');
@@ -498,7 +498,7 @@ describe('PUT /app/[slug]', function () {
             if (error) {
                 return done(error);
             } else {
-                should.exist(data.error);
+                data.should.have.property('error').have.property('name', 'NotFound');
                 data.should.not.have.property('_id');
                 data.should.not.have.property('slug');
                 data.should.not.have.property('name');
@@ -520,8 +520,8 @@ describe('PUT /app/[slug]', function () {
             if (error) {
                 return done(error);
             } else {
-                should.not.exist(data.error, 'erro inesperado');
                 should.exist(data);
+                should.not.exist(data.error, 'erro inesperado');
                 data.should.have.property('_id');
                 data.should.have.property('slug');
                 data.should.have.property('name', name);

@@ -490,8 +490,8 @@ describe('GET /user/validate', function() {
         },
         function(error, data, response) {
             should.exist(data, 'não retornou dado nenhum');
-            should.not.exist(data.error, 'Não era para retornar erro');
-            should.exist(data._id, 'Precisava retornar o ID');
+            data.should.not.have.property('error');
+            data.should.have.property('user').have.property('_id');
             done();
         }
         );
