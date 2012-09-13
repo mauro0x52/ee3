@@ -26,11 +26,11 @@ describe('GET /country/[slugCountry]/state/[slugState]/cities', function () {
                 else {
                     response.should.have.status(200);
                     should.not.exist(data.error, 'erro inesperado');
-                    data.length.should.be.above(100);
-                    for (var i = 1; i < data.length; i++) {
-                        data[i].should.have.property('name');
-                        data[i].name.should.be.above(data[i-1].name, 'não ordenou');
-                        data[i].should.have.property('state').equal(dt.state.id);
+                    data.cities.length.should.be.above(100);
+                    for (var i = 1; i < data.cities.length; i++) {
+                        data.cities[i].should.have.property('name');
+                        data.cities[i].name.should.be.above(data.cities[i-1].name, 'não ordenou');
+                        data.cities[i].should.have.property('state').equal(dt.state.id);
                     }
                     done();
                 }
@@ -70,7 +70,7 @@ describe('GET /country/[slugCountry]/state/[slugState]/cities', function () {
                 if (error) return done(error);
                 else {
                     should.not.exist(data.error, 'erro inesperado');
-                    data.should.have.lengthOf(18);
+                    data.cities.should.have.lengthOf(18);
                     done();
                 }
             }
@@ -81,17 +81,17 @@ describe('GET /country/[slugCountry]/state/[slugState]/cities', function () {
                 if (error) return done(error);
                 else {
                     should.not.exist(data.error);
-                    data.should.have.lengthOf(4);
-                    var cities = data;
+                    data.cities.should.have.lengthOf(4);
+                    var cities = data.cities;
                     api.get('location', '/country/'+dt.country.slug+'/state/'+dt.state.slug+'/cities', {limit : 2, page : 2}, function(error, data, response) {
                             if (error) return done(error);
                             else {
                                 should.not.exist(data.error, 'erro inesperado');
-                                data.should.have.lengthOf(2);
+                                data.cities.should.have.lengthOf(2);
                                 JSON.stringify(cities)
-                                    .should.include(JSON.stringify(data[0]), 'resultado menor tem que está dentro do resultado maior');
+                                    .should.include(JSON.stringify(data.cities[0]), 'resultado menor tem que está dentro do resultado maior');
                                 JSON.stringify(cities)
-                                    .should.include(JSON.stringify(data[1]), 'resultado menor tem que está dentro do resultado maior');
+                                    .should.include(JSON.stringify(data.cities[1]), 'resultado menor tem que está dentro do resultado maior');
                                 done();
                             }
                         }
@@ -107,10 +107,10 @@ describe('GET /country/[slugCountry]/state/[slugState]/cities', function () {
                 if (error) return done(error);
                 else {
                     should.not.exist(data.error, 'erro inesperado');
-                    data.length.should.be.above(100);
+                    data.cities.length.should.be.above(100);
                     for (var i = 1; i < data.length; i++) {
-                        data[i].name.should.be.above(data[i-1].name, 'não ordenou');
-                        data[i].should.have.property('state').equal(dt.state.id);
+                        data.cities[i].name.should.be.above(data.cities[i-1].name, 'não ordenou');
+                        data.cities[i].should.have.property('state').equal(dt.state.id);
                     }
                     done();
                 }
@@ -126,10 +126,10 @@ describe('GET /country/[slugCountry]/state/[slugState]/cities', function () {
                 if (error) return done(error);
                 else {
                     should.not.exist(data.error, 'erro inesperado');
-                    data.length.should.be.above(100);
-                    for (var i = 1; i < data.length; i++) {
-                        data[i-1].slug.should.be.above(data[i].slug, 'não ordenou');
-                        data[i].should.have.property('state').equal(dt.state.id);
+                    data.cities.length.should.be.above(100);
+                    for (var i = 1; i < data.cities.length; i++) {
+                        data.cities[i-1].slug.should.be.above(data.cities[i].slug, 'não ordenou');
+                        data.cities[i].should.have.property('state').equal(dt.state.id);
                     }
                     done();
                 }
@@ -197,8 +197,8 @@ describe('GET /country/[slugCountry]/state/[slugState]/city/[slugCity]', functio
             function(error, data, response) {
                 if (error) return done(error);
                 else {
-                    data.should.have.property('_id', dt.city.id, 'os ids devem ser iguais');
-                    data.should.have.property('slug', dt.city.slug, 'os slugs devem ser iguais');
+                    data.should.have.property('city').have.property('_id', dt.city.id, 'os ids devem ser iguais');
+                    data.should.have.property('city').have.property('slug', dt.city.slug, 'os slugs devem ser iguais');
                     done();
                 }
             }
@@ -210,8 +210,8 @@ describe('GET /country/[slugCountry]/state/[slugState]/city/[slugCity]', functio
             function(error, data, response) {
                 if (error) return done(error);
                 else {
-                    data.should.have.property('_id', dt.city.id, 'os ids devem ser iguais');
-                    data.should.have.property('slug', dt.city.slug, 'os slugs devem ser iguais');
+                    data.should.have.property('city').have.property('_id', dt.city.id, 'os ids devem ser iguais');
+                    data.should.have.property('city').have.property('slug', dt.city.slug, 'os slugs devem ser iguais');
                     done();
                 }
             }
@@ -223,8 +223,8 @@ describe('GET /country/[slugCountry]/state/[slugState]/city/[slugCity]', functio
             function(error, data, response) {
                 if (error) return done(error);
                 else {
-                    data.should.have.property('_id', dt.city.id, 'os ids devem ser iguais');
-                    data.should.have.property('slug', dt.city.slug, 'os slugs devem ser iguais');
+                    data.should.have.property('city').have.property('_id', dt.city.id, 'os ids devem ser iguais');
+                    data.should.have.property('city').have.property('slug', dt.city.slug, 'os slugs devem ser iguais');
                     done();
                 }
             }
@@ -236,8 +236,8 @@ describe('GET /country/[slugCountry]/state/[slugState]/city/[slugCity]', functio
             function(error, data, response) {
                 if (error) return done(error);
                 else {
-                    data.should.have.property('_id', dt.city.id, 'os ids devem ser iguais');
-                    data.should.have.property('slug', dt.city.slug, 'os slugs devem ser iguais');
+                    data.should.have.property('city').have.property('_id', dt.city.id, 'os ids devem ser iguais');
+                    data.should.have.property('city').have.property('slug', dt.city.slug, 'os slugs devem ser iguais');
                     done();
                 }
             }
@@ -268,8 +268,8 @@ describe('GET /city/[idCity]', function () {
             function(error, data, response) {
                 if (error) return done(error);
                 else {
-                    data.should.have.property('_id', dt.city.id, 'os ids devem ser iguais');
-                    data.should.have.property('slug', dt.city.slug, 'os slugs devem ser iguais');
+                    data.should.have.property('city').have.property('_id', dt.city.id, 'os ids devem ser iguais');
+                    data.should.have.property('city').have.property('slug', dt.city.slug, 'os slugs devem ser iguais');
                     done();
                 }
             }
