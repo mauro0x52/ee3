@@ -102,7 +102,7 @@ module.exports = function (app) {
             } else {
                 //verifica se o app foi encontrado
                 if (app === null) {
-                    response.send({error : { message : 'app not found', name : 'NotFound', errors : { message : 'app not found', name : 'NotFound', path : 'slug', value : request.params.slug }}});
+                    response.send({error : { message : 'app not found', name : 'NotFound', errors : [{ id : request.params.slug, model : 'App'}]}});
                 } else {
                     response.send(app);
                 }
@@ -138,11 +138,11 @@ module.exports = function (app) {
                     } else {
                         //verifica se o app foi encontrado
                         if (app === null) {
-                            response.send({error : { message : 'app not found', name : 'NotFound', errors : { message : 'app not found', name : 'NotFound', path : 'slug', value : request.params.slug }}});
+                            response.send({error : { message : 'app not found', name : 'NotFound', errors : [{ id : request.params.slug, model : 'App'}]}});
                         } else {
                             //verifica se o usuário é o criador do app
                             if (user._id !== app.creator) {
-                                response.send({error : { message : 'permission denied', name : 'PermissionDenied', errors : { message : 'permission denied', name : 'PermissionDenied'}}});
+                                response.send({error : { message : 'permission denied', name : 'PermissionDenied'}});
                             } else {
                                 //remove o aplicativo
                                 app.remove(function (error) {
@@ -188,11 +188,11 @@ module.exports = function (app) {
                     } else {
                         //verifica se o app foi encontrado
                         if (app === null) {
-                            response.send({error : { message : 'app not found', name : 'NotFound', errors : { message : 'app not found', name : 'NotFound', path : 'slug', value : request.params.slug }}});
+                            response.send({error : { message : 'app not found', name : 'NotFound', errors : [{ id : request.params.slug, model : 'App'}]}});
                         } else {
                             //verifica se o usuário é o criador do app
                             if (user._id !== app.creator) {
-                                response.send({error : { message : 'permission denied', name : 'PermissionDenied', errors : { message : 'permission denied', name : 'PermissionDenied'}}});
+                                response.send({error : { message : 'permission denied', name : 'PermissionDenied'}});
                             } else {
                                 //altera os dados do aplicativo
                                 app.name = request.param('name', app.name);

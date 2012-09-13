@@ -45,7 +45,7 @@ module.exports = function (app) {
                         } else {
                             //verifica se o usuário é o criador do app
                             if (user._id !== app.creator) {
-                                response.send({error : 'permission denied'});
+                                response.send({error : { message : 'permission denied', name : 'PermissionDenied' }});
                             } else {
                                 //busca a versão
                                 app.findVersion(request.params.number, function (error, version) {
@@ -54,7 +54,7 @@ module.exports = function (app) {
                                     } else {
                                         //verifica se a versão foi encontrada
                                         if (version === null) {
-                                            response.send({error : 'version not found'});
+                                            response.send({error : { message : 'version not found', name : 'NotFound', errors : { message : 'version not found', name : 'NotFound', path : 'slug', value : request.params.slug }}});
                                         } else {
                                             //pega os dados do post e coloca em um objeto
                                             dialog = new Dialog({
