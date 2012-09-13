@@ -41,7 +41,7 @@ module.exports = function (app) {
                     } else {
                         //verifica se a compania foi encontrada
                         if (company === null) {
-                            response.send({error : 'company not found'});
+                            response.send({error : {message :  'company not found', name : 'NotFoundError', id : request.params.slug, model : 'company'}});
                         } else {
                             //verifica se o usuário é dono da compania
                             if (! company.isOwner(user._id)) {
@@ -94,7 +94,7 @@ module.exports = function (app) {
             } else {
                 //verifica se a compania foi encontrada
                 if (company === null) {
-                    response.send({error : 'company not found'});
+                    response.send({error : {message :  'company not found', name : 'NotFoundError', id : request.params.slug, model : 'company'}});
                 } else {
                     response.send(company.addresses);
                 }
@@ -125,7 +125,7 @@ module.exports = function (app) {
             } else {
                 //verifica se a compania foi encontrada
                 if (company === null) {
-                    response.send({error : 'company not found'});
+                    response.send({error : {message :  'company not found', name : 'NotFoundError', id : request.params.slug, model : 'company'}});
                 } else {
                     //busca o endereço
                     company.findAddress(request.params.id, function (error, address) {
@@ -134,7 +134,7 @@ module.exports = function (app) {
                         } else {
                             //verifica se o endereço foi encontrado
                             if (address === null) {
-                                response.send({error : 'address not found'});
+                                response.send({error : {message :  'address not found', name : 'NotFoundError', id : request.params.id, model : 'address'}});
                             } else {
                                 response.send(address);
                             }
@@ -173,7 +173,7 @@ module.exports = function (app) {
                     } else {
                         //verifica se a compania foi encontrada
                         if (company === null) {
-                            response.send({error : 'company not found'});
+                            response.send({error : {message :  'company not found', name : 'NotFoundError', id : request.params.slug, model : 'company'}});
                         } else {
                             //verifica se o usuário é dono da compania
                             if (! company.isOwner(user._id)) {
@@ -186,7 +186,7 @@ module.exports = function (app) {
                                     } else {
                                         //verifica se o endereço foi encontrado
                                         if (address === null) {
-                                            response.send({error : 'address not found'});
+                                            response.send({error : {message :  'address not found', name : 'NotFoundError', id : request.params.id, model : 'address'}});
                                         } else {
                                             //altera os dados do endereço
                                             address.street = request.param('street', address.street);
@@ -241,7 +241,7 @@ module.exports = function (app) {
                     } else {
                         //verifica se a compania foi encontrada
                         if (company === null) {
-                            response.send({error : 'company not found'});
+                            response.send({error : {message :  'company not found', name : 'NotFoundError', id : request.params.slug, model : 'company'}});
                         } else {
                             //verifica se o usuário é dono da compania
                             if (! company.isOwner(user._id)) {
@@ -254,7 +254,7 @@ module.exports = function (app) {
                                     } else {
                                         //verifica se o endereço foi encontrado
                                         if (address === null) {
-                                            response.send({error : 'address not found'});
+                                            response.send({error : {message :  'address not found', name : 'NotFoundError', id : request.params.id, model : 'address'}});
                                         } else {
                                             //remove o endereço
                                             address.remove();

@@ -53,7 +53,7 @@ module.exports = function (app) {
                 }
             });
         } else {
-            response.send({error : 'Password confirmation invalid'});
+            response.send({error : {message : 'invalid password confirmation', name : 'ValidationError', errors : {password_confirmation : {message : 'invalid password confirmation', name : 'ValidatorError', path : 'password_confirmation', type : 'confirmation' }}}});
         }
     });
 
@@ -200,7 +200,7 @@ module.exports = function (app) {
                 }
             });
         } else {
-            response.send({error : 'Password confirmation invalid'});
+            response.send({error : {message : 'invalid password confirmation', name : 'ValidationError', errors : {password_confirmation : {message : 'invalid password confirmation', name : 'ValidatorError', path : 'password_confirmation', type : 'confirmation' }}}});
         }
     });
 
@@ -227,11 +227,11 @@ module.exports = function (app) {
             } else {
                 //verifica se o usuario foi encontrado
                 if (user === null) {
-                    response.send({error : 'invalid username or password'});
+                    response.send({error : { message : 'invalid username or password', name : 'InvalidLoginError'}});
                 } else {
                     //verifica a senha do usuário
                     if (user.password !== request.param('password', null)) {
-                        response.send({error : 'invalid username or password'});
+                        response.send({error : { message : 'invalid username or password', name : 'InvalidLoginError'}});
                     } else {
                         //loga o usuário
                         user.login(function (error) {

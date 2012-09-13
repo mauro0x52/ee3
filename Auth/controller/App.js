@@ -104,7 +104,7 @@ module.exports = function (app) {
                                 } else {
                                     //verifica se a autorização foi encontrada
                                     if (app === null) {
-                                        response.send({error : 'app not found'});
+                                        response.send({error : { message : 'app not found', name : 'NotFoundError', id : request.params.id, model : 'app'}});
                                     } else {
                                         //remove a autorização
                                         app.remove();
@@ -162,7 +162,7 @@ module.exports = function (app) {
                                 } else {
                                     //verifica se a autorização foi encontrada
                                     if (app === null) {
-                                        response.send({error : 'app not found'});
+                                        response.send({error : { message : 'app not found', name : 'NotFoundError', id : request.params.id, model : 'app'}});
                                     } else {
                                         response.send(app);
                                     }
@@ -216,7 +216,7 @@ module.exports = function (app) {
                                 } else {
                                     //verifica se a autorização foi encontrada
                                     if (app === null) {
-                                        response.send({error : 'app not found'});
+                                        response.send({error : { message : 'app not found', name : 'NotFoundError', id : request.params.id, model : 'app'}});
                                     } else {
                                         //edita dados da autorização
                                         app.authorizationDate = request.param('authorizationDate', app.authorizationDate);
@@ -274,12 +274,12 @@ module.exports = function (app) {
                         } else {
                             //verifica se a autorização foi encontrada
                             if (app === null) {
-                                response.send({error : 'app not found'});
+                                response.send({error : { message : 'app not found', name : 'NotFoundError', errors : [{ id : request.params.id, model : 'app', message : request.params.id + ' not found'}]}});
                             } else {
                                 if (user.authorizedApps[i].token === request.param('token', null)) {
                                     response.send({valid : true});
                                 } else {
-                                    response.send({error : 'token not validate'});
+                                    response.send({error : {message : 'token denied by app', name : 'DeniedTokenError'}});
                                 }
                             }
                         }

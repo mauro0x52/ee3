@@ -40,7 +40,7 @@ module.exports = function (app) {
                     } else {
                         //verifica se a compania foi encontrada
                         if (company === null) {
-                            response.send({error : 'company not found'});
+                            response.send({error : {message :  'company not found', name : 'NotFoundError', id : request.params.slug, model : 'company'}});
                         } else {
                             //verifica se o usuário é dono da compania
                             if (! company.isOwner(user._id)) {
@@ -90,7 +90,7 @@ module.exports = function (app) {
             } else {
                 //verifica se a compania foi encontrada
                 if (company === null) {
-                    response.send({error : 'company not found'});
+                    response.send({error : {message :  'company not found', name : 'NotFoundError', id : request.params.slug, model : 'company'}});
                 } else {
                     response.send(company.embeddeds);
                 }
@@ -121,7 +121,7 @@ module.exports = function (app) {
             } else {
                 //verifica se a compania foi encontrada
                 if (company === null) {
-                    response.send({error : 'company not found'});
+                    response.send({error : {message :  'company not found', name : 'NotFoundError', id : request.params.slug, model : 'company'}});
                 } else {
                     //busca o embbeded
                     company.findEmbedded(request.params.id, function (error, embedded) {
@@ -130,7 +130,7 @@ module.exports = function (app) {
                         } else {
                             //verifica se o embedded foi encontrado
                             if (embedded === null) {
-                                response.send({error : 'embedded not found'});
+                                response.send({error : {message :  'embedded not found', name : 'NotFoundError', id : request.params.id, model : 'embedded'}});
                             } else {
                                 response.send(embedded);
                             }
@@ -169,7 +169,7 @@ module.exports = function (app) {
                     } else {
                         //verifica se a compania foi encontrada
                         if (company === null) {
-                            response.send({error : 'company not found'});
+                            response.send({error : {message :  'company not found', name : 'NotFoundError', id : request.params.slug, model : 'company'}});
                         } else {
                             //verifica se o usuário é dono da compania
                             if (! company.isOwner(user._id)) {
@@ -182,7 +182,7 @@ module.exports = function (app) {
                                     } else {
                                         //verifica se o embedded foi encontrado
                                         if (embedded === null) {
-                                            response.send({error : 'embedded not found'});
+                                            response.send({error : {message :  'embedded not found', name : 'NotFoundError', id : request.params.id, model : 'embedded'}});
                                         } else {
                                             //altera os dados do embbeded
                                             embedded.link = request.param('link', embedded.link);
@@ -234,7 +234,7 @@ module.exports = function (app) {
                     } else {
                         //verifica se a compania foi encontrada
                         if (company === null) {
-                            response.send({error : 'company not found'});
+                            response.send({error : {message :  'company not found', name : 'NotFoundError', id : request.params.slug, model : 'company'}});
                         } else {
                             //verifica se o usuário é dono da compania
                             if (! company.isOwner(user._id)) {
@@ -247,7 +247,7 @@ module.exports = function (app) {
                                     } else {
                                         //verifica se o embedded foi encontrado
                                         if (embedded === null) {
-                                            response.send({error : 'embedded not found'});
+                                            response.send({error : {message :  'embedded not found', name : 'NotFoundError', id : request.params.id, model : 'embedded'}});
                                         } else {
                                             //remove o embedded
                                             embedded.remove();

@@ -137,7 +137,7 @@ module.exports = function (app) {
                                 } else {
                                     //verifica se o login externo foi encontrado
                                     if (thirdPartyLogin === null) {
-                                        response.send({error : 'third party login not found'});
+                                        response.send({error : { message : 'third-party-login not found', name : 'NotFoundError', id : request.params.id, model : 'third-party-login'}});
                                     } else {
                                         response.send(thirdPartyLogin);
                                     }
@@ -191,7 +191,7 @@ module.exports = function (app) {
                                 } else {
                                     //verifica se o login externo foi encontrado
                                     if (thirdPartyLogin === null) {
-                                        response.send({error : 'third party login not found'});
+                                        response.send({error : { message : 'third-party-login not found', name : 'NotFoundError', id : request.params.id, model : 'third-party-login'}});
                                     } else {
                                         //remove o login externo
                                         thirdPartyLogin.remove();
