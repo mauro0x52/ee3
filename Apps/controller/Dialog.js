@@ -54,7 +54,7 @@ module.exports = function (app) {
                                     } else {
                                         //verifica se a versão foi encontrada
                                         if (version === null) {
-                                            response.send({error : { message : 'version not found', name : 'NotFound', errors : [{ id : request.params.slug, model : 'version', message : 'version not found' }]}});
+                                            response.send({error : { message : 'version not found', name : 'NotFound', errors : [{ id : request.params.slug, model : 'version', message : request.params.slug + ' not found' }]}});
                                         } else {
                                             //pega os dados do post e coloca em um objeto
                                             dialog = new Dialog({
