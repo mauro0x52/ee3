@@ -30,13 +30,13 @@ module.exports = function (app) {
         folderPath = request.param('path');
 
         if (!folderPath) {
-            response.send({error: 'path not defined'});
+            response.send({error : {message : 'no defined path', name : 'ValidationError', errors : {path : {message : 'no defined path', name : 'ValidatorError', path : 'path', type : 'required'}}}});
         } else {
             // caminho escolhido
             folderPath = request.param('path', null);
 
             if (!request.files || !request.files.file) {
-                response.send({error: 'no selected file'});
+                response.send({error : {message : 'no selected file', name : 'ValidationError', errors : {file : {message : 'no selected file', name : 'ValidatorError', path : 'file', type : 'required'}}}});
             } else {
                 // arquivo da imagem temporaria
                 tmpFile = request.files.file;
@@ -99,10 +99,10 @@ module.exports = function (app) {
         response.contentType('json');
 
         if (!fileId) {
-            response.send({error: 'no file defined'});
+            response.send({error : {message : 'no defined file', name : 'ValidationError', errors : {file : {message : 'no defined file', name : 'ValidatorError', path : 'file', type : 'required'}}}});
         } else {
             if (!width && !height) {
-                response.send({error : 'no dimensions defined'})
+                response.send({error : {message : 'no defined dimensions', name : 'ValidationError', errors : {width : {message : 'no defined dimensions', name : 'ValidatorError', path : 'path', type : 'required',height : {message : 'no defined dimensions', name : 'ValidatorError', path : 'height', type : 'required'}}}}})
             } else {
                 // le dados da imagem
                 File.findByIdentity(fileId, function (error, file) {
@@ -164,7 +164,7 @@ module.exports = function (app) {
 
 
         if (!fileId) {
-            response.send({error: 'É preciso definir um path!'});
+            response.send({error : { message : 'image not found', name : 'NotFoundError', id : '', model : 'image'}});
         } else {
             File.findByIdentity(fileId, function (error, file) {
                 if (error) {
