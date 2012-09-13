@@ -72,7 +72,7 @@ module.exports = function (app) {
                         }
                     });
                 } else {
-                    response.send({error : "country not found."});
+                    response.send({error : { message : 'country not found', name : 'NotFoundError', id : request.params.slug, model : 'country'}});
                 }
             }
         });
@@ -111,12 +111,12 @@ module.exports = function (app) {
                             if (state) {
                                 response.send(state);
                             } else {
-                                response.send({error : "state not found."});
+                                response.send({error : { message : 'state not found', name : 'NotFoundError', id : request.params.stateSlug, model : 'state'}});
                             }
                         }
                     });
                 } else {
-                    response.send({error : "country not found."});
+                    response.send({error : { message : 'country not found', name : 'NotFoundError', id : request.params.countrySlug, model : 'country'}});
                 }
             }
         });
