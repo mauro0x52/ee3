@@ -22,12 +22,12 @@ describe('POST /thread', function () {
             password : 'testando',
             password_confirmation : 'testando'
         }, function(error, data) {
-            token = data.token;
+            token = data.user.token;
             api.post('talk', '/conversant', {
                 token : token,
                 label : 'Label ' + rand()
             }, function (error, data, response) {
-                conversant = data._id;
+                conversant = data.conversant._id;
                 done();
             });
         });
@@ -55,10 +55,6 @@ describe('POST /thread', function () {
                     return done(error);
                 } else { 
                     should.exist(data.error);
-                    data.should.not.have.property('_id');
-                    data.should.not.have.property('place');
-                    data.should.not.have.property('name');
-                    data.should.not.have.property('slug');
                     done();
                 }
             }
@@ -74,10 +70,6 @@ describe('POST /thread', function () {
                     return done(error);
                 } else { 
                     should.exist(data.error);
-                    data.should.not.have.property('_id');
-                    data.should.not.have.property('place');
-                    data.should.not.have.property('name');
-                    data.should.not.have.property('slug');
                     done();
                 }
             }
@@ -93,10 +85,6 @@ describe('POST /thread', function () {
                     return done(error);
                 } else { 
                     should.exist(data.error);
-                    data.should.not.have.property('_id');
-                    data.should.not.have.property('place');
-                    data.should.not.have.property('name');
-                    data.should.not.have.property('slug');
                     done();
                 }
             }
@@ -113,10 +101,10 @@ describe('POST /thread', function () {
                     return done(error);
                 } else { 
                     should.not.exist(data.error, 'erro inesperado');
-                    data.should.have.property('_id');
-                    data.should.have.property('place');
-                    data.should.have.property('name');
-                    data.should.have.property('slug');
+                    data.should.have.property('thread').have.property('_id');
+                    data.should.have.property('thread').have.property('place');
+                    data.should.have.property('thread').have.property('name');
+                    data.should.have.property('thread').have.property('slug');
                     done();
                 }
             }
@@ -136,18 +124,18 @@ describe('PUT /thread/[slug]', function () {
             password : 'testando',
             password_confirmation : 'testando'
         }, function(error, data) {
-            token = data.token;
+            token = data.user.token;
             api.post('talk', '/conversant', {
                 token : token,
                 label : 'Label ' + rand()
             }, function (error, data, response) {
-                conversant = data._id;
+                conversant = data.conversant._id;
                 api.post('talk', '/thread', {
                     token : token,
                     place : 'Place ' + rand(),
                     name  : 'Name ' + rand()
                 }, function (error, data, response) {
-                    thread = data.slug;
+                    thread = data.thread.slug;
                     done();
                 });
             });
@@ -174,10 +162,6 @@ describe('PUT /thread/[slug]', function () {
                 return done(error);
             } else {
                 should.exist(data.error);
-                data.should.not.have.property('_id');
-                data.should.not.have.property('place');
-                data.should.not.have.property('name');
-                data.should.not.have.property('slug');
                 done();
             }
         });
@@ -191,10 +175,6 @@ describe('PUT /thread/[slug]', function () {
                 return done(error);
             } else {
                 should.exist(data.error);
-                data.should.not.have.property('_id');
-                data.should.not.have.property('place');
-                data.should.not.have.property('name');
-                data.should.not.have.property('slug');
                 done();
             }
         });
@@ -208,10 +188,10 @@ describe('PUT /thread/[slug]', function () {
                 return done(error);
             } else {
                 should.not.exist(data.error, 'erro inesperado');
-                data.should.have.property('_id');
-                data.should.have.property('place');
-                data.should.have.property('name');
-                data.should.have.property('slug');
+                data.should.have.property('thread').have.property('_id');
+                data.should.have.property('thread').have.property('place');
+                data.should.have.property('thread').have.property('name');
+                data.should.have.property('thread').have.property('slug');
                 done();
             }
         });
@@ -230,12 +210,12 @@ describe('GET /threads', function () {
             password : 'testando',
             password_confirmation : 'testando'
         }, function(error, data) {
-            token = data.token;
+            token = data.user.token;
             api.post('talk', '/conversant', {
                 token : token,
                 label : 'Label ' + rand()
             }, function (error, data, response) {
-                conversant = data._id;
+                conversant = data.conversant._id;
                 for (var i = 0; i < 20; i = i + 1) {
                     api.post('talk', '/thread', {
                         token : token,
@@ -285,12 +265,12 @@ describe('GET /threads', function () {
                 return done(error);
             } else {
                 should.not.exist(data.error, 'erro inesperado');
-                data.length.should.be.above(19);
-                for (var i = 0 ; i < data.length; i = i + 1) {
-                    data[i].should.have.property('_id');
-                    data[i].should.have.property('name');
-                    data[i].should.have.property('slug');
-                    data[i].should.have.property('place');
+                data.threads.length.should.be.above(19);
+                for (var i = 0 ; i < data.threads.length; i = i + 1) {
+                    data.threads[i].should.have.property('_id');
+                    data.threads[i].should.have.property('name');
+                    data.threads[i].should.have.property('slug');
+                    data.threads[i].should.have.property('place');
                 }
                 done();
             }
@@ -310,18 +290,18 @@ describe('POST /thread/[slug]/message', function () {
             password : 'testando',
             password_confirmation : 'testando'
         }, function(error, data) {
-            token = data.token;
+            token = data.user.token;
             api.post('talk', '/conversant', {
                 token : token,
                 label : 'Label ' + rand()
             }, function (error, data, response) {
-                conversant = data._id;
+                conversant = data.conversant._id;
                 api.post('talk', '/thread', {
                     token : token,
                     place : 'Place ' + rand(),
                     name  : 'Name ' + rand()
                 }, function (error, data, response) {
-                    thread = data.slug;
+                    thread = data.thread.slug;
                     done();
                 });
             });
@@ -349,10 +329,6 @@ describe('POST /thread/[slug]/message', function () {
                 return done(error);
             } else {
                 should.exist(data.error);
-                data.should.not.have.property('_id');
-                data.should.not.have.property('place');
-                data.should.not.have.property('name');
-                data.should.not.have.property('slug');
                 done();
             }
         });
@@ -367,10 +343,6 @@ describe('POST /thread/[slug]/message', function () {
                 return done(error);
             } else {
                 should.exist(data.error);
-                data.should.not.have.property('_id');
-                data.should.not.have.property('place');
-                data.should.not.have.property('name');
-                data.should.not.have.property('slug');
                 done();
             }
         });
@@ -384,10 +356,6 @@ describe('POST /thread/[slug]/message', function () {
                 return done(error);
             } else {
                 should.exist(data.error);
-                data.should.not.have.property('_id');
-                data.should.not.have.property('place');
-                data.should.not.have.property('name');
-                data.should.not.have.property('slug');
                 done();
             }
         });
@@ -402,10 +370,10 @@ describe('POST /thread/[slug]/message', function () {
                 return done(error);
             } else {
                 should.not.exist(data.error, 'erro inesperado');
-                data.should.have.property('_id');
-                data.should.have.property('content');
-                data.should.have.property('date');
-                data.should.have.property('sender');
+                data.should.have.property('message').have.property('_id');
+                data.should.have.property('message').have.property('content');
+                data.should.have.property('message').have.property('date');
+                data.should.have.property('message').have.property('sender');
                 done();
             }
         });
@@ -425,18 +393,18 @@ describe('GET /thread/[slug]/messages', function () {
             password : 'testando',
             password_confirmation : 'testando'
         }, function(error, data) {
-            token = data.token;
+            token = data.user.token;
             api.post('talk', '/conversant', {
                 token : token,
                 label : 'Label ' + rand()
             }, function (error, data, response) {
-                conversant = data._id;
+                conversant = data.conversant._id;
                 api.post('talk', '/thread', {
                     token : token,
                     place : 'Place ' + rand(),
                     name  : 'Name ' + rand()
                 }, function (error, data, response) {
-                    thread = data.slug;
+                    thread = data.thread.slug;
                     for (var i = 0; i < 20; i = i + 1) {
                         api.post('talk','/thread/' + thread + '/message',  {
                             token  : token,
@@ -500,12 +468,12 @@ describe('GET /thread/[slug]/messages', function () {
                 return done(error);
             } else {
                 should.not.exist(data.error, 'erro inesperado');
-                data.length.should.be.above(19);
-                for (var i = 0; i < data.length; i = i + 1) {
-                    data[i].should.have.property('content');
-                    data[i].should.have.property('date');
-                    data[i].should.have.property('sender');
-                    data[i].should.have.property('_id');
+                data.messages.length.should.be.above(19);
+                for (var i = 0; i < data.messages.length; i = i + 1) {
+                    data.messages[i].should.have.property('content');
+                    data.messages[i].should.have.property('date');
+                    data.messages[i].should.have.property('sender');
+                    data.messages[i].should.have.property('_id');
                 }
                 done();
             }
@@ -527,18 +495,18 @@ describe('GET /thread/[slug]/unread-messages', function () {
             password : 'testando',
             password_confirmation : 'testando'
         }, function(error, data) {
-            token = data.token;
+            token = data.user.token;
             api.post('talk', '/conversant', {
                 token : token,
                 label : 'Label ' + rand()
             }, function (error, data, response) {
-                conversant = data._id;
+                conversant = data.conversant._id;
                 api.post('talk', '/thread', {
                     token : token,
                     place : 'Place ' + rand(),
                     name  : 'Name ' + rand()
                 }, function (error, data, response) {
-                    thread = data.slug;
+                    thread = data.thread.slug;
                     for (var i = 0; i < 20; i = i + 1) {
                         api.post('talk','/thread/' + thread + '/message',  {
                             token  : token,
@@ -602,12 +570,12 @@ describe('GET /thread/[slug]/unread-messages', function () {
                 return done(error);
             } else {
                 should.not.exist(data.error, 'erro inesperado');
-                data.length.should.be.above(19);
-                for (var i = 0; i < data.length; i = i + 1) {
-                    data[i].should.have.property('content');
-                    data[i].should.have.property('date');
-                    data[i].should.have.property('sender');
-                    data[i].should.have.property('_id');
+                data.messages.length.should.be.above(19);
+                for (var i = 0; i < data.messages.length; i = i + 1) {
+                    data.messages[i].should.have.property('content');
+                    data.messages[i].should.have.property('date');
+                    data.messages[i].should.have.property('sender');
+                    data.messages[i].should.have.property('_id');
                 }
                 done();
             }

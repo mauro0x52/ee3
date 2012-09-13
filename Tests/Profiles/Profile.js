@@ -28,16 +28,16 @@ describe('POST /profile', function () {
             password : 'testando',
             password_confirmation : 'testando'
         }, function(error, data) {
-            userA.token = data.token;
-            userA._id = data._id;
+            userA.token = data.user.token;
+            userA._id = data.user._id;
             // cria outro usuario
             api.post('auth', '/user', {
                 username : userB.username,
                 password : 'testando',
                 password_confirmation : 'testando'
             }, function(error, data) {
-                userB.token = data.token;
-                userB._id = data._id;
+                userB.token = data.user.token;
+                userB._id = data.user._id;
                 done();
             });
         });
@@ -51,7 +51,6 @@ describe('POST /profile', function () {
             else {
                 response.should.have.status(200);
                 should.exist(data.error);
-                should.not.exist(data.slug);
                 done();
             }
         });
@@ -66,7 +65,6 @@ describe('POST /profile', function () {
             else {
                 response.should.have.status(200);
                 should.exist(data.error);
-                should.not.exist(data.slug);
                 done();
             }
         });
@@ -81,10 +79,10 @@ describe('POST /profile', function () {
             if (error) return done(error);
             else {
                 data.should.not.have.property('error');
-                data.should.have.property('slug').equal('nome'+random+'-sobrenome'+random);
-                data.should.have.property('name').equal('Nome' + random);
-                data.should.have.property('surname').equal('Sobrenome' + random);
-                profileA = data;
+                data.should.have.property('profile').have.property('slug').equal('nome'+random+'-sobrenome'+random);
+                data.should.have.property('profile').have.property('name').equal('Nome' + random);
+                data.should.have.property('profile').have.property('surname').equal('Sobrenome' + random);
+                profileA = data.profile;
                 done();
             }
         });
@@ -98,11 +96,11 @@ describe('POST /profile', function () {
             if (error) return done(error);
             else {
                 data.should.not.have.property('error');
-                data.should.have.property('slug')
+                data.should.have.property('profile').have.property('slug')
                     .include(profileA.slug)
                     .match(/nome[0-9,a-f]{2,}\-sobrenome[0-9,a-f]{2,}\-[0-9,a-f]{2,}/);
-                data.should.have.property('name').equal('Nome' + random);
-                data.should.have.property('surname').equal('Sobrenome' + random);
+                data.should.have.property('profile').have.property('name').equal('Nome' + random);
+                data.should.have.property('profile').have.property('surname').equal('Sobrenome' + random);
                 profileB = data;
                 done();
             }
@@ -126,10 +124,10 @@ describe('GET /profile/:profile_id', function() {
             if (error) done(error);
             else {
                 data.should.not.have.property('error');
-                data.should.have.property('_id').equal(profileA._id);
-                data.should.have.property('slug').equal(profileA.slug);
-                data.should.have.property('name').equal(profileA.name);
-                data.should.have.property('surname').equal(profileA.surname);
+                data.should.have.property('profile').have.property('_id').equal(profileA._id);
+                data.should.have.property('profile').have.property('slug').equal(profileA.slug);
+                data.should.have.property('profile').have.property('name').equal(profileA.name);
+                data.should.have.property('profile').have.property('surname').equal(profileA.surname);
                 done();
             }
         });
@@ -139,10 +137,10 @@ describe('GET /profile/:profile_id', function() {
             if (error) done(error);
             else {
                 data.should.not.have.property('error');
-                data.should.have.property('_id').equal(profileA._id);
-                data.should.have.property('slug').equal(profileA.slug);
-                data.should.have.property('name').equal(profileA.name);
-                data.should.have.property('surname').equal(profileA.surname);
+                data.should.have.property('profile').have.property('_id').equal(profileA._id);
+                data.should.have.property('profile').have.property('slug').equal(profileA.slug);
+                data.should.have.property('profile').have.property('name').equal(profileA.name);
+                data.should.have.property('profile').have.property('surname').equal(profileA.surname);
                 done();
             }
         });
@@ -199,8 +197,8 @@ describe('PUT /profile/:profile_id', function() {
                 if (error) done(error);
                 else {
                     data.should.not.have.property('error');
-                    data.should.have.property('about').equal('');
-                    profileA = data;
+                    data.should.have.property('profile').have.property('about').equal('');
+                    profileA = data.profile;
                     done();
                 }
             }
@@ -228,12 +226,12 @@ describe('PUT /profile/:profile_id', function() {
                 if (error) done(error);
                 else {
                     data.should.not.have.property('error');
-                    data.should.have.property('_id').equal(profileA._id);
-                    data.should.have.property('slug').equal(profileA.slug);
-                    data.should.have.property('name').equal(profileA.name);
-                    data.should.have.property('surname').equal(profileA.surname);
-                    data.should.have.property('about').equal('Atualizando meu sobre!');
-                    profileA = data;
+                    data.should.have.property('profile').have.property('_id').equal(profileA._id);
+                    data.should.have.property('profile').have.property('slug').equal(profileA.slug);
+                    data.should.have.property('profile').have.property('name').equal(profileA.name);
+                    data.should.have.property('profile').have.property('surname').equal(profileA.surname);
+                    data.should.have.property('profile').have.property('about').equal('Atualizando meu sobre!');
+                    profileA = data.profile;
                     done();
                 }
             }
@@ -248,13 +246,13 @@ describe('PUT /profile/:profile_id', function() {
                 if (error) done(error);
                 else {
                     data.should.not.have.property('error');
-                    data.should.have.property('_id').equal(profileA._id);
-                    data.should.have.property('slug')
+                    data.should.have.property('profile').have.property('_id').equal(profileA._id);
+                    data.should.have.property('profile').have.property('slug')
                         .match(/novonome[0-9,a-f]{2,}\-novosobrenome[0-9,a-f]{2,}\-?[0-9,a-f]*/);
-                    data.should.have.property('name').equal('Novonome'+random);
-                    data.should.have.property('surname').equal('Novosobrenome'+random);
-                    data.should.have.property('about').equal(profileA.about);
-                    profileA = data;
+                    data.should.have.property('profile').have.property('name').equal('Novonome'+random);
+                    data.should.have.property('profile').have.property('surname').equal('Novosobrenome'+random);
+                    data.should.have.property('profile').have.property('about').equal(profileA.about);
+                    profileA = data.profile;
                     done();
                 }
             }

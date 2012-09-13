@@ -27,7 +27,7 @@ describe('POST /company', function () {
             password : 'testando',
             password_confirmation : 'testando'
         }, function(error, data) {
-            user = data;
+            user = data.user;
             done();
         });
     });
@@ -49,7 +49,6 @@ describe('POST /company', function () {
             if (error) return done(error);
             else {
                 should.exist(data.error);
-                should.not.exist(data.slug);
                 done();
             }
         });
@@ -66,7 +65,6 @@ describe('POST /company', function () {
             if (error) return done(error);
             else {
                 should.exist(data.error);
-                should.not.exist(data.slug);
                 done();
             }
         });
@@ -85,9 +83,9 @@ describe('POST /company', function () {
             if (error) return done(error);
             else {
                 data.should.not.have.property('error');
-                data.should.have.property('slug').match(/[a-z,0-9,\-]+/);
-                data.should.have.property('name').equal('Emprêsa muito bacanão! ' + random);
-                company = data;
+                data.should.have.property('company').have.property('slug').match(/[a-z,0-9,\-]+/);
+                data.should.have.property('company').have.property('name').equal('Emprêsa muito bacanão! ' + random);
+                company = data.company;
                 done();
             }
         });
@@ -106,9 +104,9 @@ describe('POST /company', function () {
             if (error) return done(error);
             else {
                 data.should.not.have.property('error');
-                data.should.have.property('slug').not.equal(company.slug);
-                data.should.have.property('slug').match(/[a-z,0-9,\-]+\-[0-9,a-f]{2,}/);
-                company = data;
+                data.should.have.property('company').have.property('slug').not.equal(company.slug);
+                data.should.have.property('company').have.property('slug').match(/[a-z,0-9,\-]+\-[0-9,a-f]{2,}/);
+                company = data.company;
                 done();
             }
         });
@@ -126,9 +124,9 @@ describe('POST /company', function () {
         }, function(error, data, response) {
             if (error) return done(error);
             else {
-                data.should.not.have.property('error');
-                data.should.have.property('slug').match(/[a-z,0-9,\-]+/);
-                company = data;
+                data.should.have.property('company').not.have.property('error');
+                data.should.have.property('company').have.property('slug').match(/[a-z,0-9,\-]+/);
+                company = data.company;
                 done();
             }
         });
@@ -147,7 +145,7 @@ describe('GET /companies', function () {
                 password_confirmation : 'testando'
             }, function(error, data) {
                 api.post('companies', '/company', {
-                    token : data.token,
+                    token : data.user.token,
                     name : 'Váreas empresa bacana!' + rand(),
                     activity : 'consultoria em testes',
                     sectors : ['00000000000000000000000'+(1+Math.floor((Math.random()*2))), '00000000000000000000000'+(3 + Math.floor((Math.random()*2)))],
@@ -175,7 +173,7 @@ describe('GET /companies', function () {
                 else {
                     response.should.have.status(200);
                     should.not.exist(data.error, 'erro inesperado');
-                    data.should.have.lengthOf(10);
+                    data.companies.should.have.lengthOf(10);
                     done();
                 }
             }
@@ -190,7 +188,7 @@ describe('GET /companies', function () {
                 if (error) return done(error);
                 else {
                     should.not.exist(data.error, 'erro inesperado');
-                    data.should.have.lengthOf(18);
+                    data.companies.should.have.lengthOf(18);
                     done();
                 }
             }
@@ -205,7 +203,7 @@ describe('GET /companies', function () {
                 if (error) return done(error);
                 else {
                     should.not.exist(data.error, 'erro inesperado');
-                    data.should.have.lengthOf(20);
+                    data.companies.should.have.lengthOf(20);
                     done();
                 }
             }
@@ -216,15 +214,15 @@ describe('GET /companies', function () {
                 if (error) return done(error);
                 else {
                     should.not.exist(data.error);
-                    var companies = data;
+                    var companies = data.companies;
                     api.get('companies', '/companies', {limit : 2, page : 2}, function(error, data, response) {
                             if (error) return done(error);
                             else {
                                 should.not.exist(data.error, 'erro inesperado');
                                 JSON.stringify(companies)
-                                    .should.include(JSON.stringify(data[0]), 'resultado menor tem que está dentro do resultado maior');
+                                    .should.include(JSON.stringify(data.companies[0]), 'resultado menor tem que está dentro do resultado maior');
                                 JSON.stringify(companies)
-                                    .should.include(JSON.stringify(data[1]), 'resultado menor tem que está dentro do resultado maior');
+                                    .should.include(JSON.stringify(data.companies[1]), 'resultado menor tem que está dentro do resultado maior');
                                 done();
                             }
                         }
@@ -240,9 +238,9 @@ describe('GET /companies', function () {
                 if (error) return done(error);
                 else {
                     should.not.exist(data.error, 'erro inesperado');
-                    data.length.should.be.above(2);
-                    for (var i = 1; i < data.length; i++) {
-                        data[i-1].dateCreated.should.be.above(data[i].dateCreated, 'não ordenou');
+                    data.companies.length.should.be.above(2);
+                    for (var i = 1; i < data.companies.length; i++) {
+                        data.companies[i-1].dateCreated.should.be.above(data.companies[i].dateCreated, 'não ordenou');
                     }
                     done();
                 }
@@ -258,9 +256,9 @@ describe('GET /companies', function () {
                 if (error) return done(error);
                 else {
                     should.not.exist(data.error, 'erro inesperado');
-                    data.length.should.be.above(2);
-                    for (var i = 1; i < data.length; i++) {
-                        data[i-1].slug.should.be.above(data[i].slug, 'não ordenou');
+                    data.companies.length.should.be.above(2);
+                    for (var i = 1; i < data.companies.length; i++) {
+                        data.companies[i-1].slug.should.be.above(data.companies[i].slug, 'não ordenou');
                     }
                     done();
                 }
@@ -276,9 +274,9 @@ describe('GET /companies', function () {
                 if (error) return done(error);
                 else {
                     should.not.exist(data.error, 'erro inesperado');
-                    data.length.should.be.above(2);
-                    for (var i = 1; i < data.length; i++) {
-                        data[i-1].slug.should.be.above(data[i].slug, 'não ordenou');
+                    data.companies.length.should.be.above(2);
+                    for (var i = 1; i < data.companies.length; i++) {
+                        data.companies[i-1].slug.should.be.above(data.companies[i].slug, 'não ordenou');
                     }
                     done();
                 }
@@ -295,9 +293,9 @@ describe('GET /companies', function () {
                 if (error) return done(error);
                 else {
                     should.not.exist(data.error, 'erro inesperado');
-                    data.length.should.be.above(2);
-                    for (var i = 0; i < data.length; i++) {
-                        data[i].sectors.should.include('000000000000000000000001', 'não filtrou por setor');
+                    data.companies.length.should.be.above(2);
+                    for (var i = 0; i < data.companies.length; i++) {
+                        data.companies[i].sectors.should.include('000000000000000000000001', 'não filtrou por setor');
                     }
                     done();
                 }
@@ -314,10 +312,10 @@ describe('GET /companies', function () {
                 if (error) return done(error);
                 else {
                     should.not.exist(data.error, 'erro inesperado');
-                    data.length.should.be.above(2);
-                    for (var i = 0; i < data.length; i++) {
-                        data[i].sectors.should.include('000000000000000000000001', 'não filtrou por setor');
-                        data[i].sectors.should.include('000000000000000000000003', 'não filtrou por setor');
+                    data.companies.length.should.be.above(2);
+                    for (var i = 0; i < data.companies.length; i++) {
+                        data.companies[i].sectors.should.include('000000000000000000000001', 'não filtrou por setor');
+                        data.companies[i].sectors.should.include('000000000000000000000003', 'não filtrou por setor');
                     }
                     done();
                 }
@@ -334,10 +332,10 @@ describe('GET /companies', function () {
                 if (error) return done(error);
                 else {
                     should.not.exist(data.error, 'erro inesperado');
-                    data.length.should.be.above(2);
+                    data.companies.length.should.be.above(2);
                     var validate = true;
-                    for (var i = 0; i < data.length; i++) {
-                        if (data[i].sectors.indexOf('000000000000000000000001') < 0 && data[i].sectors.indexOf('000000000000000000000003') < 0) {
+                    for (var i = 0; i < data.companies.length; i++) {
+                        if (data.companies[i].sectors.indexOf('000000000000000000000001') < 0 && data.companies[i].sectors.indexOf('000000000000000000000003') < 0) {
                             validate = false;
                         }
                         validate.should.be.ok;
@@ -357,13 +355,13 @@ describe('GET /companies', function () {
                 if (error) return done(error);
                 else {
                     should.not.exist(data.error, 'erro inesperado');
-                    data.length.should.be.above(1);
-                    for (var i = 0; i < data.length; i++) {
-                        data[i].should.have.property('addresses');
+                    data.companies.length.should.be.above(1);
+                    for (var i = 0; i < data.companies.length; i++) {
+                        data.companies[i].should.have.property('addresses');
 
                         var localvalidate = false;
-                        for (var j = 0; j < data[i].addresses.length; j++) {
-                            if (data[i].addresses[j].city === '000000000000000000000001') {
+                        for (var j = 0; j < data.companies[i].addresses.length; j++) {
+                            if (data.companies[i].addresses[j].city === '000000000000000000000001') {
                                 localvalidate = true;
                             }
                         }
@@ -384,15 +382,15 @@ describe('GET /companies', function () {
                 if (error) return done(error);
                 else {
                     should.not.exist(data.error, 'erro inesperado');
-                    data.length.should.be.above(1);
-                    for (var i = 0; i < data.length; i++) {
-                        data[i].should.have.property('addresses');
+                    data.companies.length.should.be.above(1);
+                    for (var i = 0; i < data.companies.length; i++) {
+                        data.companies[i].should.have.property('addresses');
                         var foundOne = false;
                         var foundTwo = false;
-                        for (var j = 0; j < data[i].addresses.length; j++) {
-                            if (data[i].addresses[j].city === '000000000000000000000001') {
+                        for (var j = 0; j < data.companies[i].addresses.length; j++) {
+                            if (data.companies[i].addresses[j].city === '000000000000000000000001') {
                                 foundOne = true;
-                            } else if (data[i].addresses[j].city === '000000000000000000000002') {
+                            } else if (data.companies[i].addresses[j].city === '000000000000000000000002') {
                                 foundTwo = true;
                             }
                         }
@@ -413,15 +411,15 @@ describe('GET /companies', function () {
                 if (error) return done(error);
                 else {
                     should.not.exist(data.error, 'erro inesperado');
-                    data.length.should.be.above(1);
-                    for (var i = 0; i < data.length; i++) {
-                        data[i].should.have.property('addresses');
+                    data.companies.length.should.be.above(1);
+                    for (var i = 0; i < data.companies.length; i++) {
+                        data.companies[i].should.have.property('addresses');
                         var foundOne = false;
                         var foundTwo = false;
-                        for (var j = 0; j < data[i].addresses.length; j++) {
-                            if (data[i].addresses[j].city === '000000000000000000000001') {
+                        for (var j = 0; j < data.companies[i].addresses.length; j++) {
+                            if (data.companies[i].addresses[j].city === '000000000000000000000001') {
                                 foundOne = true;
-                            } else if (data[i].addresses[j].city === '000000000000000000000002') {
+                            } else if (data.companies[i].addresses[j].city === '000000000000000000000002') {
                                 foundTwo = true;
                             }
                         }
@@ -443,26 +441,26 @@ describe('GET /companies', function () {
                 if (error) return done(error);
                 else {
                     should.not.exist(data.error, 'erro inesperado');
-                    data.length.should.be.above(1);
+                    data.companies.length.should.be.above(1);
 
-                    for (var i = 0; i < data.length; i++) {
-                        data[i].should.have.property('sectors');
-                        data[i].sectors.should.include('000000000000000000000001', 'não filtrou por setor');
-                        data[i].sectors.should.include('000000000000000000000003', 'não filtrou por setor');
+                    for (var i = 0; i < data.companies.length; i++) {
+                        data.companies[i].should.have.property('sectors');
+                        data.companies[i].sectors.should.include('000000000000000000000001', 'não filtrou por setor');
+                        data.companies[i].sectors.should.include('000000000000000000000003', 'não filtrou por setor');
 
-                        data[i].should.have.property('addresses');
+                        data.companies[i].should.have.property('addresses');
                         var foundCityOne = false;
                         var foundCityTwo = false;
-                        for (var j = 0; j < data[i].addresses.length; j++) {
-                            if (data[i].addresses[j].city === '000000000000000000000001') {
+                        for (var j = 0; j < data.companies[i].addresses.length; j++) {
+                            if (data.companies[i].addresses[j].city === '000000000000000000000001') {
                                 foundCityOne = true;
-                            } else if (data[i].addresses[j].city === '000000000000000000000002') {
+                            } else if (data.companies[i].addresses[j].city === '000000000000000000000002') {
                                 foundCityTwo = true;
                             }
                         }
                         (foundCityOne || foundCityTwo).should.be.ok;
                     }
-                    var companies = data;
+                    var companies = data.companies;
                     api.get('companies', '/companies',
                         {
                             filterBySectors : {sectors : ['000000000000000000000001', '000000000000000000000003'], operator : 'and'},
@@ -475,9 +473,9 @@ describe('GET /companies', function () {
                             else {
                                 should.not.exist(data.error, 'erro inesperado');
                                 JSON.stringify(companies)
-                                    .should.include(JSON.stringify(data[0]), 'resultado menor tem que está dentro do resultado maior');
+                                    .should.include(JSON.stringify(data.companies[0]), 'resultado menor tem que está dentro do resultado maior');
                                 JSON.stringify(companies)
-                                    .should.include(JSON.stringify(data[1]), 'resultado menor tem que está dentro do resultado maior');
+                                    .should.include(JSON.stringify(data.companies[1]), 'resultado menor tem que está dentro do resultado maior');
                                 done();
                             }
                         }
@@ -710,8 +708,8 @@ describe('GET /company/:company_id', function () {
             function(error, data, response) {
                 if (error) return done(error);
                 else {
-                    data.should.have.property('_id', company._id, 'os ids devem ser iguais');
-                    data.should.have.property('slug', company.slug, 'os slugs devem ser iguais');
+                    data.should.have.property('company').have.property('_id', company._id, 'os ids devem ser iguais');
+                    data.should.have.property('company').have.property('slug', company.slug, 'os slugs devem ser iguais');
                     done();
                 }
             }
@@ -723,8 +721,8 @@ describe('GET /company/:company_id', function () {
             function(error, data, response) {
                 if (error) return done(error);
                 else {
-                    data.should.have.property('_id', company._id, 'os ids devem ser iguais');
-                    data.should.have.property('slug', company.slug, 'os slugs devem ser iguais');
+                    data.should.have.property('company').have.property('_id', company._id, 'os ids devem ser iguais');
+                    data.should.have.property('company').have.property('slug', company.slug, 'os slugs devem ser iguais');
                     done();
                 }
             }
@@ -737,13 +735,13 @@ describe('GET /company/:company_id', function () {
                 if (error) return done(error);
                 else {
                     should.not.exist(data.products, 'não deve mostrar produtos');
-                    data.should.have.property('addresses').not.have.property('street');
-                    data.should.have.property('addresses').not.have.property('number');
-                    data.should.have.property('addresses').not.have.property('complement');
-                    should.not.exist(data.about, 'não deve mostrar sobre');
-                    should.not.exist(data.embeddeds, 'não deve mostrar embeddeds');
-                    should.not.exist(data.phones, 'não deve mostrar telefones');
-                    should.not.exist(data.links, 'não deve mostrar links');
+                    data.should.have.property('company').have.property('addresses').not.have.property('street');
+                    data.should.have.property('company').have.property('addresses').not.have.property('number');
+                    data.should.have.property('company').have.property('addresses').not.have.property('complement');
+                    should.not.exist(data.company.about, 'não deve mostrar sobre');
+                    should.not.exist(data.company.embeddeds, 'não deve mostrar embeddeds');
+                    should.not.exist(data.company.phones, 'não deve mostrar telefones');
+                    should.not.exist(data.company.links, 'não deve mostrar links');
                     done();
                 }
             }
@@ -767,12 +765,13 @@ describe('GET /company/:company_id', function () {
                 if (error) return done(error);
                 else {
                     should.not.exist(data.error, 'erro inesperado');
-                    should.exist(data.about, 'deve mostrar sobre');
-                    should.exist(data.products, 'deve mostrar produtos');
-                    should.exist(data.addresses, 'deve mostrar endereços');
-                    should.exist(data.embeddeds, 'deve mostrar embeddeds');
-                    should.exist(data.phones, 'deve mostrar telefones');
-                    should.exist(data.links, 'deve mostrar links');
+                    should.exist(data.company, 'deve retornar compania');
+                    should.exist(data.company.about, 'deve mostrar sobre');
+                    should.exist(data.company.products, 'deve mostrar produtos');
+                    should.exist(data.company.addresses, 'deve mostrar endereços');
+                    should.exist(data.company.embeddeds, 'deve mostrar embeddeds');
+                    should.exist(data.company.phones, 'deve mostrar telefones');
+                    should.exist(data.company.links, 'deve mostrar links');
                     done();
                 }
             }
@@ -791,11 +790,11 @@ describe('GET /company/:company_id', function () {
                 if (error) return done(error);
                 else {
                     should.not.exist(data.error, 'erro inesperado');
-                    data.should.have.property('addresses').have.not.property('street');
-                    data.should.have.property('addresses').have.not.property('number');
-                    data.should.have.property('addresses').have.not.property('complement');
-                    should.not.exist(data.phones, 'não deve mostrar telefones');
-                    should.not.exist(data.contacts, 'não deve mostrar contatos');
+                    data.should.have.property('company').have.property('addresses').have.not.property('street');
+                    data.should.have.property('company').have.property('addresses').have.not.property('number');
+                    data.should.have.property('company').have.property('addresses').have.not.property('complement');
+                    should.not.exist(data.company.phones, 'não deve mostrar telefones');
+                    should.not.exist(data.company.contacts, 'não deve mostrar contatos');
                     done();
                 }
             }
@@ -812,7 +811,7 @@ describe('PUT /company/:company:id', function(error, data){
             password : 'testando',
             password_confirmation : 'testando'
         }, function(error, data) {
-            user2 = data;
+            user2 = data.user;
             done();
         });
     });
@@ -858,22 +857,21 @@ describe('PUT /company/:company:id', function(error, data){
         }, function (error, data, response) {
             if (error) done(error);
             else {
-                data.should.have.property('_id').equal(company._id);
-                data.should.have.property('slug').not.equal(company.slug);
-                data.should.have.property('name').equal('Outro nome muuuito bacana '+random);
-                data.should.have.property('activity').equal(company.activity);
-                data.should.have.property('about').equal(company.about);
-                data.should.have.property('dateUpdated').above(company.dateUpdated);
-                company = data;
+                data.should.have.property('company').have.property('_id').equal(company._id);
+                data.should.have.property('company').have.property('slug').not.equal(company.slug);
+                data.should.have.property('company').have.property('name').equal('Outro nome muuuito bacana '+random);
+                data.should.have.property('company').have.property('activity').equal(company.activity);
+                data.should.have.property('company').have.property('about').equal(company.about);
+                data.should.have.property('company').have.property('dateUpdated').above(company.dateUpdated);
+                company = data.company;
                 db.openCollection('companies', 'companies', function(error, companies) {
                     companies.findOne({slug : company.slug }, function (error, dbcompany) {
                         if (error) done (error);
                         else {
-                            dbcompany.should.have.property('_id');
-                            dbcompany._id.toString().should.be.equal(data._id);
-                            dbcompany.should.have.property('slug').equal(data.slug);
-                            dbcompany.should.have.property('name').equal(data.name);
-                            dbcompany.should.have.property('about').equal(data.about);
+                            dbcompany.should.have.property('_id')
+                            dbcompany.should.have.property('slug').equal(company.slug);
+                            dbcompany.should.have.property('name').equal(company.name);
+                            dbcompany.should.have.property('about').equal(company.about);
                             done();
                         }
                     })
@@ -888,17 +886,15 @@ describe('PUT /company/:company:id', function(error, data){
         }, function (error, data, response) {
             if (error) done(error);
             else {
-                data.should.have.property('_id').equal(company._id);
-                data.should.have.property('slug').equal(company.slug);
-                company = data;
+                data.should.have.property('company').have.property('_id').equal(company._id);
+                data.should.have.property('company').have.property('slug').equal(company.slug);
+                company = data.company;
                 db.openCollection('companies', 'companies', function(error, companies) {
                     companies.findOne({slug : company.slug }, function (error, dbcompany) {
                         if (error) done (error);
                         else {
-                            dbcompany.should.have.property('_id');
-                            dbcompany._id.toString().should.be.equal(data._id);
-                            dbcompany.should.have.property('slug').equal(data.slug);
-                            dbcompany.should.have.property('name').equal(data.name);
+                            dbcompany.should.have.property('slug').equal(company.slug);
+                            dbcompany.should.have.property('name').equal(company.name);
                             done();
                         }
                     })
