@@ -59,7 +59,7 @@ describe('POST /profile/[slug]/phone', function () {
                 if (error) {
                     return done(error);
                 } else { 
-                    should.exist(data.error);
+                    data.should.have.property('error');
                     done();
                 }
             }
@@ -78,7 +78,7 @@ describe('POST /profile/[slug]/phone', function () {
                 if (error) {
                     return done(error);
                 } else { 
-                    should.exist(data.error);
+                    data.should.have.property('error');
                     done();
                 }
             }
@@ -96,7 +96,7 @@ describe('POST /profile/[slug]/phone', function () {
                 if (error) {
                     return done(error);
                 } else { 
-                    should.exist(data.error);
+                    data.should.have.property('error');
                     done();
                 }
             }
@@ -114,7 +114,7 @@ describe('POST /profile/[slug]/phone', function () {
                 if (error) {
                     return done(error);
                 } else { 
-                    should.exist(data.error);
+                    data.should.have.property('error');
                     done();
                 }
             }
@@ -132,7 +132,7 @@ describe('POST /profile/[slug]/phone', function () {
                 if (error) {
                     return done(error);
                 } else { 
-                    should.exist(data.error);
+                    data.should.have.property('error');
                     done();
                 }
             }
@@ -150,7 +150,7 @@ describe('POST /profile/[slug]/phone', function () {
                 if (error) {
                     return done(error);
                 } else { 
-                    should.exist(data.error);
+                    data.should.have.property('error');
                     done();
                 }
             }
@@ -168,7 +168,7 @@ describe('POST /profile/[slug]/phone', function () {
                 if (error) {
                     return done(error);
                 } else { 
-                    should.exist(data.error);
+                    data.should.have.property('error');
                     done();
                 }
             }
@@ -186,7 +186,7 @@ describe('POST /profile/[slug]/phone', function () {
                 if (error) {
                     return done(error);
                 } else { 
-                    should.exist(data.error);
+                    data.should.have.property('error');
                     done();
                 }
             }
@@ -211,7 +211,7 @@ describe('POST /profile/[slug]/phone', function () {
                     return done(error);
                 } else { 
                     should.exist(data);
-                    should.not.exist(data.error);
+                    data.should.not.have.property('error');
                     data.should.have.property('phone').have.property('_id');
                     data.should.have.property('phone').have.property('number', number);
                     data.should.have.property('phone').have.property('extension', extension);
@@ -286,7 +286,7 @@ describe('GET /profile/[slug]/phonees', function () {
             if (error) {
                 return done(error);
             } else {
-                should.exist(data.error);
+                data.should.have.property('error');
                 done();
             }
         });
@@ -370,7 +370,7 @@ describe('GET /profile/[slug]/phone/[id]', function () {
             if (error) {
                 return done(error);
             } else {
-                should.exist(data.error);
+                data.should.have.property('error');
                 done();
             }
         });
@@ -451,7 +451,7 @@ describe('DEL /profile/[slug]/phone/[id]', function () {
             if (error) {
                 return done(error);
             } else {
-                should.exist(data.error);
+                data.should.have.property('error');
                 done();
             }
         });
@@ -462,7 +462,7 @@ describe('DEL /profile/[slug]/phone/[id]', function () {
             if (error) {
                 return done(error);
             } else {
-                should.exist(data.error);
+                data.should.have.property('error');
                 done();
             }
         });
@@ -549,7 +549,7 @@ describe('PUT /profile/[slug]/phone/[id]', function () {
             if (error) {
                 return done(error);
             } else {
-                should.exist(data.error);
+                data.should.have.property('error');
                 done();
             }
         });
@@ -567,7 +567,7 @@ describe('PUT /profile/[slug]/phone/[id]', function () {
             if (error) {
                 return done(error);
             } else {
-                should.exist(data.error);
+                data.should.have.property('error');
                 done();
             }
         });
@@ -585,7 +585,7 @@ describe('PUT /profile/[slug]/phone/[id]', function () {
                 return done(error);
             } else {
                 obj = data.phone;
-                should.not.exist(data.error);
+                data.should.not.have.property('error');
                 data.should.have.property('phone').have.property('_id');
                 data.should.have.property('phone').have.property('number', obj.number);
                 done();
@@ -605,7 +605,7 @@ describe('PUT /profile/[slug]/phone/[id]', function () {
                 return done(error);
             } else {
                 obj = data.phone;
-                should.not.exist(data.error);
+                data.should.not.have.property('error');
                 data.should.have.property('phone').have.property('_id');
                 data.should.have.property('phone').have.property('extension', obj.extension);
                 done();
@@ -625,7 +625,7 @@ describe('PUT /profile/[slug]/phone/[id]', function () {
                 return done(error);
             } else {
                 obj = data.phone;
-                should.not.exist(data.error);
+                data.should.not.have.property('error');
                 data.should.have.property('phone').have.property('_id');
                 data.should.have.property('phone').have.property('areaCode', obj.areaCode);
                 done();
@@ -645,7 +645,7 @@ describe('PUT /profile/[slug]/phone/[id]', function () {
                 return done(error);
             } else {
                 obj = data.phone;
-                should.not.exist(data.error);
+                data.should.not.have.property('error');
                 data.should.have.property('phone').have.property('_id');
                 data.should.have.property('phone').have.property('intCode', obj.intCode);
                 done();
@@ -665,7 +665,7 @@ describe('PUT /profile/[slug]/phone/[id]', function () {
                 return done(error);
             } else {
                 obj = data.phone;
-                should.not.exist(data.error);
+                data.should.not.have.property('error');
                 data.should.have.property('phone').have.property('_id');
                 data.should.have.property('phone').have.property('type', obj.type);
                 done();
@@ -690,7 +690,7 @@ describe('PUT /profile/[slug]/phone/[id]', function () {
             if (error) {
                 return done(error);
             } else {
-                should.not.exist(data.error);
+                data.should.not.have.property('error');
                 api.get('profiles', '/profile/' + profile + '/phone/' + phone, {token : token}, function (error, data) {
                     should.not.exist(data.error, 'algo deu errado');
                     data.should.have.property('phone').have.property('_id');

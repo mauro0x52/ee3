@@ -101,7 +101,7 @@ describe('POST /profile/:profile_id/thumbnail', function () {
             function(error, data, response) {
                 if (error) return done(error);
                 else {
-                    should.not.exist(data.error);
+                    data.should.not.have.property('error');
                     data.should.have.property('thumbnail').property('original').property('url')
                         .match(/^http\:\/\/.+\/profiles\/.+\/thumbnails\/.+\/original\..+$/, 'não salvou o original corretamente');
                     data.should.have.property('thumbnail').property('small').property('url')
@@ -127,7 +127,7 @@ describe('POST /profile/:profile_id/thumbnail', function () {
             function(error, data, response) {
                 if (error) return done(error);
                 else {
-                    should.not.exist(data.error);
+                    data.should.not.have.property('error');
                     data.should.have.property('thumbnail').property('original').property('url')
                         .match(/^http\:\/\/.+\/profiles\/.+\/thumbnails\/.+\/original\..+$/, 'não salvou o original corretamente')
                         .not.equal(profile.thumbnail.original.url);

@@ -51,7 +51,7 @@ describe('GET /regions', function () {
         api.get('location', '/regions', {limit : 4, page : 1}, function(error, data, response) {
                 if (error) return done(error);
                 else {
-                    should.not.exist(data.error);
+                    data.should.not.have.property('error');
                     data.regions.length.should.be.below(5);
                     var regions = data.regions;
                     if (data.regions.length == 4){
@@ -134,7 +134,7 @@ describe('GET /region/:region_id', function () {
             function(error, data, response) {
                 if (error) return done(error);
                 else {
-                    should.exist(data.error);
+                    data.should.have.property('error');
                     done();
                 }
             }

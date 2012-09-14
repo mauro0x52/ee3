@@ -59,7 +59,7 @@ describe('POST /profile/[slug]/contact', function () {
                 if (error) {
                     return done(error);
                 } else { 
-                    should.exist(data.error);
+                    data.should.have.property('error');
                     done();
                 }
             }
@@ -75,7 +75,7 @@ describe('POST /profile/[slug]/contact', function () {
                 if (error) {
                     return done(error);
                 } else { 
-                    should.exist(data.error);
+                    data.should.have.property('error');
                     done();
                 }
             }
@@ -90,7 +90,7 @@ describe('POST /profile/[slug]/contact', function () {
                 if (error) {
                     return done(error);
                 } else { 
-                    should.exist(data.error);
+                    data.should.have.property('error');
                     done();
                 }
             }
@@ -105,7 +105,7 @@ describe('POST /profile/[slug]/contact', function () {
                 if (error) {
                     return done(error);
                 } else { 
-                    should.exist(data.error);
+                    data.should.have.property('error');
                     done();
                 }
             }
@@ -121,7 +121,7 @@ describe('POST /profile/[slug]/contact', function () {
                 if (error) {
                     return done(error);
                 } else { 
-                    should.exist(data.error);
+                    data.should.have.property('error');
                     done();
                 }
             }
@@ -140,7 +140,7 @@ describe('POST /profile/[slug]/contact', function () {
                     return done(error);
                 } else { 
                     should.exist(data);
-                    should.not.exist(data.error);
+                    data.should.not.have.property('error');
                     data.should.have.property('contact').have.property('_id');
                     data.should.have.property('contact').have.property('address', address);
                     data.should.have.property('contact').have.property('type', type);
@@ -209,7 +209,7 @@ describe('GET /profile/[slug]/contactes', function () {
             if (error) {
                 return done(error);
             } else {
-                should.exist(data.error);
+                data.should.have.property('error');
                 done();
             }
         });
@@ -287,7 +287,7 @@ describe('GET /profile/[slug]/contact/[id]', function () {
             if (error) {
                 return done(error);
             } else {
-                should.exist(data.error);
+                data.should.have.property('error');
                 done();
             }
         });
@@ -362,7 +362,7 @@ describe('DEL /profile/[slug]/contact/[id]', function () {
             if (error) {
                 return done(error);
             } else {
-                should.exist(data.error);
+                data.should.have.property('error');
                 done();
             }
         });
@@ -373,7 +373,7 @@ describe('DEL /profile/[slug]/contact/[id]', function () {
             if (error) {
                 return done(error);
             } else {
-                should.exist(data.error);
+                data.should.have.property('error');
                 done();
             }
         });
@@ -454,7 +454,7 @@ describe('PUT /profile/[slug]/contact/[id]', function () {
             if (error) {
                 return done(error);
             } else {
-                should.exist(data.error);
+                data.should.have.property('error');
                 done();
             }
         });
@@ -469,7 +469,7 @@ describe('PUT /profile/[slug]/contact/[id]', function () {
             if (error) {
                 return done(error);
             } else {
-                should.exist(data.error);
+                data.should.have.property('error');
                 done();
             }
         });
@@ -484,7 +484,7 @@ describe('PUT /profile/[slug]/contact/[id]', function () {
                 return done(error);
             } else {
                 obj = data;
-                should.not.exist(data.error);
+                data.should.not.have.property('error');
                 data.should.have.property('contact').have.property('_id');
                 data.should.have.property('contact').have.property('address', obj.address);
                 done();
@@ -501,7 +501,7 @@ describe('PUT /profile/[slug]/contact/[id]', function () {
                 return done(error);
             } else {
                 obj = data;
-                should.not.exist(data.error);
+                data.should.not.have.property('error');
                 data.should.have.property('contact').have.property('_id');
                 data.should.have.property('contact').have.property('type', obj.type);
                 done();
@@ -518,7 +518,7 @@ describe('PUT /profile/[slug]/contact/[id]', function () {
             if (error) {
                 return done(error);
             } else {
-                should.exist(data.error);
+                data.should.have.property('error');
                 done();
             }
         });
@@ -535,7 +535,7 @@ describe('PUT /profile/[slug]/contact/[id]', function () {
             if (error) {
                 return done(error);
             } else {
-                should.not.exist(data.error);
+                data.should.not.have.property('error');
                 api.get('profiles', '/profile/' + profile + '/contact/' + contact, {token : token}, function (error, data) {
                     should.not.exist(data.error, 'algo deu errado');
                     data.should.have.property('contact').have.property('_id');

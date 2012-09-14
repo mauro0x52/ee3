@@ -46,7 +46,7 @@ describe('POST /conversant', function () {
                 if (error) {
                     return done(error);
                 } else { 
-                    should.exist(data.error);
+                    data.should.have.property('error');
                     done();
                 }
             }
@@ -60,7 +60,7 @@ describe('POST /conversant', function () {
                 if (error) {
                     return done(error);
                 } else { 
-                    should.exist(data.error);
+                    data.should.have.property('error');
                     done();
                 }
             }
@@ -129,7 +129,7 @@ describe('PUT /conversant/[id]/change-label', function () {
                 if (error) {
                     return done(error);
                 } else { 
-                    should.exist(data.error);
+                    data.should.have.property('error');
                     done();
                 }
             }
@@ -144,7 +144,7 @@ describe('PUT /conversant/[id]/change-label', function () {
                     return done(error);
                 } else { 
                     obj = data;
-                    should.not.exist(data.error);
+                    data.should.not.have.property('error');
                     data.should.have.property('conversant').have.property('_id');
                     data.should.have.property('conversant').have.property('label', obj.label);
                     done();

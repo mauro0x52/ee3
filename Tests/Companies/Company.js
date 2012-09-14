@@ -48,7 +48,7 @@ describe('POST /company', function () {
         }, function(error, data, response) {
             if (error) return done(error);
             else {
-                should.exist(data.error);
+                data.should.have.property('error');
                 done();
             }
         });
@@ -64,7 +64,7 @@ describe('POST /company', function () {
         }, function(error, data, response) {
             if (error) return done(error);
             else {
-                should.exist(data.error);
+                data.should.have.property('error');
                 done();
             }
         });
@@ -144,8 +144,9 @@ describe('GET /companies', function () {
                 password : 'testando',
                 password_confirmation : 'testando'
             }, function(error, data) {
+                var user = data.user;
                 api.post('companies', '/company', {
-                    token : data.user.token,
+                    token : user.token,
                     name : 'Váreas empresa bacana!' + rand(),
                     activity : 'consultoria em testes',
                     sectors : ['00000000000000000000000'+(1+Math.floor((Math.random()*2))), '00000000000000000000000'+(3 + Math.floor((Math.random()*2)))],
@@ -213,7 +214,7 @@ describe('GET /companies', function () {
         api.get('companies', '/companies', {limit : 4, page : 1}, function(error, data, response) {
                 if (error) return done(error);
                 else {
-                    should.not.exist(data.error);
+                    data.should.not.have.property('error');
                     var companies = data.companies;
                     api.get('companies', '/companies', {limit : 2, page : 2}, function(error, data, response) {
                             if (error) return done(error);
@@ -276,7 +277,10 @@ describe('GET /companies', function () {
                     should.not.exist(data.error, 'erro inesperado');
                     data.companies.length.should.be.above(2);
                     for (var i = 1; i < data.companies.length; i++) {
-                        data.companies[i-1].slug.should.be.above(data.companies[i].slug, 'não ordenou');
+                        data.companies[i-1].activity.should.not.be.below(data.companies[i].activity, 'não ordenou');
+                        if (data.companies[i-1].activity <= data.companies[i].activity) {
+                            data.companies[i-1].slug.should.not.be.below(data.companies[i].slug, 'não ordenou');
+                        }
                     }
                     done();
                 }
@@ -696,7 +700,7 @@ describe('GET /company/:company_id', function () {
             function(error, data, response) {
                 if (error) return done(error);
                 else {
-                    should.exist(data.error);
+                    data.should.have.property('error');
                     done();
                 }
             }
@@ -764,14 +768,13 @@ describe('GET /company/:company_id', function () {
             function(error, data, response) {
                 if (error) return done(error);
                 else {
-                    should.not.exist(data.error, 'erro inesperado');
-                    should.exist(data.company, 'deve retornar compania');
-                    should.exist(data.company.about, 'deve mostrar sobre');
-                    should.exist(data.company.products, 'deve mostrar produtos');
-                    should.exist(data.company.addresses, 'deve mostrar endereços');
-                    should.exist(data.company.embeddeds, 'deve mostrar embeddeds');
-                    should.exist(data.company.phones, 'deve mostrar telefones');
-                    should.exist(data.company.links, 'deve mostrar links');
+                    data.should.have.property('company').not.property('error');
+                    data.should.have.property('company').property('about');
+                    data.should.have.property('company').property('products');
+                    data.should.have.property('company').property('addresses');
+                    data.should.have.property('company').property('embeddeds');
+                    data.should.have.property('company').property('phones');
+                    data.should.have.property('company').property('links');
                     done();
                 }
             }
@@ -793,8 +796,8 @@ describe('GET /company/:company_id', function () {
                     data.should.have.property('company').have.property('addresses').have.not.property('street');
                     data.should.have.property('company').have.property('addresses').have.not.property('number');
                     data.should.have.property('company').have.property('addresses').have.not.property('complement');
-                    should.not.exist(data.company.phones, 'não deve mostrar telefones');
-                    should.not.exist(data.company.contacts, 'não deve mostrar contatos');
+                    data.should.have.property('company').not.have.property('phones');
+                    data.should.have.property('company').not.have.property('contacts');
                     done();
                 }
             }

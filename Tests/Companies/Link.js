@@ -58,8 +58,8 @@ describe('POST /company/[slug]/link', function () {
             }, function(error, data, response) {
                 if (error) {
                     return done(error);
-                } else { 
-                    should.exist(data.error);
+                } else {
+                    data.should.have.property('error').property('name', 'NotFoundError');
                     done();
                 }
             }
@@ -70,12 +70,12 @@ describe('POST /company/[slug]/link', function () {
         api.post('companies', '/company/' + company + '/link', {
                 token     : 'tokeninvalido',
                 url     : 'Url ' + rand(),
-                type    : 'Youtube'
+                type    : 'youtube'
             }, function(error, data, response) {
                 if (error) {
                     return done(error);
-                } else { 
-                    should.exist(data.error);
+                } else {
+                    data.should.have.property('error').property('name', 'InvalidTokenError');
                     done();
                 }
             }
@@ -85,12 +85,12 @@ describe('POST /company/[slug]/link', function () {
     it('url em branco', function(done) {
         api.post('companies', '/company/' + company + '/link', {
                 token   : token,
-                type    : 'Youtube'
+                type    : 'youtube'
             }, function(error, data, response) {
                 if (error) {
                     return done(error);
-                } else { 
-                    should.exist(data.error);
+                } else {
+                    data.should.have.property('error').property('name', 'ValidationError');
                     done();
                 }
             }
@@ -104,8 +104,8 @@ describe('POST /company/[slug]/link', function () {
             }, function(error, data, response) {
                 if (error) {
                     return done(error);
-                } else { 
-                    should.exist(data.error);
+                } else {
+                    data.should.have.property('error').property('name', 'ValidationError');
                     done();
                 }
             }
@@ -120,8 +120,8 @@ describe('POST /company/[slug]/link', function () {
             }, function(error, data, response) {
                 if (error) {
                     return done(error);
-                } else { 
-                    should.exist(data.error);
+                } else {
+                    data.should.have.property('error').property('name', 'ValidationError');
                     done();
                 }
             }
@@ -130,7 +130,7 @@ describe('POST /company/[slug]/link', function () {
 
     it('cadastra link', function(done) {
         var url = 'Url ' + rand(),
-            type = 'Youtube';
+            type = 'youtube';
         api.post('companies', '/company/' + company + '/link', {
                 token   : token,
                 url     : url,
@@ -138,8 +138,8 @@ describe('POST /company/[slug]/link', function () {
             }, function(error, data, response) {
                 if (error) {
                     return done(error);
-                } else { 
-                    should.not.exist(data.error);
+                } else {
+                    data.should.not.have.property('error');
                     data.should.have.property('link').have.property('_id');
                     data.should.have.property('link').have.property('url', url);
                     data.should.have.property('link').have.property('type', type);
@@ -179,7 +179,7 @@ describe('GET /company/[slug]/linkes', function () {
                     api.post('companies', '/company/' + company + '/link', {
                         token   : token,
                         url     : 'Url ' + rand(),
-                        type    : 'Youtube'
+                        type    : 'youtube'
                     }, function(error, data, response) {
                         linkes++;
                         if (linkes === 20) {
@@ -190,7 +190,7 @@ describe('GET /company/[slug]/linkes', function () {
             });
         });
     });
-    
+
     it('url tem que existir', function(done) {
         api.get('companies', '/company/' + company + '/links', {}, function(error, data, response) {
             if (error) {
@@ -202,24 +202,24 @@ describe('GET /company/[slug]/linkes', function () {
             }
         });
     });
-    
+
     it('empresa inexistente', function(done) {
         api.get('companies', '/company/inexistente/links', {}, function(error, data, response) {
             if (error) {
                 return done(error);
             } else {
-                should.exist(data.error);
+                data.should.have.property('error').property('name', 'NotFoundError');
                 done();
             }
         });
     });
-    
+
     it('listar links', function(done) {
         api.get('companies', '/company/' + company + '/links', {}, function(error, data, response) {
             if (error) {
                 return done(error);
             } else {
-                should.not.exist(data.error, 'erro inesperado');                
+                should.not.exist(data.error, 'erro inesperado');
                 for (var i = 0 ; i < data.links.length; i = i + 1) {
                     data.links[i].should.have.property('_id');
                     data.links[i].should.have.property('url');
@@ -259,7 +259,7 @@ describe('GET /company/[slug]/link/[id]', function () {
                 api.post('companies', '/company/' + company + '/link', {
                     token   : token,
                     url     : 'Url ' + rand(),
-                    type    : 'Youtube'
+                    type    : 'youtube'
                 }, function(error, data, response) {
                     link = data.link._id
                     done();
@@ -267,7 +267,7 @@ describe('GET /company/[slug]/link/[id]', function () {
             });
         });
     });
-    
+
     it('url tem que existir', function(done) {
         api.get('companies', '/company/' + company + '/link/' + link, {}, function(error, data, response) {
             if (error) {
@@ -279,24 +279,24 @@ describe('GET /company/[slug]/link/[id]', function () {
             }
         });
     });
-    
+
     it('empresa inexistente', function(done) {
         api.get('companies', '/company/inexistente/link/' + link, {}, function(error, data, response) {
             if (error) {
                 return done(error);
             } else {
-                should.exist(data.error);
+                data.should.have.property('error').property('name', 'NotFoundError');
                 done();
             }
         });
     });
-    
+
     it('exibir link', function(done) {
         api.get('companies', '/company/' + company + '/link/' + link, {}, function(error, data, response) {
             if (error) {
                 return done(error);
             } else {
-                should.not.exist(data.error, 'erro inesperado');    
+                should.not.exist(data.error, 'erro inesperado');
                 data.should.have.property('link').have.property('_id');
                 data.should.have.property('link').have.property('url');
                 data.should.have.property('link').have.property('type');
@@ -334,7 +334,7 @@ describe('DEL /company/[slug]/link/[id]', function () {
                 api.post('companies', '/company/' + company + '/link', {
                     token   : token,
                     url     : 'Url ' + rand(),
-                    type    : 'Youtube'
+                    type    : 'youtube'
                 }, function(error, data, response) {
                     link = data.link._id
                     done();
@@ -342,7 +342,7 @@ describe('DEL /company/[slug]/link/[id]', function () {
             });
         });
     });
-    
+
     it('url tem que existir', function(done) {
         api.del('companies', '/company/' + company + '/link/' + link, {}, function(error, data, response) {
             if (error) {
@@ -354,29 +354,29 @@ describe('DEL /company/[slug]/link/[id]', function () {
             }
         });
     });
-    
+
     it('token inválido', function(done) {
         api.del('companies', '/company/' + company + '/link/' + link, {token : 'invalido'}, function(error, data, response) {
             if (error) {
                 return done(error);
             } else {
-                should.exist(data.error);
+                data.should.have.property('error').property('name', 'InvalidTokenError');
                 done();
             }
         });
     });
-    
+
     it('empresa inexistente', function(done) {
         api.del('companies', '/company/inexistente/link/' + link, {token : token}, function(error, data, response) {
             if (error) {
                 return done(error);
             } else {
-                should.exist(data.error);
+                data.should.have.property('error').property('name', 'NotFoundError');
                 done();
             }
         });
     });
-    
+
     it('remove link', function(done) {
         api.del('companies', '/company/' + company + '/link/' + link, {token : token}, function(error, data, response) {
             if (error) {
@@ -421,7 +421,7 @@ describe('PUT /company/[slug]/link/[id]', function () {
                 api.post('companies', '/company/' + company + '/link', {
                     token   : token,
                     url     : 'Url ' + rand(),
-                    type    : 'Youtube'
+                    type    : 'youtube'
                 }, function(error, data, response) {
                     link = data.link._id;
                     obj=data.link;
@@ -430,7 +430,7 @@ describe('PUT /company/[slug]/link/[id]', function () {
             });
         });
     });
-    
+
     it('url tem que existir', function(done) {
         api.put('companies', '/company/' + company + '/link/' + link, {}, function(error, data, response) {
             if (error) {
@@ -442,54 +442,54 @@ describe('PUT /company/[slug]/link/[id]', function () {
             }
         });
     });
-    
+
     it('token inválido', function(done) {
         api.put('companies', '/company/' + company + '/link/' + link, {
             token : 'invalido',
             url     : 'Url ' + rand(),
-            type    : 'Youtube'
+            type    : 'youtube'
         }, function(error, data, response) {
             if (error) {
                 return done(error);
             } else {
-                should.exist(data.error);
+                data.should.have.property('error').property('name', 'InvalidTokenError');
                 done();
             }
         });
     });
-    
+
     it('empresa inexistente', function(done) {
         api.put('companies', '/company/inexistente/link/' + link, {
             token : token,
             url     : 'Url ' + rand(),
-            type    : 'Youtube'
+            type    : 'youtube'
         }, function(error, data, response) {
             if (error) {
                 return done(error);
             } else {
-                should.exist(data.error);
+                data.should.have.property('error').property('name', 'NotFoundError');
                 done();
             }
         });
     });
-    
+
     it('url em branco', function(done) {
         api.put('companies', '/company/' + company + '/link/' + link, {
             token : token,
-            type    : 'Youtube'
+            type    : 'youtube'
         }, function(error, data, response) {
             if (error) {
                 return done(error);
             } else {
                 obj=data.link;
-                should.not.exist(data.error);
+                data.should.not.have.property('error');
                 data.should.have.property('link').have.property('_id');
                 data.should.have.property('link').have.property('url', obj.url);
                 done();
             }
         });
     });
-    
+
     it('type em branco', function(done) {
         api.put('companies', '/company/' + company + '/link/' + link, {
             token : token,
@@ -499,17 +499,17 @@ describe('PUT /company/[slug]/link/[id]', function () {
                 return done(error);
             } else {
                 obj=data.link;
-                should.not.exist(data.error);
+                data.should.not.have.property('error');
                 data.should.have.property('link').have.property('_id');
                 data.should.have.property('link').have.property('type', obj.type);
                 done();
             }
         });
     });
-    
+
     it('edita link', function(done) {
         var url  = 'Url ' + rand(),
-            type = 'Youtube';
+            type = 'youtube';
         api.put('companies', '/company/' + company + '/link/' + link, {
             token : token,
             url     : url,
@@ -518,7 +518,7 @@ describe('PUT /company/[slug]/link/[id]', function () {
             if (error) {
                 return done(error);
             } else {
-                should.not.exist(data.error);
+                data.should.not.have.property('error');
                 data.should.have.property('link').have.property('_id');
                 data.should.have.property('link').have.property('url', url);
                 data.should.have.property('link').have.property('type', type);

@@ -51,7 +51,7 @@ describe('GET /countries', function () {
         api.get('location', '/countries', {limit : 4, page : 1}, function(error, data, response) {
                 if (error) return done(error);
                 else {
-                    should.not.exist(data.error);
+                    data.should.not.have.property('error');
                     data.countries.length.should.be.below(5);
                     var countries = data.countries;
                     if (data.countries.length == 4){
@@ -134,7 +134,7 @@ describe('GET /country/:slug_country', function () {
             function(error, data, response) {
                 if (error) return done(error);
                 else {
-                    should.exist(data.error);
+                    data.should.have.property('error');
                     done();
                 }
             }

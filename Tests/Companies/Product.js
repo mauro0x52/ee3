@@ -41,7 +41,7 @@ describe('POST /company/[slug]/product', function () {
             });
         });
     });
-    
+
     it('token inválido', function(done) {
         api.post('companies', '/company/' + company.slug + '/product',
             {
@@ -53,7 +53,7 @@ describe('POST /company/[slug]/product', function () {
                 else {
                     response.should.have.status(200);
                     should.exist(data);
-                    data.should.have.property('error');
+                    data.should.have.property('error').property('name', 'InvalidTokenError');
                     done();
                 }
             }
@@ -67,7 +67,7 @@ describe('POST /company/[slug]/product', function () {
             function(error, data, response) {
                 if (error) return done(error);
                 else {
-                    data.should.have.property('error');
+                    data.should.have.property('error').property('name', 'ValidationError');
                     done();
                 }
             }
@@ -158,7 +158,7 @@ describe('GET /company/:company_id/products', function() {
             else {
                 response.should.have.status(200);
                 should.exist(data);
-                data.should.have.property('error');
+                data.should.have.property('error').property('name', 'NotFoundError');
                 done();
             }
         });
@@ -196,7 +196,7 @@ describe('GET /company/:company_id/product/:product_id', function() {
             else {
                 response.should.have.status(200);
                 should.exist(data);
-                data.should.have.property('error');
+                data.should.have.property('error').property('name', 'NotFoundError');
                 done();
             }
         });
@@ -206,7 +206,7 @@ describe('GET /company/:company_id/product/:product_id', function() {
             if (error) done(error);
             else {
                 should.exist(data);
-                data.should.have.property('error');
+                data.should.have.property('error').property('name', 'NotFoundError');
                 done();
             }
         });
@@ -216,7 +216,7 @@ describe('GET /company/:company_id/product/:product_id', function() {
             if (error) done(error);
             else {
                 should.exist(data);
-                data.should.have.property('error');
+                data.should.have.property('error').property('name', 'NotFoundError');
                 done();
             }
         });
@@ -260,7 +260,7 @@ describe('PUT /company/:company_id/product/:product_id', function() {
             else {
                 response.should.have.status(200);
                 should.exist(data);
-                data.should.have.property('error');
+                data.should.have.property('error').property('name', 'InvalidTokenError');
                 done();
             }
         });
@@ -273,7 +273,7 @@ describe('PUT /company/:company_id/product/:product_id', function() {
             else {
                 response.should.have.status(200);
                 should.exist(data);
-                data.should.have.property('error');
+                data.should.have.property('error').property('name', 'NotFoundError');
                 done();
             }
         });
@@ -286,7 +286,7 @@ describe('PUT /company/:company_id/product/:product_id', function() {
             else {
                 response.should.have.status(200);
                 should.exist(data);
-                data.should.have.property('error');
+                data.should.have.property('error').property('name', 'NotFoundError');
                 done();
             }
         });
@@ -299,7 +299,7 @@ describe('PUT /company/:company_id/product/:product_id', function() {
             else {
                 response.should.have.status(200);
                 should.exist(data);
-                data.should.have.property('error');
+                data.should.have.property('error').property('name', 'NotFoundError');
                 done();
             }
         });
@@ -311,7 +311,7 @@ describe('PUT /company/:company_id/product/:product_id', function() {
         }, function(error, data, response) {
             if (error) done(error);
             else {
-                data.should.have.property('error');
+                data.should.have.property('error').property('name', 'PermissionDeniedError');
                 done();
             }
         });
@@ -377,7 +377,7 @@ describe('DEL /company/:company_id/product/:product_id', function() {
             else {
                 response.should.have.status(200);
                 should.exist(data);
-                data.should.have.property('error');
+                data.should.have.property('error').property('name', 'InvalidTokenError');
                 done();
             }
         });
@@ -390,7 +390,7 @@ describe('DEL /company/:company_id/product/:product_id', function() {
             else {
                 response.should.have.status(200);
                 should.exist(data);
-                data.should.have.property('error');
+                data.should.have.property('error').property('name', 'NotFoundError');
                 done();
             }
         });
@@ -403,7 +403,7 @@ describe('DEL /company/:company_id/product/:product_id', function() {
             else {
                 response.should.have.status(200);
                 should.exist(data);
-                data.should.have.property('error');
+                data.should.have.property('error').property('name', 'NotFoundError');
                 done();
             }
         });
@@ -416,7 +416,7 @@ describe('DEL /company/:company_id/product/:product_id', function() {
             else {
                 response.should.have.status(200);
                 should.exist(data);
-                data.should.have.property('error');
+                data.should.have.property('error').property('name', 'NotFoundError');
                 done();
             }
         });
@@ -427,7 +427,7 @@ describe('DEL /company/:company_id/product/:product_id', function() {
         }, function(error, data, response) {
             if (error) done(error);
             else {
-                data.should.have.property('error');
+                data.should.have.property('error').property('name', 'PermissionDeniedError');
                 done();
             }
         });
@@ -442,7 +442,7 @@ describe('DEL /company/:company_id/product/:product_id', function() {
                 api.get('companies', '/company/' + company.slug + '/product/' + product.slug, {}, function (error, data, response) {
                     if (error) done(error);
                     else {
-                        data.should.have.property('error');
+                        data.should.have.property('error').property('name', 'NotFoundError');
                         done();
                     }
                 });

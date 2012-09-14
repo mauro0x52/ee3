@@ -54,7 +54,7 @@ describe('POST /thread', function () {
                 if (error) {
                     return done(error);
                 } else { 
-                    should.exist(data.error);
+                    data.should.have.property('error');
                     done();
                 }
             }
@@ -69,7 +69,7 @@ describe('POST /thread', function () {
                 if (error) {
                     return done(error);
                 } else { 
-                    should.exist(data.error);
+                    data.should.have.property('error');
                     done();
                 }
             }
@@ -84,7 +84,7 @@ describe('POST /thread', function () {
                 if (error) {
                     return done(error);
                 } else { 
-                    should.exist(data.error);
+                    data.should.have.property('error');
                     done();
                 }
             }
@@ -161,7 +161,7 @@ describe('PUT /thread/[slug]', function () {
             if (error) {
                 return done(error);
             } else {
-                should.exist(data.error);
+                data.should.have.property('error');
                 done();
             }
         });
@@ -174,7 +174,7 @@ describe('PUT /thread/[slug]', function () {
             if (error) {
                 return done(error);
             } else {
-                should.exist(data.error);
+                data.should.have.property('error');
                 done();
             }
         });
@@ -251,7 +251,7 @@ describe('GET /threads', function () {
             if (error) {
                 return done(error);
             } else {
-                should.exist(data.error);
+                data.should.have.property('error');
                 done();
             }
         });
@@ -328,7 +328,7 @@ describe('POST /thread/[slug]/message', function () {
             if (error) {
                 return done(error);
             } else {
-                should.exist(data.error);
+                data.should.have.property('error');
                 done();
             }
         });
@@ -342,7 +342,7 @@ describe('POST /thread/[slug]/message', function () {
             if (error) {
                 return done(error);
             } else {
-                should.exist(data.error);
+                data.should.have.property('error');
                 done();
             }
         });
@@ -355,7 +355,7 @@ describe('POST /thread/[slug]/message', function () {
             if (error) {
                 return done(error);
             } else {
-                should.exist(data.error);
+                data.should.have.property('error');
                 done();
             }
         });
@@ -440,7 +440,7 @@ describe('GET /thread/[slug]/messages', function () {
             if (error) {
                 return done(error);
             } else {
-                should.exist(data.error);
+                data.should.have.property('error');
                 done();
             }
         });
@@ -453,7 +453,7 @@ describe('GET /thread/[slug]/messages', function () {
             if (error) {
                 return done(error);
             } else {
-                should.exist(data.error);
+                data.should.have.property('error');
                 done();
             }
         });
@@ -542,7 +542,7 @@ describe('GET /thread/[slug]/unread-messages', function () {
             if (error) {
                 return done(error);
             } else {
-                should.exist(data.error);
+                data.should.have.property('error');
                 done();
             }
         });
@@ -555,7 +555,7 @@ describe('GET /thread/[slug]/unread-messages', function () {
             if (error) {
                 return done(error);
             } else {
-                should.exist(data.error);
+                data.should.have.property('error');
                 done();
             }
         });

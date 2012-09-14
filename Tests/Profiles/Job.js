@@ -59,7 +59,7 @@ describe('POST /profile/[slug]/job', function () {
                 if (error) {
                     return done(error);
                 } else { 
-                    should.exist(data.error);
+                    data.should.have.property('error');
                     done();
                 }
             }
@@ -78,7 +78,7 @@ describe('POST /profile/[slug]/job', function () {
                 if (error) {
                     return done(error);
                 } else { 
-                    should.exist(data.error);
+                    data.should.have.property('error');
                     done();
                 }
             }
@@ -96,7 +96,7 @@ describe('POST /profile/[slug]/job', function () {
                 if (error) {
                     return done(error);
                 } else { 
-                    should.exist(data.error);
+                    data.should.have.property('error');
                     done();
                 }
             }
@@ -116,7 +116,7 @@ describe('POST /profile/[slug]/job', function () {
                     return done(error);
                 } else { 
                     should.exist(data);
-                    should.not.exist(data.error);
+                    data.should.not.have.property('error');
                     data.should.have.property('job').have.property('_id');
                     data.should.have.property('job').have.property('name');
                     data.should.have.property('job').have.property('companyName');
@@ -191,7 +191,7 @@ describe('GET /profile/[slug]/jobes', function () {
             if (error) {
                 return done(error);
             } else {
-                should.exist(data.error);
+                data.should.have.property('error');
                 done();
             }
         });
@@ -275,7 +275,7 @@ describe('GET /profile/[slug]/job/[id]', function () {
             if (error) {
                 return done(error);
             } else {
-                should.exist(data.error);
+                data.should.have.property('error');
                 done();
             }
         });
@@ -356,7 +356,7 @@ describe('DEL /profile/[slug]/job/[id]', function () {
             if (error) {
                 return done(error);
             } else {
-                should.exist(data.error);
+                data.should.have.property('error');
                 done();
             }
         });
@@ -367,7 +367,7 @@ describe('DEL /profile/[slug]/job/[id]', function () {
             if (error) {
                 return done(error);
             } else {
-                should.exist(data.error);
+                data.should.have.property('error');
                 done();
             }
         });
@@ -454,7 +454,7 @@ describe('PUT /profile/[slug]/job/[id]', function () {
             if (error) {
                 return done(error);
             } else {
-                should.exist(data.error);
+                data.should.have.property('error');
                 done();
             }
         });
@@ -472,7 +472,7 @@ describe('PUT /profile/[slug]/job/[id]', function () {
             if (error) {
                 return done(error);
             } else {
-                should.exist(data.error);
+                data.should.have.property('error');
                 done();
             }
         });
@@ -490,7 +490,7 @@ describe('PUT /profile/[slug]/job/[id]', function () {
                 return done(error);
             } else {
                 obj = data;
-                should.not.exist(data.error);
+                data.should.not.have.property('error');
                 data.should.have.property('job').have.property('_id');
                 data.should.have.property('job').have.property('name', obj.name);
                 done();
@@ -513,7 +513,7 @@ describe('PUT /profile/[slug]/job/[id]', function () {
             if (error) {
                 return done(error);
             } else {
-                should.not.exist(data.error);
+                data.should.not.have.property('error');
                 api.get('profiles', '/profile/' + profile + '/job/' + job, {token : token}, function (error, data) {
                     should.not.exist(data.error, 'algo deu errado');
                     data.should.have.property('job').have.property('_id');

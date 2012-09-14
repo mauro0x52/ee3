@@ -43,7 +43,7 @@ describe('GET /country/[slugCountry]/state/[slugState]/cities', function () {
             function(error, data, response) {
                 if (error) return done(error);
                 else {
-                    should.exist(data.error);
+                    data.should.have.property('error');
                     done();
                 }
             }
@@ -55,7 +55,7 @@ describe('GET /country/[slugCountry]/state/[slugState]/cities', function () {
             function(error, data, response) {
                 if (error) return done(error);
                 else {
-                    should.exist(data.error);
+                    data.should.have.property('error');
                     done();
                 }
             }
@@ -80,7 +80,7 @@ describe('GET /country/[slugCountry]/state/[slugState]/cities', function () {
         api.get('location', '/country/'+dt.country.slug+'/state/'+dt.state.slug+'/cities', {limit : 4, page : 1}, function(error, data, response) {
                 if (error) return done(error);
                 else {
-                    should.not.exist(data.error);
+                    data.should.not.have.property('error');
                     data.cities.should.have.lengthOf(4);
                     var cities = data.cities;
                     api.get('location', '/country/'+dt.country.slug+'/state/'+dt.state.slug+'/cities', {limit : 2, page : 2}, function(error, data, response) {
@@ -161,7 +161,7 @@ describe('GET /country/[slugCountry]/state/[slugState]/city/[slugCity]', functio
             function(error, data, response) {
                 if (error) return done(error);
                 else {
-                    should.exist(data.error);
+                    data.should.have.property('error');
                     done();
                 }
             }
@@ -173,7 +173,7 @@ describe('GET /country/[slugCountry]/state/[slugState]/city/[slugCity]', functio
             function(error, data, response) {
                 if (error) return done(error);
                 else {
-                    should.exist(data.error);
+                    data.should.have.property('error');
                     done();
                 }
             }
@@ -185,7 +185,7 @@ describe('GET /country/[slugCountry]/state/[slugState]/city/[slugCity]', functio
             function(error, data, response) {
                 if (error) return done(error);
                 else {
-                    should.exist(data.error);
+                    data.should.have.property('error');
                     done();
                 }
             }

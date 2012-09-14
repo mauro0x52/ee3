@@ -62,7 +62,7 @@ describe('GET /country/:slug_country/states', function () {
         api.get('location', '/country/'+dt.country.slug+'/states', {limit : 4, page : 1}, function(error, data, response) {
                 if (error) return done(error);
                 else {
-                    should.not.exist(data.error);
+                    data.should.not.have.property('error');
                     data.states.should.have.lengthOf(4);
                     var states = data.states;
                     api.get('location', '/country/'+dt.country.slug+'/states', {limit : 2, page : 2}, function(error, data, response) {
@@ -141,7 +141,7 @@ describe('GET /country/:slug_country/state/:state_id', function () {
             function(error, data, response) {
                 if (error) return done(error);
                 else {
-                    should.exist(data.error);
+                    data.should.have.property('error');
                     done();
                 }
             }
@@ -153,7 +153,7 @@ describe('GET /country/:slug_country/state/:state_id', function () {
             function(error, data, response) {
                 if (error) return done(error);
                 else {
-                    should.exist(data.error);
+                    data.should.have.property('error');
                     done();
                 }
             }

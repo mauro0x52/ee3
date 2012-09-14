@@ -58,8 +58,8 @@ describe('POST /company/[slug]/contact', function () {
             }, function(error, data, response) {
                 if (error) {
                     return done(error);
-                } else { 
-                    should.exist(data.error);
+                } else {
+                    data.should.have.property('error').property('name', 'NotFoundError');
                     done();
                 }
             }
@@ -74,8 +74,8 @@ describe('POST /company/[slug]/contact', function () {
             }, function(error, data, response) {
                 if (error) {
                     return done(error);
-                } else { 
-                    should.exist(data.error);
+                } else {
+                    data.should.have.property('error').property('name', 'InvalidTokenError');
                     done();
                 }
             }
@@ -85,12 +85,12 @@ describe('POST /company/[slug]/contact', function () {
     it('address em branco', function(done) {
         api.post('companies', '/company/' + company + '/contact', {
                 token   : token,
-                type      : 'Twitter'
+                type      : 'twitter'
             }, function(error, data, response) {
                 if (error) {
                     return done(error);
-                } else { 
-                    should.exist(data.error);
+                } else {
+                    data.should.have.property('error').property('name', 'ValidationError');
                     done();
                 }
             }
@@ -104,8 +104,8 @@ describe('POST /company/[slug]/contact', function () {
             }, function(error, data, response) {
                 if (error) {
                     return done(error);
-                } else { 
-                    should.exist(data.error);
+                } else {
+                    data.should.have.property('error').property('name', 'ValidationError');
                     done();
                 }
             }
@@ -120,8 +120,8 @@ describe('POST /company/[slug]/contact', function () {
             }, function(error, data, response) {
                 if (error) {
                     return done(error);
-                } else { 
-                    should.exist(data.error);
+                } else {
+                    data.should.have.property('error').property('name', 'ValidationError');
                     done();
                 }
             }
@@ -130,7 +130,7 @@ describe('POST /company/[slug]/contact', function () {
 
     it('cadastra contato', function(done) {
         var address = 'Number ' + rand(),
-            type = 'Twitter';
+            type = 'twitter';
         api.post('companies', '/company/' + company + '/contact', {
                 token   : token,
                 address   : address,
@@ -138,9 +138,9 @@ describe('POST /company/[slug]/contact', function () {
             }, function(error, data, response) {
                 if (error) {
                     return done(error);
-                } else { 
+                } else {
                     should.exist(data);
-                    should.not.exist(data.error);
+                    data.should.not.have.property('error');
                     data.should.have.property('contact').have.property('_id');
                     data.should.have.property('contact').have.property('address', address);
                     data.should.have.property('contact').have.property('type', type);
@@ -180,7 +180,7 @@ describe('GET /company/[slug]/contactes', function () {
                     api.post('companies', '/company/' + company + '/contact', {
                         token   : token,
                         address   : 'Number ' + rand(),
-                        type      : 'Twitter'
+                        type      : 'twitter'
                     }, function(error, data, response) {
                         contactes++;
                         if (contactes === 20) {
@@ -191,7 +191,7 @@ describe('GET /company/[slug]/contactes', function () {
             });
         });
     });
-    
+
     it('url tem que existir', function(done) {
         api.get('companies', '/company/' + company + '/contacts', {}, function(error, data, response) {
             if (error) {
@@ -203,24 +203,24 @@ describe('GET /company/[slug]/contactes', function () {
             }
         });
     });
-    
+
     it('empresa inexistente', function(done) {
         api.get('companies', '/company/inexistente/contacts', {}, function(error, data, response) {
             if (error) {
                 return done(error);
             } else {
-                should.exist(data.error);
+                data.should.have.property('error').property('name', 'NotFoundError');
                 done();
             }
         });
     });
-    
+
     it('listar contatos', function(done) {
         api.get('companies', '/company/' + company + '/contacts', {}, function(error, data, response) {
             if (error) {
                 return done(error);
             } else {
-                should.not.exist(data.error, 'erro inesperado');                
+                should.not.exist(data.error, 'erro inesperado');
                 for (var i = 0 ; i < data.length; i = i + 1) {
                     data.contact[i].should.have.property('_id');
                     data.contact[i].should.have.property('address');
@@ -260,7 +260,7 @@ describe('GET /company/[slug]/contact/[id]', function () {
                 api.post('companies', '/company/' + company + '/contact', {
                     token   : token,
                     address   : 'Number ' + rand(),
-                    type      : 'Twitter'
+                    type      : 'twitter'
                 }, function(error, data, response) {
                     contact = data.contact._id
                     done();
@@ -268,7 +268,7 @@ describe('GET /company/[slug]/contact/[id]', function () {
             });
         });
     });
-    
+
     it('url tem que existir', function(done) {
         api.get('companies', '/company/' + company + '/contact/' + contact, {}, function(error, data, response) {
             if (error) {
@@ -280,24 +280,24 @@ describe('GET /company/[slug]/contact/[id]', function () {
             }
         });
     });
-    
+
     it('empresa inexistente', function(done) {
         api.get('companies', '/company/inexistente/contact/' + contact, {}, function(error, data, response) {
             if (error) {
                 return done(error);
             } else {
-                should.exist(data.error);
+                data.should.have.property('error').property('name', 'NotFoundError');
                 done();
             }
         });
     });
-    
+
     it('exibir contato', function(done) {
         api.get('companies', '/company/' + company + '/contact/' + contact, {}, function(error, data, response) {
             if (error) {
                 return done(error);
             } else {
-                should.not.exist(data.error, 'erro inesperado');    
+                should.not.exist(data.error, 'erro inesperado');
                 data.should.have.property('contact').have.property('_id');
                 data.should.have.property('contact').have.property('address');
                 data.should.have.property('contact').have.property('type');
@@ -335,7 +335,7 @@ describe('DEL /company/[slug]/contact/[id]', function () {
                 api.post('companies', '/company/' + company + '/contact', {
                     token   : token,
                     address   : 'Number ' + rand(),
-                    type      : 'Twitter'
+                    type      : 'twitter'
                 }, function(error, data, response) {
                     contact = data.contact._id
                     done();
@@ -343,7 +343,7 @@ describe('DEL /company/[slug]/contact/[id]', function () {
             });
         });
     });
-    
+
     it('url tem que existir', function(done) {
         api.del('companies', '/company/' + company + '/contact/' + contact, {}, function(error, data, response) {
             if (error) {
@@ -355,29 +355,29 @@ describe('DEL /company/[slug]/contact/[id]', function () {
             }
         });
     });
-    
+
     it('token inválido', function(done) {
         api.del('companies', '/company/' + company + '/contact/' + contact, {token : 'invalido'}, function(error, data, response) {
             if (error) {
                 return done(error);
             } else {
-                should.exist(data.error);
+                data.should.have.property('error').property('name', 'InvalidTokenError');
                 done();
             }
         });
     });
-    
+
     it('empresa inexistente', function(done) {
         api.del('companies', '/company/inexistente/contact/' + contact, {token : token}, function(error, data, response) {
             if (error) {
                 return done(error);
             } else {
-                should.exist(data.error);
+                data.should.have.property('error').property('name', 'NotFoundError');
                 done();
             }
         });
     });
-    
+
     it('remove contato', function(done) {
         api.del('companies', '/company/' + company + '/contact/' + contact, {token : token}, function(error, data, response) {
             if (error) {
@@ -422,7 +422,7 @@ describe('PUT /company/[slug]/contact/[id]', function () {
                 api.post('companies', '/company/' + company + '/contact', {
                     token   : token,
                     address   : 'Number ' + rand(),
-                    type      : 'Twitter'
+                    type      : 'twitter'
                 }, function(error, data, response) {
                     contact = data.contact._id;
                     obj = data.contact;
@@ -431,7 +431,7 @@ describe('PUT /company/[slug]/contact/[id]', function () {
             });
         });
     });
-    
+
     it('url tem que existir', function(done) {
         api.put('companies', '/company/' + company + '/contact/' + contact, {}, function(error, data, response) {
             if (error) {
@@ -443,54 +443,54 @@ describe('PUT /company/[slug]/contact/[id]', function () {
             }
         });
     });
-    
+
     it('token inválido', function(done) {
         api.put('companies', '/company/' + company + '/contact/' + contact, {
             token : 'invalido',
             address   : 'Number ' + rand(),
-            type      : 'Twitter'
+            type      : 'twitter'
         }, function(error, data, response) {
             if (error) {
                 return done(error);
             } else {
-                should.exist(data.error);
+                data.should.have.property('error').property('name', 'InvalidTokenError');
                 done();
             }
         });
     });
-    
+
     it('empresa inexistente', function(done) {
         api.put('companies', '/company/inexistente/contact/' + contact, {
             token : token,
             address   : 'Number ' + rand(),
-            type      : 'Twitter'
+            type      : 'twitter'
         }, function(error, data, response) {
             if (error) {
                 return done(error);
             } else {
-                should.exist(data.error);
+                data.should.have.property('error').property('name', 'NotFoundError');
                 done();
             }
         });
     });
-    
+
     it('address em branco', function(done) {
         api.put('companies', '/company/' + company + '/contact/' + contact, {
             token : token,
-            type      : 'Twitter'
+            type      : 'twitter'
         }, function(error, data, response) {
             if (error) {
                 return done(error);
             } else {
                 obj = data.contact;
-                should.not.exist(data.error);
+                data.should.not.have.property('error');
                 data.should.have.property('contact').have.property('_id');
                 data.should.have.property('contact').have.property('address', obj.address);
                 done();
             }
         });
     });
-    
+
     it('type em branco', function(done) {
         api.put('companies', '/company/' + company + '/contact/' + contact, {
             token : token,
@@ -500,14 +500,14 @@ describe('PUT /company/[slug]/contact/[id]', function () {
                 return done(error);
             } else {
                 obj = data.contact;
-                should.not.exist(data.error);
+                data.should.not.have.property('error');
                 data.should.have.property('contact').have.property('_id');
                 data.should.have.property('contact').have.property('type', obj.type);
                 done();
             }
         });
     });
-    
+
     it('type inválido', function(done) {
         api.put('companies', '/company/' + company + '/contact/' + contact, {
             token : token,
@@ -517,7 +517,7 @@ describe('PUT /company/[slug]/contact/[id]', function () {
             if (error) {
                 return done(error);
             } else {
-                should.exist(data.error);
+                data.should.have.property('error').property('name', 'ValidationError');
                 done();
             }
         });
@@ -525,7 +525,7 @@ describe('PUT /company/[slug]/contact/[id]', function () {
 
     it('edita contato', function(done) {
         var address = 'Number ' + rand(),
-            type = 'Twitter';
+            type = 'twitter';
         api.put('companies', '/company/' + company + '/contact/' + contact, {
             token : token,
             address   : address,
@@ -534,7 +534,7 @@ describe('PUT /company/[slug]/contact/[id]', function () {
             if (error) {
                 return done(error);
             } else {
-                should.not.exist(data.error);
+                data.should.not.have.property('error');
                 data.should.have.property('contact').have.property('_id');
                 data.should.have.property('contact').have.property('address', address);
                 data.should.have.property('contact').have.property('type', type);

@@ -50,7 +50,7 @@ describe('POST /profile', function () {
             if (error) return done(error);
             else {
                 response.should.have.status(200);
-                should.exist(data.error);
+                data.should.have.property('error');
                 done();
             }
         });
@@ -64,7 +64,7 @@ describe('POST /profile', function () {
             if (error) return done(error);
             else {
                 response.should.have.status(200);
-                should.exist(data.error);
+                data.should.have.property('error');
                 done();
             }
         });

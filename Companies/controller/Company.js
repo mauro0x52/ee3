@@ -238,7 +238,7 @@ module.exports = function (app) {
             token = request.param('token');
 
         //valida o token do usuário
-        auth(token, function (user) {
+        auth(token, function (error, user) {
             Company.findByIdentity(id, function(error, company) {
                 if (error) {
                     response.send({error : error});

@@ -58,8 +58,8 @@ describe('POST /company/[slug]/phone', function () {
             }, function(error, data, response) {
                 if (error) {
                     return done(error);
-                } else { 
-                    should.exist(data.error);
+                } else {
+                    data.should.have.property('error').property('name', 'NotFoundError')
                     done();
                 }
             }
@@ -77,8 +77,8 @@ describe('POST /company/[slug]/phone', function () {
             }, function(error, data, response) {
                 if (error) {
                     return done(error);
-                } else { 
-                    should.exist(data.error);
+                } else {
+                    data.should.have.property('error').property('name', 'InvalidTokenError')
                     done();
                 }
             }
@@ -95,8 +95,8 @@ describe('POST /company/[slug]/phone', function () {
             }, function(error, data, response) {
                 if (error) {
                     return done(error);
-                } else { 
-                    should.exist(data.error);
+                } else {
+                    data.should.have.property('error').property('name', 'ValidationError')
                     done();
                 }
             }
@@ -113,8 +113,8 @@ describe('POST /company/[slug]/phone', function () {
             }, function(error, data, response) {
                 if (error) {
                     return done(error);
-                } else { 
-                    should.exist(data.error);
+                } else {
+                    data.should.have.property('error').property('name', 'ValidationError')
                     done();
                 }
             }
@@ -131,8 +131,8 @@ describe('POST /company/[slug]/phone', function () {
             }, function(error, data, response) {
                 if (error) {
                     return done(error);
-                } else { 
-                    should.exist(data.error);
+                } else {
+                    data.should.have.property('error').property('name', 'ValidationError')
                     done();
                 }
             }
@@ -149,8 +149,8 @@ describe('POST /company/[slug]/phone', function () {
             }, function(error, data, response) {
                 if (error) {
                     return done(error);
-                } else { 
-                    should.exist(data.error);
+                } else {
+                    data.should.have.property('error').property('name', 'ValidationError')
                     done();
                 }
             }
@@ -167,8 +167,8 @@ describe('POST /company/[slug]/phone', function () {
             }, function(error, data, response) {
                 if (error) {
                     return done(error);
-                } else { 
-                    should.exist(data.error);
+                } else {
+                    data.should.have.property('error').property('name', 'ValidationError')
                     done();
                 }
             }
@@ -185,8 +185,8 @@ describe('POST /company/[slug]/phone', function () {
             }, function(error, data, response) {
                 if (error) {
                     return done(error);
-                } else { 
-                    should.exist(data.error);
+                } else {
+                    data.should.have.property('error').property('name', 'ValidationError')
                     done();
                 }
             }
@@ -209,9 +209,9 @@ describe('POST /company/[slug]/phone', function () {
             }, function(error, data, response) {
                 if (error) {
                     return done(error);
-                } else { 
+                } else {
                     should.exist(data);
-                    should.not.exist(data.error);
+                    data.should.not.have.property('error')
                     data.should.have.property('phone').have.property('_id');
                     data.should.have.property('phone').have.property('number', number);
                     data.should.have.property('phone').have.property('extension', extension);
@@ -268,7 +268,7 @@ describe('GET /company/[slug]/phonees', function () {
             });
         });
     });
-    
+
     it('url tem que existir', function(done) {
         api.get('companies', '/company/' + company + '/phones', {}, function(error, data, response) {
             if (error) {
@@ -280,24 +280,24 @@ describe('GET /company/[slug]/phonees', function () {
             }
         });
     });
-    
+
     it('empresa inexistente', function(done) {
         api.get('companies', '/company/inexistente/phones', {}, function(error, data, response) {
             if (error) {
                 return done(error);
             } else {
-                should.exist(data.error);
+                data.should.have.property('error').property('name', 'NotFoundError');
                 done();
             }
         });
     });
-    
+
     it('listar telefones', function(done) {
         api.get('companies', '/company/' + company + '/phones', {}, function(error, data, response) {
             if (error) {
                 return done(error);
             } else {
-                should.not.exist(data.error, 'erro inesperado');                
+                should.not.exist(data.error, 'erro inesperado');
                 for (var i = 0 ; i < data.length; i = i + 1) {
                     data.phones[i].should.have.property('_id');
                     data.phones[i].should.have.property('number');
@@ -351,7 +351,7 @@ describe('GET /company/[slug]/phone/[id]', function () {
             });
         });
     });
-    
+
     it('url tem que existir', function(done) {
         api.get('companies', '/company/' + company + '/phone/' + phone, {}, function(error, data, response) {
             if (error) {
@@ -363,24 +363,24 @@ describe('GET /company/[slug]/phone/[id]', function () {
             }
         });
     });
-    
+
     it('empresa inexistente', function(done) {
         api.get('companies', '/company/inexistente/phone/' + phone, {}, function(error, data, response) {
             if (error) {
                 return done(error);
             } else {
-                should.exist(data.error);
+                data.should.have.property('error').property('name', 'NotFoundError');
                 done();
             }
         });
     });
-    
+
     it('exibir telefone', function(done) {
         api.get('companies', '/company/' + company + '/phone/' + phone, {}, function(error, data, response) {
             if (error) {
                 return done(error);
             } else {
-                should.not.exist(data.error, 'erro inesperado');    
+                should.not.exist(data.error, 'erro inesperado');
                 data.should.have.property('phone').have.property('_id');
                 data.should.have.property('phone').have.property('number');
                 data.should.have.property('phone').have.property('extension');
@@ -432,7 +432,7 @@ describe('DEL /company/[slug]/phone/[id]', function () {
             });
         });
     });
-    
+
     it('url tem que existir', function(done) {
         api.del('companies', '/company/' + company + '/phone/' + phone, {}, function(error, data, response) {
             if (error) {
@@ -444,29 +444,29 @@ describe('DEL /company/[slug]/phone/[id]', function () {
             }
         });
     });
-    
+
     it('token inválido', function(done) {
         api.del('companies', '/company/' + company + '/phone/' + phone, {token : 'invalido'}, function(error, data, response) {
             if (error) {
                 return done(error);
             } else {
-                should.exist(data.error);
+                data.should.have.property('error').property('name', 'InvalidTokenError');
                 done();
             }
         });
     });
-    
+
     it('empresa inexistente', function(done) {
         api.del('companies', '/company/inexistente/phone/' + phone, {token : token}, function(error, data, response) {
             if (error) {
                 return done(error);
             } else {
-                should.exist(data.error);
+                data.should.have.property('error').property('name', 'NotFoundError');
                 done();
             }
         });
     });
-    
+
     it('remove telefone', function(done) {
         api.del('companies', '/company/' + company + '/phone/' + phone, {token : token}, function(error, data, response) {
             if (error) {
@@ -523,7 +523,7 @@ describe('PUT /company/[slug]/phone/[id]', function () {
             });
         });
     });
-    
+
     it('url tem que existir', function(done) {
         api.put('companies', '/company/' + company + '/phone/' + phone, {}, function(error, data, response) {
             if (error) {
@@ -535,7 +535,7 @@ describe('PUT /company/[slug]/phone/[id]', function () {
             }
         });
     });
-    
+
     it('token inválido', function(done) {
         api.put('companies', '/company/' + company + '/phone/' + phone, {
             token : 'invalido',
@@ -548,12 +548,12 @@ describe('PUT /company/[slug]/phone/[id]', function () {
             if (error) {
                 return done(error);
             } else {
-                should.exist(data.error);
+                data.should.have.property('error').property('name', 'InvalidTokenError');
                 done();
             }
         });
     });
-    
+
     it('empresa inexistente', function(done) {
         api.put('companies', '/company/inexistente/phone/' + phone, {
             token : token,
@@ -566,12 +566,12 @@ describe('PUT /company/[slug]/phone/[id]', function () {
             if (error) {
                 return done(error);
             } else {
-                should.exist(data.error);
+                data.should.have.property('error').property('name', 'NotFoundError')
                 done();
             }
         });
     });
-    
+
     it('number em branco', function(done) {
         api.put('companies', '/company/' + company + '/phone/' + phone, {
             token : token,
@@ -584,14 +584,14 @@ describe('PUT /company/[slug]/phone/[id]', function () {
                 return done(error);
             } else {
                 obj = data.phone;
-                should.not.exist(data.error);
+                data.should.not.have.property('error')
                 data.should.have.property('phone').have.property('_id');
                 data.should.have.property('phone').have.property('number', obj.number);
                 done();
             }
         });
     });
-    
+
     it('extension em branco', function(done) {
         api.put('companies', '/company/' + company + '/phone/' + phone, {
             token : token,
@@ -604,14 +604,14 @@ describe('PUT /company/[slug]/phone/[id]', function () {
                 return done(error);
             } else {
                 obj = data.phone;
-                should.not.exist(data.error);
+                data.should.not.have.property('error')
                 data.should.have.property('phone').have.property('_id');
                 data.should.have.property('phone').have.property('extension', obj.extension);
                 done();
             }
         });
     });
-    
+
     it('areaCode em branco', function(done) {
         api.put('companies', '/company/' + company + '/phone/' + phone, {
             token : token,
@@ -624,14 +624,14 @@ describe('PUT /company/[slug]/phone/[id]', function () {
                 return done(error);
             } else {
                 obj = data.phone;
-                should.not.exist(data.error);
+                data.should.not.have.property('error')
                 data.should.have.property('phone').have.property('_id');
                 data.should.have.property('phone').have.property('areaCode', obj.areaCode);
                 done();
             }
         });
     });
-    
+
     it('intCode em branco', function(done) {
         api.put('companies', '/company/' + company + '/phone/' + phone, {
             token : token,
@@ -644,14 +644,14 @@ describe('PUT /company/[slug]/phone/[id]', function () {
                 return done(error);
             } else {
                 obj = data.phone;
-                should.not.exist(data.error);
+                data.should.not.have.property('error')
                 data.should.have.property('phone').have.property('_id');
                 data.should.have.property('phone').have.property('intCode', obj.intCode);
                 done();
             }
         });
     });
-    
+
     it('type em branco', function(done) {
         api.put('companies', '/company/' + company + '/phone/' + phone, {
             token : token,
@@ -664,14 +664,14 @@ describe('PUT /company/[slug]/phone/[id]', function () {
                 return done(error);
             } else {
                 obj = data.phone;
-                should.not.exist(data.error);
+                data.should.not.have.property('error')
                 data.should.have.property('phone').have.property('_id');
                 data.should.have.property('phone').have.property('type', obj.type);
                 done();
             }
         });
     });
-    
+
     it('edita telefone', function(done) {
         var number    = 'Number ' + rand(),
             extension = 'extension ' + rand(),
@@ -689,7 +689,7 @@ describe('PUT /company/[slug]/phone/[id]', function () {
             if (error) {
                 return done(error);
             } else {
-                should.not.exist(data.error);
+                data.should.not.have.property('error')
                 data.should.have.property('phone').have.property('_id');
                 data.should.have.property('phone').have.property('number', number);
                 data.should.have.property('phone').have.property('extension', extension);
