@@ -28,8 +28,8 @@ describe('POST /image', function() {
             function(error, data, response) {
                 if (error) done(error);
                 else {
-                    should.exist(data, 'não retornou dado nenhum');
-                    should.exist(data.error, 'não retornou erro');
+                    should.exist(data);
+                    data.should.have.property('error');
                     done();
                 }
             }
@@ -44,8 +44,8 @@ describe('POST /image', function() {
             function(error, data, response) {
                 if (error) done(error);
                 else {
-                    should.exist(data, 'não retornou dado nenhum');
-                    should.exist(data.error, 'não retornou erro');
+                    should.exist(data);
+                    data.should.have.property('error').property('name', 'ValidationError');
                     done();
                 }
             }
@@ -62,9 +62,9 @@ describe('POST /image', function() {
             function(error, data, response) {
                 if (error) done(error);
                 else {
-                    should.exist(data, 'não retornou dado nenhum');
+                    should.exist(data);
                     data.should.have.property('image').have.property('url').include(path);
-                    image = data;
+                    image = data.image;
                     done();
                 }
             }
@@ -81,7 +81,7 @@ describe('POST /image', function() {
             function(error, data, response) {
                 if (error) done(error);
                 else {
-                    should.exist(data, 'não retornou dado nenhum');
+                    should.exist(data);
                     data.should.have.property('image').have.property('url')
                         .include(path)
                         .and.should.not.equal(image.url);
@@ -103,8 +103,8 @@ describe('POST /image/resize', function() {
             function(error, data, response) {
                 if (error) done(error);
                 else {
-                    should.exist(data, 'não retornou dado nenhum');
-                    should.exist(data.error, 'não retornou erro');
+                    should.exist(data);
+                    data.should.have.property('error');
                     done();
                 }
             }
@@ -118,8 +118,8 @@ describe('POST /image/resize', function() {
             function(error, data, response) {
                 if (error) done(error);
                 else {
-                    should.exist(data, 'não retornou dado nenhum');
-                    should.exist(data.error, 'não retornou erro');
+                    should.exist(data);
+                    data.should.have.property('error');
                     done();
                 }
             }
@@ -134,12 +134,12 @@ describe('POST /image/resize', function() {
             function(error, data, response) {
                 if (error) done(error);
                 else {
-                    should.exist(data, 'não retornou dado nenhum');
+                    should.exist(data);
                     data.should.have.property('image').have.property('url')
                         .include(path)
                         .and.include('h200')
                         .and.include('extend');
-                    h200extend = data;
+                    h200extend = data.image;
                     done();
                 }
             }
@@ -154,12 +154,12 @@ describe('POST /image/resize', function() {
             function(error, data, response) {
                 if (error) done(error);
                 else {
-                    should.exist(data, 'não retornou dado nenhum');
+                    should.exist(data);
                     data.should.have.property('image').have.property('url')
                         .include(path)
                         .and.include('w200')
                         .and.include('extend');
-                    w200extend = data;
+                    w200extend = data.image;
                     done();
                 }
             }
@@ -175,13 +175,13 @@ describe('POST /image/resize', function() {
             function(error, data, response) {
                 if (error) done(error);
                 else {
-                    should.exist(data, 'não retornou dado nenhum');
+                    should.exist(data);
                     data.should.have.property('image').have.property('url')
                         .include(path)
                         .and.include('w200')
                         .and.include('h200')
                         .and.include('extend');
-                    w200h200extend = data;
+                    w200h200extend = data.image;
                     done();
                 }
             }
@@ -197,12 +197,12 @@ describe('POST /image/resize', function() {
             function(error, data, response) {
                 if (error) done(error);
                 else {
-                    should.exist(data, 'não retornou dado nenhum');
+                    should.exist(data);
                     data.should.have.property('image').have.property('url')
                         .include(path)
                         .and.include('w200')
                         .and.include('fit');
-                    w200fit = data;
+                    w200fit = data.image;
                     done();
                 }
             }
@@ -218,12 +218,12 @@ describe('POST /image/resize', function() {
             function(error, data, response) {
                 if (error) done(error);
                 else {
-                    should.exist(data, 'não retornou dado nenhum');
+                    should.exist(data);
                     data.should.have.property('image').have.property('url')
                         .include(path)
                         .and.include('h200')
                         .and.include('fit');
-                    h200fit = data;
+                    h200fit = data.image;
                     done();
                 }
             }
@@ -240,13 +240,13 @@ describe('POST /image/resize', function() {
             function(error, data, response) {
                 if (error) done(error);
                 else {
-                    should.exist(data, 'não retornou dado nenhum');
+                    should.exist(data);
                     data.should.have.property('image').have.property('url')
                         .include(path)
                         .and.include('w200')
                         .and.include('h200')
                         .and.include('fit');
-                    w200h200fit = data;
+                    w200h200fit = data.image;
                     done();
                 }
             }
@@ -263,7 +263,7 @@ describe('POST /image/resize', function() {
             function(error, data, response) {
                 if (error) done(error);
                 else {
-                    should.exist(data, 'não retornou dado nenhum');
+                    should.exist(data);
                     data.should.have.property('image').have.property('url')
                         .include(path)
                         .and.include('labeltestando');
@@ -283,7 +283,7 @@ describe('POST /image/resize', function() {
             function(error, data, response) {
                 if (error) done(error);
                 else {
-                    should.exist(data, 'não retornou dado nenhum');
+                    should.exist(data);
                     data.should.have.property('image').have.property('path')
                         .include(path)
                         .and.include('url');
@@ -303,7 +303,7 @@ describe('POST /image/resize', function() {
             function(error, data, response) {
                 if (error) done(error);
                 else {
-                    should.exist(data, 'não retornou dado nenhum');
+                    should.exist(data);
                     data.should.have.property('image').have.property('url')
                         .include(path)
                         .and.include('id');
@@ -364,8 +364,8 @@ describe('Verificação dos resizeamentos', function() {
         imagemagick.identify(w200extend.fullPath, function (error, features) {
             if (error) done(error);
             else {
-                features.should.have.property('image').have.property('width').equal(200);
-                features.should.have.property('image').have.property('height').equal(200);
+                features.should.have.property('width').equal(200);
+                features.should.have.property('height').equal(200);
                 done();
             }
         });
@@ -374,8 +374,8 @@ describe('Verificação dos resizeamentos', function() {
         imagemagick.identify(h200extend.fullPath, function (error, features) {
             if (error) done(error);
             else {
-                features.should.have.property('image').have.property('width').equal(200);
-                features.should.have.property('image').have.property('height').equal(200);
+                features.should.have.property('width').equal(200);
+                features.should.have.property('height').equal(200);
                 done();
             }
         });
@@ -384,8 +384,8 @@ describe('Verificação dos resizeamentos', function() {
         imagemagick.identify(w200h200extend.fullPath, function (error, features) {
             if (error) done(error);
             else {
-                features.should.have.property('image').have.property('width').equal(200);
-                features.should.have.property('image').have.property('height').equal(200);
+                features.should.have.property('width').equal(200);
+                features.should.have.property('height').equal(200);
                 done();
             }
         });
@@ -394,8 +394,8 @@ describe('Verificação dos resizeamentos', function() {
         imagemagick.identify(w200fit.fullPath, function (error, features) {
             if (error) done(error);
             else {
-                features.should.have.property('image').have.property('width').below(201);
-                features.should.have.property('image').have.property('height').below(201);
+                features.should.have.property('width').below(201);
+                features.should.have.property('height').below(201);
                 done();
             }
         });
@@ -404,8 +404,8 @@ describe('Verificação dos resizeamentos', function() {
         imagemagick.identify(h200fit.fullPath, function (error, features) {
             if (error) done(error);
             else {
-                features.should.have.property('image').have.property('width').below(201);
-                features.should.have.property('image').have.property('height').below(201);
+                features.should.have.property('width').below(201);
+                features.should.have.property('height').below(201);
                 done();
             }
         });
@@ -414,8 +414,8 @@ describe('Verificação dos resizeamentos', function() {
         imagemagick.identify(w200h200fit.fullPath, function (error, features) {
             if (error) done(error);
             else {
-                features.should.have.property('image').have.property('width').below(201);
-                features.should.have.property('image').have.property('width').below(201);
+                features.should.have.property('width').below(201);
+                features.should.have.property('width').below(201);
                 done();
             }
         });
