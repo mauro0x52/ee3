@@ -60,7 +60,7 @@ describe('POST /app/[slug]/version/[number]/dialog', function () {
                 if (error) {
                     return done(error);
                 } else {
-                    should.exist(data.error);
+                    data.should.have.property('error').have.property('name', 'NotFoundError');
                     done();
                 }
             }
@@ -74,7 +74,7 @@ describe('POST /app/[slug]/version/[number]/dialog', function () {
                 if (error) {
                     return done(error);
                 } else {
-                    should.exist(data.error);
+                    data.should.have.property('error').have.property('name', 'NotFoundError');
                     done();
                 }
             }
@@ -90,7 +90,7 @@ describe('POST /app/[slug]/version/[number]/dialog', function () {
                 if (error) {
                     return done(error);
                 } else {
-                    should.exist(data.error);
+                    data.should.have.property('error').have.property('name', 'InvalidTokenError');
                     done();
                 }
             }
@@ -105,7 +105,7 @@ describe('POST /app/[slug]/version/[number]/dialog', function () {
                 if (error) {
                     return done(error);
                 } else {
-                    should.exist(data.error);
+                    data.should.have.property('error').have.property('name', 'ValidationError');
                     done();
                 }
             }
@@ -120,7 +120,7 @@ describe('POST /app/[slug]/version/[number]/dialog', function () {
                 if (error) {
                     return done(error);
                 } else {
-                    should.exist(data.error);
+                    data.should.have.property('error').have.property('name', 'ValidationError');
                     done();
                 }
             }
@@ -208,7 +208,7 @@ describe('GET /app/[slug]/version/[number]/dialogs', function () {
             if (error) {
                 return done(error);
             } else {
-                should.exist(data.error);
+                data.should.have.property('error').have.property('name', 'NotFoundError');
                 done();
             }
         });
@@ -219,7 +219,7 @@ describe('GET /app/[slug]/version/[number]/dialogs', function () {
             if (error) {
                 return done(error);
             } else {
-                should.exist(data.error);
+                data.should.have.property('error').have.property('name', 'NotFoundError');
                 done();
             }
         });
@@ -299,7 +299,7 @@ describe('GET /app/[slug]/version/[number]/dialog/[id]', function () {
             if (error) {
                 return done(error);
             } else {
-                should.exist(data.error);
+                data.should.have.property('error').have.property('name', 'NotFoundError');
                 done();
             }
         });
@@ -310,7 +310,7 @@ describe('GET /app/[slug]/version/[number]/dialog/[id]', function () {
             if (error) {
                 return done(error);
             } else {
-                should.exist(data.error);
+                data.should.have.property('error').have.property('name', 'NotFoundError');
                 done();
             }
         });
@@ -321,7 +321,7 @@ describe('GET /app/[slug]/version/[number]/dialog/[id]', function () {
             if (error) {
                 return done(error);
             } else {
-                should.exist(data.error);
+                data.should.have.property('error').have.property('name', 'NotFoundError');
                 done();
             }
         });
@@ -396,7 +396,7 @@ describe('DEL /app/[slug]/version/[number]/dialog/[id]', function () {
             if (error) {
                 return done(error);
             } else {
-                should.exist(data.error);
+                data.should.have.property('error').have.property('name', 'InvalidTokenError');
                 done();
             }
         });
@@ -407,7 +407,7 @@ describe('DEL /app/[slug]/version/[number]/dialog/[id]', function () {
             if (error) {
                 return done(error);
             } else {
-                should.exist(data.error);
+                data.should.have.property('error').have.property('name', 'NotFoundError');
                 done();
             }
         });
@@ -418,7 +418,7 @@ describe('DEL /app/[slug]/version/[number]/dialog/[id]', function () {
             if (error) {
                 return done(error);
             } else {
-                should.exist(data.error);
+                data.should.have.property('error').have.property('name', 'NotFoundError');
                 done();
             }
         });
@@ -429,7 +429,7 @@ describe('DEL /app/[slug]/version/[number]/dialog/[id]', function () {
             if (error) {
                 return done(error);
             } else {
-                should.exist(data.error);
+                data.should.have.property('error').have.property('name', 'NotFoundError');
                 done();
             }
         });
@@ -512,7 +512,7 @@ describe('PUT /app/[slug]/version/[number]/dialog/[id]', function () {
             if (error) {
                 return done(error);
             } else {
-                should.exist(data.error);
+                data.should.have.property('error').have.property('name', 'InvalidTokenError');
                 done();
             }
         });
@@ -527,7 +527,7 @@ describe('PUT /app/[slug]/version/[number]/dialog/[id]', function () {
             if (error) {
                 return done(error);
             } else {
-                should.exist(data.error);
+                data.should.have.property('error').have.property('name', 'NotFoundError');
                 done();
             }
         });
@@ -542,7 +542,7 @@ describe('PUT /app/[slug]/version/[number]/dialog/[id]', function () {
                 if (error) {
                     return done(error);
                 } else {
-                    should.exist(data.error);
+                    data.should.have.property('error').have.property('name', 'NotFoundError');
                     done();
                 }
             }
@@ -558,7 +558,7 @@ describe('PUT /app/[slug]/version/[number]/dialog/[id]', function () {
                 if (error) {
                     return done(error);
                 } else {
-                    should.exist(data.error);
+                    data.should.have.property('error').have.property('name', 'NotFoundError');
                     done();
                 }
             }

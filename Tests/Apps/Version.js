@@ -432,7 +432,7 @@ describe('PUT /app/[slug]/version/[numer]', function () {
     });
 
     it('versão inexistente', function(done) {
-        api.put('apps', '/app/' + slug + '/version/inexistente', {
+        api.put('apps', '/app/' + slug + '/version/inexistente', { 
             token : token,
             number  : rand()
         }, function(error, data, response) {

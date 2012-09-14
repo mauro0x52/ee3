@@ -50,7 +50,7 @@ describe('POST /user/[id]/third-party-login', function () {
             if (error) {
                 done(error);
             } else {
-                should.exist(data.error, 'deveria retornar erro');
+                data.should.have.property('error').have.property('name', 'InvalidTokenError');
                 done();
             }
         });
@@ -66,7 +66,7 @@ describe('POST /user/[id]/third-party-login', function () {
             if (error) {
                 done(error);
             } else {
-                should.exist(data.error, 'deveria retornar erro');
+                data.should.have.property('error').have.property('name', 'NotFoundError');
                 done();
             }
         });
@@ -81,7 +81,7 @@ describe('POST /user/[id]/third-party-login', function () {
             if (error) {
                 done(error);
             } else {
-                should.exist(data.error, 'deveria retornar erro');
+                data.should.have.property('error').have.property('name', 'ValidationError');
                 done();
             }
         });
@@ -96,7 +96,7 @@ describe('POST /user/[id]/third-party-login', function () {
             if (error) {
                 done(error);
             } else {
-                should.exist(data.error, 'deveria retornar erro');
+                data.should.have.property('error').have.property('name', 'ValidationError');
                 done();
             }
         });
@@ -169,7 +169,7 @@ describe('GET /user/[id]/third-party-logins', function () {
             if (error) {
                 done(error);
             } else {
-                should.exist(data.error, 'deveria retornar erro');
+                data.should.have.property('error').have.property('name', 'InvalidTokenError');
                 done();
             }
         });
@@ -180,7 +180,7 @@ describe('GET /user/[id]/third-party-logins', function () {
             if (error) {
                 done(error);
             } else {
-                should.exist(data.error, 'deveria retornar erro');
+                data.should.have.property('error').have.property('name', 'NotFoundError');
                 done();
             }
         });
@@ -248,7 +248,7 @@ describe('GET /user/[id]/third-party-login', function () {
             if (error) {
                 done(error);
             } else {
-                should.exist(data.error, 'deveria retornar erro');
+                data.should.have.property('error').have.property('name', 'InvalidTokenError');
                 done();
             }
         });
@@ -259,7 +259,7 @@ describe('GET /user/[id]/third-party-login', function () {
             if (error) {
                 done(error);
             } else {
-                should.exist(data.error, 'deveria retornar erro');
+                data.should.have.property('error').have.property('name', 'NotFoundError');
                 done();
             }
         });
@@ -270,7 +270,7 @@ describe('GET /user/[id]/third-party-login', function () {
             if (error) {
                 done(error);
             } else {
-                should.exist(data.error, 'deveria retornar erro');
+                data.should.have.property('error').have.property('name', 'NotFoundError');
                 done();
             }
         });
@@ -335,7 +335,7 @@ describe('DEL /user/[id]/third-party-login', function () {
             if (error) {
                 done(error);
             } else {
-                should.exist(data.error, 'deveria retornar erro');
+                data.should.have.property('error').have.property('name', 'InvalidTokenError');
                 done();
             }
         });
@@ -346,7 +346,7 @@ describe('DEL /user/[id]/third-party-login', function () {
             if (error) {
                 done(error);
             } else {
-                should.exist(data.error, 'deveria retornar erro');
+                data.should.have.property('error').have.property('name', 'NotFoundError');
                 done();
             }
         });
@@ -357,7 +357,7 @@ describe('DEL /user/[id]/third-party-login', function () {
             if (error) {
                 done(error);
             } else {
-                should.exist(data.error, 'deveria retornar erro');
+                data.should.have.property('error').have.property('name', 'NotFoundError');
                 done();
             }
         });
@@ -370,7 +370,7 @@ describe('DEL /user/[id]/third-party-login', function () {
             } else {
                 should.not.exist(data, 'erro inesperado');
                 api.get('auth', '/user/'+userId+'/third-party-login/' + third, {token : token}, function (error, data) {
-                    should.exist(data.error, 'não exclui o login externo');
+                    data.should.have.property('error').have.property('name', 'NotFoundError');
                     done();
                 });
             }

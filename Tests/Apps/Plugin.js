@@ -60,7 +60,7 @@ describe('POST /app/[slug]/version/[number]/plugin', function () {
                 if (error) {
                     return done(error);
                 } else {
-                    should.exist(data.error);
+                    data.should.have.property('error').have.property('name', 'NotFoundError');
                     done();
                 }
             }
@@ -74,7 +74,7 @@ describe('POST /app/[slug]/version/[number]/plugin', function () {
                 if (error) {
                     return done(error);
                 } else {
-                    should.exist(data.error);
+                    data.should.have.property('error').have.property('name', 'NotFoundError');
                     done();
                 }
             }
@@ -91,7 +91,7 @@ describe('POST /app/[slug]/version/[number]/plugin', function () {
                 if (error) {
                     return done(error);
                 } else {
-                    should.exist(data.error);
+                    data.should.have.property('error').have.property('name', 'InvalidTokenError');
                     done();
                 }
             }
@@ -107,7 +107,7 @@ describe('POST /app/[slug]/version/[number]/plugin', function () {
                 if (error) {
                     return done(error);
                 } else {
-                    should.exist(data.error);
+                    data.should.have.property('error').have.property('name', 'ValidationError');
                     done();
                 }
             }
@@ -123,7 +123,7 @@ describe('POST /app/[slug]/version/[number]/plugin', function () {
                 if (error) {
                     return done(error);
                 } else {
-                    should.exist(data.error);
+                    data.should.have.property('error').have.property('name', 'ValidationError');
                     done();
                 }
             }
@@ -211,7 +211,7 @@ describe('GET /app/[slug]/version/[number]/plugins', function () {
             if (error) {
                 return done(error);
             } else {
-                should.exist(data.error);
+                data.should.have.property('error').have.property('name', 'NotFoundError');
                 done();
             }
         });
@@ -222,7 +222,7 @@ describe('GET /app/[slug]/version/[number]/plugins', function () {
             if (error) {
                 return done(error);
             } else {
-                should.exist(data.error);
+                data.should.have.property('error').have.property('name', 'NotFoundError');
                 done();
             }
         });
@@ -302,7 +302,7 @@ describe('GET /app/[slug]/version/[number]/plugin/[id]', function () {
             if (error) {
                 return done(error);
             } else {
-                should.exist(data.error);
+                data.should.have.property('error').have.property('name', 'NotFoundError');
                 done();
             }
         });
@@ -313,7 +313,7 @@ describe('GET /app/[slug]/version/[number]/plugin/[id]', function () {
             if (error) {
                 return done(error);
             } else {
-                should.exist(data.error);
+                data.should.have.property('error').have.property('name', 'NotFoundError');
                 done();
             }
         });
@@ -324,7 +324,7 @@ describe('GET /app/[slug]/version/[number]/plugin/[id]', function () {
             if (error) {
                 return done(error);
             } else {
-                should.exist(data.error);
+                data.should.have.property('error').have.property('name', 'NotFoundError');
                 done();
             }
         });
@@ -399,7 +399,7 @@ describe('DEL /app/[slug]/version/[number]/plugin/[id]', function () {
             if (error) {
                 return done(error);
             } else {
-                should.exist(data.error);
+                data.should.have.property('error').have.property('name', 'InvalidTokenError');
                 done();
             }
         });
@@ -410,7 +410,7 @@ describe('DEL /app/[slug]/version/[number]/plugin/[id]', function () {
             if (error) {
                 return done(error);
             } else {
-                should.exist(data.error);
+                data.should.have.property('error').have.property('name', 'NotFoundError');
                 done();
             }
         });
@@ -421,7 +421,7 @@ describe('DEL /app/[slug]/version/[number]/plugin/[id]', function () {
             if (error) {
                 return done(error);
             } else {
-                should.exist(data.error);
+                data.should.have.property('error').have.property('name', 'NotFoundError');
                 done();
             }
         });
@@ -432,7 +432,7 @@ describe('DEL /app/[slug]/version/[number]/plugin/[id]', function () {
             if (error) {
                 return done(error);
             } else {
-                should.exist(data.error);
+                data.should.have.property('error').have.property('name', 'NotFoundError');
                 done();
             }
         });
@@ -445,7 +445,7 @@ describe('DEL /app/[slug]/version/[number]/plugin/[id]', function () {
             } else {
                 should.not.exist(data, 'erro inesperado');
                 api.get('apps', '/app/' + slug + '/version/' + version + '/plugin/' + plugin, {token : token}, function (error, data) {
-                    should.exist(data.error, 'não exclui');
+                    data.should.have.property('error').have.property('name', 'NotFoundError');
                     done();
                 });
             }
@@ -515,7 +515,7 @@ describe('PUT /app/[slug]/version/[number]/plugin/[id]', function () {
             if (error) {
                 return done(error);
             } else {
-                should.exist(data.error);
+                data.should.have.property('error').have.property('name', 'InvalidTokenError');
                 done();
             }
         });
@@ -530,7 +530,7 @@ describe('PUT /app/[slug]/version/[number]/plugin/[id]', function () {
             if (error) {
                 return done(error);
             } else {
-                should.exist(data.error);
+                data.should.have.property('error').have.property('name', 'NotFoundError');
                 done();
             }
         });
@@ -545,7 +545,7 @@ describe('PUT /app/[slug]/version/[number]/plugin/[id]', function () {
                 if (error) {
                     return done(error);
                 } else {
-                    should.exist(data.error);
+                    data.should.have.property('error').have.property('name', 'NotFoundError');
                     done();
                 }
             }
@@ -561,7 +561,7 @@ describe('PUT /app/[slug]/version/[number]/plugin/[id]', function () {
                 if (error) {
                     return done(error);
                 } else {
-                    should.exist(data.error);
+                    data.should.have.property('error').have.property('name', 'NotFoundError');
                     done();
                 }
             }

@@ -42,7 +42,7 @@ module.exports = function (app) {
                     //verifica o token do usuário
                     user.checkToken(request.param('token', null), function (valid) {
                         if (!valid) {
-                            response.send({error : {message : 'invalid token', name : 'InvalidToken'}});
+                            response.send({error : {message : 'invalid token', name : 'InvalidTokenError'}});
                         } else {
                             //gera o token
                             token = crypto.createHash('md5').update(user.login + user.password + request.params.app_id).digest('hex');
@@ -95,7 +95,7 @@ module.exports = function (app) {
                     //verifica o token do usuário
                     user.checkToken(request.param('token', null), function (valid) {
                         if (!valid) {
-                            response.send({error : {message : 'invalid token', name : 'InvalidToken'}});
+                            response.send({error : {message : 'invalid token', name : 'InvalidTokenError'}});
                         } else {
                             //busca a autorização
                             user.findAuthorizedApp(request.params.id, function (error, app) {
@@ -191,7 +191,7 @@ module.exports = function (app) {
                     //verifica o token do usuário
                     user.checkToken(request.param('token', null), function (valid) {
                         if (!valid) {
-                            response.send({error : {message : 'invalid token', name : 'InvalidToken'}});
+                            response.send({error : {message : 'invalid token', name : 'InvalidTokenError'}});
                         } else {
                             //busca a autorização
                             user.findAuthorizedApp(request.params.id, function (error, authorizedApp) {
@@ -199,13 +199,8 @@ module.exports = function (app) {
                                     response.send({error : error});
                                 } else {
                                     //verifica se a autorização foi encontrada
-<<<<<<< HEAD
                                     if (app === null) {
                                         response.send({error : { message : 'app not found', name : 'NotFoundError', id : request.params.id, model : 'app'}});
-=======
-                                    if (authorizedApp === null) {
-                                        response.send({error : 'app not found'});
->>>>>>> 2d28e37e0632690fd7093c1ccade6c78c67c2f1f
                                     } else {
                                         response.send({authorizedApp : authorizedApp});
                                     }
@@ -250,7 +245,7 @@ module.exports = function (app) {
                     //verifica o token do usuário
                     user.checkToken(request.param('token', null), function (valid) {
                         if (!valid) {
-                            response.send({error : {message : 'invalid token', name : 'InvalidToken'}});
+                            response.send({error : {message : 'invalid token', name : 'InvalidTokenError'}});
                         } else {
                             //busca a autorização
                             user.findAuthorizedApp(request.params.id, function (error, authorizedApp) {
@@ -258,13 +253,8 @@ module.exports = function (app) {
                                     response.send({error : error});
                                 } else {
                                     //verifica se a autorização foi encontrada
-<<<<<<< HEAD
                                     if (app === null) {
                                         response.send({error : { message : 'app not found', name : 'NotFoundError', id : request.params.id, model : 'app'}});
-=======
-                                    if (authorizedApp === null) {
-                                        response.send({error : 'app not found'});
->>>>>>> 2d28e37e0632690fd7093c1ccade6c78c67c2f1f
                                     } else {
                                         //edita dados da autorização
                                         authorizedApp.authorizationDate = request.param('authorizationDate', authorizedApp.authorizationDate);
