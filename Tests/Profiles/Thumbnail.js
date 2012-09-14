@@ -30,7 +30,7 @@ describe('POST /profile/:profile_id/thumbnail', function () {
             password : 'testando',
             password_confirmation : 'testando'
         }, function(error, data) {
-            user.token = data.token;
+            user.token = data.user.token;
             // cria empresa
             api.post('profiles', '/profile', {
                 token : user.token,
@@ -38,7 +38,7 @@ describe('POST /profile/:profile_id/thumbnail', function () {
                 surname : profile.surname,
                 about : 'sobre'
             }, function(error, data) {
-                profile = data;
+                profile = data.profile;
                 if (error) return done(error);
                 else done();
             });
@@ -102,15 +102,15 @@ describe('POST /profile/:profile_id/thumbnail', function () {
                 if (error) return done(error);
                 else {
                     should.not.exist(data.error);
-                    (data && data.original && data.original.url ? data.original.url : '')
-                        .should.match(/^http\:\/\/.+\/profiles\/.+\/thumbnails\/.+\/original\..+$/, 'não salvou o original corretamente');
-                    (data && data.small && data.small.url ? data.small.url : '')
-                        .should.match(/^http\:\/\/.+\/profiles\/.+\/thumbnails\/.+\/small\..+$/, 'não salvou o small corretamente');
-                    (data && data.medium && data.medium.url ? data.medium.url : '')
-                        .should.match(/^http\:\/\/.+\/profiles\/.+\/thumbnails\/.+\/medium\..+$/, 'não salvou o medium corretamente');
-                    (data && data.large && data.large.url ? data.large.url : '')
-                        .should.match(/^http\:\/\/.+\/profiles\/.+\/thumbnails\/.+\/large\..+$/, 'não salvou o large corretamente');
-                    profile.thumbnail = data;
+                    data.should.have.property('thumbnail').property('original').property('url')
+                        .match(/^http\:\/\/.+\/profiles\/.+\/thumbnails\/.+\/original\..+$/, 'não salvou o original corretamente');
+                    data.should.have.property('thumbnail').property('small').property('url')
+                        .match(/^http\:\/\/.+\/profiles\/.+\/thumbnails\/.+\/small\..+$/, 'não salvou o small corretamente');
+                    data.should.have.property('thumbnail').property('medium').property('url')
+                        .match(/^http\:\/\/.+\/profiles\/.+\/thumbnails\/.+\/medium\..+$/, 'não salvou o medium corretamente');
+                    data.should.have.property('thumbnail').property('large').property('url')
+                        .match(/^http\:\/\/.+\/profiles\/.+\/thumbnails\/.+\/large\..+$/, 'não salvou o large corretamente');
+                    profile.thumbnail = data.thumbnail;
                     done();
                 }
             }
@@ -128,10 +128,10 @@ describe('POST /profile/:profile_id/thumbnail', function () {
                 if (error) return done(error);
                 else {
                     should.not.exist(data.error);
-                    (data && data.original && data.original.url ? data.original.url : '')
-                        .should.match(/^http\:\/\/.+\/profiles\/.+\/thumbnails\/.+\/original\..+$/, 'não salvou o original corretamente');
-                    profile.thumbnail.should.not.equal(data && data.original && data.original.url ? data.original.url : '', 'as urls deveriam ser diferentes');
-                    profile.thumbnail = data;
+                    data.should.have.property('thumbnail').property('original').property('url')
+                        .match(/^http\:\/\/.+\/profiles\/.+\/thumbnails\/.+\/original\..+$/, 'não salvou o original corretamente')
+                        .not.equal(profile.thumbnail.original.url);
+                    profile.thumbnail = data.thumbnail;
                     done();
                 }
             }
@@ -159,7 +159,7 @@ describe('GET /company/:profile_id/thumbnail', function () {
                 password_confirmation : 'testando'
             },
             function(error, data) {
-                user2.token = data.token;
+                user2.token = data.user.token;
                 // cria profile
                 api.post('profiles', '/profile', {
                     token : user2.token,
@@ -167,7 +167,7 @@ describe('GET /company/:profile_id/thumbnail', function () {
                     surname : profile2.surname,
                     about : 'sobre'
                 }, function(error, data) {
-                    profile2 = data;
+                    profile2 = data.profile;
                     if (error) return done(error);
                     else done();
                 });
@@ -190,9 +190,9 @@ describe('GET /company/:profile_id/thumbnail', function () {
     });
     it('perfil com thumbnail', function (done) {
         api.get('profiles', '/profile/' + profile.slug + '/thumbnail', {}, function(error, data, response) {
-           should.not.exist(data.error, 'retornou erro inexperado');
-           (data && data.original && data.original.url ? data.original.url : '')
-               .should.equal(profile.thumbnail.original.url, 'não pegou o thumbnail correto');
+            should.not.exist(data.error, 'retornou erro inexperado');
+            data.should.have.property('thumbnail').property('original').property('url')
+               .equal(profile.thumbnail.original.url)
             done();
         });
     });
@@ -221,14 +221,16 @@ describe('GET /profile/:profile_id/thumbnail/:size', function() {
     it('pega tamanho medio', function (done) {
         api.get('profiles', '/profile/' + profile.slug + '/thumbnail/medium', {}, function(error, data, response) {
             should.not.exist(data.error, 'não pode retornar erro');
-            (profile.thumbnail.medium.url).should.equal(data.url);
+            data.should.have.property('medium').property('url')
+                .equal(profile.thumbnail.medium.url);
             done();
         });
     });
     it('tamanho qualquer retorna small', function (done) {
         api.get('profiles', '/profile/' + profile.slug + '/thumbnail/fasfsafsasfafas', {}, function(error, data, response) {
             should.not.exist(data.error, 'não pode retornar erro');
-            (profile.thumbnail.small.url).should.equal(data.url);
+            data.should.have.property('small').property('url')
+                .equal(profile.thumbnail.small.url);
             done();
         });
     });

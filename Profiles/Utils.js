@@ -64,7 +64,7 @@ exports.files = {
                     'file': restler.file(tmpFile.path, tmpFile.name, tmpFile.size, null, tmpFile.type)
                 }
             }).on('success', function(data) {
-                cb(undefined, data);
+                cb(undefined, data.image);
             }).on('error', function(error) {
                 cb(error, undefined);
             });
@@ -73,18 +73,10 @@ exports.files = {
             upload : function (file, path, cb) {
                 "use strict";
                 // arquivo da imagem temporaria
-                var tmpFile = file;
-                var restler = require('restler');
-
-
-                var restler = require('restler');
-                var restler1 = require('restler');
-                var restler2 = require('restler');
-                var restler3 = require('restler');
-                var resizeUrl = 'http://'+config.services.files.host+':'+config.services.files.port+'/image/resize',
+                var tmpFile = file,
+                    restler = require('restler'),
+                    resizeUrl = 'http://'+config.services.files.host+':'+config.services.files.port+'/image/resize',
                     sendUrl = 'http://'+config.services.files.host+':'+config.services.files.port+'/image',
-                    resultHandler,
-                    processed = 0,
                     imagesList = {},
                     originalPath;
 
@@ -99,8 +91,8 @@ exports.files = {
                     if (data.error) {
                         cb(data.error);
                     } else {
-                        originalPath = data.path;
-                        imagesList.original = data;
+                        originalPath = data.image.path;
+                        imagesList.original = data.image;
 
 
                         // thumbnail de 50 px
@@ -114,7 +106,7 @@ exports.files = {
                             }
                         })
                         .on('success', function (data) {
-                            imagesList.small = data;
+                            imagesList.small = data.image;
                             // thumbnail de 100 px
                             restler.post(resizeUrl, {
                                 data: {
@@ -126,7 +118,7 @@ exports.files = {
                                 }
                             })
                             .on('success', function (data) {
-                                imagesList.medium = data;
+                                imagesList.medium = data.image;
                                 // thumbnail de 200 px
                                 restler.post(resizeUrl, {
                                     data: {
@@ -138,7 +130,7 @@ exports.files = {
                                     }
                                 })
                                 .on('success', function (data) {
-                                    imagesList.large = data;
+                                    imagesList.large = data.image;
                                     cb(undefined, imagesList);
                                 })
                                 .on('error', function(error) {

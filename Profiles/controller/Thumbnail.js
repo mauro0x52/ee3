@@ -172,7 +172,7 @@ module.exports = function (app) {
                         sizeData[size] = profile.thumbnail[size];
                         response.send(sizeData);
                     } else {
-                        response.send(null);
+                        response.send({error : { message : 'size not found', name : 'NotFoundError', id : request.params.size, model : 'size'}});
                     }
                 }
             }
