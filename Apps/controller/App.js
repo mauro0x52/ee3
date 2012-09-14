@@ -29,6 +29,7 @@ module.exports = function (app) {
         var app;
 
         response.contentType('json');
+        response.header('Access-Control-Allow-Origin', '*');
 
         //valida o token do usuário
         auth(request.param('token', null), function (error, user) {
@@ -68,6 +69,7 @@ module.exports = function (app) {
      */
     app.get('/apps', function (request, response) {
         response.contentType('json');
+        response.header('Access-Control-Allow-Origin', '*');
 
         //busca todos os apps
         App.find(function (error, apps) {
@@ -94,6 +96,7 @@ module.exports = function (app) {
      */
     app.get('/app/:slug', function (request, response) {
         response.contentType('json');
+        response.header('Access-Control-Allow-Origin', '*');
 
         //busca todos os apps
         App.findOne({slug : request.params.slug}, function (error, app) {
@@ -125,6 +128,7 @@ module.exports = function (app) {
      */
     app.del('/app/:slug', function (request, response) {
         response.contentType('json');
+        response.header('Access-Control-Allow-Origin', '*');
 
         //valida o token do usuário
         auth(request.param('token', null), function (error, user) {
@@ -175,6 +179,7 @@ module.exports = function (app) {
      */
     app.put('/app/:slug', function (request, response) {
         response.contentType('json');
+        response.header('Access-Control-Allow-Origin', '*');
 
         //valida o token do usuário
         auth(request.param('token', null), function (error, user) {

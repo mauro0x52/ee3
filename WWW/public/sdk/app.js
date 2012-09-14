@@ -7,7 +7,7 @@
  *
  * @description : controlador de carregamento de aplicativos
  */
-sdk.modules.apps = function (sdk) {
+sdk.modules.apps = function () {
     "use strict";
 
     var ajax = new sdk.modules.ajax(this),
@@ -45,10 +45,10 @@ sdk.modules.apps = function (sdk) {
                 url : 'http://' + config.services.apps.host + ':' + config.services.apps.port + '/app/' + this.slug + '/versions'
             }, function (response) {
                 var i,
-                    versions;
+                    versions = [];
 
-                for (i = 0; i < response.length; i++) {
-                    versions.push(new Version(response[i], this.slug));
+                for (i = 0; i < response.versions.length; i++) {
+                    versions.push(new Version(response.versions[i], app.slug));
                 }
                 cb(versions);
             });
@@ -69,6 +69,7 @@ sdk.modules.apps = function (sdk) {
         this.number = version.number;
         this.app = app_slug;
         this._id = version._id;
+        var number = this.number;
 
         /** Tools
          *
@@ -83,10 +84,10 @@ sdk.modules.apps = function (sdk) {
                 url : 'http://' + config.services.apps.host + ':' + config.services.apps.port + '/app/' + this.app + '/version/' + this.number + '/tools'
             }, function (response) {
                 var i,
-                    tools;
+                    tools = [];
 
-                for (i = 0; i < response.length; i++) {
-                    tools.push(new Tool(response[i]));
+                for (i = 0; i < response.tools.length; i++) {
+                    tools.push(new Tool(response.tools[i], number, app_slug));
                 }
                 cb(tools);
             });
@@ -104,11 +105,12 @@ sdk.modules.apps = function (sdk) {
      * @param slug : slug da ferramenta
      * @param _id : id da ferramenta
      */
-    var Tool = function (tool) {
+    var Tool = function (tool, version_slug, app_slug) {
         this.name = tool.name;
         this.source = tool.source;
         this.slug = tool.slug;
         this._id = tool._id;
+        var that = this;
 
         /** Load
          *
@@ -118,7 +120,24 @@ sdk.modules.apps = function (sdk) {
          * @description : monta o contexto e carrega a ferramenta
          */
         this.load = function () {
-            var document = undefined,
+            document.getElementById('tool-name').innerHTML = this.name;
+            ajax.getJSON({
+                url : 'http://' + config.services.apps.host + ':' + config.services.apps.port + '/app/' + app_slug + '/version/' + version_slug + '/tool/' + this.slug
+            }, function (app) {
+                that.build();
+            })
+        };
+
+        /** Build
+         *
+         * @autor : Rafael Erthal
+         * @since : 2012-09
+         *
+         * @description : adiciona extensões do sdk na ferramenta
+         */
+        this.build = function () {
+            var prop,
+                document = undefined,
                 window = undefined,
                 navigator = undefined,
                 screen = undefined,
@@ -127,18 +146,22 @@ sdk.modules.apps = function (sdk) {
                 alert = undefined,
                 prompt = undefined,
                 confirm = undefined,
-                sdk = undefined,
                 header = undefined,
                 app;
 
-            console.spacer();
             console.log("Building app");
-
-            document.getElementById('tool-name').innerHTML = this.name;
             eval(this.source);
-            app.slug = app.slug;
-
-            this.build(app);
+            app.slug = this.slug;
+            
+            for (prop in sdk.modules) {
+                if (sdk.modules.hasOwnProperty(prop)) {
+                    if (prop !== 'app') {
+                        app[prop] = new sdk.modules[prop](app);
+                    }
+                }
+            }
+            app.config = sdk.config;    
+            
             console.log("Loading app");
             try {
                 if (app.Load) {
@@ -151,29 +174,9 @@ sdk.modules.apps = function (sdk) {
                 console.error(error);
             }
         };
-
-        /** Build
-         *
-         * @autor : Rafael Erthal
-         * @since : 2012-09
-         *
-         * @description : adiciona extensões do sdk na ferramenta
-         */
-        this.build = function (app) {
-            var prop;
-
-            for (prop in sdk.modules) {
-                if (sdk.modules.hasOwnProperty(prop)) {
-                    if (prop === 'app') {
-                        app[prop] = new sdk.modules[prop](sdk);
-                    }
-                }
-            }
-            app.config = sdk.config;
-        };
     };
 
-    /** List
+    /** ListAllApps
      *
      * @autor : Rafael Erthal
      * @since : 2012-09
@@ -182,7 +185,7 @@ sdk.modules.apps = function (sdk) {
      * @param user : usuário
      * @param cb : callback a ser chamado após encontrados os aplicativos
      */
-    this.list = function (user, cb) {
+    this.listAllApps = function (user, cb) {
         ajax.getJSON({
             url : 'http://' + config.services.auth.host + ':' + config.services.auth.port + '/user/' + user.login + '/apps',
             data : {token : user.token}
@@ -192,7 +195,7 @@ sdk.modules.apps = function (sdk) {
                 apps = [];
 
             if (response.error) {
-                console.error(response.error);
+                console.error(JSON.stringify(response.error));
             } else {
                 for (i = 0; i < response.length; i++) {
                     ajax.getJSON({
@@ -211,6 +214,36 @@ sdk.modules.apps = function (sdk) {
                         }
                     });
                 }
+            }
+        });
+    };
+
+    /** ListCompulsoryApps
+     *
+     * @autor : Rafael Erthal
+     * @since : 2012-09
+     *
+     * @description : lista todas os aplicativos autenticados de um usuário
+     * @param user : usuário
+     * @param cb : callback a ser chamado após encontrados os aplicativos
+     */
+    this.listCompulsoryApps = function (cb) {
+        ajax.getJSON({
+            url : 'http://' + config.services.apps.host + ':' + config.services.apps.port + '/apps'
+        }, function (response) {
+            var handled = 0,
+                i,
+                apps = [];
+
+            if (response.error) {
+                console.error(JSON.stringify(response.error));
+            } else {
+                for (i = 0; i < response.apps.length; i++) {
+                    if (response.apps[i].type === 'compulsory') {
+                        apps.push(new App(response.apps[i]));
+                    }
+                }
+                cb(apps);
             }
         });
     };

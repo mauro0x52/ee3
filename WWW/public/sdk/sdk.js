@@ -39,7 +39,7 @@ var Sdk = function () {
             invocation.open('get', url, true);
             invocation.send(null);
         } catch (error) {
-            console.error(error);
+            console.error(JSON.stringify(error));
         }
     }
 
@@ -79,59 +79,6 @@ var Sdk = function () {
     };
 };
 
-/** console
- *
- * @autor : Rafael Erthal
- * @since : 2012-08
- *
- * @description : logger do sdk
- */
-var console = {
-    /** log
-     *
-     * @autor : Rafael Erthal
-     * @since : 2012-08
-     *
-     * @description : apresenta mensagem no console
-     * @param data : mensagem a ser apresentada
-     */
-    log : function (data) {
-        "use strict";
-
-        var element = document.getElementById('console');
-        if (element) {
-            element.innerHTML = document.getElementById('console').innerHTML + data + '<br />';
-        }
-    },
-
-    /** error
-     *
-     * @autor : Rafael Erthal
-     * @since : 2012-08
-     *
-     * @description : apresenta mensagem de erro no console
-     * @param data : mensagem a ser apresentada
-     */
-    error : function (data) {
-        "use strict";
-
-        this.log('<font color="red">' + data + '</font>');
-    },
-
-    /** spacer
-     *
-     * @autor : Rafael Erthal
-     * @since : 2012-08
-     *
-     * @description : apresenta espaçamento no console
-     */
-    spacer : function () {
-        "use strict";
-
-        this.log('<font color="green">-------------------------------------------------------------------------------------------------------------</font>');
-    }
-};
-
 var sdk = new Sdk();
 (function () {
     "use strict";
@@ -142,6 +89,7 @@ var sdk = new Sdk();
             console.error(error);
         } else {
             console.log('modules loaded successfuly');
+            sdk.apps = new sdk.modules.apps(sdk);
             sdk.empreendemia.start();
             //sdk.App.tool('empresas', '0.1', 'lista-de-empresas');
         }

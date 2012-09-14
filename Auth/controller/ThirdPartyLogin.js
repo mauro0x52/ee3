@@ -26,6 +26,7 @@ module.exports = function (app) {
      */
     app.post('/user/:login/third-party-login', function (request, response) {
         response.contentType('json');
+        response.header('Access-Control-Allow-Origin', '*');
 
         //localiza o usuário
         User.findByIdentity(request.params.login, function (error, user) {
@@ -77,6 +78,7 @@ module.exports = function (app) {
      */
     app.get('/user/:login/third-party-logins', function (request, response) {
         response.contentType('json');
+        response.header('Access-Control-Allow-Origin', '*');
 
         //localiza o usuário
         User.findByIdentity(request.params.login, function (error, user) {
@@ -115,6 +117,7 @@ module.exports = function (app) {
      */
     app.get('/user/:login/third-party-login/:id', function (request, response) {
         response.contentType('json');
+        response.header('Access-Control-Allow-Origin', '*');
 
         //localiza o usuário
         User.findByIdentity(request.params.login, function (error, user) {
@@ -169,6 +172,7 @@ module.exports = function (app) {
             found = false;
 
         response.contentType('json');
+        response.header('Access-Control-Allow-Origin', '*');
 
         //localiza o usuário
         User.findByIdentity(request.params.login, function (error, user) {

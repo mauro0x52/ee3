@@ -29,6 +29,7 @@ module.exports = function (app) {
         var token;
 
         response.contentType('json');
+        response.header('Access-Control-Allow-Origin', '*');
 
         //localiza o usuário
         User.findByIdentity(request.params.login, function (error, user) {
@@ -82,6 +83,7 @@ module.exports = function (app) {
      */
     app.del('/user/:login/app/:id', function (request, response) {
         response.contentType('json');
+        response.header('Access-Control-Allow-Origin', '*');
 
         //localiza o usuário
         User.findByIdentity(request.params.login, function (error, user) {
@@ -140,6 +142,7 @@ module.exports = function (app) {
      */
     app.get('/user/:login/apps', function (request, response) {
         response.contentType('json');
+        response.header('Access-Control-Allow-Origin', '*');
 
         //localiza o usuário
         User.findByIdentity(request.params.login, function (error, user) {
@@ -178,6 +181,7 @@ module.exports = function (app) {
      */
     app.get('/user/:login/app/:id', function (request, response) {
         response.contentType('json');
+        response.header('Access-Control-Allow-Origin', '*');
 
         //localiza o usuário
         User.findByIdentity(request.params.login, function (error, user) {
@@ -232,6 +236,7 @@ module.exports = function (app) {
             found = false;
 
         response.contentType('json');
+        response.header('Access-Control-Allow-Origin', '*');
 
         //localiza o usuário
         User.findByIdentity(request.params.login, function (error, user) {
@@ -295,6 +300,7 @@ module.exports = function (app) {
             found = false;
 
         response.contentType('json');
+        response.header('Access-Control-Allow-Origin', '*');
 
         //localiza o usuário
         User.findByIdentity(request.params.login, function (error, user) {

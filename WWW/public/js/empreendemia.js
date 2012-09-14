@@ -45,7 +45,6 @@ sdk.empreendemia = {
      * @description : inicia o WWW do empreendemia
      */
     start : function () {
-        this.apps = new sdk.modules.apps(sdk);
         this.menu.load();
         //this.welcome.load();
     },
@@ -60,7 +59,7 @@ sdk.empreendemia = {
          */
         load : function () {
             this.user = 'lalalalla';
-            sdk.empreendemia.apps.list(this.user, function (apps) {
+            sdk.apps.listCompulsoryApps(function (apps) {
                 var i;
 
                 for (i = 0; i < apps.length; i++) {

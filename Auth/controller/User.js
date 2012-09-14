@@ -28,6 +28,7 @@ module.exports = function (app) {
         var user;
 
         response.contentType('json');
+        response.header('Access-Control-Allow-Origin', '*');
 
         // valida se a senha e a confirmação senha conferem
         if (request.param('password', null) === request.param('password_confirmation', null)) {
@@ -72,6 +73,7 @@ module.exports = function (app) {
      */
     app.put('/user/:login/deactivate', function (request, response) {
         response.contentType('json');
+        response.header('Access-Control-Allow-Origin', '*');
 
         //localiza o usuário
         User.findByIdentity(request.params.login, function (error, user) {
@@ -117,6 +119,7 @@ module.exports = function (app) {
      */
     app.put('/user/:login/activate', function (request, response) {
         response.contentType('json');
+        response.header('Access-Control-Allow-Origin', '*');
 
         //localiza o usuário
         User.findByIdentity(request.params.login, function (error, user) {
@@ -162,6 +165,7 @@ module.exports = function (app) {
      */
     app.put('/user/:login/password-recovery', function (request, response) {
         response.contentType('json');
+        response.header('Access-Control-Allow-Origin', '*');
 
         // valida se a senha e a confirmação senha conferem
         if (request.param('newpassword', null) === request.param('newpasswordconfirmation', null)) {
@@ -219,6 +223,7 @@ module.exports = function (app) {
      */
     app.put('/user/:login/login', function (request, response) {
         response.contentType('json');
+        response.header('Access-Control-Allow-Origin', '*');
 
         //localiza o usuário
         User.findByIdentity(request.params.login, function (error, user) {
@@ -262,6 +267,7 @@ module.exports = function (app) {
      */
     app.put('/user/:login/logout', function (request, response) {
         response.contentType('json');
+        response.header('Access-Control-Allow-Origin', '*');
 
         //localiza o usuário
         User.findByIdentity(request.params.login, function (error, user) {
@@ -307,6 +313,7 @@ module.exports = function (app) {
      */
     app.get('/user/validate', function (request, response) {
         response.contentType('json');
+        response.header('Access-Control-Allow-Origin', '*');
 
         //localiza o usuário
         User.findOne({token : request.param('token', '')}, function (error, user) {
