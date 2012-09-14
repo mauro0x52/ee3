@@ -45,8 +45,8 @@ describe('POST /conversant', function () {
             }, function(error, data, response) {
                 if (error) {
                     return done(error);
-                } else { 
-                    data.should.have.property('error');
+                } else {
+                    data.should.have.property('error').property('name', 'InvalidTokenError');
                     done();
                 }
             }
@@ -59,8 +59,8 @@ describe('POST /conversant', function () {
             }, function(error, data, response) {
                 if (error) {
                     return done(error);
-                } else { 
-                    data.should.have.property('error');
+                } else {
+                    data.should.have.property('error').property('name', 'ValidationError');
                     done();
                 }
             }
@@ -73,7 +73,7 @@ describe('POST /conversant', function () {
             }, function(error, data, response) {
                 if (error) {
                     return done(error);
-                } else { 
+                } else {
                     should.not.exist(data.error, 'erro inesperado');
                     data.should.have.property('conversant').have.property('_id');
                     data.should.have.property('conversant').have.property('label');
@@ -128,8 +128,8 @@ describe('PUT /conversant/[id]/change-label', function () {
             }, function(error, data, response) {
                 if (error) {
                     return done(error);
-                } else { 
-                    data.should.have.property('error');
+                } else {
+                    data.should.have.property('error').property('name', 'InvalidTokenError');
                     done();
                 }
             }
@@ -142,7 +142,7 @@ describe('PUT /conversant/[id]/change-label', function () {
             }, function(error, data, response) {
                 if (error) {
                     return done(error);
-                } else { 
+                } else {
                     obj = data;
                     data.should.not.have.property('error');
                     data.should.have.property('conversant').have.property('_id');
@@ -161,7 +161,7 @@ describe('PUT /conversant/[id]/change-label', function () {
             }, function(error, data, response) {
                 if (error) {
                     return done(error);
-                } else { 
+                } else {
                     should.not.exist(data.error, 'erro inesperado');
                     data.should.have.property('conversant').have.property('_id');
                     data.should.have.property('conversant').have.property('label', new_label);

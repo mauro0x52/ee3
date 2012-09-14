@@ -53,8 +53,8 @@ describe('POST /thread', function () {
             }, function(error, data, response) {
                 if (error) {
                     return done(error);
-                } else { 
-                    data.should.have.property('error');
+                } else {
+                    data.should.have.property('error').property('name', 'InvalidTokenError');
                     done();
                 }
             }
@@ -68,8 +68,8 @@ describe('POST /thread', function () {
             }, function(error, data, response) {
                 if (error) {
                     return done(error);
-                } else { 
-                    data.should.have.property('error');
+                } else {
+                    data.should.have.property('error').property('name', 'ValidationError');
                     done();
                 }
             }
@@ -83,8 +83,8 @@ describe('POST /thread', function () {
             }, function(error, data, response) {
                 if (error) {
                     return done(error);
-                } else { 
-                    data.should.have.property('error');
+                } else {
+                    data.should.have.property('error').property('name', 'ValidationError');
                     done();
                 }
             }
@@ -99,7 +99,7 @@ describe('POST /thread', function () {
             }, function(error, data, response) {
                 if (error) {
                     return done(error);
-                } else { 
+                } else {
                     should.not.exist(data.error, 'erro inesperado');
                     data.should.have.property('thread').have.property('_id');
                     data.should.have.property('thread').have.property('place');
@@ -161,7 +161,7 @@ describe('PUT /thread/[slug]', function () {
             if (error) {
                 return done(error);
             } else {
-                data.should.have.property('error');
+                data.should.have.property('error').property('name', 'InvalidTokenError');
                 done();
             }
         });
@@ -174,7 +174,7 @@ describe('PUT /thread/[slug]', function () {
             if (error) {
                 return done(error);
             } else {
-                data.should.have.property('error');
+                data.should.have.property('error').property('name', 'NotFoundError');
                 done();
             }
         });
@@ -251,7 +251,7 @@ describe('GET /threads', function () {
             if (error) {
                 return done(error);
             } else {
-                data.should.have.property('error');
+                data.should.have.property('error').property('name', 'InvalidTokenError');
                 done();
             }
         });
@@ -328,7 +328,7 @@ describe('POST /thread/[slug]/message', function () {
             if (error) {
                 return done(error);
             } else {
-                data.should.have.property('error');
+                data.should.have.property('error').property('name', 'InvalidTokenError');
                 done();
             }
         });
@@ -342,7 +342,7 @@ describe('POST /thread/[slug]/message', function () {
             if (error) {
                 return done(error);
             } else {
-                data.should.have.property('error');
+                data.should.have.property('error').property('name', 'NotFoundError');
                 done();
             }
         });
@@ -355,7 +355,7 @@ describe('POST /thread/[slug]/message', function () {
             if (error) {
                 return done(error);
             } else {
-                data.should.have.property('error');
+                data.should.have.property('error').property('name', 'ValidationError');
                 done();
             }
         });
@@ -440,7 +440,7 @@ describe('GET /thread/[slug]/messages', function () {
             if (error) {
                 return done(error);
             } else {
-                data.should.have.property('error');
+                data.should.have.property('error').property('name', 'InvalidTokenError');
                 done();
             }
         });
@@ -453,7 +453,7 @@ describe('GET /thread/[slug]/messages', function () {
             if (error) {
                 return done(error);
             } else {
-                data.should.have.property('error');
+                data.should.have.property('error').property('name', 'NotFoundError');
                 done();
             }
         });
@@ -542,7 +542,7 @@ describe('GET /thread/[slug]/unread-messages', function () {
             if (error) {
                 return done(error);
             } else {
-                data.should.have.property('error');
+                data.should.have.property('error').property('name', 'InvalidTokenError');
                 done();
             }
         });
@@ -555,7 +555,7 @@ describe('GET /thread/[slug]/unread-messages', function () {
             if (error) {
                 return done(error);
             } else {
-                data.should.have.property('error');
+                data.should.have.property('error').property('name', 'NotFoundError');
                 done();
             }
         });
