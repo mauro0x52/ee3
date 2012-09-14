@@ -80,7 +80,7 @@ productSchema.methods.findImage = function (id, cb) {
     if (image) {
         cb(undefined, image);
     } else {
-        cb('image not found', null);
+        cb({message : 'image not found', name : 'NotFoundError', id : id, model : 'image'}, null);
     }
 };
 

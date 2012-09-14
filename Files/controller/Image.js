@@ -171,7 +171,7 @@ module.exports = function (app) {
                     response.send(error);
                 } else {
                     if (!file) {
-                        response.send({error: fileId + " não foi encontrado"});
+                        response.send({error : { message : 'image not found', name : 'NotFoundError', id : '', model : 'image'}});
                     } else {
                         response.send({image : file});
                     }

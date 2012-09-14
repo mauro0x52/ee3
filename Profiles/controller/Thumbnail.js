@@ -152,7 +152,8 @@ module.exports = function (app) {
     app.get('/profile/:profile_id/thumbnail/:size', function (request, response) {
         response.contentType('json');
 
-        var size = request.param('size');
+        var size = request.param('size'),
+            sizeData;
 
         if (size !== 'original' && size !== 'large' && size !== 'medium' && size !== 'small' ) {
             size = 'small';
@@ -167,7 +168,9 @@ module.exports = function (app) {
                     response.send({error : { message : 'profile not found', name : 'NotFoundError', id : request.params.slug, model : 'profile'}});
                 } else {
                     if (profile.thumbnail[size] && profile.thumbnail[size].url) {
-                        response.send({size : profile.thumbnail[size]});
+                        sizeData = {};
+                        sizeData[size] = profile.thumbnail[size];
+                        response.send(sizeData);
                     } else {
                         response.send(null);
                     }

@@ -26,7 +26,7 @@ describe('POST /company/:company_slug/product/:product_slug/image', function() {
             password : 'testando',
             password_confirmation : 'testando'
         }, function(error, data) {
-            userA.token = data.token;
+            userA.token = data.user.token;
             // cria empresa
             api.post('companies', '/company', {
                 token : userA.token,
@@ -36,28 +36,28 @@ describe('POST /company/:company_slug/product/:product_slug/image', function() {
                 profile : 'all',
                 active : true
             }, function(error, data) {
-                companyA = data;
+                companyA = data.company;
                 api.post('companies', '/company/' + companyA.slug + '/product',
                     {
                         token : userA.token,
                         name : 'Um produto ' + random
                     },
                     function(error, data, response) {
-                        productA = data;
+                        productA = data.product;
                         api.post('companies', '/company/' + companyA.slug + '/product',
                         {
                             token : userA.token,
                             name : 'Outro produto' + random
                         },
                         function(error, data, response) {
-                            productA2 = data;
+                            productA2 = data.product;
                             // cria usuario B
                             api.post('auth', '/user', {
                                 username : userB.username,
                                 password : 'testando',
                                 password_confirmation : 'testando'
                             }, function(error, data) {
-                                userB.token = data.token;
+                                userB.token = data.user.token;
                                // cria empresa
                                api.post('companies', '/company', {
                                    token : userB.token,
@@ -67,7 +67,7 @@ describe('POST /company/:company_slug/product/:product_slug/image', function() {
                                    profile : 'all',
                                    active : true
                                }, function(error, data) {
-                                   companyB = data;
+                                   companyB = data.company;
                                    done();
                                });
                             });
@@ -227,13 +227,13 @@ describe('POST /company/:company_slug/product/:product_slug/image', function() {
                 if (error) return done(error);
                 else {
                     data.should.not.have.property('error');
-                    data.should.have.property('url')
+                    data.should.have.property('image').property('url')
                         .match(/^http\:\/\/.+\/companies\/.+\/products\/.+\/images\/.+\/original\..+$/);
-                    data.should.have.property('_id');
-                    data.should.have.property('file');
-                    data.should.have.property('title').equal('Titulo da imagem');
-                    data.should.have.property('legend').equal('Legenda da imagem');
-                    imageA = data;
+                    data.should.have.property('image').property('_id');
+                    data.should.have.property('image').property('file');
+                    data.should.have.property('image').property('title').equal('Titulo da imagem');
+                    data.should.have.property('image').property('legend').equal('Legenda da imagem');
+                    imageA = data.image;
                     done();
                 }
             }
@@ -314,15 +314,15 @@ describe('GET /company/:company_slug/product/:product_slug/images', function() {
             if (error) return done(error);
             else {
                 data.should.not.have.property('error');
-                data.should.be.an.instanceOf(Array);
-                data.length.should.be.above(10);
-                for (var i = 0; i < data.length; i++) {
-                    data[i].should.have.property('url')
+                data.should.have.property('images').instanceOf(Array);
+                data.images.length.should.be.above(10);
+                for (var i = 0; i < data.images.length; i++) {
+                    data.images[i].should.have.property('url')
                         .match(/^http\:\/\/.+\/companies\/.+\/products\/.+\/images\/.+\/original\..+$/);
-                    data[i].should.have.property('_id');
-                    data[i].should.have.property('file');
-                    data[i].should.have.property('title');
-                    data[i].should.have.property('legend');
+                    data.images[i].should.have.property('_id');
+                    data.images[i].should.have.property('file');
+                    data.images[i].should.have.property('title');
+                    data.images[i].should.have.property('legend');
                 }
                 done();
             }
@@ -379,15 +379,15 @@ describe('GET /company/:company_slug/product/:product_slug/image/:id', function(
             }
         });
     });
-    it('dados da imagens', function(done) {
+    it('dados da imagem', function(done) {
         api.get('companies', '/company/' + companyA.slug + '/product/' + productA.slug + '/image/' + imageA._id, {}, function(error, data, response) {
             if (error) return done(error);
             else {
-                data.should.have.property('url').equal(imageA.url);
-                data.should.have.property('_id').equal(imageA._id);
-                data.should.have.property('file').equal(imageA.file);
-                data.should.have.property('title').equal(imageA.title);
-                data.should.have.property('legend').equal(imageA.legend);
+                data.should.have.property('image').property('url').equal(imageA.url);
+                data.should.have.property('image').property('_id').equal(imageA._id);
+                data.should.have.property('image').property('file').equal(imageA.file);
+                data.should.have.property('image').property('title').equal(imageA.title);
+                data.should.have.property('image').property('legend').equal(imageA.legend);
                 done();
             }
         });
@@ -498,18 +498,18 @@ describe('PUT /company/:company_slug/product/:product_slug/image/:id', function(
             if (error) return done(error);
             else {
                 data.should.not.have.property('error');
-                data.should.have.property('_id').equal(imageA._id);
-                data.should.have.property('file').equal(imageA.file);
-                data.should.have.property('title').equal('Atualizando titulo');
-                data.should.have.property('legend').equal('Atualizando legenda');
+                data.should.have.property('image').property('_id').equal(imageA._id);
+                data.should.have.property('image').property('file').equal(imageA.file);
+                data.should.have.property('image').property('title').equal('Atualizando titulo');
+                data.should.have.property('image').property('legend').equal('Atualizando legenda');
                 api.get('companies', '/company/' + companyA.slug + '/product/' + productA.slug + '/image/' + imageA._id, {}, function(error, data, response) {
                     if (error) return done(error);
                     else {
                         data.should.not.have.property('error');
-                        data.should.have.property('_id').equal(imageA._id);
-                        data.should.have.property('file').equal(imageA.file);
-                        data.should.have.property('title').equal('Atualizando titulo');
-                        data.should.have.property('legend').equal('Atualizando legenda');
+                        data.should.have.property('image').property('_id').equal(imageA._id);
+                        data.should.have.property('image').property('file').equal(imageA.file);
+                        data.should.have.property('image').property('title').equal('Atualizando titulo');
+                        data.should.have.property('image').property('legend').equal('Atualizando legenda');
                         done();
                     }
                 });

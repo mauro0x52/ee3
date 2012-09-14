@@ -27,7 +27,7 @@ describe('POST /company/[id]/thumbnail', function () {
             password : 'testando',
             password_confirmation : 'testando'
         }, function(error, data) {
-            user.token = data.token;
+            user.token = data.user.token;
             // cria empresa
             api.post('companies', '/company', {
                 token : user.token,
@@ -37,7 +37,7 @@ describe('POST /company/[id]/thumbnail', function () {
                 profile : 'all',
                 active : true
             }, function(error, data) {
-                company = data;
+                company = data.company;
                 if (error) return done(error);
                 else done();
             });
@@ -104,15 +104,15 @@ describe('POST /company/[id]/thumbnail', function () {
                 else {
                     should.exist(data, 'não retornou dado nenhum');
                     data.should.not.have.property('error');
-                    data.should.have.property('original').property('url')
+                    data.should.have.property('thumbnail').property('original').property('url')
                         .match(/^http\:\/\/.+\/companies\/.+\/thumbnails\/.+\/original\..+$/);
-                    data.should.have.property('small').property('url')
+                    data.should.have.property('thumbnail').property('small').property('url')
                         .match(/^http\:\/\/.+\/companies\/.+\/thumbnails\/.+\/small..+$/);
-                    data.should.have.property('medium').property('url')
+                    data.should.have.property('thumbnail').property('medium').property('url')
                         .match(/^http\:\/\/.+\/companies\/.+\/thumbnails\/.+\/medium..+$/);
-                    data.should.have.property('large').property('url')
+                    data.should.have.property('thumbnail').property('large').property('url')
                         .match(/^http\:\/\/.+\/companies\/.+\/thumbnails\/.+\/large..+$/);
-                    company.thumbnail = data;
+                    company.thumbnail = data.thumbnail;
                     done();
                 }
             }
@@ -133,16 +133,16 @@ describe('POST /company/[id]/thumbnail', function () {
                 else {
                     should.exist(data, 'não retornou dado nenhum');
                     data.should.not.have.property('error');
-                    data.should.have.property('original').property('url')
+                    data.should.have.property('thumbnail').property('original').property('url')
                         .match(/^http\:\/\/.+\/companies\/.+\/thumbnails\/.+\/original\..+$/)
                         .not.equal(company.thumbnail.original.url);
-                    data.should.have.property('small').property('url')
+                    data.should.have.property('thumbnail').property('small').property('url')
                         .match(/^http\:\/\/.+\/companies\/.+\/thumbnails\/.+\/small..+$/);
-                    data.should.have.property('medium').property('url')
+                    data.should.have.property('thumbnail').property('medium').property('url')
                         .match(/^http\:\/\/.+\/companies\/.+\/thumbnails\/.+\/medium..+$/);
-                    data.should.have.property('large').property('url')
+                    data.should.have.property('thumbnail').property('large').property('url')
                         .match(/^http\:\/\/.+\/companies\/.+\/thumbnails\/.+\/large..+$/);
-                    company.thumbnail = data;
+                    company.thumbnail = data.thumbnail;
                     done();
                 }
             }
@@ -165,7 +165,7 @@ describe('GET /company/[id]/thumbnail', function () {
                 password_confirmation : 'testando'
             },
             function(error, data) {
-                user2.token = data.token;
+                user2.token = data.user.token;
                 // cria empresa
                 api.post('companies', '/company',
                     {
@@ -182,7 +182,7 @@ describe('GET /company/[id]/thumbnail', function () {
                         if (error) return done(error);
                         else {
                             done();
-                            company2 = data;
+                            company2 = data.company;
                         }
                     }
                 );
@@ -208,13 +208,13 @@ describe('GET /company/[id]/thumbnail', function () {
                 response.should.have.status(200);
                 should.exist(data, 'não retornou dado nenhum');
                 data.should.not.have.property('error');
-                data.should.have.property('original').property('url')
+                data.should.have.property('thumbnail').property('original').property('url')
                     .match(/^http\:\/\/.+\/companies\/.+\/thumbnails\/.+\/original\..+$/);
-                data.should.have.property('small').property('url')
+                data.should.have.property('thumbnail').property('small').property('url')
                     .match(/^http\:\/\/.+\/companies\/.+\/thumbnails\/.+\/small..+$/);
-                data.should.have.property('medium').property('url')
+                data.should.have.property('thumbnail').property('medium').property('url')
                     .match(/^http\:\/\/.+\/companies\/.+\/thumbnails\/.+\/medium..+$/);
-                data.should.have.property('large').property('url')
+                data.should.have.property('thumbnail').property('large').property('url')
                     .match(/^http\:\/\/.+\/companies\/.+\/thumbnails\/.+\/large..+$/);
                 done();
             }
@@ -225,7 +225,7 @@ describe('GET /company/[id]/thumbnail', function () {
             if (error) return done(error);
             else {
                 response.should.have.status(200);
-                should.not.exist(data, 'deveria retornar undefined')
+                should.not.exist(data)
                 done();
             }
         });
@@ -258,7 +258,7 @@ describe('GET /company/:company_id/thumbnail/:size', function() {
             if (error) return done(error);
             else {
                 data.should.not.have.property('error');
-                data.should.have.property('url').equal(company.thumbnail.medium.url)
+                data.should.have.property('medium').property('url').equal(company.thumbnail.medium.url)
                 should.not.exist(data.error, 'não pode retornar erro');
                 done();
             }
@@ -269,7 +269,7 @@ describe('GET /company/:company_id/thumbnail/:size', function() {
             if (error) return done(error);
             else {
                 data.should.not.have.property('error');
-                data.should.have.property('url').equal(company.thumbnail.small.url)
+                data.should.have.property('small').property('url').equal(company.thumbnail.small.url)
                 done();
             }
         });
@@ -300,7 +300,7 @@ describe('DEL /company/[id]/thumbnail', function() {
             password : 'testando',
             password_confirmation : 'testando'
         }, function(error, data) {
-            user3.token = data.token;
+            user3.token = data.user.token;
             // cria empresa
             api.post('companies', '/company', {
                 token : user3.token,
@@ -312,7 +312,7 @@ describe('DEL /company/[id]/thumbnail', function() {
             }, function(error, data) {
                 if (error) return done(error);
                 else {
-                    company3 = data;
+                    company3 = data.company;
                     done();
                 }
             });
@@ -376,7 +376,7 @@ describe('POST /company/[id]/product/[id]/thumbnail', function () {
         }, function(error, data, response) {
             if (error) return done(error);
             else {
-                product = data;
+                product = data.product;
                 done();
             }
         });
@@ -426,15 +426,15 @@ describe('POST /company/[id]/product/[id]/thumbnail', function () {
                 if (error) return done(error);
                 else {
                     data.should.not.have.property('error');
-                    data.should.have.property('original').property('url')
+                    data.should.have.property('thumbnail').property('original').property('url')
                         .match(/^http\:\/\/.+\/companies\/.+\/products\/.+\/thumbnails\/.+\/original\..+$/);
-                    data.should.have.property('small').property('url')
+                    data.should.have.property('thumbnail').property('small').property('url')
                         .match(/^http\:\/\/.+\/companies\/.+\/products\/.+\/thumbnails\/.+\/small..+$/);
-                    data.should.have.property('medium').property('url')
+                    data.should.have.property('thumbnail').property('medium').property('url')
                         .match(/^http\:\/\/.+\/companies\/.+\/products\/.+\/thumbnails\/.+\/medium..+$/);
-                    data.should.have.property('large').property('url')
+                    data.should.have.property('thumbnail').property('large').property('url')
                         .match(/^http\:\/\/.+\/companies\/.+\/products\/.+\/thumbnails\/.+\/large..+$/);
-                    product.thumbnail = data;
+                    product.thumbnail = data.thumbnail;
                     done();
                 }
             }
@@ -452,16 +452,16 @@ describe('POST /company/[id]/product/[id]/thumbnail', function () {
                 if (error) return done(error);
                 else {
                     data.should.not.have.property('error');
-                    data.should.have.property('original').property('url')
-                        .match(/^http\:\/\/.+\/companies\/.+\/products\/.+\/thumbnails\/.+\/original\..+$/);
-                    data.should.have.property('small').property('url')
+                    data.should.have.property('thumbnail').property('original').property('url')
+                        .match(/^http\:\/\/.+\/companies\/.+\/products\/.+\/thumbnails\/.+\/original\..+$/)
+                        .not.equal(product.thumbnail.original.url);
+                    data.should.have.property('thumbnail').property('small').property('url')
                         .match(/^http\:\/\/.+\/companies\/.+\/products\/.+\/thumbnails\/.+\/small..+$/);
-                    data.should.have.property('medium').property('url')
+                    data.should.have.property('thumbnail').property('medium').property('url')
                         .match(/^http\:\/\/.+\/companies\/.+\/products\/.+\/thumbnails\/.+\/medium..+$/);
-                    data.should.have.property('large').property('url')
+                    data.should.have.property('thumbnail').property('large').property('url')
                         .match(/^http\:\/\/.+\/companies\/.+\/products\/.+\/thumbnails\/.+\/large..+$/);
-                    product.thumbnail.original.url.should.not.equal(data && data.original && data.large.url ? data.original.url : '', 'as urls deveriam ser diferentes');
-                    product.thumbnail = data;
+                    product.thumbnail = data.thumbnail;
                     done();
                 }
             }
@@ -480,7 +480,7 @@ describe('GET /company/:company_id/product/:product_id/thumbnail', function () {
         }, function(error, data, response) {
             if (error) return done(error);
             else {
-                product2 = data;
+                product2 = data.product;
                 done();
             }
         });
@@ -514,10 +514,10 @@ describe('GET /company/:company_id/product/:product_id/thumbnail', function () {
             else {
                 should.exist(data);
                 data.should.not.have.property('error');
-                data.should.have.property('original').property('url').equal(product.thumbnail.original.url);
-                data.should.have.property('small').property('url').equal(product.thumbnail.small.url);
-                data.should.have.property('medium').property('url').equal(product.thumbnail.medium.url);
-                data.should.have.property('large').property('url').equal(product.thumbnail.large.url);
+                data.should.have.property('thumbnail').property('original').property('url').equal(product.thumbnail.original.url);
+                data.should.have.property('thumbnail').property('small').property('url').equal(product.thumbnail.small.url);
+                data.should.have.property('thumbnail').property('medium').property('url').equal(product.thumbnail.medium.url);
+                data.should.have.property('thumbnail').property('large').property('url').equal(product.thumbnail.large.url);
                 done();
             }
         });
@@ -568,7 +568,7 @@ describe('GET /company/:company_id/product/:product_id/thumbnail/:size', functio
             if (error) return done(error);
             else {
                 data.should.not.have.property('error');
-                data.should.have.property('url').equal(product.thumbnail.medium.url);
+                data.should.have.property('medium').property('url').equal(product.thumbnail.medium.url);
                 done();
             }
         });
@@ -578,7 +578,7 @@ describe('GET /company/:company_id/product/:product_id/thumbnail/:size', functio
             if (error) return done(error);
             else {
                 data.should.not.have.property('error');
-                data.should.have.property('url').equal(product.thumbnail.small.url);
+                data.should.have.property('small').property('url').equal(product.thumbnail.small.url);
                 done();
             }
         });

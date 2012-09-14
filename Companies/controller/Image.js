@@ -187,7 +187,7 @@ module.exports = function (app) {
                                     } else {
                                         //verifica se a imagem foi encontrada
                                         if (image === null) {
-                                            response.send({error : { message : 'image not found'});
+                                            response.send({error : {message :  'image not found', name : 'NotFoundError', id : request.params.image_id, model : 'image'}});
                                         } else {
                                             response.send({image : image});
                                         }

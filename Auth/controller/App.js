@@ -199,13 +199,8 @@ module.exports = function (app) {
                                     response.send({error : error});
                                 } else {
                                     //verifica se a autorização foi encontrada
-<<<<<<< HEAD
-                                    if (app === null) {
-                                        response.send({error : { message : 'app not found', name : 'NotFoundError', id : request.params.id, model : 'app'}});
-=======
                                     if (authorizedApp === null) {
-                                        response.send({error : 'app not found'});
->>>>>>> 2d28e37e0632690fd7093c1ccade6c78c67c2f1f
+                                        response.send({error : { message : 'app not found', name : 'NotFoundError', id : request.params.id, model : 'app'}});
                                     } else {
                                         response.send({authorizedApp : authorizedApp});
                                     }
@@ -258,13 +253,8 @@ module.exports = function (app) {
                                     response.send({error : error});
                                 } else {
                                     //verifica se a autorização foi encontrada
-<<<<<<< HEAD
-                                    if (app === null) {
-                                        response.send({error : { message : 'app not found', name : 'NotFoundError', id : request.params.id, model : 'app'}});
-=======
                                     if (authorizedApp === null) {
-                                        response.send({error : 'app not found'});
->>>>>>> 2d28e37e0632690fd7093c1ccade6c78c67c2f1f
+                                        response.send({error : { message : 'app not found', name : 'NotFoundError', id : request.params.id, model : 'app'}});
                                     } else {
                                         //edita dados da autorização
                                         authorizedApp.authorizationDate = request.param('authorizationDate', authorizedApp.authorizationDate);
