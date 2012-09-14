@@ -58,8 +58,8 @@ describe('POST /profile/[slug]/job', function () {
             }, function(error, data, response) {
                 if (error) {
                     return done(error);
-                } else { 
-                    data.should.have.property('error');
+                } else {
+                    data.should.have.property('error').property('name', 'NotFoundError');
                     done();
                 }
             }
@@ -77,8 +77,8 @@ describe('POST /profile/[slug]/job', function () {
             }, function(error, data, response) {
                 if (error) {
                     return done(error);
-                } else { 
-                    data.should.have.property('error');
+                } else {
+                    data.should.have.property('error').property('name', 'InvalidTokenError');
                     done();
                 }
             }
@@ -95,8 +95,8 @@ describe('POST /profile/[slug]/job', function () {
             }, function(error, data, response) {
                 if (error) {
                     return done(error);
-                } else { 
-                    data.should.have.property('error');
+                } else {
+                    data.should.have.property('error').property('name', 'ValidationError');
                     done();
                 }
             }
@@ -114,7 +114,7 @@ describe('POST /profile/[slug]/job', function () {
             }, function(error, data, response) {
                 if (error) {
                     return done(error);
-                } else { 
+                } else {
                     should.exist(data);
                     data.should.not.have.property('error');
                     data.should.have.property('job').have.property('_id');
@@ -173,7 +173,7 @@ describe('GET /profile/[slug]/jobes', function () {
             });
         });
     });
-    
+
     it('url tem que existir', function(done) {
         api.get('profiles', '/profile/' + profile + '/jobs', {}, function(error, data, response) {
             if (error) {
@@ -185,24 +185,24 @@ describe('GET /profile/[slug]/jobes', function () {
             }
         });
     });
-    
+
     it('perfil inexistente', function(done) {
         api.get('profiles', '/profile/inexistente/jobs', {}, function(error, data, response) {
             if (error) {
                 return done(error);
             } else {
-                data.should.have.property('error');
+                data.should.have.property('error').property('name', 'NotFoundError');
                 done();
             }
         });
     });
-    
+
     it('listar jobs', function(done) {
         api.get('profiles', '/profile/' + profile + '/jobs', {}, function(error, data, response) {
             if (error) {
                 return done(error);
             } else {
-                should.not.exist(data.error, 'erro inesperado');                
+                should.not.exist(data.error, 'erro inesperado');
                 data.jobs.length.should.be.above(19);
                 for (var i = 0 ; i < data.jobs.length; i = i + 1) {
                     data.jobs[i].should.have.property('_id');
@@ -257,7 +257,7 @@ describe('GET /profile/[slug]/job/[id]', function () {
             });
         });
     });
-    
+
     it('url tem que existir', function(done) {
         api.get('profiles', '/profile/' + profile + '/job/' + job, {}, function(error, data, response) {
             if (error) {
@@ -269,24 +269,24 @@ describe('GET /profile/[slug]/job/[id]', function () {
             }
         });
     });
-    
+
     it('perfil inexistente', function(done) {
         api.get('profiles', '/profile/inexistente/job/' + job, {}, function(error, data, response) {
             if (error) {
                 return done(error);
             } else {
-                data.should.have.property('error');
+                data.should.have.property('error').property('name', 'NotFoundError');
                 done();
             }
         });
     });
-    
+
     it('exibir contato', function(done) {
         api.get('profiles', '/profile/' + profile + '/job/' + job, {}, function(error, data, response) {
             if (error) {
                 return done(error);
             } else {
-                should.not.exist(data.error, 'erro inesperado');    
+                should.not.exist(data.error, 'erro inesperado');
                 data.should.have.property('job').have.property('_id');
                 data.should.have.property('job').have.property('name');
                 data.should.have.property('job').have.property('companyName');
@@ -338,7 +338,7 @@ describe('DEL /profile/[slug]/job/[id]', function () {
             });
         });
     });
-    
+
     it('url tem que existir', function(done) {
         api.del('profiles', '/profile/' + profile + '/job/' + job, {}, function(error, data, response) {
             if (error) {
@@ -350,29 +350,29 @@ describe('DEL /profile/[slug]/job/[id]', function () {
             }
         });
     });
-    
+
     it('token inválido', function(done) {
         api.del('profiles', '/profile/' + profile + '/job/' + job, {token : 'invalido'}, function(error, data, response) {
             if (error) {
                 return done(error);
             } else {
-                data.should.have.property('error');
+                data.should.have.property('error').property('name', 'InvalidTokenError');
                 done();
             }
         });
     });
-    
+
     it('perfil inexistente', function(done) {
         api.del('profiles', '/profile/inexistente/job/' + job, {token : token}, function(error, data, response) {
             if (error) {
                 return done(error);
             } else {
-                data.should.have.property('error');
+                data.should.have.property('error').property('name', 'NotFoundError');
                 done();
             }
         });
     });
-    
+
     it('remove job', function(done) {
         api.del('profiles', '/profile/' + profile + '/job/' + job, {token : token}, function(error, data, response) {
             if (error) {
@@ -429,7 +429,7 @@ describe('PUT /profile/[slug]/job/[id]', function () {
             });
         });
     });
-    
+
     it('url tem que existir', function(done) {
         api.put('profiles', '/profile/' + profile + '/job/' + job, {}, function(error, data, response) {
             if (error) {
@@ -441,7 +441,7 @@ describe('PUT /profile/[slug]/job/[id]', function () {
             }
         });
     });
-    
+
     it('token inválido', function(done) {
         api.put('profiles', '/profile/' + profile + '/job/' + job, {
             token : 'invalido',
@@ -454,12 +454,12 @@ describe('PUT /profile/[slug]/job/[id]', function () {
             if (error) {
                 return done(error);
             } else {
-                data.should.have.property('error');
+                data.should.have.property('error').property('name', 'InvalidTokenError');
                 done();
             }
         });
     });
-    
+
     it('perfil inexistente', function(done) {
         api.put('profiles', '/profile/inexistente/job/' + job, {
             token : token,
@@ -472,12 +472,12 @@ describe('PUT /profile/[slug]/job/[id]', function () {
             if (error) {
                 return done(error);
             } else {
-                data.should.have.property('error');
+                data.should.have.property('error').property('name', 'NotFoundError');
                 done();
             }
         });
     });
-    
+
     it('name em branco', function(done) {
         api.put('profiles', '/profile/' + profile + '/job/' + job, {
             token : token,
@@ -497,7 +497,7 @@ describe('PUT /profile/[slug]/job/[id]', function () {
             }
         });
     });
-    
+
     it('edita contato', function(done) {
         var name        = 'Nome ' + rand(),
             companyName = 'Teste ' + rand(),

@@ -160,7 +160,7 @@ module.exports = function (app) {
                 response.send({error : error});
             } else {
                 //busca o profile
-                Profile.findOne({"slugs" : request.params.slug}, function (error, profile) {
+                Profile.findByIdentity(request.params.slug, function (error, profile) {
                     if (error) {
                         response.send({error : error});
                     } else {
@@ -168,14 +168,18 @@ module.exports = function (app) {
                         if (profile === null) {
                             response.send({error : { message : 'profile not found', name : 'NotFoundError', id : request.params.slug, path : 'profile'}});
                         } else {
-                            //remove o profile
-                            profile.remove(function (error) {
-                                if (error) {
-                                    response.send({error : error});
-                                } else {
-                                    response.send(null);
-                                }
-                            });
+                            if (!profile.isOwner(user._id)) {
+                                response.send({ error : { message : 'permission denied', name : 'PermissionDeniedError'}});
+                            } else {
+                                //remove o profile
+                                profile.remove(function (error) {
+                                    if (error) {
+                                        response.send({error : error});
+                                    } else {
+                                        response.send(null);
+                                    }
+                                });
+                            }
                         }
                     }
                 });

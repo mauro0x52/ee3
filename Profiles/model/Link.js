@@ -4,14 +4,14 @@
  *
  * @description : Representação da entidade de links
  */
- 
+
 var mongoose = require('mongoose'),
     schema   = mongoose.Schema,
     objectId = schema.ObjectId,
     linkSchema;
 
 linkSchema = new schema({
-    type : {type : String, required : true, enum : ['Blog', 'Youtube', 'Facebook', 'Vimeo', 'Slideshare', 'Website']},
+    type : {type : String, required : true, enum : ['blog', 'youtube', 'facebook', 'vimeo', 'slideshare', 'website']},
     url  : {type : String, required : true, trim : true}
 });
 

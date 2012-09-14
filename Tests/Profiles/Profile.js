@@ -50,7 +50,7 @@ describe('POST /profile', function () {
             if (error) return done(error);
             else {
                 response.should.have.status(200);
-                data.should.have.property('error');
+                data.should.have.property('error').property('name', 'ValidationError');
                 done();
             }
         });
@@ -64,7 +64,7 @@ describe('POST /profile', function () {
             if (error) return done(error);
             else {
                 response.should.have.status(200);
-                data.should.have.property('error');
+                data.should.have.property('error').property('name', 'InvalidTokenError');
                 done();
             }
         });
@@ -101,7 +101,7 @@ describe('POST /profile', function () {
                     .match(/nome[0-9,a-f]{2,}\-sobrenome[0-9,a-f]{2,}\-[0-9,a-f]{2,}/);
                 data.should.have.property('profile').have.property('name').equal('Nome' + random);
                 data.should.have.property('profile').have.property('surname').equal('Sobrenome' + random);
-                profileB = data;
+                profileB = data.profile;
                 done();
             }
         });
@@ -114,7 +114,7 @@ describe('GET /profile/:profile_id', function() {
             if (error) done(error);
             else {
                 response.should.have.status(200);
-                data.should.have.property('error');
+                data.should.have.property('error').property('name', 'NotFoundError');
                 done();
             }
         });
@@ -156,7 +156,7 @@ describe('PUT /profile/:profile_id', function() {
             }, function(error, data, response) {
                 if (error) done(error);
                 else {
-                    data.should.have.property('error');
+                    data.should.have.property('error').property('name', 'NotFoundError');
                     done();
                 }
             }
@@ -170,7 +170,7 @@ describe('PUT /profile/:profile_id', function() {
             }, function(error, data, response) {
                 if (error) done(error);
                 else {
-                    data.should.have.property('error');
+                    data.should.have.property('error').property('name', 'InvalidTokenError');
                     done();
                 }
             }
@@ -183,7 +183,7 @@ describe('PUT /profile/:profile_id', function() {
             }, function(error, data, response) {
                 if (error) done(error);
                 else {
-                    data.should.have.property('error');
+                    data.should.have.property('error').property('name', 'ValidationError');
                     done();
                 }
             }
@@ -212,7 +212,7 @@ describe('PUT /profile/:profile_id', function() {
             }, function(error, data, response) {
                 if (error) done(error);
                 else {
-                    data.should.have.property('error');
+                    data.should.have.property('error').property('name', 'PermissionDeniedError');
                     done();
                 }
             }
@@ -268,7 +268,7 @@ describe('DEL /profile/:profile_id', function() {
                 if (error) done(error);
                 else {
                     response.should.have.status(200);
-                    data.should.have.property('error');
+                    data.should.have.property('error').property('name', 'InvalidTokenError');
                     done();
                 }
             }
@@ -280,19 +280,19 @@ describe('DEL /profile/:profile_id', function() {
             }, function(error, data, response) {
                 if (error) done(error);
                 else {
-                    data.should.have.property('error');
+                    data.should.have.property('error').property('name', 'NotFoundError');
                     done();
                 }
             }
         );
     });
     it('perfil de outro usuário', function (done) {
-        api.del('profiles', '/profile/'+profileB.slug, {
+        api.del('profiles', '/profile/'+profileB._id, {
                 token : userA.token
             }, function(error, data, response) {
                 if (error) done(error);
                 else {
-                    data.should.have.property('error');
+                    data.should.have.property('error').property('name', 'PermissionDeniedError');
                     done();
                 }
             }
@@ -304,7 +304,7 @@ describe('DEL /profile/:profile_id', function() {
             }, function(error, data, response) {
                 if (error) done(error);
                 else {
-                    data.should.have.property('error');
+                    should.not.exist(data);
                     api.get('profiles', '/profile/' + profileA.slug, {}, function(error, data, response) {
                         if (error) done(error);
                         else {

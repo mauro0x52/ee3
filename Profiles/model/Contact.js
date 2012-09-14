@@ -4,14 +4,14 @@
  *
  * @description : Representação da entidade de contact
  */
- 
+
 var mongoose = require('mongoose'),
     schema   = mongoose.Schema,
     objectId = schema.ObjectId,
     contactSchema;
 
 contactSchema = new schema({
-    type    : {type : String, required : true, enum : ['Twitter', 'Msn', 'Email', 'Skype', 'Gtalk']},
+    type    : {type : String, required : true, enum : ['twitter', 'msn', 'email', 'skype', 'gtalk']},
     address : {type : String, required : true, trim : true}
 });
 

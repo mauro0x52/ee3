@@ -58,8 +58,8 @@ describe('POST /profile/[slug]/contact', function () {
             }, function(error, data, response) {
                 if (error) {
                     return done(error);
-                } else { 
-                    data.should.have.property('error');
+                } else {
+                    data.should.have.property('error').property('name', 'NotFoundError');
                     done();
                 }
             }
@@ -70,12 +70,12 @@ describe('POST /profile/[slug]/contact', function () {
         api.post('profiles', '/profile/' + profile + '/contact', {
                 token     : 'tokeninvalido',
                 address   : 'Number ' + rand(),
-                type      : 'Twitter'
+                type      : 'twitter'
             }, function(error, data, response) {
                 if (error) {
                     return done(error);
-                } else { 
-                    data.should.have.property('error');
+                } else {
+                    data.should.have.property('error').property('name', 'InvalidTokenError');
                     done();
                 }
             }
@@ -85,12 +85,12 @@ describe('POST /profile/[slug]/contact', function () {
     it('address em branco', function(done) {
         api.post('profiles', '/profile/' + profile + '/contact', {
                 token   : token,
-                type      : 'Twitter'
+                type      : 'twitter'
             }, function(error, data, response) {
                 if (error) {
                     return done(error);
-                } else { 
-                    data.should.have.property('error');
+                } else {
+                    data.should.have.property('error').property('name', 'ValidationError');
                     done();
                 }
             }
@@ -104,8 +104,8 @@ describe('POST /profile/[slug]/contact', function () {
             }, function(error, data, response) {
                 if (error) {
                     return done(error);
-                } else { 
-                    data.should.have.property('error');
+                } else {
+                    data.should.have.property('error').property('name', 'ValidationError');
                     done();
                 }
             }
@@ -120,8 +120,8 @@ describe('POST /profile/[slug]/contact', function () {
             }, function(error, data, response) {
                 if (error) {
                     return done(error);
-                } else { 
-                    data.should.have.property('error');
+                } else {
+                    data.should.have.property('error').property('name', 'ValidationError');
                     done();
                 }
             }
@@ -130,7 +130,7 @@ describe('POST /profile/[slug]/contact', function () {
 
     it('cadastra contato', function(done) {
         var address = 'Number ' + rand(),
-            type = 'Twitter';
+            type = 'twitter';
         api.post('profiles', '/profile/' + profile + '/contact', {
                 token   : token,
                 address   : address,
@@ -138,7 +138,7 @@ describe('POST /profile/[slug]/contact', function () {
             }, function(error, data, response) {
                 if (error) {
                     return done(error);
-                } else { 
+                } else {
                     should.exist(data);
                     data.should.not.have.property('error');
                     data.should.have.property('contact').have.property('_id');
@@ -180,7 +180,7 @@ describe('GET /profile/[slug]/contactes', function () {
                     api.post('profiles', '/profile/' + profile + '/contact', {
                         token   : token,
                         address   : 'Number ' + rand(),
-                        type      : 'Twitter'
+                        type      : 'twitter'
                     }, function(error, data, response) {
                         contactes++;
                         if (contactes === 20) {
@@ -191,7 +191,7 @@ describe('GET /profile/[slug]/contactes', function () {
             });
         });
     });
-    
+
     it('url tem que existir', function(done) {
         api.get('profiles', '/profile/' + profile + '/contacts', {}, function(error, data, response) {
             if (error) {
@@ -203,24 +203,24 @@ describe('GET /profile/[slug]/contactes', function () {
             }
         });
     });
-    
+
     it('perfil inexistente', function(done) {
         api.get('profiles', '/profile/inexistente/contacts', {}, function(error, data, response) {
             if (error) {
                 return done(error);
             } else {
-                data.should.have.property('error');
+                data.should.have.property('error').property('name', 'NotFoundError');
                 done();
             }
         });
     });
-    
+
     it('listar contatos', function(done) {
         api.get('profiles', '/profile/' + profile + '/contacts', {}, function(error, data, response) {
             if (error) {
                 return done(error);
             } else {
-                should.not.exist(data.error, 'erro inesperado');                
+                should.not.exist(data.error, 'erro inesperado');
                 data.contacts.length.should.be.above(19);
                 for (var i = 0 ; i < data.contacts.length; i = i + 1) {
                     data.contacts[i].should.have.property('_id');
@@ -261,7 +261,7 @@ describe('GET /profile/[slug]/contact/[id]', function () {
                 api.post('profiles', '/profile/' + profile + '/contact', {
                     token   : token,
                     address   : 'Number ' + rand(),
-                    type      : 'Twitter'
+                    type      : 'twitter'
                 }, function(error, data, response) {
                     contact = data.contact._id
                     done();
@@ -269,7 +269,7 @@ describe('GET /profile/[slug]/contact/[id]', function () {
             });
         });
     });
-    
+
     it('url tem que existir', function(done) {
         api.get('profiles', '/profile/' + profile + '/contact/' + contact, {}, function(error, data, response) {
             if (error) {
@@ -281,24 +281,24 @@ describe('GET /profile/[slug]/contact/[id]', function () {
             }
         });
     });
-    
+
     it('perfil inexistente', function(done) {
         api.get('profiles', '/profile/inexistente/contact/' + contact, {}, function(error, data, response) {
             if (error) {
                 return done(error);
             } else {
-                data.should.have.property('error');
+                data.should.have.property('error').property('name', 'NotFoundError');
                 done();
             }
         });
     });
-    
+
     it('exibir contato', function(done) {
         api.get('profiles', '/profile/' + profile + '/contact/' + contact, {}, function(error, data, response) {
             if (error) {
                 return done(error);
             } else {
-                should.not.exist(data.error, 'erro inesperado');    
+                should.not.exist(data.error, 'erro inesperado');
                 data.should.have.property('contact').have.property('_id');
                 data.should.have.property('contact').have.property('address');
                 data.should.have.property('contact').have.property('type');
@@ -336,7 +336,7 @@ describe('DEL /profile/[slug]/contact/[id]', function () {
                 api.post('profiles', '/profile/' + profile + '/contact', {
                     token   : token,
                     address   : 'Number ' + rand(),
-                    type      : 'Twitter'
+                    type      : 'twitter'
                 }, function(error, data, response) {
                     contact = data.contact._id
                     done();
@@ -344,7 +344,7 @@ describe('DEL /profile/[slug]/contact/[id]', function () {
             });
         });
     });
-    
+
     it('url tem que existir', function(done) {
         api.del('profiles', '/profile/' + profile + '/contact/' + contact, {}, function(error, data, response) {
             if (error) {
@@ -356,29 +356,29 @@ describe('DEL /profile/[slug]/contact/[id]', function () {
             }
         });
     });
-    
+
     it('token inválido', function(done) {
         api.del('profiles', '/profile/' + profile + '/contact/' + contact, {token : 'invalido'}, function(error, data, response) {
             if (error) {
                 return done(error);
             } else {
-                data.should.have.property('error');
+                data.should.have.property('error').property('name', 'InvalidTokenError');
                 done();
             }
         });
     });
-    
+
     it('perfil inexistente', function(done) {
         api.del('profiles', '/profile/inexistente/contact/' + contact, {token : token}, function(error, data, response) {
             if (error) {
                 return done(error);
             } else {
-                data.should.have.property('error');
+                data.should.have.property('error').property('name', 'NotFoundError');
                 done();
             }
         });
     });
-    
+
     it('remove contato', function(done) {
         api.del('profiles', '/profile/' + profile + '/contact/' + contact, {token : token}, function(error, data, response) {
             if (error) {
@@ -423,7 +423,7 @@ describe('PUT /profile/[slug]/contact/[id]', function () {
                 api.post('profiles', '/profile/' + profile + '/contact', {
                     token   : token,
                     address   : 'Number ' + rand(),
-                    type      : 'Twitter'
+                    type      : 'twitter'
                 }, function(error, data, response) {
                     contact = data.contact._id;
                     obj = data.contact;
@@ -432,7 +432,7 @@ describe('PUT /profile/[slug]/contact/[id]', function () {
             });
         });
     });
-    
+
     it('url tem que existir', function(done) {
         api.put('profiles', '/profile/' + profile + '/contact/' + contact, {}, function(error, data, response) {
             if (error) {
@@ -444,41 +444,41 @@ describe('PUT /profile/[slug]/contact/[id]', function () {
             }
         });
     });
-    
+
     it('token inválido', function(done) {
         api.put('profiles', '/profile/' + profile + '/contact/' + contact, {
             token : 'invalido',
             address   : 'Number ' + rand(),
-            type      : 'Twitter'
+            type      : 'twitter'
         }, function(error, data, response) {
             if (error) {
                 return done(error);
             } else {
-                data.should.have.property('error');
+                data.should.have.property('error').property('name', 'InvalidTokenError');
                 done();
             }
         });
     });
-    
+
     it('perfil inexistente', function(done) {
         api.put('profiles', '/profile/inexistente/contact/' + contact, {
             token : token,
             address   : 'Number ' + rand(),
-            type      : 'Twitter'
+            type      : 'twitter'
         }, function(error, data, response) {
             if (error) {
                 return done(error);
             } else {
-                data.should.have.property('error');
+                data.should.have.property('error').property('name', 'NotFoundError');
                 done();
             }
         });
     });
-    
+
     it('address em branco', function(done) {
         api.put('profiles', '/profile/' + profile + '/contact/' + contact, {
             token : token,
-            type      : 'Twitter'
+            type      : 'twitter'
         }, function(error, data, response) {
             if (error) {
                 return done(error);
@@ -491,7 +491,7 @@ describe('PUT /profile/[slug]/contact/[id]', function () {
             }
         });
     });
-    
+
     it('type em branco', function(done) {
         api.put('profiles', '/profile/' + profile + '/contact/' + contact, {
             token : token,
@@ -508,7 +508,7 @@ describe('PUT /profile/[slug]/contact/[id]', function () {
             }
         });
     });
-    
+
     it('type inválido', function(done) {
         api.put('profiles', '/profile/' + profile + '/contact/' + contact, {
             token : token,
@@ -518,7 +518,7 @@ describe('PUT /profile/[slug]/contact/[id]', function () {
             if (error) {
                 return done(error);
             } else {
-                data.should.have.property('error');
+                data.should.have.property('error').property('name', 'ValidationError');
                 done();
             }
         });
@@ -526,7 +526,7 @@ describe('PUT /profile/[slug]/contact/[id]', function () {
 
     it('edita contato', function(done) {
         var address = 'Number ' + rand(),
-            type = 'Twitter';
+            type = 'twitter';
         api.put('profiles', '/profile/' + profile + '/contact/' + contact, {
             token : token,
             address   : address,

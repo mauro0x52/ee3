@@ -55,8 +55,8 @@ describe('POST /profile/[slug]/link', function () {
             }, function(error, data, response) {
                 if (error) {
                     return done(error);
-                } else { 
-                    data.should.have.property('error');
+                } else {
+                    data.should.have.property('error').property('name', 'NotFoundError');
                     done();
                 }
             }
@@ -67,12 +67,12 @@ describe('POST /profile/[slug]/link', function () {
         api.post('profiles', '/profile/' + profile + '/link', {
                 token     : 'tokeninvalido',
                 url     : 'Url ' + rand(),
-                type    : 'Youtube'
+                type    : 'youtube'
             }, function(error, data, response) {
                 if (error) {
                     return done(error);
-                } else { 
-                    data.should.have.property('error');
+                } else {
+                    data.should.have.property('error').property('name', 'InvalidTokenError');
                     done();
                 }
             }
@@ -82,12 +82,12 @@ describe('POST /profile/[slug]/link', function () {
     it('url em branco', function(done) {
         api.post('profiles', '/profile/' + profile + '/link', {
                 token   : token,
-                type    : 'Youtube'
+                type    : 'youtube'
             }, function(error, data, response) {
                 if (error) {
                     return done(error);
-                } else { 
-                    data.should.have.property('error');
+                } else {
+                    data.should.have.property('error').property('name', 'ValidationError');
                     done();
                 }
             }
@@ -101,8 +101,8 @@ describe('POST /profile/[slug]/link', function () {
             }, function(error, data, response) {
                 if (error) {
                     return done(error);
-                } else { 
-                    data.should.have.property('error');
+                } else {
+                    data.should.have.property('error').property('name', 'ValidationError');
                     done();
                 }
             }
@@ -117,8 +117,8 @@ describe('POST /profile/[slug]/link', function () {
             }, function(error, data, response) {
                 if (error) {
                     return done(error);
-                } else { 
-                    data.should.have.property('error');
+                } else {
+                    data.should.have.property('error').property('name', 'ValidationError');
                     done();
                 }
             }
@@ -127,7 +127,7 @@ describe('POST /profile/[slug]/link', function () {
 
     it('cadastra link', function(done) {
         var url = 'Url ' + rand(),
-            type = 'Youtube';
+            type = 'youtube';
         api.post('profiles', '/profile/' + profile + '/link', {
                 token   : token,
                 url     : url,
@@ -135,7 +135,7 @@ describe('POST /profile/[slug]/link', function () {
             }, function(error, data, response) {
                 if (error) {
                     return done(error);
-                } else { 
+                } else {
                     data.should.not.have.property('error');
                     data.should.have.property('link').have.property('_id');
                     data.should.have.property('link').have.property('url', url);
@@ -173,7 +173,7 @@ describe('GET /profile/[slug]/links', function () {
                     api.post('profiles', '/profile/' + profile + '/link', {
                         token   : token,
                         url     : 'Url ' + rand(),
-                        type    : 'Youtube'
+                        type    : 'youtube'
                     }, function(error, data, response) {
                         linkes++;
                         if (linkes === 20) {
@@ -184,7 +184,7 @@ describe('GET /profile/[slug]/links', function () {
             });
         });
     });
-    
+
     it('url tem que existir', function(done) {
         api.get('profiles', '/profile/' + profile + '/links', {}, function(error, data, response) {
             if (error) {
@@ -196,24 +196,24 @@ describe('GET /profile/[slug]/links', function () {
             }
         });
     });
-    
+
     it('profile inexistente', function(done) {
         api.get('profiles', '/profile/inexistente/links', {}, function(error, data, response) {
             if (error) {
                 return done(error);
             } else {
-                data.should.have.property('error');
+                data.should.have.property('error').property('name', 'NotFoundError');
                 done();
             }
         });
     });
-    
+
     it('listar links', function(done) {
         api.get('profiles', '/profile/' + profile + '/links', {}, function(error, data, response) {
             if (error) {
                 return done(error);
             } else {
-                should.not.exist(data.error, 'erro inesperado');                
+                should.not.exist(data.error, 'erro inesperado');
                 data.links.length.should.be.above(19);
                 for (var i = 0 ; i < data.links.length; i = i + 1) {
                     data.links[i].should.have.property('_id');
@@ -251,7 +251,7 @@ describe('GET /profile/[slug]/link/[id]', function () {
                 api.post('profiles', '/profile/' + profile + '/link', {
                     token   : token,
                     url     : 'Url ' + rand(),
-                    type    : 'Youtube'
+                    type    : 'youtube'
                 }, function(error, data, response) {
                     link = data.link._id
                     done();
@@ -259,7 +259,7 @@ describe('GET /profile/[slug]/link/[id]', function () {
             });
         });
     });
-    
+
     it('url tem que existir', function(done) {
         api.get('profiles', '/profile/' + profile + '/link/' + link, {}, function(error, data, response) {
             if (error) {
@@ -271,24 +271,24 @@ describe('GET /profile/[slug]/link/[id]', function () {
             }
         });
     });
-    
+
     it('profile inexistente', function(done) {
         api.get('profiles', '/profile/inexistente/link/' + link, {}, function(error, data, response) {
             if (error) {
                 return done(error);
             } else {
-                data.should.have.property('error');
+                data.should.have.property('error').property('name', 'NotFoundError');
                 done();
             }
         });
     });
-    
+
     it('exibir link', function(done) {
         api.get('profiles', '/profile/' + profile + '/link/' + link, {}, function(error, data, response) {
             if (error) {
                 return done(error);
             } else {
-                should.not.exist(data.error, 'erro inesperado');    
+                should.not.exist(data.error, 'erro inesperado');
                 data.should.have.property('link').have.property('_id');
                 data.should.have.property('link').have.property('url');
                 data.should.have.property('link').have.property('type');
@@ -323,7 +323,7 @@ describe('DEL /profile/[slug]/link/[id]', function () {
                 api.post('profiles', '/profile/' + profile + '/link', {
                     token   : token,
                     url     : 'Url ' + rand(),
-                    type    : 'Youtube'
+                    type    : 'youtube'
                 }, function(error, data, response) {
                     link = data.link._id
                     done();
@@ -331,7 +331,7 @@ describe('DEL /profile/[slug]/link/[id]', function () {
             });
         });
     });
-    
+
     it('url tem que existir', function(done) {
         api.del('profiles', '/profile/' + profile + '/link/' + link, {}, function(error, data, response) {
             if (error) {
@@ -343,29 +343,29 @@ describe('DEL /profile/[slug]/link/[id]', function () {
             }
         });
     });
-    
+
     it('token inválido', function(done) {
         api.del('profiles', '/profile/' + profile + '/link/' + link, {token : 'invalido'}, function(error, data, response) {
             if (error) {
                 return done(error);
             } else {
-                data.should.have.property('error');
+                data.should.have.property('error').property('name', 'InvalidTokenError');
                 done();
             }
         });
     });
-    
+
     it('profile inexistente', function(done) {
         api.del('profiles', '/profile/inexistente/link/' + link, {token : token}, function(error, data, response) {
             if (error) {
                 return done(error);
             } else {
-                data.should.have.property('error');
+                data.should.have.property('error').property('name', 'NotFoundError');
                 done();
             }
         });
     });
-    
+
     it('remove link', function(done) {
         api.del('profiles', '/profile/' + profile + '/link/' + link, {token : token}, function(error, data, response) {
             if (error) {
@@ -407,7 +407,7 @@ describe('PUT /profile/[slug]/link/[id]', function () {
                 api.post('profiles', '/profile/' + profile + '/link', {
                     token   : token,
                     url     : 'Url ' + rand(),
-                    type    : 'Youtube'
+                    type    : 'youtube'
                 }, function(error, data, response) {
                     link = data.link._id;
                     obj = data.link;
@@ -416,7 +416,7 @@ describe('PUT /profile/[slug]/link/[id]', function () {
             });
         });
     });
-    
+
     it('url tem que existir', function(done) {
         api.put('profiles', '/profile/' + profile + '/link/' + link, {}, function(error, data, response) {
             if (error) {
@@ -428,41 +428,41 @@ describe('PUT /profile/[slug]/link/[id]', function () {
             }
         });
     });
-    
+
     it('token inválido', function(done) {
         api.put('profiles', '/profile/' + profile + '/link/' + link, {
             token : 'invalido',
             url     : 'Url ' + rand(),
-            type    : 'Youtube'
+            type    : 'youtube'
         }, function(error, data, response) {
             if (error) {
                 return done(error);
             } else {
-                data.should.have.property('error');
+                data.should.have.property('error').property('name', 'InvalidTokenError');
                 done();
             }
         });
     });
-    
+
     it('profile inexistente', function(done) {
         api.put('profiles', '/profile/inexistente/link/' + link, {
             token : token,
             url     : 'Url ' + rand(),
-            type    : 'Youtube'
+            type    : 'youtube'
         }, function(error, data, response) {
             if (error) {
                 return done(error);
             } else {
-                data.should.have.property('error');
+                data.should.have.property('error').property('name', 'NotFoundError');
                 done();
             }
         });
     });
-    
+
     it('url em branco', function(done) {
         api.put('profiles', '/profile/' + profile + '/link/' + link, {
             token : token,
-            type    : 'Youtube'
+            type    : 'youtube'
         }, function(error, data, response) {
             if (error) {
                 return done(error);
@@ -475,7 +475,7 @@ describe('PUT /profile/[slug]/link/[id]', function () {
             }
         });
     });
-    
+
     it('type em branco', function(done) {
         api.put('profiles', '/profile/' + profile + '/link/' + link, {
             token : token,
@@ -492,10 +492,10 @@ describe('PUT /profile/[slug]/link/[id]', function () {
             }
         });
     });
-    
+
     it('edita link', function(done) {
         var url  = 'Url ' + rand(),
-            type = 'Youtube';
+            type = 'youtube';
         api.put('profiles', '/profile/' + profile + '/link/' + link, {
             token : token,
             url     : url,
