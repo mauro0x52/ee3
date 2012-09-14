@@ -41,7 +41,7 @@ module.exports = function (app) {
                     } else {
                         //verifica se o perfil foi encontrado
                         if (profile === null) {
-                            response.send({error : { message : 'profile not found', name : 'NotFoundError', id : request.params.slug, model : 'profile'}});
+                            response.send({error : { message : 'profile not found', name : 'NotFoundError', id : request.params.slug, path : 'profile'}});
                         } else {
                             //verifica se o usuário é dono do perfil
                             if (!profile.isOwner(user._id)) {
@@ -128,7 +128,7 @@ module.exports = function (app) {
             } else {
                 //verifica se o perfil foi encontrada
                 if (profile === null) {
-                    response.send({error : { message : 'profile not found', name : 'NotFoundError', id : request.params.slug, model : 'profile'}});
+                    response.send({error : { message : 'profile not found', name : 'NotFoundError', id : request.params.slug, path : 'profile'}});
                 } else {
                     response.send({thumbnail : profile.thumbnail});
                 }
@@ -165,14 +165,14 @@ module.exports = function (app) {
             } else {
                 //verifica se o perfil foi encontrado
                 if (profile === null) {
-                    response.send({error : { message : 'profile not found', name : 'NotFoundError', id : request.params.slug, model : 'profile'}});
+                    response.send({error : { message : 'profile not found', name : 'NotFoundError', id : request.params.slug, path : 'profile'}});
                 } else {
                     if (profile.thumbnail[size] && profile.thumbnail[size].url) {
                         sizeData = {};
                         sizeData[size] = profile.thumbnail[size];
                         response.send(sizeData);
                     } else {
-                        response.send({error : { message : 'size not found', name : 'NotFoundError', id : request.params.size, model : 'size'}});
+                        response.send({error : { message : 'size not found', name : 'NotFoundError', id : request.params.size, path : 'size'}});
                     }
                 }
             }
@@ -224,7 +224,7 @@ module.exports = function (app) {
                     } else {
                         //verifica se o perfil foi encontrada
                         if (profile === null) {
-                            response.send({error : { message : 'profile not found', name : 'NotFoundError', id : request.params.slug, model : 'profile'}});
+                            response.send({error : { message : 'profile not found', name : 'NotFoundError', id : request.params.slug, path : 'profile'}});
                         } else {
                             //verifica se o usuário é dono do perfil
                             if (!profile.isOwner(user._id)) {

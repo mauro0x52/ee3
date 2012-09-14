@@ -139,7 +139,7 @@ companySchema.methods.findProduct = function (id, cb) {
         if (product) {
             cb(undefined, product);
         } else {
-            cb('product not found', null);
+            cb({message :  'product not found', name : 'NotFoundError', id : id, path : 'product' }, null);
         }
     } else {
         //varre os produtos da empresa
@@ -151,7 +151,7 @@ companySchema.methods.findProduct = function (id, cb) {
         if (product) {
             cb(undefined, product);
         } else {
-            cb('product not found', null);
+            cb({message :  'product not found', name : 'NotFoundError', id : id, path : 'product' }, null);
         }
     }
 
@@ -180,7 +180,7 @@ companySchema.methods.findContact = function (id, cb) {
     if (contact) {
         cb(undefined, contact);
     } else {
-        cb('contact not found', null);
+        cb({message :  'contact not found', name : 'NotFoundError', id : id, path : 'contact' }, null);
     }
 };
 
@@ -207,7 +207,7 @@ companySchema.methods.findEmbedded = function (id, cb) {
     if (embed) {
         cb(undefined, embed);
     } else {
-        cb('embedded not found', null);
+        cb({message :  'embedded not found', name : 'NotFoundError', id : id, path : 'embedded' }, null);
     }
 };
 
@@ -234,7 +234,7 @@ companySchema.methods.findAddress = function (id, cb) {
     if (address) {
         cb(undefined, address);
     } else {
-        cb('address not found', null);
+        cb({message :  'address not found', name : 'NotFoundError', id : id, path : 'address' }, null);
     }
 };
 
@@ -261,7 +261,7 @@ companySchema.methods.findPhone = function (id, cb) {
     if (phone) {
         cb(undefined, phone);
     } else {
-        cb('phone not found', null);
+        cb({message :  'phone not found', name : 'NotFoundError', id : id, path : 'phone' }, null);
     }
 };
 
@@ -288,7 +288,7 @@ companySchema.methods.findLink = function (id, cb) {
     if (link) {
         cb(undefined, link);
     } else {
-        cb('link not found', null);
+        cb({message :  'link not found', name : 'NotFoundError', id : id, path : 'link' }, null);
     }
 };
 

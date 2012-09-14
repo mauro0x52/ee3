@@ -59,7 +59,7 @@ describe('POST /company/[slug]/address', function () {
                 if (error) {
                     return done(error);
                 } else {
-                    should.exist(data.error);
+                    data.should.have.property('error').property('name', 'NotFoundError');
                     done();
                 }
             }
@@ -78,7 +78,7 @@ describe('POST /company/[slug]/address', function () {
                 if (error) {
                     return done(error);
                 } else {
-                    should.exist(data.error);
+                    data.should.have.property('error').property('name', 'InvalidTokenError');
                     done();
                 }
             }
@@ -96,7 +96,7 @@ describe('POST /company/[slug]/address', function () {
                 if (error) {
                     return done(error);
                 } else {
-                    should.exist(data.error);
+                    data.should.have.property('error').property('name', 'ValidationError');
                     done();
                 }
             }
@@ -114,7 +114,7 @@ describe('POST /company/[slug]/address', function () {
                 if (error) {
                     return done(error);
                 } else {
-                    should.exist(data.error);
+                    data.should.have.property('error').property('name', 'ValidationError');
                     done();
                 }
             }
@@ -132,7 +132,7 @@ describe('POST /company/[slug]/address', function () {
                 if (error) {
                     return done(error);
                 } else {
-                    should.exist(data.error);
+                    data.should.have.property('error').property('name', 'ValidationError');
                     done();
                 }
             }
@@ -150,7 +150,7 @@ describe('POST /company/[slug]/address', function () {
                 if (error) {
                     return done(error);
                 } else {
-                    should.exist(data.error);
+                    data.should.have.property('error').property('name', 'ValidationError');
                     done();
                 }
             }
@@ -175,7 +175,7 @@ describe('POST /company/[slug]/address', function () {
                     return done(error);
                 } else {
                     should.exist(data);
-                    should.not.exist(data.error);
+                    data.should.not.have.property('error');
                     data.should.have.property('address').have.property('_id');
                     data.should.have.property('address').have.property('street', street);
                     data.should.have.property('address').have.property('number', number);
@@ -248,7 +248,7 @@ describe('GET /company/[slug]/addresses', function () {
             if (error) {
                 return done(error);
             } else {
-                should.exist(data.error);
+                data.should.have.property('error').property('name', 'NotFoundError');
                 done();
             }
         });
@@ -259,7 +259,7 @@ describe('GET /company/[slug]/addresses', function () {
             if (error) {
                 return done(error);
             } else {
-                should.not.exist(data.error, 'erro inesperado');
+                data.should.not.have.property('error');
                 for (var i = 0 ; i < data.addresses.length; i = i + 1) {
                     data.addresses[i].should.have.property('_id');
                     data.addresses[i].should.have.property('street');
@@ -331,7 +331,7 @@ describe('GET /company/[slug]/address/[id]', function () {
             if (error) {
                 return done(error);
             } else {
-                should.exist(data.error);
+                data.should.have.property('error').property('name', 'NotFoundError');
                 done();
             }
         });
@@ -342,7 +342,7 @@ describe('GET /company/[slug]/address/[id]', function () {
             if (error) {
                 return done(error);
             } else {
-                should.not.exist(data.error, 'erro inesperado');
+                data.should.not.have.property('error');
                 data.should.have.property('address').have.property('_id');
                 data.should.have.property('address').have.property('street');
                 data.should.have.property('address').have.property('number');
@@ -412,7 +412,7 @@ describe('DEL /company/[slug]/address/[id]', function () {
             if (error) {
                 return done(error);
             } else {
-                should.exist(data.error);
+                data.should.have.property('error').property('name', 'InvalidTokenError');
                 done();
             }
         });
@@ -423,7 +423,7 @@ describe('DEL /company/[slug]/address/[id]', function () {
             if (error) {
                 return done(error);
             } else {
-                should.exist(data.error);
+                data.should.have.property('error').property('name', 'NotFoundError');
                 done();
             }
         });
@@ -436,7 +436,7 @@ describe('DEL /company/[slug]/address/[id]', function () {
             } else {
                 should.not.exist(data);
                 api.get('companies', '/company/' + company + '/address/' + address, {token : token}, function (error, data) {
-                    should.exist(data.error, 'não exclui');
+                    data.should.have.property('error').property('name', 'NotFoundError');
                     done();
                 });
             }
@@ -510,7 +510,7 @@ describe('PUT /company/[slug]/address/[id]', function () {
             if (error) {
                 return done(error);
             } else {
-                should.exist(data.error);
+                data.should.have.property('error').property('name', 'InvalidTokenError');
                 done();
             }
         });
@@ -528,7 +528,7 @@ describe('PUT /company/[slug]/address/[id]', function () {
             if (error) {
                 return done(error);
             } else {
-                should.exist(data.error);
+                data.should.have.property('error').property('name', 'NotFoundError');
                 done();
             }
         });
@@ -546,7 +546,7 @@ describe('PUT /company/[slug]/address/[id]', function () {
                 return done(error);
             } else {
                 obj = data.address;
-                should.not.exist(data.error);
+                data.should.not.have.property('error');
                 data.should.have.property('address').have.property('_id');
                 data.should.have.property('address').have.property('street', obj.street);
                 done();
@@ -566,7 +566,7 @@ describe('PUT /company/[slug]/address/[id]', function () {
                 return done(error);
             } else {
                 obj = data.address;
-                should.not.exist(data.error);
+                data.should.not.have.property('error');
                 data.should.have.property('address').have.property('_id');
                 data.should.have.property('address').have.property('number', obj.number);
                 done();
@@ -586,7 +586,7 @@ describe('PUT /company/[slug]/address/[id]', function () {
                 return done(error);
             } else {
                 obj = data.address;
-                should.not.exist(data.error);
+                data.should.not.have.property('error');
                 data.should.have.property('address').have.property('_id');
                 data.should.have.property('address').have.property('complement', obj.complement);
                 done();
@@ -606,7 +606,7 @@ describe('PUT /company/[slug]/address/[id]', function () {
                 return done(error);
             } else {
                 obj = data.address;
-                should.not.exist(data.error);
+                data.should.not.have.property('error');
                 data.should.have.property('address').have.property('_id');
                 data.should.have.property('address').have.property('headQuarters', obj.headQuarters);
                 done();
@@ -630,7 +630,7 @@ describe('PUT /company/[slug]/address/[id]', function () {
             if (error) {
                 return done(error);
             } else {
-                should.not.exist(data.error);
+                data.should.not.have.property('error');
                 data.should.have.property('address').have.property('_id');
                 data.should.have.property('address').have.property('street', street);
                 data.should.have.property('address').have.property('number', number);

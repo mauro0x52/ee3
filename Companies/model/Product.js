@@ -80,7 +80,7 @@ productSchema.methods.findImage = function (id, cb) {
     if (image) {
         cb(undefined, image);
     } else {
-        cb({message : 'image not found', name : 'NotFoundError', id : id, model : 'image'}, null);
+        cb({message : 'image not found', name : 'NotFoundError', id : id, path : 'image'}, null);
     }
 };
 
@@ -107,35 +107,9 @@ productSchema.methods.findLink = function (id, cb) {
     if (link) {
         cb(undefined, link);
     } else {
-        cb('link not found', null);
+        cb({message :  'link not found', name : 'NotFoundError', id : id, path : 'link' }, null);
     }
 };
 
-/** findThumbnail
- * @author : Rafael Erthal
- * @since : 2012-08
- *
- * @description : Procura um thumbnail de um produto.
- * @param id : id do thumbnail
- * @param cb : callback a ser chamado após achado o thumbnail
- */
-productSchema.methods.findThumbnail = function (id, cb) {
-    "use strict";
-
-    var i,
-        thumbnail;
-
-    //varre os links do produto
-    for (i = 0; i < this.thumbnails.length; i = i + 1) {
-        if (this.thumbnails[i]._id.toString() === id.toString()) {
-            thumbnail = this.thumbnails[i];
-        }
-    }
-    if (thumbnail) {
-        cb(undefined, thumbnail);
-    } else {
-        cb('thumbnail not found', null);
-    }
-};
 
 Product = exports.Product = productSchema;

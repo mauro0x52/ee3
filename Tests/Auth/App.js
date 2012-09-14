@@ -75,19 +75,6 @@ describe('POST /user/[login]/app/[app_id]', function () {
         });
     });
 
-    it('aplicativo inexistente', function(done) {
-        api.post('auth', '/user/' + userId + '/app/inexistente', {
-            token : token
-        }, function (error, data, response) {
-            if (error) {
-                return done(error);
-            } else {
-                data.should.have.property('error').have.property('name', 'NotFoundError');
-                done();
-            }
-        });
-    });
-
     it('aplicativo autorizado', function(done) {
         api.post('auth', '/user/'+userId+'/app/'+appId, {
             token : token
@@ -95,7 +82,7 @@ describe('POST /user/[login]/app/[app_id]', function () {
             if (error) {
                 return done(error);
             } else {
-                should.not.exist(data.error);
+                data.should.not.have.property('error');
                 data.should.have.property('authorizedApp').have.property('_id');
                 data.should.have.property('authorizedApp').have.property('appId');
                 data.should.have.property('authorizedApp').have.property('token');
@@ -148,7 +135,7 @@ describe('DEL /user/[login]/app/[app_id]', function () {
             }
         });
     });
-    
+
     it('token inválido', function(done) {
         api.del('auth', '/user/'+userId+'/app/'+appId, {token : 'tokeninválido'}, function(error, data, response) {
             if (error) {
@@ -172,18 +159,6 @@ describe('DEL /user/[login]/app/[app_id]', function () {
         });
     });
 
-    it('aplicativo inexistente', function(done) {
-        api.del('auth', '/user/'+userId+'/app/inexistente', {
-            token : token
-        }, function(error, data, response) {
-            if (error) return done(error);
-            else {
-                data.should.have.property('error').have.property('name', 'NotFoundError');
-                done();
-            }
-        });
-    });
-
     it('remoção da autenticação', function(done) {
         api.del('auth', '/user/'+userId+'/app/'+appId, {
             token : token
@@ -193,7 +168,7 @@ describe('DEL /user/[login]/app/[app_id]', function () {
             } else {
                 should.not.exist(data);
                 api.get('auth', '/user/'+userId+'/app/' + appId, {token : token}, function (error, data) {
-                    data.should.have.property('error').have.property('name', 'NotFoundError');
+                    data.should.have.property('error').have.property('name', 'DeniedTokenError');
                     done();
                 });
             }
@@ -244,7 +219,7 @@ describe('GET /user/[login]/app/[app_id]', function () {
             }
         });
     });
-    
+
     it('token inválido', function(done) {
         api.get('auth', '/user/'+userId+'/app/'+appId, {token : 'tokeninválido'}, function(error, data, response) {
             if (error) {
@@ -274,7 +249,7 @@ describe('GET /user/[login]/app/[app_id]', function () {
         }, function(error, data, response) {
             if (error) return done(error);
             else {
-                data.should.have.property('error').have.property('name', 'NotFoundError');
+                data.should.have.property('error').have.property('name', 'DeniedTokenError');
                 done();
             }
         });
@@ -287,7 +262,7 @@ describe('GET /user/[login]/app/[app_id]', function () {
             if (error) {
                 return done(error);
             } else {
-                should.not.exist(data.error);
+                data.should.not.have.property('error');
                 data.should.have.property('authorizedApp').have.property('appId');
                 data.should.have.property('authorizedApp').have.property('token');
                 done();
@@ -339,7 +314,7 @@ describe('PUT /user/[login]/app/[app_id]', function () {
             }
         });
     });
-    
+
     it('token inválido', function(done) {
         api.put('auth', '/user/'+userId+'/app/'+appId, {token : 'tokeninválido'}, function(error, data, response) {
             if (error) {
@@ -369,7 +344,7 @@ describe('PUT /user/[login]/app/[app_id]', function () {
         }, function(error, data, response) {
             if (error) return done(error);
             else {
-                data.should.have.property('error').have.property('name', 'NotFoundError');
+                data.should.have.property('error').have.property('name', 'DeniedTokenError');
                 done();
             }
         });
@@ -384,9 +359,9 @@ describe('PUT /user/[login]/app/[app_id]', function () {
             if (error) {
                 return done(error);
             } else {
-                should.not.exist(data.error);
+                data.should.not.have.property('error');
                 api.get('auth', '/user/'+userId+'/app/'+appId, {token : token}, function (error, data) {
-                    should.not.exist(data.error, 'algo deu errado');
+                    data.should.not.have.property('error');
                     data.should.have.property('authorizedApp').have.property('_id');
                     data.should.have.property('authorizedApp').have.property('appId');
                     data.should.have.property('authorizedApp').have.property('token');

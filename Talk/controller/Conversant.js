@@ -81,7 +81,7 @@ module.exports = function (app) {
                     } else {
                         //verifica se o usuário foi encontrado
                         if (conversant === null) {
-                            response.send({error : {message :  'conversant not found', name : 'NotFoundError', id : request.params.user, model : 'conversant'}});
+                            response.send({error : {message :  'conversant not found', name : 'NotFoundError', id : request.params.user, path : 'conversant'}});
                         } else {
                             //modifica a label
                             conversant.label = request.param('new_label', conversant.label);
@@ -123,7 +123,7 @@ module.exports = function (app) {
             } else {
                 //verifica se o usuário foi encontrado
                 if (conversant === null) {
-                    response.send({error : {message :  'conversant not found', name : 'NotFoundError', id : request.params.user_id, model : 'conversant'}});
+                    response.send({error : {message :  'conversant not found', name : 'NotFoundError', id : request.params.user_id, path : 'conversant'}});
                 } else {
                     conversant.isOnline(function (isOnline) {
                         if (isOnline) {

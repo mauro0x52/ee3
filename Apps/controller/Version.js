@@ -43,7 +43,7 @@ module.exports = function (app) {
                     } else {
                         //verifica se o app foi encontrado
                         if (app === null) {
-                            response.send({error : { message : 'app not found', name : 'NotFoundError', id : request.params.slug, model : 'app'}});
+                            response.send({error : { message : 'app not found', name : 'NotFoundError', id : request.params.slug, path : 'app'}});
                         } else {
                             //verifica se o usuário é o criador do app
                             if (user._id !== app.creator) {
@@ -93,7 +93,7 @@ module.exports = function (app) {
             } else {
                 //verifica se o app foi encontrado
                 if (app === null) {
-                    response.send({error : { message : 'app not found', name : 'NotFoundError', id : request.params.slug, model : 'app'}});
+                    response.send({error : { message : 'app not found', name : 'NotFoundError', id : request.params.slug, path : 'app'}});
                 } else {
                     //pega as versões do app
                     app.versions(function (error, versions) {
@@ -131,7 +131,7 @@ module.exports = function (app) {
             } else {
                 //verifica se o app foi encontrado
                 if (app === null) {
-                    response.send({error : { message : 'app not found', name : 'NotFoundError', id : request.params.slug, model : 'app'}});
+                    response.send({error : { message : 'app not found', name : 'NotFoundError', id : request.params.slug, path : 'app'}});
                 } else {
                     //pega a versão do app
                     app.findVersion(request.params.number, function (error, version) {
@@ -140,7 +140,7 @@ module.exports = function (app) {
                         } else {
                             //verifica se a versão foi encontrada
                             if (version === null) {
-                                response.send({error : { message : 'version not found', name : 'NotFoundError', id : request.params.number, model : 'version'}});
+                                response.send({error : { message : 'version not found', name : 'NotFoundError', id : request.params.number, path : 'version'}});
                             } else {
                                 response.send({version : version});
                             }
@@ -179,7 +179,7 @@ module.exports = function (app) {
                     } else {
                         //verifica se o app foi encontrado
                         if (app === null) {
-                            response.send({error : { message : 'app not found', name : 'NotFoundError', id : request.params.slug, model : 'app'}});
+                            response.send({error : { message : 'app not found', name : 'NotFoundError', id : request.params.slug, path : 'app'}});
                         } else {
                             //verifica se o usuário é o criador do app
                             if (user._id !== app.creator) {
@@ -192,7 +192,7 @@ module.exports = function (app) {
                                     } else {
                                         //verifica se a versão foi encontrada
                                         if (version === null) {
-                                            response.send({error : { message : 'version not found', name : 'NotFoundError', id : request.params.number, model : 'version'}});
+                                            response.send({error : { message : 'version not found', name : 'NotFoundError', id : request.params.number, path : 'version'}});
                                         } else {
                                             //remove a versão
                                             version.remove(function (error) {
@@ -241,7 +241,7 @@ module.exports = function (app) {
                     } else {
                         //verifica se o app foi encontrado
                         if (app === null) {
-                            response.send({error : { message : 'app not found', name : 'NotFoundError', id : request.params.slug, model : 'app'}});
+                            response.send({error : { message : 'app not found', name : 'NotFoundError', id : request.params.slug, path : 'app'}});
                         } else {
                             //verifica se o usuário é o criador do app
                             if (user._id !== app.creator) {
@@ -254,7 +254,7 @@ module.exports = function (app) {
                                     } else {
                                         //verifica se a versão foi encontrada
                                         if (version === null) {
-                                            response.send({error : { message : 'version not found', name : 'NotFoundError', id : request.params.number, model : 'version'}});
+                                            response.send({error : { message : 'version not found', name : 'NotFoundError', id : request.params.number, path : 'version'}});
                                         } else {
                                             //altera os dados da versão
                                             version.number = request.param('number', version.number);

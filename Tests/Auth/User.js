@@ -436,29 +436,27 @@ describe('PUT /user/[login]/logout', function() {
             token : token
         },
         function(error, data, response) {
-            data.should.have.property('error').have.property('name', 'NotFoundError');
+            data.should.have.property('error').property('name', 'NotFoundError');
             done();
         }
         );
     });
     it('token errado', function (done) {
-        api.put('auth', '/user/'+userId+'asd123asd123/logout', {
+        api.put('auth', '/user/'+userId+'/logout', {
             token : token+"asd123"
         },
         function(error, data, response) {
-            //data.should.have.property('error').have.property('name', 'AssertionError');
+            data.should.have.property('error').have.property('name', 'InvalidTokenError');
             done();
         }
         );
     });
     it('token em branco', function (done) {
-        api.put('auth', '/user/'+userId+'asd123asd123/logout', {
+        api.put('auth', '/user/'+userId+'/logout', {
             //token : token+"asd123"
         },
         function(error, data, response) {
-            console.log(data)
-            console.log(response)
-            data.should.have.property('error').have.property('name', 'AssertionError');
+            data.should.have.property('error').have.property('name', 'InvalidTokenError');
             done();
         }
         );

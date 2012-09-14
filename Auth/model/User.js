@@ -196,7 +196,7 @@ userSchema.methods.findAuthorizedApp = function (id, cb) {
     if (authorizedApp) {
         cb(undefined, authorizedApp);
     } else {
-        cb('app not found', null);
+        cb({ message : 'denied token', name : 'DeniedTokenError'}, null);
     }
 };
 
@@ -216,13 +216,13 @@ userSchema.methods.findThirdPartyLogin = function (id, cb) {
 
     for (i = 0; i < this.thirdPartyLogins.length; i = i + 1) {
         if (this.thirdPartyLogins[i]._id.toString() === id.toString()) {
-            thirdPartyLogin = this.thirdPartyLogins[i];            
+            thirdPartyLogin = this.thirdPartyLogins[i];
         }
     }
     if (thirdPartyLogin) {
         cb(undefined, thirdPartyLogin);
     } else {
-        cb('third party login not found', null);
+        cb({ message : 'third-party-login not found', name : 'NotFoundError', id : id, path : 'third-party-login'}, null);
     }
 };
 

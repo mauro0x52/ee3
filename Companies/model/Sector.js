@@ -59,7 +59,7 @@ var Sector = {
         }
 
         if (!sector) {
-            cb('sector ' + id + ' not found');
+            cb({message :  'sector not found', name : 'NotFoundError', id : id, path : 'sector'});
         } else {
             cb(undefined, sector)
         }

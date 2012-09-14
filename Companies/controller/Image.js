@@ -41,7 +41,7 @@ module.exports = function (app) {
                     } else {
                         //verifica se a compania foi encontrada
                         if (company === null) {
-                            response.send({error : {message :  'company not found', name : 'NotFoundError', id : request.params.company_id, model : 'company'}});
+                            response.send({error : {message :  'company not found', name : 'NotFoundError', id : request.params.company_id, path : 'company'}});
                         } else {
                             //verifica se o usuário é dono da compania
                             if (!company.isOwner(user._id)) {
@@ -54,7 +54,7 @@ module.exports = function (app) {
                                     } else {
                                         //verifica se o produto foi encontrado
                                         if (product === null) {
-                                            response.send({error : {message :  'product not found', name : 'NotFoundError', id : request.params.product_id, model : 'product'}});
+                                            response.send({error : {message :  'product not found', name : 'NotFoundError', id : request.params.product_id, path : 'product'}});
                                         } else {
                                             // verifica se foi enviado algum arquivo
                                             if (!request.files || !request.files.file) {
@@ -121,7 +121,7 @@ module.exports = function (app) {
             } else {
                 //verifica se a compania foi encontrada
                 if (company === null) {
-                    response.send({error : {message :  'company not found', name : 'NotFoundError', id : request.params.company_id, model : 'company'}});
+                    response.send({error : {message :  'company not found', name : 'NotFoundError', id : request.params.company_id, path : 'company'}});
                 } else {
                     //busca o produto
                     company.findProduct(request.params.product_id, function (error, product) {
@@ -130,7 +130,7 @@ module.exports = function (app) {
                         } else {
                             //verifica se o produto foi encontrado
                             if (product === null) {
-                                response.send({error : {message :  'product not found', name : 'NotFoundError', id : request.params.product_id, model : 'product'}});
+                                response.send({error : {message :  'product not found', name : 'NotFoundError', id : request.params.product_id, path : 'product'}});
                             } else {
                                 if (!product.images || !product.images.length) {
                                     response.send(null);
@@ -169,7 +169,7 @@ module.exports = function (app) {
             } else {
                 //verifica se a compania foi encontrada
                 if (company === null) {
-                    response.send({error : {message :  'company not found', name : 'NotFoundError', id : request.params.company_id, model : 'company'}});
+                    response.send({error : {message :  'company not found', name : 'NotFoundError', id : request.params.company_id, path : 'company'}});
                 } else {
                     //busca o produto
                     company.findProduct(request.params.product_id, function (error, product) {
@@ -178,7 +178,7 @@ module.exports = function (app) {
                         } else {
                             //verifica se o produto foi encontrado
                             if (product === null) {
-                                response.send({error : {message :  'product not found', name : 'NotFoundError', id : request.params.product_id, model : 'product'}});
+                                response.send({error : {message :  'product not found', name : 'NotFoundError', id : request.params.product_id, path : 'product'}});
                             } else {
                                 //busca a imagem
                                 product.findImage(request.params.image_id, function (error, image) {
@@ -187,7 +187,7 @@ module.exports = function (app) {
                                     } else {
                                         //verifica se a imagem foi encontrada
                                         if (image === null) {
-                                            response.send({error : {message :  'image not found', name : 'NotFoundError', id : request.params.image_id, model : 'image'}});
+                                            response.send({error : {message :  'image not found', name : 'NotFoundError', id : request.params.image_id, path : 'image'}});
                                         } else {
                                             response.send({image : image});
                                         }
@@ -229,7 +229,7 @@ module.exports = function (app) {
                     } else {
                         //verifica se a compania foi encontrada
                         if (company === null) {
-                            response.send({error : {message :  'company not found', name : 'NotFoundError', id : request.params.company_id, model : 'company'}});
+                            response.send({error : {message :  'company not found', name : 'NotFoundError', id : request.params.company_id, path : 'company'}});
                         } else {
                             //verifica se o usuário é dono da compania
                             if (! company.isOwner(user._id)) {
@@ -242,7 +242,7 @@ module.exports = function (app) {
                                     } else {
                                         //verifica se o produto foi encontrado
                                         if (product === null) {
-                                            response.send({error : {message :  'product not found', name : 'NotFoundError', id : request.params.product_id, model : 'product'}});
+                                            response.send({error : {message :  'product not found', name : 'NotFoundError', id : request.params.product_id, path : 'product'}});
                                         } else {
                                             //busca a imagem
                                             product.findImage(request.params.image_id, function (error, image) {
@@ -251,7 +251,7 @@ module.exports = function (app) {
                                                 } else {
                                                     //verifica se a imagem foi encontrada
                                                     if (image === null) {
-                                                        response.send({error : {message :  'image not found', name : 'NotFoundError', id : request.params.image_id, model : 'image'}});
+                                                        response.send({error : {message :  'image not found', name : 'NotFoundError', id : request.params.image_id, path : 'image'}});
                                                     } else {
                                                         //altera os dados da imagem
                                                         image.title = request.param('title', image.title);
@@ -306,7 +306,7 @@ module.exports = function (app) {
                     } else {
                         //verifica se a compania foi encontrada
                         if (company === null) {
-                            response.send({error : {message :  'company not found', name : 'NotFoundError', id : request.params.company_id, model : 'company'}});
+                            response.send({error : {message :  'company not found', name : 'NotFoundError', id : request.params.company_id, path : 'company'}});
                         } else {
                             //verifica se o usuário é dono da compania
                             if (!company.isOwner(user._id)) {
@@ -319,7 +319,7 @@ module.exports = function (app) {
                                     } else {
                                         //verifica se o produto foi encontrado
                                         if (product === null) {
-                                            response.send({error : {message :  'product not found', name : 'NotFoundError', id : request.params.product_id, model : 'product'}});
+                                            response.send({error : {message :  'product not found', name : 'NotFoundError', id : request.params.product_id, path : 'product'}});
                                         } else {
                                             //busca a imagem
                                             product.findImage(request.params.image_id, function (error, image) {
@@ -328,7 +328,7 @@ module.exports = function (app) {
                                                 } else {
                                                     //verifica se a imagem foi encontrada
                                                     if (image === null) {
-                                                        response.send({error : {message :  'image not found', name : 'NotFoundError', id : request.params.image_id, model : 'image'}});
+                                                        response.send({error : {message :  'image not found', name : 'NotFoundError', id : request.params.image_id, path : 'image'}});
                                                     } else {
                                                         image.remove();
                                                         //remove a imagem

@@ -43,7 +43,7 @@ module.exports = function (app) {
                     } else {
                         //verifica se o app foi encontrado
                         if (app === null) {
-                            response.send({error : { message : 'app not found', name : 'NotFoundError', id : request.params.slug, model : 'app'}});
+                            response.send({error : { message : 'app not found', name : 'NotFoundError', id : request.params.slug, path : 'app'}});
                         } else {
                             //verifica se o usuário é o criador do app
                             if (user._id !== app.creator) {
@@ -56,7 +56,7 @@ module.exports = function (app) {
                                     } else {
                                         //verifica se a versão foi encontrada
                                         if (version === null) {
-                                            response.send({error : { message : 'version not found', name : 'NotFoundError', id : request.params.number, model : 'version'}});
+                                            response.send({error : { message : 'version not found', name : 'NotFoundError', id : request.params.number, path : 'version'}});
                                         } else {
                                             //pega os dados do post e coloca em um objeto
                                             plugin = new Plugin({
@@ -107,7 +107,7 @@ module.exports = function (app) {
             } else {
                 //verifica se o app foi encontrado
                 if (app === null) {
-                    response.send({error : { message : 'app not found', name : 'NotFoundError', id : request.params.slug, model : 'app'}});
+                    response.send({error : { message : 'app not found', name : 'NotFoundError', id : request.params.slug, path : 'app'}});
                 } else {
                     //pega versão do app
                     app.findVersion(request.params.number, function (error, version) {
@@ -116,7 +116,7 @@ module.exports = function (app) {
                         } else {
                             //verifica se a versão foi encontrada
                             if (version === null) {
-                                response.send({error : { message : 'version not found', name : 'NotFoundError', id : request.params.number, model : 'version'}});
+                                response.send({error : { message : 'version not found', name : 'NotFoundError', id : request.params.number, path : 'version'}});
                             } else {
                                 //pega plugins
                                 version.plugins(function (error, plugins) {
@@ -157,7 +157,7 @@ module.exports = function (app) {
             } else {
                 //verifica se o app foi encontrado
                 if (app === null) {
-                    response.send({error : { message : 'app not found', name : 'NotFoundError', id : request.params.slug, model : 'app'}});
+                    response.send({error : { message : 'app not found', name : 'NotFoundError', id : request.params.slug, path : 'app'}});
                 } else {
                     //pega a versão do app
                     app.findVersion(request.params.number, function (error, version) {
@@ -166,7 +166,7 @@ module.exports = function (app) {
                         } else {
                             //verifica se a versão foi encontrada
                             if (version === null) {
-                                response.send({error : { message : 'version not found', name : 'NotFoundError', id : request.params.number, model : 'version'}});
+                                response.send({error : { message : 'version not found', name : 'NotFoundError', id : request.params.number, path : 'version'}});
                             } else {
                                 version.findPlugin(request.params.name, function (error, plugin) {
                                     if (error) {
@@ -174,7 +174,7 @@ module.exports = function (app) {
                                     } else {
                                         //verifica se a ferramente foi encontrada
                                         if (plugin === null) {
-                                            response.send({error : { message : 'plugin not found', name : 'NotFoundError', id : request.params.name, model : 'plugin'}});
+                                            response.send({error : { message : 'plugin not found', name : 'NotFoundError', id : request.params.name, path : 'plugin'}});
                                         } else {
                                             response.send({plugin : plugin});
                                         }
@@ -216,7 +216,7 @@ module.exports = function (app) {
                     } else {
                         //verifica se o app foi encontrado
                         if (app === null) {
-                            response.send({error : { message : 'app not found', name : 'NotFoundError', id : request.params.slug, model : 'app'}});
+                            response.send({error : { message : 'app not found', name : 'NotFoundError', id : request.params.slug, path : 'app'}});
                         } else {
                             //verifica se o usuário é o criador do app
                             if (user._id !== app.creator) {
@@ -229,7 +229,7 @@ module.exports = function (app) {
                                     } else {
                                         //verifica se a versão foi encontrada
                                         if (version === null) {
-                                            response.send({error : { message : 'version not found', name : 'NotFoundError', id : request.params.number, model : 'version'}});
+                                            response.send({error : { message : 'version not found', name : 'NotFoundError', id : request.params.number, path : 'version'}});
                                         } else {
                                             //pega a plugin
                                             version.findPlugin(request.params.name, function (error, plugin) {
@@ -238,7 +238,7 @@ module.exports = function (app) {
                                                 } else {
                                                     //verifica se a plugin foi encontrada
                                                     if (plugin === null) {
-                                                        response.send({error : { message : 'plugin not found', name : 'NotFoundError', id : request.params.name, model : 'plugin'}});
+                                                        response.send({error : { message : 'plugin not found', name : 'NotFoundError', id : request.params.name, path : 'plugin'}});
                                                     } else {
                                                         //remove a plugin
                                                         plugin.remove(function (error) {
@@ -290,7 +290,7 @@ module.exports = function (app) {
                     } else {
                         //verifica se o app foi encontrado
                         if (app === null) {
-                            response.send({error : { message : 'app not found', name : 'NotFoundError', id : request.params.slug, model : 'app'}});
+                            response.send({error : { message : 'app not found', name : 'NotFoundError', id : request.params.slug, path : 'app'}});
                         } else {
                             //verifica se o usuário é o criador do app
                             if (user._id !== app.creator) {
@@ -303,7 +303,7 @@ module.exports = function (app) {
                                     } else {
                                         //verifica se a versão foi encontrada
                                         if (version === null) {
-                                            response.send({error : { message : 'version not found', name : 'NotFoundError', id : request.params.number, model : 'version'}});
+                                            response.send({error : { message : 'version not found', name : 'NotFoundError', id : request.params.number, path : 'version'}});
                                         } else {
                                             //busca a plugin
                                             version.findPlugin(request.params.oldname, function (error, plugin) {
@@ -312,7 +312,7 @@ module.exports = function (app) {
                                                 } else {
                                                     //verifica se a plugin foi encontrada
                                                     if (plugin === null) {
-                                                        response.send({error : { message : 'plugin not found', name : 'NotFoundError', id : request.params.name, model : 'plugin'}});
+                                                        response.send({error : { message : 'plugin not found', name : 'NotFoundError', id : request.params.name, path : 'plugin'}});
                                                     } else {
                                                         //altera os dados da plugin
                                                         plugin.name = request.param('name', plugin.name);

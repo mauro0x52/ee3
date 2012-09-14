@@ -85,7 +85,7 @@ module.exports = function (app) {
                 if (region) {
                     response.send({region : region});
                 } else {
-                    response.send({error : { message : 'region not found', name : 'NotFoundError', id : request.params.slug, model : 'region'}});
+                    response.send({error : { message : 'region not found', name : 'NotFoundError', id : request.params.slug, path : 'region'}});
                 }
             }
         });
@@ -151,7 +151,7 @@ module.exports = function (app) {
                     }
                 });
             } else {
-                response.send({error : { message : 'region not found', name : 'NotFoundError', id : request.params.slug, model : 'region'}});
+                response.send({error : { message : 'region not found', name : 'NotFoundError', id : request.params.slug, path : 'region'}});
             }
         });
     });
@@ -216,7 +216,7 @@ module.exports = function (app) {
                     }
                 });
             } else {
-                response.send({error : { message : 'region not found', name : 'NotFoundError', id : request.params.slug, model : 'region'}});
+                response.send({error : { message : 'region not found', name : 'NotFoundError', id : request.params.slug, path : 'region'}});
             }
         });
     });
@@ -281,7 +281,7 @@ module.exports = function (app) {
                     }
                 });
             } else {
-                response.send({error : { message : 'region not found', name : 'NotFoundError', id : request.params.slug, model : 'region'}});
+                response.send({error : { message : 'region not found', name : 'NotFoundError', id : request.params.slug, path : 'region'}});
             }
         });
     });

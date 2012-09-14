@@ -44,7 +44,7 @@ module.exports = function (app) {
                     } else {
                         //verifica se o app foi encontrado
                         if (app === null) {
-                            response.send({error : { message : 'app not found', name : 'NotFoundError', id : request.params.slug, model : 'app'}});
+                            response.send({error : { message : 'app not found', name : 'NotFoundError', id : request.params.slug, path : 'app'}});
                         } else {
                             //verifica se o usuário é o criador do app
                             if (user._id !== app.creator) {
@@ -57,7 +57,7 @@ module.exports = function (app) {
                                     } else {
                                         //verifica se a versão foi encontrada
                                         if (version === null) {
-                                            response.send({error : { message : 'version not found', name : 'NotFoundError', id : request.params.number, model : 'version'}});
+                                            response.send({error : { message : 'version not found', name : 'NotFoundError', id : request.params.number, path : 'version'}});
                                         } else {
                                             //pega os dados do post e coloca em um objeto
                                             tool = new Tool({
@@ -109,7 +109,7 @@ module.exports = function (app) {
             } else {
                 //verifica se o app foi encontrado
                 if (app === null) {
-                    response.send({error : { message : 'app not found', name : 'NotFoundError', id : request.params.slug, model : 'app'}});
+                    response.send({error : { message : 'app not found', name : 'NotFoundError', id : request.params.slug, path : 'app'}});
                 } else {
                     //pega versão do app
                     app.findVersion(request.params.number, function (error, version) {
@@ -118,7 +118,7 @@ module.exports = function (app) {
                         } else {
                             //verifica se a versão foi encontrada
                             if (version === null) {
-                                response.send({error : { message : 'version not found', name : 'NotFoundError', id : request.params.number, model : 'version'}});
+                                response.send({error : { message : 'version not found', name : 'NotFoundError', id : request.params.number, path : 'version'}});
                             } else {
                                 //pega ferramentas
                                 version.tools(function (error, tools) {
@@ -160,7 +160,7 @@ module.exports = function (app) {
             } else {
                 //verifica se o app foi encontrado
                 if (app === null) {
-                    response.send({error : { message : 'app not found', name : 'NotFoundError', id : request.params.slug, model : 'app'}});
+                    response.send({error : { message : 'app not found', name : 'NotFoundError', id : request.params.slug, path : 'app'}});
                 } else {
                     //pega a versão do app
                     app.findVersion(request.params.number, function (error, version) {
@@ -169,7 +169,7 @@ module.exports = function (app) {
                         } else {
                             //verifica se a versão foi encontrada
                             if (version === null) {
-                                response.send({error : { message : 'version not found', name : 'NotFoundError', id : request.params.number, model : 'version'}});
+                                response.send({error : { message : 'version not found', name : 'NotFoundError', id : request.params.number, path : 'version'}});
                             } else {
                                 version.findTool(request.params.tool_slug, function (error, tool) {
                                     if (error) {
@@ -177,7 +177,7 @@ module.exports = function (app) {
                                     } else {
                                         //verifica se a ferramente foi encontrada
                                         if (tool === null) {
-                                            response.send({error : { message : 'tool not found', name : 'NotFoundError', id : request.params.tool_slug, model : 'tool'}});
+                                            response.send({error : { message : 'tool not found', name : 'NotFoundError', id : request.params.tool_slug, path : 'tool'}});
                                         } else {
                                             tool.minify(app, version, function (error) {
                                                 if (error) {
@@ -226,7 +226,7 @@ module.exports = function (app) {
                     } else {
                         //verifica se o app foi encontrado
                         if (app === null) {
-                            response.send({error : { message : 'app not found', name : 'NotFoundError', id : request.params.slug, model : 'app'}});
+                            response.send({error : { message : 'app not found', name : 'NotFoundError', id : request.params.slug, path : 'app'}});
                         } else {
                             //verifica se o usuário é o criador do app
                             if (user._id !== app.creator) {
@@ -239,7 +239,7 @@ module.exports = function (app) {
                                     } else {
                                         //verifica se a versão foi encontrada
                                         if (version === null) {
-                                            response.send({error : { message : 'version not found', name : 'NotFoundError', id : request.params.number, model : 'version'}});
+                                            response.send({error : { message : 'version not found', name : 'NotFoundError', id : request.params.number, path : 'version'}});
                                         } else {
                                             //pega a ferramenta
                                             version.findTool(request.params.name, function (error, tool) {
@@ -248,7 +248,7 @@ module.exports = function (app) {
                                                 } else {
                                                     //verifica se a ferramenta foi encontrada
                                                     if (tool === null) {
-                                                        response.send({error : { message : 'tool not found', name : 'NotFoundError', id : request.params.tool_slug, model : 'tool'}});
+                                                        response.send({error : { message : 'tool not found', name : 'NotFoundError', id : request.params.tool_slug, path : 'tool'}});
                                                     } else {
                                                         //remove a ferramenta
                                                         tool.remove(function (error) {
@@ -301,7 +301,7 @@ module.exports = function (app) {
                     } else {
                         //verifica se o app foi encontrado
                         if (app === null) {
-                            response.send({error : { message : 'app not found', name : 'NotFoundError', id : request.params.slug, model : 'app'}});
+                            response.send({error : { message : 'app not found', name : 'NotFoundError', id : request.params.slug, path : 'app'}});
                         } else {
                             //verifica se o usuário é o criador do app
                             if (user._id !== app.creator) {
@@ -314,7 +314,7 @@ module.exports = function (app) {
                                     } else {
                                         //verifica se a versão foi encontrada
                                         if (version === null) {
-                                            response.send({error : { message : 'version not found', name : 'NotFoundError', id : request.params.number, model : 'version'}});
+                                            response.send({error : { message : 'version not found', name : 'NotFoundError', id : request.params.number, path : 'version'}});
                                         } else {
                                             //busca a ferramenta
                                             version.findTool(request.params.oldname, function (error, tool) {
@@ -323,7 +323,7 @@ module.exports = function (app) {
                                                 } else {
                                                     //verifica se a ferramenta foi encontrada
                                                     if (tool === null) {
-                                                        response.send({error : { message : 'tool not found', name : 'NotFoundError', id : request.params.tool_slug, model : 'tool'}});
+                                                        response.send({error : { message : 'tool not found', name : 'NotFoundError', id : request.params.tool_slug, path : 'tool'}});
                                                     } else {
                                                         //altera os dados da ferramenta
                                                         tool.name = request.param('name', tool.name);

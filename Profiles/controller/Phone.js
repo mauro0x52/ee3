@@ -40,7 +40,7 @@ module.exports = function (app) {
                     } else {
                         //verifica se o perfil foi encontrado
                         if (profile === null) {
-                            response.send({error : { message : 'profile not found', name : 'NotFoundError', id : request.params.slug, model : 'profile'}});
+                            response.send({error : { message : 'profile not found', name : 'NotFoundError', id : request.params.slug, path : 'profile'}});
                         } else {
                             //verifica se o usuário é dono da compania
                             if (! profile.isOwner(user._id)) {
@@ -93,7 +93,7 @@ module.exports = function (app) {
             } else {
                 //verifica se o perfil foi encontrada
                 if (profile === null) {
-                    response.send({error : { message : 'profile not found', name : 'NotFoundError', id : request.params.slug, model : 'profile'}});
+                    response.send({error : { message : 'profile not found', name : 'NotFoundError', id : request.params.slug, path : 'profile'}});
                 } else {
                     response.send({phones : profile.phones});
                 }
@@ -124,7 +124,7 @@ module.exports = function (app) {
             } else {
                 //verifica se o perfil foi encontrado
                 if (profile === null) {
-                    response.send({error : { message : 'profile not found', name : 'NotFoundError', id : request.params.slug, model : 'profile'}});
+                    response.send({error : { message : 'profile not found', name : 'NotFoundError', id : request.params.slug, path : 'profile'}});
                 } else {
                     //busca telefone
                     profile.findPhone(request.params.id, function (error, phone) {
@@ -133,7 +133,7 @@ module.exports = function (app) {
                         } else {
                             //verifica se telefone foi encontrado
                             if (phone === null) {
-                                response.send({error : { message : 'phone not found', name : 'NotFoundError', id : request.params.id, model : 'phone'}});
+                                response.send({error : { message : 'phone not found', name : 'NotFoundError', id : request.params.id, path : 'phone'}});
                             } else {
                                 response.send({phone : phone});
                             }
@@ -172,7 +172,7 @@ module.exports = function (app) {
                     } else {
                         //verifica se o perfil foi encontrada
                         if (profile === null) {
-                            response.send({error : { message : 'profile not found', name : 'NotFoundError', id : request.params.slug, model : 'profile'}});
+                            response.send({error : { message : 'profile not found', name : 'NotFoundError', id : request.params.slug, path : 'profile'}});
                         } else {
                             //verifica se o usuário é dono do perfil
                             if (! profile.isOwner(user._id)) {
@@ -235,7 +235,7 @@ module.exports = function (app) {
                     } else {
                         //verifica se o perfil foi encontrada
                         if (profile === null) {
-                            response.send({error : { message : 'profile not found', name : 'NotFoundError', id : request.params.slug, model : 'profile'}});
+                            response.send({error : { message : 'profile not found', name : 'NotFoundError', id : request.params.slug, path : 'profile'}});
                         } else {
                             //verifica se o usuário é dono do perfil
                             if (! profile.isOwner(user._id)) {
@@ -248,7 +248,7 @@ module.exports = function (app) {
                                     } else {
                                         //verifica se telefone foi encontrado
                                         if (phone === null) {
-                                            response.send({error : { message : 'phone not found', name : 'NotFoundError', id : request.params.id, model : 'phone'}});
+                                            response.send({error : { message : 'phone not found', name : 'NotFoundError', id : request.params.id, path : 'phone'}});
                                         } else {
                                             //remove o telefone
                                             phone.remove();

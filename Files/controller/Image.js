@@ -164,14 +164,14 @@ module.exports = function (app) {
 
 
         if (!fileId) {
-            response.send({error : { message : 'image not found', name : 'NotFoundError', id : '', model : 'image'}});
+            response.send({error : { message : 'image not found', name : 'NotFoundError', id : '', path : 'image'}});
         } else {
             File.findByIdentity(fileId, function (error, file) {
                 if (error) {
                     response.send(error);
                 } else {
                     if (!file) {
-                        response.send({error : { message : 'image not found', name : 'NotFoundError', id : '', model : 'image'}});
+                        response.send({error : { message : 'image not found', name : 'NotFoundError', id : '', path : 'image'}});
                     } else {
                         response.send({image : file});
                     }

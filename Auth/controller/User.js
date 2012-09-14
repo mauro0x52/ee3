@@ -76,11 +76,11 @@ module.exports = function (app) {
         //localiza o usuário
         User.findByIdentity(request.params.login, function (error, user) {
             if (error) {
-                response.send({error : { message : 'user not found', name : 'NotFoundError', id : request.params.login, model : 'user'}});
+                response.send({error : { message : 'user not found', name : 'NotFoundError', id : request.params.login, path : 'user'}});
             } else {
                 //verifica se o usuario foi encontrado
                 if (user === null) {
-                    response.send({error : {message :  'user not found', name : 'NotFoundError', id : request.params.login, model : 'user' }});
+                    response.send({error : {message :  'user not found', name : 'NotFoundError', id : request.params.login, path : 'user' }});
                 } else {
                     //checa token
                     user.checkToken(request.param('token', null), function (valid) {
@@ -121,11 +121,11 @@ module.exports = function (app) {
         //localiza o usuário
         User.findByIdentity(request.params.login, function (error, user) {
             if (error) {
-                response.send({error : { message : 'user not found', name : 'NotFoundError', id : request.params.login, model : 'user'}});
+                response.send({error : { message : 'user not found', name : 'NotFoundError', id : request.params.login, path : 'user'}});
             } else {
                 //verifica se o usuario foi encontrado
                 if (user === null) {
-                    response.send({error : {message :  'user not found', name : 'NotFoundError', id : request.params.login, model : 'user' }});
+                    response.send({error : {message :  'user not found', name : 'NotFoundError', id : request.params.login, path : 'user' }});
                 } else {
                     //checa token
                     user.checkToken(request.param('token', null), function (valid) {
@@ -168,11 +168,11 @@ module.exports = function (app) {
             //localiza o usuário
             User.findByIdentity(request.params.login, function (error, user) {
                 if (error) {
-                    response.send({error : { message : 'user not found', name : 'NotFoundError', id : request.params.login, model : 'user'}});
+                    response.send({error : { message : 'user not found', name : 'NotFoundError', id : request.params.login, path : 'user'}});
                 } else {
                     //verifica se o usuario foi encontrado
                     if (user === null) {
-                        response.send({error : {message :  'user not found', name : 'NotFoundError', id : request.params.login, model : 'user' }});
+                        response.send({error : {message :  'user not found', name : 'NotFoundError', id : request.params.login, path : 'user' }});
                     } else {
                         //checa token
                         user.checkToken(request.param('token', null), function (valid) {
@@ -223,7 +223,7 @@ module.exports = function (app) {
         //localiza o usuário
         User.findByIdentity(request.params.login, function (error, user) {
             if (error) {
-                response.send({error : { message : 'user not found', name : 'NotFoundError', id : request.params.login, model : 'user'}});
+                response.send({error : { message : 'user not found', name : 'NotFoundError', id : request.params.login, path : 'user'}});
             } else {
                 //verifica se o usuario foi encontrado
                 if (user === null) {
@@ -266,11 +266,11 @@ module.exports = function (app) {
         //localiza o usuário
         User.findByIdentity(request.params.login, function (error, user) {
             if (error) {
-                response.send({error : { message : 'user not found', name : 'NotFoundError', id : request.params.login, model : 'user'}});
+                response.send({error : { message : 'user not found', name : 'NotFoundError', id : request.params.login, path : 'user'}});
             } else {
                 //verifica se o usuario foi encontrado
                 if (user === null) {
-                    response.send({error : {message :  'user not found', name : 'NotFoundError', id : request.params.login, model : 'user' }});
+                    response.send({error : {message :  'user not found', name : 'NotFoundError', id : request.params.login, path : 'user' }});
                 } else {
                     //verifica o token do usuário
                     user.checkToken(request.param('token', null), function (valid) {

@@ -2,7 +2,7 @@
  * @author : Mauro Ribeiro
  * @since : 2012-08
  *
- * @description : Manipulacao de imagens 
+ * @description : Manipulacao de imagens
  */
 
 var crypto = require('crypto'),
@@ -47,15 +47,15 @@ imageSchema.methods.save = function (cb) {
 
     // tem algum arquivo?
     if (!file) {
-        cb('Arquivo de imagem é obrigatório', undefined);
+        cb({message : 'no defined file', name : 'ValidationError', errors : {file : {message : 'no defined file', name : 'ValidatorError', path : 'file', type : 'required'}}}, undefined);
     } else {
         // foi definido o caminho?
         if (!path) {
-            cb('Caminho não definido', undefined);
+            cb({message : 'no defined path', name : 'ValidationError', errors : { path : {message : 'no defined path', name : 'ValidatorError', path : 'path', type : 'required'}}}, undefined);
         } else {
             // tamanho muito grande?
             if (file.size > config.files.maxsize) {
-                cb('Tamanho máximo excedido', undefined);
+                cb({message : 'max file size exceeded ('+config.files.maxsize+')', name : 'ValidationError', errors : { file : {message : 'max file size exceeded ('+config.files.maxsize+')', name : 'ValidatorError', path : 'path', type : 'max'}}}, undefined);
             } else {
                 if (config.aws.s3.enabled) {
                     // ----------------------------------------
@@ -69,7 +69,7 @@ imageSchema.methods.save = function (cb) {
 
                     s3Client.putFile(file.path, path, function (error, response) {
                         if (200 !== response.statusCode) {
-                            cb('Ocorreu algum erro ao salvar imagem', undefined);
+                            cb({message : 'error saving image', name : 'ServerError'}, undefined);
                         } else {
                             cb(undefined, new Image({path: file.path}), path);
                         }
@@ -89,7 +89,7 @@ imageSchema.methods.save = function (cb) {
                     // arquivo ja existe?
                     fs.exists(fullPath, function (exists) {
                         if (exists) {
-                            cb('Arquivo com nome "' + path + '" já existe', undefined);
+                            cb({message : 'path already exists', name : 'ValidationError', errors : { path : {message : 'path already exists', name : 'ValidatorError', path : 'path', type : 'unique'}}}, undefined);
                         } else {
                             // cria diretorio
                             folderPath = fullPath.substring(0, fullPath.lastIndexOf("/"));
@@ -101,7 +101,7 @@ imageSchema.methods.save = function (cb) {
                                     fullPath,
                                     function (error) {
                                         if (error) {
-                                            cb('Ocorreu algum erro ao salvar imagem', undefined);
+                                            cb({message : 'error saving image', name : 'ServerError'}, undefined);
                                         } else {
                                             cb(undefined, new Image({path: fullPath}), path);
                                         }
@@ -176,7 +176,7 @@ imageSchema.statics.open = function (path, cb) {
                 response.on('end', function () {
                     fs.writeFile(fileFullPath, fileStream, 'binary', function (error) {
                         if (error) {
-                            cb('Erro ao ler imagem', undefined);
+                            cb({message : 'error reading image', name : 'ServerError'}, undefined);
                         } else {
                             cb(undefined, new Image({path: fileFullPath}));
                         }
@@ -319,12 +319,12 @@ imageSchema.statics.resize = function (params, cb) {
                         original_width = features.width;
                         original_height = features.height;
                         original_aspect = original_width / original_height;
-    
+
                         aspect = width / height;
-    
+
                         resizeImageProperties = {};
                         resizeImageProperties.srcData = originalImage;
-    
+
                         if (original_aspect >= aspect) {
                             // extended + o original eh mais achatado que o desejado
                             resizeImageProperties.width = width;

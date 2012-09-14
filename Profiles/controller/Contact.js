@@ -40,7 +40,7 @@ module.exports = function (app) {
                     } else {
                         //verifica se o perfil foi encontrado
                         if (profile === null) {
-                            response.send({error : { message : 'profile not found', name : 'NotFoundError', id : request.params.slug, model : 'profile'}});
+                            response.send({error : { message : 'profile not found', name : 'NotFoundError', id : request.params.slug, path : 'profile'}});
                         } else {
                             //verifica se o usuário é dono da compania
                             if (! profile.isOwner(user._id)) {
@@ -90,7 +90,7 @@ module.exports = function (app) {
             } else {
                 //verifica se o perfil foi encontrada
                 if (profile === null) {
-                    response.send({error : { message : 'profile not found', name : 'NotFoundError', id : request.params.slug, model : 'profile'}});
+                    response.send({error : { message : 'profile not found', name : 'NotFoundError', id : request.params.slug, path : 'profile'}});
                 } else {
                     response.send({contacts : profile.contacts});
                 }
@@ -121,7 +121,7 @@ module.exports = function (app) {
             } else {
                 //verifica se o perfil foi encontrado
                 if (profile === null) {
-                    response.send({error : { message : 'profile not found', name : 'NotFoundError', id : request.params.slug, model : 'profile'}});
+                    response.send({error : { message : 'profile not found', name : 'NotFoundError', id : request.params.slug, path : 'profile'}});
                 } else {
                     //busca o contato
                     profile.findContact(request.params.id, function (error, contact) {
@@ -130,7 +130,7 @@ module.exports = function (app) {
                         } else {
                             //verifica se contato foi encontrado
                             if (contact === null) {
-                                response.send({error : { message : 'contact not found', name : 'NotFoundError', id : request.params.id, model : 'contact'}});
+                                response.send({error : { message : 'contact not found', name : 'NotFoundError', id : request.params.id, path : 'contact'}});
                             } else {
                                 response.send({contact : contact});
                             }
@@ -169,7 +169,7 @@ module.exports = function (app) {
                     } else {
                         //verifica se o perfil foi encontrada
                         if (profile === null) {
-                            response.send({error : { message : 'profile not found', name : 'NotFoundError', id : request.params.slug, model : 'profile'}});
+                            response.send({error : { message : 'profile not found', name : 'NotFoundError', id : request.params.slug, path : 'profile'}});
                         } else {
                             //verifica se o usuário é dono do perfil
                             if (! profile.isOwner(user._id)) {
@@ -182,7 +182,7 @@ module.exports = function (app) {
                                     } else {
                                         //verifica se o contato foi encontrado
                                         if (contact === null) {
-                                            response.send({error : { message : 'contact not found', name : 'NotFoundError', id : request.params.id, model : 'contact'}});
+                                            response.send({error : { message : 'contact not found', name : 'NotFoundError', id : request.params.id, path : 'contact'}});
                                         } else {
                                             //altera os dados do contato
                                             contact.type = request.param('type', contact.type);
@@ -234,7 +234,7 @@ module.exports = function (app) {
                     } else {
                         //verifica se o perfil foi encontrada
                         if (profile === null) {
-                            response.send({error : { message : 'profile not found', name : 'NotFoundError', id : request.params.slug, model : 'profile'}});
+                            response.send({error : { message : 'profile not found', name : 'NotFoundError', id : request.params.slug, path : 'profile'}});
                         } else {
                             //verifica se o usuário é dono do perfil
                             if (! profile.isOwner(user._id)) {
@@ -247,7 +247,7 @@ module.exports = function (app) {
                                     } else {
                                         //verifica se contato foi encontrado
                                         if (contact === null) {
-                                            response.send({error : { message : 'contact not found', name : 'NotFoundError', id : request.params.id, model : 'contact'}});
+                                            response.send({error : { message : 'contact not found', name : 'NotFoundError', id : request.params.id, path : 'contact'}});
                                         } else {
                                             //remove o contato
                                             contact.remove();

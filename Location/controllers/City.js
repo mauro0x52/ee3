@@ -84,12 +84,12 @@ module.exports = function (app) {
                                     }
                                 });
                             } else {
-                                response.send({error : { message : 'state not found', name : 'NotFoundError', id : request.params.stateSlug, model : 'state'}});
+                                response.send({error : { message : 'state not found', name : 'NotFoundError', id : request.params.stateSlug, path : 'state'}});
                             }
                         }
                     });
                 } else {
-                    response.send({error : { message : 'country not found', name : 'NotFoundError', id : request.params.countrySlug, model : 'country'}});
+                    response.send({error : { message : 'country not found', name : 'NotFoundError', id : request.params.countrySlug, path : 'country'}});
                 }
             }
         });
@@ -133,17 +133,17 @@ module.exports = function (app) {
                                         if (city) {
                                             response.send({city : city});
                                         } else {
-                                            response.send({error : { message : 'city not found', name : 'NotFoundError', id : request.params.citySlug, model : 'city'}});
+                                            response.send({error : { message : 'city not found', name : 'NotFoundError', id : request.params.citySlug, path : 'city'}});
                                         };
                                     }
                                 });
                             } else {
-                                response.send({error : { message : 'state not found', name : 'NotFoundError', id : request.params.stateSlug, model : 'state'}});
+                                response.send({error : { message : 'state not found', name : 'NotFoundError', id : request.params.stateSlug, path : 'state'}});
                             }
                         }
                     });
                 } else {
-                    response.send({error : { message : 'country not found', name : 'NotFoundError', id : request.params.countrySlug, model : 'country'}});
+                    response.send({error : { message : 'country not found', name : 'NotFoundError', id : request.params.countrySlug, path : 'country'}});
                 }
             }
         });
@@ -176,11 +176,11 @@ module.exports = function (app) {
                             response.send({city : city, state : state});
                         }
                         else {
-                            response.send({error : { message : 'state not found', name : 'NotFoundError', id : request.params.stateSlug, model : 'state'}});
+                            response.send({error : { message : 'state not found', name : 'NotFoundError', id : request.params.stateSlug, path : 'state'}});
                         }
                     })
                 } else {
-                    response.send({error : { message : 'city not found', name : 'NotFoundError', id : request.params.citySlug, model : 'city'}});
+                    response.send({error : { message : 'city not found', name : 'NotFoundError', id : request.params.citySlug, path : 'city'}});
                 };
             }
         });

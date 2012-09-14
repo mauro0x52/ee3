@@ -40,7 +40,7 @@ module.exports = function (app) {
                     } else {
                         //verifica se a compania foi encontrada
                         if (company === null) {
-                            response.send({error : {message :  'company not found', name : 'NotFoundError', id : request.params.slug, model : 'company'}});
+                            response.send({error : {message :  'company not found', name : 'NotFoundError', id : request.params.slug, path : 'company'}});
                         } else {
                             //verifica se o usuário é dono da compania
                             if (! company.isOwner(user._id)) {
@@ -90,7 +90,7 @@ module.exports = function (app) {
             } else {
                 //verifica se a compania foi encontrada
                 if (company === null) {
-                    response.send({error : {message :  'company not found', name : 'NotFoundError', id : request.params.slug, model : 'company'}});
+                    response.send({error : {message :  'company not found', name : 'NotFoundError', id : request.params.slug, path : 'company'}});
                 } else {
                     response.send({contacts : company.contacts});
                 }
@@ -121,7 +121,7 @@ module.exports = function (app) {
             } else {
                 //verifica se a compania foi encontrada
                 if (company === null) {
-                    response.send({error : {message :  'company not found', name : 'NotFoundError', id : request.params.slug, model : 'company'}});
+                    response.send({error : {message :  'company not found', name : 'NotFoundError', id : request.params.slug, path : 'company'}});
                 } else {
                     //busca o contato
                     company.findContact(request.params.id, function (error, contact) {
@@ -130,7 +130,7 @@ module.exports = function (app) {
                         } else {
                             //verifica se o contato foi encontrado
                             if (contact === null) {
-                                response.send({error : {message :  'contact not found', name : 'NotFoundError', id : request.params.id, model : 'contact'}});
+                                response.send({error : {message :  'contact not found', name : 'NotFoundError', id : request.params.id, path : 'contact'}});
                             } else {
                                 response.send({contact : contact});
                             }
@@ -169,7 +169,7 @@ module.exports = function (app) {
                     } else {
                         //verifica se a compania foi encontrada
                         if (company === null) {
-                            response.send({error : {message :  'company not found', name : 'NotFoundError', id : request.params.slug, model : 'company'}});
+                            response.send({error : {message :  'company not found', name : 'NotFoundError', id : request.params.slug, path : 'company'}});
                         } else {
                             //verifica se o usuário é dono da compania
                             if (! company.isOwner(user._id)) {
@@ -182,7 +182,7 @@ module.exports = function (app) {
                                     } else {
                                         //verifica se o contato foi encontrado
                                         if (contact === null) {
-                                            response.send({error : {message :  'contact not found', name : 'NotFoundError', id : request.params.id, model : 'contact'}});
+                                            response.send({error : {message :  'contact not found', name : 'NotFoundError', id : request.params.id, path : 'contact'}});
                                         } else {
                                             //altera os dados do contato
                                             contact.address = request.param('address', contact.address);
@@ -234,7 +234,7 @@ module.exports = function (app) {
                     } else {
                         //verifica se a compania foi encontrada
                         if (company === null) {
-                            response.send({error : {message :  'company not found', name : 'NotFoundError', id : request.params.slug, model : 'company'}});
+                            response.send({error : {message :  'company not found', name : 'NotFoundError', id : request.params.slug, path : 'company'}});
                         } else {
                             //verifica se o usuário é dono da compania
                             if (! company.isOwner(user._id)) {
@@ -247,7 +247,7 @@ module.exports = function (app) {
                                     } else {
                                         //verifica se o contato foi encontrado
                                         if (contact === null) {
-                                            response.send({error : {message :  'contact not found', name : 'NotFoundError', id : request.params.id, model : 'contact'}});
+                                            response.send({error : {message :  'contact not found', name : 'NotFoundError', id : request.params.id, path : 'contact'}});
                                         } else {
                                             //remove o contato
                                             contact.remove();

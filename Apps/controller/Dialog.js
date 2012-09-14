@@ -43,7 +43,7 @@ module.exports = function (app) {
                     } else {
                         //verifica se o app foi encontrado
                         if (app === null) {
-                            response.send({error : { message : 'app not found', name : 'NotFoundError', id : request.params.slug, model : 'app'}});
+                            response.send({error : { message : 'app not found', name : 'NotFoundError', id : request.params.slug, path : 'app'}});
                         } else {
                             //verifica se o usuário é o criador do app
                             if (user._id !== app.creator) {
@@ -56,7 +56,7 @@ module.exports = function (app) {
                                     } else {
                                         //verifica se a versão foi encontrada
                                         if (version === null) {
-                                            response.send({error : { message : 'version not found', name : 'NotFoundError', id : request.params.number, model : 'version'}});
+                                            response.send({error : { message : 'version not found', name : 'NotFoundError', id : request.params.number, path : 'version'}});
                                         } else {
                                             //pega os dados do post e coloca em um objeto
                                             dialog = new Dialog({
@@ -107,7 +107,7 @@ module.exports = function (app) {
             } else {
                 //verifica se o app foi encontrado
                 if (app === null) {
-                    response.send({error : { message : 'app not found', name : 'NotFoundError', id : request.params.slug, model : 'app'}});
+                    response.send({error : { message : 'app not found', name : 'NotFoundError', id : request.params.slug, path : 'app'}});
                 } else {
                     //pega versão do app
                     app.findVersion(request.params.number, function (error, version) {
@@ -116,7 +116,7 @@ module.exports = function (app) {
                         } else {
                             //verifica se a versão foi encontrada
                             if (version === null) {
-                                response.send({error : { message : 'version not found', name : 'NotFoundError', id : request.params.number, model : 'version'}});
+                                response.send({error : { message : 'version not found', name : 'NotFoundError', id : request.params.number, path : 'version'}});
                             } else {
                                 //pega dialogos
                                 version.dialogs(function (error, dialogs) {
@@ -157,7 +157,7 @@ module.exports = function (app) {
             } else {
                 //verifica se o app foi encontrado
                 if (app === null) {
-                    response.send({error : { message : 'app not found', name : 'NotFoundError', id : request.params.slug, model : 'app'}});
+                    response.send({error : { message : 'app not found', name : 'NotFoundError', id : request.params.slug, path : 'app'}});
                 } else {
                     //pega a versão do app
                     app.findVersion(request.params.number, function (error, version) {
@@ -166,7 +166,7 @@ module.exports = function (app) {
                         } else {
                             //verifica se a versão foi encontrada
                             if (version === null) {
-                                response.send({error : { message : 'version not found', name : 'NotFoundError', id : request.params.number, model : 'version'}});
+                                response.send({error : { message : 'version not found', name : 'NotFoundError', id : request.params.number, path : 'version'}});
                             } else {
                                 version.findDialog(request.params.name, function (error, dialog) {
                                     if (error) {
@@ -174,7 +174,7 @@ module.exports = function (app) {
                                     } else {
                                         //verifica se a ferramente foi encontrada
                                         if (dialog === null) {
-                                            response.send({error : { message : 'dialog not found', name : 'NotFoundError', id : request.params.name, model : 'dialog'}});
+                                            response.send({error : { message : 'dialog not found', name : 'NotFoundError', id : request.params.name, path : 'dialog'}});
                                         } else {
                                             response.send({dialog : dialog});
                                         }
@@ -216,7 +216,7 @@ module.exports = function (app) {
                     } else {
                         //verifica se o app foi encontrado
                         if (app === null) {
-                            response.send({error : { message : 'app not found', name : 'NotFoundError', id : request.params.slug, model : 'app'}});
+                            response.send({error : { message : 'app not found', name : 'NotFoundError', id : request.params.slug, path : 'app'}});
                         } else {
                             //verifica se o usuário é o criador do app
                             if (user._id !== app.creator) {
@@ -229,7 +229,7 @@ module.exports = function (app) {
                                     } else {
                                         //verifica se a versão foi encontrada
                                         if (version === null) {
-                                            response.send({error : { message : 'version not found', name : 'NotFoundError', id : request.params.number, model : 'version'}});
+                                            response.send({error : { message : 'version not found', name : 'NotFoundError', id : request.params.number, path : 'version'}});
                                         } else {
                                             //pega a dialogo
                                             version.findDialog(request.params.name, function (error, dialog) {
@@ -238,7 +238,7 @@ module.exports = function (app) {
                                                 } else {
                                                     //verifica se a dialogo foi encontrada
                                                     if (dialog === null) {
-                                                        response.send({error : { message : 'dialog not found', name : 'NotFoundError', id : request.params.name, model : 'dialog'}});
+                                                        response.send({error : { message : 'dialog not found', name : 'NotFoundError', id : request.params.name, path : 'dialog'}});
                                                     } else {
                                                         //remove a dialogo
                                                         dialog.remove(function (error) {
@@ -290,7 +290,7 @@ module.exports = function (app) {
                     } else {
                         //verifica se o app foi encontrado
                         if (app === null) {
-                            response.send({error : { message : 'app not found', name : 'NotFoundError', id : request.params.slug, model : 'app'}});
+                            response.send({error : { message : 'app not found', name : 'NotFoundError', id : request.params.slug, path : 'app'}});
                         } else {
                             //verifica se o usuário é o criador do app
                             if (user._id !== app.creator) {
@@ -303,7 +303,7 @@ module.exports = function (app) {
                                     } else {
                                         //verifica se a versão foi encontrada
                                         if (version === null) {
-                                            response.send({error : { message : 'version not found', name : 'NotFoundError', id : request.params.number, model : 'version'}});
+                                            response.send({error : { message : 'version not found', name : 'NotFoundError', id : request.params.number, path : 'version'}});
                                         } else {
                                             //busca a dialogo
                                             version.findDialog(request.params.oldname, function (error, dialog) {
@@ -312,7 +312,7 @@ module.exports = function (app) {
                                                 } else {
                                                     //verifica se a dialogo foi encontrada
                                                     if (dialog === null) {
-                                                        response.send({error : { message : 'dialog not found', name : 'NotFoundError', id : request.params.name, model : 'dialog'}});
+                                                        response.send({error : { message : 'dialog not found', name : 'NotFoundError', id : request.params.name, path : 'dialog'}});
                                                     } else {
                                                         //altera os dados da dialogo
                                                         dialog.name = request.param('name', dialog.name);

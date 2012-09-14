@@ -43,7 +43,7 @@ module.exports = function (app) {
                     } else {
                         //verifica se o usuário foi encontrado
                         if (conversant === null) {
-                            response.send({error : {message :  'conversant not found', name : 'NotFoundError', id : user._id, model : 'conversant'}});
+                            response.send({error : {message :  'conversant not found', name : 'NotFoundError', id : user._id, path : 'conversant'}});
                         } else {
                             //pega os dados do post e coloca em um objeto
                             thread = new Thread({
@@ -102,7 +102,7 @@ module.exports = function (app) {
                     } else {
                         //verifica se o usuário foi encontrado
                         if (conversant === null) {
-                            response.send({error : {message :  'conversant not found', name : 'NotFoundError', id : user._id, model : 'conversant'}});
+                            response.send({error : {message :  'conversant not found', name : 'NotFoundError', id : user._id, path : 'conversant'}});
                         } else {
                             //busca a thread
                             Thread.findOne({slug : request.params.slug}, function (error, thread) {
@@ -111,7 +111,7 @@ module.exports = function (app) {
                                 } else {
                                     //verifica se a thread foi encontrada
                                     if (thread === null) {
-                                        response.send({error : {message :  'thread not found', name : 'NotFoundError', id : request.params.slug, model : 'thread'}});
+                                        response.send({error : {message :  'thread not found', name : 'NotFoundError', id : request.params.slug, path : 'thread'}});
                                     } else {
                                         //coloca a thread na lista de threads do usuário
                                         conversant.threads.push(thread._id);
@@ -161,7 +161,7 @@ module.exports = function (app) {
                     } else {
                         //verifica se o usuário foi encontrado
                         if (conversant === null) {
-                            response.send({error : {message :  'conversant not found', name : 'NotFoundError', id : user._id, model : 'conversant'}});
+                            response.send({error : {message :  'conversant not found', name : 'NotFoundError', id : user._id, path : 'conversant'}});
                         } else {
                             //busca as threads do usuário
                             conversant.activeThreads(function (error, threads) {
@@ -206,7 +206,7 @@ module.exports = function (app) {
                     } else {
                         //verifica se o usuário foi encontrado
                         if (conversant === null) {
-                            response.send({error : {message :  'conversant not found', name : 'NotFoundError', id : user._id, model : 'conversant'}});
+                            response.send({error : {message :  'conversant not found', name : 'NotFoundError', id : user._id, path : 'conversant'}});
                         } else {
                             //busca a thread
                             Thread.findOne({slug : request.params.slug}, function (error, thread) {
@@ -215,7 +215,7 @@ module.exports = function (app) {
                                 } else {
                                     //verifica se a thread foi encontrada
                                     if (thread === null) {
-                                        response.send({error : {message :  'thread not found', name : 'NotFoundError', id : request.params.slug, model : 'thread'}});
+                                        response.send({error : {message :  'thread not found', name : 'NotFoundError', id : request.params.slug, path : 'thread'}});
                                     } else {
                                         //coloca os dados do post em um objeto
                                         thread.messages.push({
@@ -269,7 +269,7 @@ module.exports = function (app) {
                     } else {
                         //verifica se o usuário foi encontrado
                         if (conversant === null) {
-                            response.send({error : {message :  'conversant not found', name : 'NotFoundError', id : user._id, model : 'conversant'}});
+                            response.send({error : {message :  'conversant not found', name : 'NotFoundError', id : user._id, path : 'conversant'}});
                         } else {
                             //busca a thread
                             Thread.findOne({slug : request.params.slug}, function (error, thread) {
@@ -278,7 +278,7 @@ module.exports = function (app) {
                                 } else {
                                     //verifica se a thread foi encontrada
                                     if (thread === null) {
-                                        response.send({error : {message :  'thread not found', name : 'NotFoundError', id : request.params.slug, model : 'thread'}});
+                                        response.send({error : {message :  'thread not found', name : 'NotFoundError', id : request.params.slug, path : 'thread'}});
                                     } else {
                                         response.send({messages : thread.messages});
                                     }
@@ -319,7 +319,7 @@ module.exports = function (app) {
                     } else {
                         //verifica se o usuário foi encontrado
                         if (conversant === null) {
-                            response.send({error : {message :  'conversant not found', name : 'NotFoundError', id : user._id, model : 'conversant'}});
+                            response.send({error : {message :  'conversant not found', name : 'NotFoundError', id : user._id, path : 'conversant'}});
                         } else {
                             //busca a thread
                             Thread.findOne({slug : request.params.slug}, function (error, thread) {
@@ -328,7 +328,7 @@ module.exports = function (app) {
                                 } else {
                                     //verifica se a thread foi encontrada
                                     if (thread === null) {
-                                        response.send({error : {message :  'thread not found', name : 'NotFoundError', id : request.params.slug, model : 'thread'}});
+                                        response.send({error : {message :  'thread not found', name : 'NotFoundError', id : request.params.slug, path : 'thread'}});
                                     } else {
                                         //atualiza o lastCheck do usuário para mante-lo online
                                         conversant.lastCheck = new Date();

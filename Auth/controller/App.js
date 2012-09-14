@@ -37,7 +37,7 @@ module.exports = function (app) {
             } else {
                 //verifica se o usuario foi encontrado
                 if (user === null) {
-                    response.send({error : {message :  'user not found', name : 'NotFoundError', id : request.params.login, model : 'user' }});
+                    response.send({error : {message :  'user not found', name : 'NotFoundError', id : request.params.login, path : 'user' }});
                 } else {
                     //verifica o token do usuário
                     user.checkToken(request.param('token', null), function (valid) {
@@ -90,7 +90,7 @@ module.exports = function (app) {
             } else {
                 //verifica se o usuario foi encontrado
                 if (user === null) {
-                    response.send({error : {message :  'user not found', name : 'NotFoundError', id : request.params.login, model : 'user' }});
+                    response.send({error : {message :  'user not found', name : 'NotFoundError', id : request.params.login, path : 'user' }});
                 } else {
                     //verifica o token do usuário
                     user.checkToken(request.param('token', null), function (valid) {
@@ -104,7 +104,7 @@ module.exports = function (app) {
                                 } else {
                                     //verifica se a autorização foi encontrada
                                     if (app === null) {
-                                        response.send({error : { message : 'app not found', name : 'NotFoundError', id : request.params.id, model : 'app'}});
+                                        response.send({error : { message : 'app not found', name : 'NotFoundError', id : request.params.id, path : 'app'}});
                                     } else {
                                         //remove a autorização
                                         app.remove();
@@ -148,12 +148,12 @@ module.exports = function (app) {
             } else {
                 //verifica se o usuario foi encontrado
                 if (user === null) {
-                    response.send({error : 'user not found'});
+                    response.send({error : {message :  'user not found', name : 'NotFoundError', id : request.params.login, path : 'user' }});
                 } else {
                     //verifica o token do usuário
                     user.checkToken(request.param('token', null), function (valid) {
                         if (!valid) {
-                            response.send({error : 'invalid token'});
+                            response.send({error : {message : 'token not allowed for this app', name : 'DeniedToken'}});
                         } else {
                             response.send({authorizedApps : user.authorizedApps});
                         }
@@ -186,7 +186,7 @@ module.exports = function (app) {
             } else {
                 //verifica se o usuario foi encontrado
                 if (user === null) {
-                    response.send({error : {message :  'user not found', name : 'NotFoundError', id : request.params.login, model : 'user' }});
+                    response.send({error : {message :  'user not found', name : 'NotFoundError', id : request.params.login, path : 'user' }});
                 } else {
                     //verifica o token do usuário
                     user.checkToken(request.param('token', null), function (valid) {
@@ -200,7 +200,7 @@ module.exports = function (app) {
                                 } else {
                                     //verifica se a autorização foi encontrada
                                     if (authorizedApp === null) {
-                                        response.send({error : { message : 'app not found', name : 'NotFoundError', id : request.params.id, model : 'app'}});
+                                        response.send({error : { message : 'app not found', name : 'NotFoundError', id : request.params.id, path : 'app'}});
                                     } else {
                                         response.send({authorizedApp : authorizedApp});
                                     }
@@ -240,7 +240,7 @@ module.exports = function (app) {
             } else {
                 //verifica se o usuario foi encontrado
                 if (user === null) {
-                    response.send({error : {message :  'user not found', name : 'NotFoundError', id : request.params.login, model : 'user' }});
+                    response.send({error : {message :  'user not found', name : 'NotFoundError', id : request.params.login, path : 'user' }});
                 } else {
                     //verifica o token do usuário
                     user.checkToken(request.param('token', null), function (valid) {
@@ -254,7 +254,7 @@ module.exports = function (app) {
                                 } else {
                                     //verifica se a autorização foi encontrada
                                     if (authorizedApp === null) {
-                                        response.send({error : { message : 'app not found', name : 'NotFoundError', id : request.params.id, model : 'app'}});
+                                        response.send({error : { message : 'app not found', name : 'NotFoundError', id : request.params.id, path : 'app'}});
                                     } else {
                                         //edita dados da autorização
                                         authorizedApp.authorizationDate = request.param('authorizationDate', authorizedApp.authorizationDate);
@@ -303,7 +303,7 @@ module.exports = function (app) {
             } else {
                 //verifica se o usuario foi encontrado
                 if (user === null) {
-                    response.send({error : {message :  'user not found', name : 'NotFoundError', id : request.params.login, model : 'user' }});
+                    response.send({error : {message :  'user not found', name : 'NotFoundError', id : request.params.login, path : 'user' }});
                 } else {
                     //busca a autorização
                     user.findAuthorizedApp(request.params.id, function (error, app) {
@@ -312,7 +312,7 @@ module.exports = function (app) {
                         } else {
                             //verifica se a autorização foi encontrada
                             if (app === null) {
-                                response.send({error : { message : 'app not found', name : 'NotFoundError', errors : [{ id : request.params.id, model : 'app', message : request.params.id + ' not found'}]}});
+                                response.send({error : { message : 'app not found', name : 'NotFoundError', errors : [{ id : request.params.id, path : 'app', message : request.params.id + ' not found'}]}});
                             } else {
                                 if (user.authorizedApps[i].token === request.param('token', null)) {
                                     response.send({valid : true});

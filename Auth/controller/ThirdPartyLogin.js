@@ -34,7 +34,7 @@ module.exports = function (app) {
             } else {
                 //verifica se o usuario foi encontrado
                 if (user === null) {
-                    response.send({error : {message :  'user not found', name : 'NotFoundError', id : request.params.login, model : 'user' }});
+                    response.send({error : {message :  'user not found', name : 'NotFoundError', id : request.params.login, path : 'user' }});
                 } else {
                     //verifica o token do usuário
                     user.checkToken(request.param('token', null), function (valid) {
@@ -85,7 +85,7 @@ module.exports = function (app) {
             } else {
                 //verifica se o usuario foi encontrado
                 if (user === null) {
-                    response.send({error : {message :  'user not found', name : 'NotFoundError', id : request.params.login, model : 'user' }});
+                    response.send({error : {message :  'user not found', name : 'NotFoundError', id : request.params.login, path : 'user' }});
                 } else {
                     //verifica o token do usuário
                     user.checkToken(request.param('token', null), function (valid) {
@@ -123,7 +123,7 @@ module.exports = function (app) {
             } else {
                 //verifica se o usuario foi encontrado
                 if (user === null) {
-                    response.send({error : {message :  'user not found', name : 'NotFoundError', id : request.params.login, model : 'user' }});
+                    response.send({error : {message :  'user not found', name : 'NotFoundError', id : request.params.login, path : 'user' }});
                 } else {
                     //verifica o token do usuário
                     user.checkToken(request.param('token', null), function (valid) {
@@ -137,7 +137,7 @@ module.exports = function (app) {
                                 } else {
                                     //verifica se o login externo foi encontrado
                                     if (thirdPartyLogin === null) {
-                                        response.send({error : { message : 'third-party-login not found', name : 'NotFoundError', id : request.params.id, model : 'third-party-login'}});
+                                        response.send({error : { message : 'third-party-login not found', name : 'NotFoundError', id : request.params.id, path : 'third-party-login'}});
                                     } else {
                                         response.send({thirdPartyLogin : thirdPartyLogin});
                                     }
@@ -177,7 +177,7 @@ module.exports = function (app) {
             } else {
                 //verifica se o usuario foi encontrado
                 if (user === null) {
-                    response.send({error : {message :  'user not found', name : 'NotFoundError', id : request.params.login, model : 'user' }});
+                    response.send({error : {message :  'user not found', name : 'NotFoundError', id : request.params.login, path : 'user' }});
                 } else {
                     //verifica o token do usuário
                     user.checkToken(request.param('token', null), function (valid) {
@@ -191,7 +191,7 @@ module.exports = function (app) {
                                 } else {
                                     //verifica se o login externo foi encontrado
                                     if (thirdPartyLogin === null) {
-                                        response.send({error : { message : 'third-party-login not found', name : 'NotFoundError', id : request.params.id, model : 'third-party-login'}});
+                                        response.send({error : { message : 'third-party-login not found', name : 'NotFoundError', id : request.params.id, path : 'third-party-login'}});
                                     } else {
                                         //remove o login externo
                                         thirdPartyLogin.remove();

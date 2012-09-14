@@ -131,7 +131,7 @@ profileSchema.methods.findPhone = function (id, cb) {
     if (phone) {
         cb(undefined, phone);
     } else {
-        cb('phone not found', null);
+        cb({message :  'phone not found', name : 'NotFoundError', id : id, path : 'phone'}, null);
     }
 };
 
@@ -158,7 +158,7 @@ profileSchema.methods.findLink = function (id, cb) {
     if (link) {
         cb(undefined, link);
     } else {
-        cb('phone not found', null);
+        cb({message :  'phone not found', name : 'NotFoundError', id : id, path : 'phone'}, null);
     }
 };
 
@@ -185,7 +185,7 @@ profileSchema.methods.findJob = function (id, cb) {
     if (job) {
         cb(undefined, job);
     } else {
-        cb('phone not found', null);
+        cb({message :  'phone not found', name : 'NotFoundError', id : id, path : 'phone'}, null);
     }
 };
 
@@ -212,7 +212,7 @@ profileSchema.methods.findContact = function (id, cb) {
     if (contact) {
         cb(undefined, contact);
     } else {
-        cb('phone not found', null);
+        cb({message :  'phone not found', name : 'NotFoundError', id : id, path : 'phone'}, null);
     }
 };
 
@@ -239,7 +239,7 @@ profileSchema.methods.findThumbnail = function (id, cb) {
     if (thumbnail) {
         cb(undefined, thumbnail);
     } else {
-        cb('phone not found', null);
+        cb({message :  'phone not found', name : 'NotFoundError', id : id, path : 'phone'}, null);
     }
 };
 

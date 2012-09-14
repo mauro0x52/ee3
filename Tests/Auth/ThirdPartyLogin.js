@@ -39,7 +39,7 @@ describe('POST /user/[id]/third-party-login', function () {
             }
         });
     });
-    
+
     it('token errado', function (done) {
         api.post('auth', '/user/'+userId+'/third-party-login', {
             server : 'Server ' + rand(),
@@ -71,7 +71,7 @@ describe('POST /user/[id]/third-party-login', function () {
             }
         });
     });
-    
+
     it('server em branco', function (done) {
         api.post('auth', '/user/'+userId+'/third-party-login', {
             token : token,
@@ -86,7 +86,7 @@ describe('POST /user/[id]/third-party-login', function () {
             }
         });
     });
-    
+
     it('external token em branco', function (done) {
         api.post('auth', '/user/'+userId+'/third-party-login', {
             server : 'Server ' + rand(),
@@ -101,7 +101,7 @@ describe('POST /user/[id]/third-party-login', function () {
             }
         });
     });
-    
+
     it('cadastra third party login', function (done) {
         api.post('auth', '/user/'+userId+'/third-party-login', {
             server : 'Server ' + rand(),
@@ -112,7 +112,7 @@ describe('POST /user/[id]/third-party-login', function () {
             if (error) {
                 done(error);
             } else {
-                should.not.exist(data.error, 'não deveria retornar erro');
+                data.should.not.have.property('error');
                 data.should.have.property('thirdPartyLogin').have.property('_id');
                 data.should.have.property('thirdPartyLogin').have.property('server');
                 data.should.have.property('thirdPartyLogin').have.property('token');
@@ -163,7 +163,7 @@ describe('GET /user/[id]/third-party-logins', function () {
             }
         });
     });
-    
+
     it('token errado', function (done) {
         api.get('auth', '/user/'+userId+'/third-party-logins', {token : 'tokeninvalido'}, function (error, data, response) {
             if (error) {
@@ -174,7 +174,7 @@ describe('GET /user/[id]/third-party-logins', function () {
             }
         });
     });
-    
+
     it('usuário inexistente', function (done) {
         api.get('auth', '/user/inexistente/third-party-logins', {}, function (error, data, response) {
             if (error) {
@@ -191,7 +191,7 @@ describe('GET /user/[id]/third-party-logins', function () {
             if (error) {
                 done(error);
             } else {
-                should.not.exist(data.error, 'erro inesperado');
+                data.should.not.have.property('error');
                 data.should.have.property('thirdPartyLogins');
                 for (var i = 0 ; i < data.thirdPartyLogins.length; i = i + 1) {
                     data.thirdPartyLogins[i].should.have.property('id');
@@ -242,7 +242,7 @@ describe('GET /user/[id]/third-party-login', function () {
             }
         });
     });
-    
+
     it('token errado', function (done) {
         api.get('auth', '/user/'+userId+'/third-party-login/'+third, {token : 'tokeninvalido'}, function (error, data, response) {
             if (error) {
@@ -253,7 +253,7 @@ describe('GET /user/[id]/third-party-login', function () {
             }
         });
     });
-    
+
     it('usuário inexistente', function (done) {
         api.get('auth', '/user/inexistente/third-party-login/' + third, {}, function (error, data, response) {
             if (error) {
@@ -264,9 +264,9 @@ describe('GET /user/[id]/third-party-login', function () {
             }
         });
     });
-    
+
     it('third party login inexistente', function (done) {
-        api.get('auth', '/user/' + userId + '/third-party-login/inexistente', {}, function (error, data, response) {
+        api.get('auth', '/user/' + userId + '/third-party-login/inexistente', {token : token}, function (error, data, response) {
             if (error) {
                 done(error);
             } else {
@@ -281,7 +281,7 @@ describe('GET /user/[id]/third-party-login', function () {
             if (error) {
                 done(error);
             } else {
-                should.not.exist(data.error, 'erro inesperado');
+                data.should.not.have.property('error');
                 data.should.have.property('thirdPartyLogin').have.property('id');
                 data.should.have.property('thirdPartyLogin').have.property('server');
                 data.should.have.property('thirdPartyLogin').have.property('token');
@@ -329,7 +329,7 @@ describe('DEL /user/[id]/third-party-login', function () {
             }
         });
     });
-    
+
     it('token errado', function (done) {
         api.del('auth', '/user/'+userId+'/third-party-login/'+third, {token : 'tokeninvalido'}, function (error, data, response) {
             if (error) {
@@ -340,7 +340,7 @@ describe('DEL /user/[id]/third-party-login', function () {
             }
         });
     });
-    
+
     it('usuário inexistente', function (done) {
         api.del('auth', '/user/inexistente/third-party-login/' + third, {}, function (error, data, response) {
             if (error) {
@@ -351,9 +351,9 @@ describe('DEL /user/[id]/third-party-login', function () {
             }
         });
     });
-    
+
     it('third party login inexistente', function (done) {
-        api.del('auth', '/user/' + userId + '/third-party-login/inexistente', {}, function (error, data, response) {
+        api.del('auth', '/user/' + userId + '/third-party-login/inexistente', {token : token}, function (error, data, response) {
             if (error) {
                 done(error);
             } else {
