@@ -24,7 +24,7 @@ describe('GET /country/:slug_country/states', function () {
                 if (error) return done(error);
                 else {
                     response.should.have.status(200);
-                    should.not.exist(data.error, 'erro inesperado');
+                    data.should.not.have.property('error');
                     data.states.should.have.lengthOf(27);
                     done();
                 }
@@ -37,7 +37,7 @@ describe('GET /country/:slug_country/states', function () {
             function(error, data, response) {
                 if (error) return done(error);
                 else {
-                    should.exist(data.error,"erro era esperado");
+                    data.should.have.property('error').property('name', 'NotFoundError');
                     done();
                 }
             }
@@ -51,7 +51,7 @@ describe('GET /country/:slug_country/states', function () {
             function(error, data, response) {
                 if (error) return done(error);
                 else {
-                    should.not.exist(data.error, 'erro inesperado');
+                    data.should.not.have.property('error');
                     data.states.should.have.lengthOf(18);
                     done();
                 }
@@ -68,7 +68,7 @@ describe('GET /country/:slug_country/states', function () {
                     api.get('location', '/country/'+dt.country.slug+'/states', {limit : 2, page : 2}, function(error, data, response) {
                             if (error) return done(error);
                             else {
-                                should.not.exist(data.error, 'erro inesperado');
+                                data.should.not.have.property('error');
                                 data.states.should.have.lengthOf(2);
                                 JSON.stringify(states)
                                     .should.include(JSON.stringify(data.states[0]), 'resultado menor tem que está dentro do resultado maior');
@@ -88,7 +88,7 @@ describe('GET /country/:slug_country/states', function () {
             function(error, data, response) {
                 if (error) return done(error);
                 else {
-                    should.not.exist(data.error, 'erro inesperado');
+                    data.should.not.have.property('error');
                     data.states.should.have.lengthOf(27);
                     for (var i = 1; i < data.states.length; i++) {
                         data.states[i].name.should.be.above(data.states[i-1].name, 'não ordenou');
@@ -106,7 +106,7 @@ describe('GET /country/:slug_country/states', function () {
             function(error, data, response) {
                 if (error) return done(error);
                 else {
-                    should.not.exist(data.error, 'erro inesperado');
+                    data.should.not.have.property('error');
                     data.states.should.have.lengthOf(27);
                     for (var i = 1; i < data.states.length; i++) {
                         data.states[i-1].slug.should.be.above(data.states[i].slug, 'não ordenou');
@@ -141,7 +141,7 @@ describe('GET /country/:slug_country/state/:state_id', function () {
             function(error, data, response) {
                 if (error) return done(error);
                 else {
-                    data.should.have.property('error');
+                    data.should.have.property('error').property('name', 'NotFoundError');
                     done();
                 }
             }
@@ -153,7 +153,7 @@ describe('GET /country/:slug_country/state/:state_id', function () {
             function(error, data, response) {
                 if (error) return done(error);
                 else {
-                    data.should.have.property('error');
+                    data.should.have.property('error').property('name', 'NotFoundError');
                     done();
                 }
             }

@@ -25,7 +25,7 @@ describe('GET /countries', function () {
                 if (error) return done(error);
                 else {
                     response.should.have.status(200);
-                    should.not.exist(data.error, 'erro inesperado');
+                    data.should.not.have.property('error');
                     data.countries.length.should.be.below(11);
                     done();
                 }
@@ -40,7 +40,7 @@ describe('GET /countries', function () {
             function(error, data, response) {
                 if (error) return done(error);
                 else {
-                    should.not.exist(data.error, 'erro inesperado');
+                    data.should.not.have.property('error');
                     data.countries.length.should.be.below(19);
                     done();
                 }
@@ -58,7 +58,7 @@ describe('GET /countries', function () {
 	                    api.get('location', '/countries', {limit : 2, page : 2}, function(error, data, response) {
 	                            if (error) return done(error);
 	                            else {
-	                                should.not.exist(data.error, 'erro inesperado');
+	                                data.should.not.have.property('error');
 	                                data.countries.length.should.be.below(3);
 	                                JSON.stringify(countries)
 	                                    .should.include(JSON.stringify(data.countries[0]), 'resultado menor tem que est√° dentro do resultado maior');
@@ -81,7 +81,7 @@ describe('GET /countries', function () {
             function(error, data, response) {
                 if (error) return done(error);
                 else {
-                    should.not.exist(data.error, 'erro inesperado');
+                    data.should.not.have.property('error');
                     data.countries.length.should.be.below(11);
                     for (var i = 1; i < data.countries.length; i++) {
                         data.countries[i].name.should.be.above(data.countries[i-1].name, 'n√£o ordenou');
@@ -99,7 +99,7 @@ describe('GET /countries', function () {
             function(error, data, response) {
                 if (error) return done(error);
                 else {
-                    should.not.exist(data.error, 'erro inesperado');
+                    data.should.not.have.property('error');
                     data.countries.length.should.be.below(11);
                     for (var i = 1; i < data.countries.length; i++) {
                         data.countries[i-1].slug.should.be.above(data.countries[i].slug, 'não ordenou');
@@ -134,7 +134,7 @@ describe('GET /country/:slug_country', function () {
             function(error, data, response) {
                 if (error) return done(error);
                 else {
-                    data.should.have.property('error');
+                    data.should.have.property('error').property('name', 'NotFoundError');
                     done();
                 }
             }

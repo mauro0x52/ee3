@@ -43,7 +43,7 @@ describe('GET /country/[slugCountry]/state/[slugState]/cities', function () {
             function(error, data, response) {
                 if (error) return done(error);
                 else {
-                    data.should.have.property('error');
+                    data.should.have.property('error').property('name', 'NotFoundError');
                     done();
                 }
             }
@@ -55,7 +55,7 @@ describe('GET /country/[slugCountry]/state/[slugState]/cities', function () {
             function(error, data, response) {
                 if (error) return done(error);
                 else {
-                    data.should.have.property('error');
+                    data.should.have.property('error').property('name', 'NotFoundError');
                     done();
                 }
             }
@@ -161,7 +161,7 @@ describe('GET /country/[slugCountry]/state/[slugState]/city/[slugCity]', functio
             function(error, data, response) {
                 if (error) return done(error);
                 else {
-                    data.should.have.property('error');
+                    data.should.have.property('error').property('name', 'NotFoundError');
                     done();
                 }
             }
@@ -173,7 +173,7 @@ describe('GET /country/[slugCountry]/state/[slugState]/city/[slugCity]', functio
             function(error, data, response) {
                 if (error) return done(error);
                 else {
-                    data.should.have.property('error');
+                    data.should.have.property('error').property('name', 'NotFoundError');
                     done();
                 }
             }
@@ -185,7 +185,7 @@ describe('GET /country/[slugCountry]/state/[slugState]/city/[slugCity]', functio
             function(error, data, response) {
                 if (error) return done(error);
                 else {
-                    data.should.have.property('error');
+                    data.should.have.property('error').property('name', 'NotFoundError');
                     done();
                 }
             }

@@ -134,7 +134,7 @@ describe('GET /region/:region_id', function () {
             function(error, data, response) {
                 if (error) return done(error);
                 else {
-                    data.should.have.property('error');
+                    data.should.have.property('error').property('name', 'NotFoundError');
                     done();
                 }
             }
