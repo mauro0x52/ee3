@@ -39,7 +39,7 @@ module.exports = function (app) {
                     //verifica o token do usuário
                     user.checkToken(request.param('token', null), function (valid) {
                         if (!valid) {
-                            response.send({error : {message : 'invalid token', name : 'InvalidToken'}});
+                            response.send({error : {message : 'invalid token', name : 'InvalidTokenError'}});
                         } else {
                             //Pega os dados do post e coloca em um objeto
                             user.thirdPartyLogins.push({
@@ -90,7 +90,7 @@ module.exports = function (app) {
                     //verifica o token do usuário
                     user.checkToken(request.param('token', null), function (valid) {
                         if (!valid) {
-                            response.send({error : {message : 'invalid token', name : 'InvalidToken'}});
+                            response.send({error : {message : 'invalid token', name : 'InvalidTokenError'}});
                         } else {
                             response.send({thirdPartyLogins : user.thirdPartyLogins});
                         }
@@ -128,7 +128,7 @@ module.exports = function (app) {
                     //verifica o token do usuário
                     user.checkToken(request.param('token', null), function (valid) {
                         if (!valid) {
-                            response.send({error : {message : 'invalid token', name : 'InvalidToken'}});
+                            response.send({error : {message : 'invalid token', name : 'InvalidTokenError'}});
                         } else {
                             //busca o login externo
                             user.findThirdPartyLogin(request.params.id, function (error, thirdPartyLogin) {
@@ -182,7 +182,7 @@ module.exports = function (app) {
                     //verifica o token do usuário
                     user.checkToken(request.param('token', null), function (valid) {
                         if (!valid) {
-                            response.send({error : {message : 'invalid token', name : 'InvalidToken'}});
+                            response.send({error : {message : 'invalid token', name : 'InvalidTokenError'}});
                         } else {
                             //busca o login externo
                             user.findThirdPartyLogin(request.params.id, function (error, thirdPartyLogin) {

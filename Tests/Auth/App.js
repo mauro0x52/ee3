@@ -56,7 +56,7 @@ describe('POST /user/[login]/app/[app_id]', function () {
             if (error) {
                 return done(error);
             } else {
-                should.exist(data.error, "deveria retornar error");
+                data.should.have.property('error').have.property('name', 'InvalidTokenError');
                 done();
             }
         });
@@ -69,7 +69,7 @@ describe('POST /user/[login]/app/[app_id]', function () {
             if (error) {
                 return done(error);
             } else {
-                should.exist(data.error, "deveria retornar error");
+                data.should.have.property('error').have.property('name', 'NotFoundError');
                 done();
             }
         });
@@ -82,7 +82,7 @@ describe('POST /user/[login]/app/[app_id]', function () {
             if (error) {
                 return done(error);
             } else {
-                should.exist(data.error, "deveria retornar error");
+                data.should.have.property('error').have.property('name', 'NotFoundError');
                 done();
             }
         });
@@ -154,8 +154,7 @@ describe('DEL /user/[login]/app/[app_id]', function () {
             if (error) {
                 return done(error);
             } else {
-                should.exist(data.error);
-                should.not.exist(data.token);
+                data.should.have.property('error').have.property('name', 'InvalidTokenError');
                 done();
             }
         });
@@ -167,8 +166,7 @@ describe('DEL /user/[login]/app/[app_id]', function () {
         }, function(error, data, response) {
             if (error) return done(error);
             else {
-                should.exist(data.error);
-                should.not.exist(data.token);
+                data.should.have.property('error').have.property('name', 'NotFoundError');
                 done();
             }
         });
@@ -180,8 +178,7 @@ describe('DEL /user/[login]/app/[app_id]', function () {
         }, function(error, data, response) {
             if (error) return done(error);
             else {
-                should.exist(data.error);
-                should.not.exist(data.token);
+                data.should.have.property('error').have.property('name', 'NotFoundError');
                 done();
             }
         });
@@ -196,7 +193,7 @@ describe('DEL /user/[login]/app/[app_id]', function () {
             } else {
                 should.not.exist(data);
                 api.get('auth', '/user/'+userId+'/app/' + appId, {token : token}, function (error, data) {
-                    should.exist(data.error, 'não exclui o login externo');
+                    data.should.have.property('error').have.property('name', 'NotFoundError');
                     done();
                 });
             }
@@ -253,8 +250,7 @@ describe('GET /user/[login]/app/[app_id]', function () {
             if (error) {
                 return done(error);
             } else {
-                should.exist(data.error);
-                should.not.exist(data.token);
+                data.should.have.property('error').have.property('name', 'InvalidTokenError');
                 done();
             }
         });
@@ -266,8 +262,7 @@ describe('GET /user/[login]/app/[app_id]', function () {
         }, function(error, data, response) {
             if (error) return done(error);
             else {
-                should.exist(data.error);
-                should.not.exist(data.token);
+                data.should.have.property('error').have.property('name', 'NotFoundError');
                 done();
             }
         });
@@ -279,8 +274,7 @@ describe('GET /user/[login]/app/[app_id]', function () {
         }, function(error, data, response) {
             if (error) return done(error);
             else {
-                should.exist(data.error);
-                should.not.exist(data.token);
+                data.should.have.property('error').have.property('name', 'NotFoundError');
                 done();
             }
         });
@@ -351,8 +345,7 @@ describe('PUT /user/[login]/app/[app_id]', function () {
             if (error) {
                 return done(error);
             } else {
-                should.exist(data.error);
-                should.not.exist(data.token);
+                data.should.have.property('error').have.property('name', 'InvalidTokenError');
                 done();
             }
         });
@@ -364,8 +357,7 @@ describe('PUT /user/[login]/app/[app_id]', function () {
         }, function(error, data, response) {
             if (error) return done(error);
             else {
-                should.exist(data.error);
-                should.not.exist(data.token);
+                data.should.have.property('error').have.property('name', 'NotFoundError');
                 done();
             }
         });
@@ -377,8 +369,7 @@ describe('PUT /user/[login]/app/[app_id]', function () {
         }, function(error, data, response) {
             if (error) return done(error);
             else {
-                should.exist(data.error);
-                should.not.exist(data.token);
+                data.should.have.property('error').have.property('name', 'NotFoundError');
                 done();
             }
         });

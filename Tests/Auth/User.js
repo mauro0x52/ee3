@@ -32,7 +32,7 @@ describe('POST /user', function () {
             if (error) {
                 done(error);
             } else {
-                should.exist(data.error, 'deveria retornar erro');
+                data.should.have.property('error').have.property('name', 'ValidationError');
                 done();
             }
         });
@@ -45,7 +45,7 @@ describe('POST /user', function () {
             if (error) {
                 done(error);
             } else {
-                should.exist(data.error, 'deveria retornar erro');
+                data.should.have.property('error').have.property('name', 'ValidationError');
                 done();
             }
         });
@@ -60,7 +60,7 @@ describe('POST /user', function () {
             if (error) {
                 done(error);
             } else {
-                should.exist(data.error, 'deveria retornar erro');
+                data.should.have.property('error').have.property('name', 'ValidationError');
                 done();
             }
         });
@@ -79,7 +79,7 @@ describe('POST /user', function () {
                 password_confirmation : 'testando',
                 status : 'active'
             }, function (error, data, response) {
-                should.exist(data.error, 'precisa retornar erro');
+                data.should.have.property('error').have.property('name', 'MongoError');
                 done();
             });
         });
@@ -145,7 +145,7 @@ describe('PUT /user/[login]/deactivate', function () {
         api.put('auth', '/user/'+userId+"/deactivate", {
             //token : token
         }, function (error, data, response) {
-            should.exist(data.error, 'deveria retornar erro');
+            data.should.have.property('error').have.property('name', 'InvalidTokenError');
             done();
         });
     });
@@ -153,7 +153,7 @@ describe('PUT /user/[login]/deactivate', function () {
         api.put('auth', '/user/'+userId+"/deactivate", {
             token : token+"asdasdasdas"
         }, function (error, data, response) {
-            should.exist(data.error, 'deveria retornar erro');
+            data.should.have.property('error').have.property('name', 'InvalidTokenError');
             done();
         });
     });
@@ -202,7 +202,7 @@ describe('PUT /user/[login]/activate', function () {
         api.put('auth', '/user/'+userId+"/activate", {
             //token : token
         }, function (error, data, response) {
-            should.exist(data.error, 'deveria retornar erro');
+            data.should.have.property('error').have.property('name', 'InvalidTokenError');
             done();
         });
     });
@@ -210,7 +210,7 @@ describe('PUT /user/[login]/activate', function () {
         api.put('auth', '/user/'+userId+"/activate", {
             token : token+"asdasdasdas"
         }, function (error, data, response) {
-            should.exist(data.error, 'deveria retornar erro');
+            data.should.have.property('error').have.property('name', 'InvalidTokenError');
             done();
         });
     });
@@ -218,7 +218,7 @@ describe('PUT /user/[login]/activate', function () {
         api.put('auth', '/user/'+userId+"223das123asd/activate", {
             token : token
         }, function (error, data, response) {
-            should.exist(data.error, 'deveria retornar erro');
+            data.should.have.property('error').have.property('name', 'NotFoundError');
             done();
         });
     });
@@ -277,7 +277,7 @@ describe('PUT /user/[login]/password-recovery', function () {
             if (error) {
                 done(error);
             } else {
-                should.exist(data.error, 'deveria retornar erro');
+                data.should.have.property('error').have.property('name', 'InvalidTokenError');
                 done();
             }
         });
@@ -288,7 +288,7 @@ describe('PUT /user/[login]/password-recovery', function () {
             newpasswordconfirmation : 'testando',
             token : token
         }, function(error, data, response) {
-            should.exist(data.error, 'deveria retornar erro');
+            data.should.have.property('error').have.property('name', 'NotFoundError');
             done();
         });
     });
@@ -298,7 +298,7 @@ describe('PUT /user/[login]/password-recovery', function () {
             newpasswordconfirmation : 'testando',
             token : token+"asdad123123asd"
         }, function(error, data, response) {
-            should.exist(data.error, 'deveria retornar erro');
+            data.should.have.property('error').have.property('name', 'InvalidTokenError');
             done();
         });
     });
@@ -308,7 +308,7 @@ describe('PUT /user/[login]/password-recovery', function () {
             newpasswordconfirmation : 'testando123123123123',
             token : token
         }, function(error, data, response) {
-            should.exist(data.error, 'deveria retornar erro');
+            data.should.have.property('error').have.property('name', 'ValidationError');
             done();
         });
     });
@@ -318,7 +318,7 @@ describe('PUT /user/[login]/password-recovery', function () {
             newpasswordconfirmation : '',
             token : token
         }, function(error, data, response) {
-            should.exist(data.error, 'deveria retornar erro');
+            data.should.have.property('error').have.property('name', 'ValidationError');
             done();
         });
     });
@@ -367,8 +367,7 @@ describe('PUT /user/[login]/login', function() {
             password : "testando"
         },
         function(error, data, response) {
-            should.exist(data.error, "era para retornar erro");
-            should.not.exist(data.token, "não era para enviar o token");
+            data.should.have.property('error').have.property('name', 'NotFoundError');
             done();
         }
         );
@@ -378,8 +377,7 @@ describe('PUT /user/[login]/login', function() {
             password : ""
         },
         function(error, data, response) {
-            should.exist(data.error, "era para retornar erro");
-            should.not.exist(data.token, "não era para enviar o token");
+            data.should.have.property('error').have.property('name', 'InvalidLoginError');
             done();
         }
         );
@@ -389,8 +387,7 @@ describe('PUT /user/[login]/login', function() {
             password : "1234567"
         },
         function(error, data, response) {
-            should.exist(data.error, "era para retornar erro");
-            should.not.exist(data.token, "não era para enviar o token");
+            data.should.have.property('error').have.property('name', 'InvalidLoginError');
             done();
         }
         );
@@ -439,7 +436,7 @@ describe('PUT /user/[login]/logout', function() {
             token : token
         },
         function(error, data, response) {
-            should.exist(data, "era para retornar erro");
+            data.should.have.property('error').have.property('name', 'NotFoundError');
             done();
         }
         );
@@ -449,7 +446,7 @@ describe('PUT /user/[login]/logout', function() {
             token : token+"asd123"
         },
         function(error, data, response) {
-            should.exist(data, "era para retornar erro");
+            //data.should.have.property('error').have.property('name', 'AssertionError');
             done();
         }
         );
@@ -459,7 +456,9 @@ describe('PUT /user/[login]/logout', function() {
             //token : token+"asd123"
         },
         function(error, data, response) {
-            should.exist(data, "era para retornar erro");
+            console.log(data)
+            console.log(response)
+            data.should.have.property('error').have.property('name', 'AssertionError');
             done();
         }
         );
@@ -512,7 +511,7 @@ describe('GET /user/validate', function() {
         api.get('auth', '/user/validate', {
             //token : token
         }, function (error, data, response) {
-            should.exist(data.error, 'deveria retornar erro');
+            data.should.have.property('error').have.property('name', 'InvalidTokenError');
             done();
         });
     });
@@ -520,7 +519,7 @@ describe('GET /user/validate', function() {
         api.get('auth', '/user/validate', {
             token : token+"asdasdasdas"
         }, function (error, data, response) {
-            should.exist(data.error, 'deveria retornar erro');
+            data.should.have.property('error').have.property('name', 'InvalidTokenError');
             done();
         });
     });

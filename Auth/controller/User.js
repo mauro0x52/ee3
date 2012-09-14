@@ -76,7 +76,7 @@ module.exports = function (app) {
         //localiza o usuário
         User.findByIdentity(request.params.login, function (error, user) {
             if (error) {
-                response.send({error : error});
+                response.send({error : { message : 'user not found', name : 'NotFoundError', id : request.params.login, model : 'user'}});
             } else {
                 //verifica se o usuario foi encontrado
                 if (user === null) {
@@ -85,7 +85,7 @@ module.exports = function (app) {
                     //checa token
                     user.checkToken(request.param('token', null), function (valid) {
                         if (!valid) {
-                            response.send({error : {message : 'invalid token', name : 'InvalidToken'}});
+                            response.send({error : {message : 'invalid token', name : 'InvalidTokenError'}});
                         } else {
                             //desativa a conta do usuário
                             user.deactivate(function (error) {
@@ -121,7 +121,7 @@ module.exports = function (app) {
         //localiza o usuário
         User.findByIdentity(request.params.login, function (error, user) {
             if (error) {
-                response.send({error : error});
+                response.send({error : { message : 'user not found', name : 'NotFoundError', id : request.params.login, model : 'user'}});
             } else {
                 //verifica se o usuario foi encontrado
                 if (user === null) {
@@ -130,7 +130,7 @@ module.exports = function (app) {
                     //checa token
                     user.checkToken(request.param('token', null), function (valid) {
                         if (!valid) {
-                            response.send({error : {message : 'invalid token', name : 'InvalidToken'}});
+                            response.send({error : {message : 'invalid token', name : 'InvalidTokenError'}});
                         } else {
                             //ativa a conta do usuário
                             user.activate(function (error) {
@@ -168,7 +168,7 @@ module.exports = function (app) {
             //localiza o usuário
             User.findByIdentity(request.params.login, function (error, user) {
                 if (error) {
-                    response.send({error : error});
+                    response.send({error : { message : 'user not found', name : 'NotFoundError', id : request.params.login, model : 'user'}});
                 } else {
                     //verifica se o usuario foi encontrado
                     if (user === null) {
@@ -177,7 +177,7 @@ module.exports = function (app) {
                         //checa token
                         user.checkToken(request.param('token', null), function (valid) {
                             if (!valid) {
-                                response.send({error : {message : 'invalid token', name : 'InvalidToken'}});
+                                response.send({error : {message : 'invalid token', name : 'InvalidTokenError'}});
                             } else {
                                 //altera a senha
                                 user.changePassword(request.param('newpassword', null), function (error) {
@@ -223,7 +223,7 @@ module.exports = function (app) {
         //localiza o usuário
         User.findByIdentity(request.params.login, function (error, user) {
             if (error) {
-                response.send({error : error});
+                response.send({error : { message : 'user not found', name : 'NotFoundError', id : request.params.login, model : 'user'}});
             } else {
                 //verifica se o usuario foi encontrado
                 if (user === null) {
@@ -266,7 +266,7 @@ module.exports = function (app) {
         //localiza o usuário
         User.findByIdentity(request.params.login, function (error, user) {
             if (error) {
-                response.send({error : error});
+                response.send({error : { message : 'user not found', name : 'NotFoundError', id : request.params.login, model : 'user'}});
             } else {
                 //verifica se o usuario foi encontrado
                 if (user === null) {
@@ -275,7 +275,7 @@ module.exports = function (app) {
                     //verifica o token do usuário
                     user.checkToken(request.param('token', null), function (valid) {
                         if (!valid) {
-                            response.send({error : {message : 'invalid token', name : 'InvalidToken'}});
+                            response.send({error : {message : 'invalid token', name : 'InvalidTokenError'}});
                         } else {
                             //desloga o usuário
                             user.logout(function (error) {

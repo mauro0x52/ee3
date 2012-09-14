@@ -42,7 +42,7 @@ module.exports = function (app) {
                     //verifica o token do usuário
                     user.checkToken(request.param('token', null), function (valid) {
                         if (!valid) {
-                            response.send({error : {message : 'invalid token', name : 'InvalidToken'}});
+                            response.send({error : {message : 'invalid token', name : 'InvalidTokenError'}});
                         } else {
                             //gera o token
                             token = crypto.createHash('md5').update(user.login + user.password + request.params.app_id).digest('hex');
@@ -95,7 +95,7 @@ module.exports = function (app) {
                     //verifica o token do usuário
                     user.checkToken(request.param('token', null), function (valid) {
                         if (!valid) {
-                            response.send({error : {message : 'invalid token', name : 'InvalidToken'}});
+                            response.send({error : {message : 'invalid token', name : 'InvalidTokenError'}});
                         } else {
                             //busca a autorização
                             user.findAuthorizedApp(request.params.id, function (error, app) {
@@ -191,7 +191,7 @@ module.exports = function (app) {
                     //verifica o token do usuário
                     user.checkToken(request.param('token', null), function (valid) {
                         if (!valid) {
-                            response.send({error : {message : 'invalid token', name : 'InvalidToken'}});
+                            response.send({error : {message : 'invalid token', name : 'InvalidTokenError'}});
                         } else {
                             //busca a autorização
                             user.findAuthorizedApp(request.params.id, function (error, authorizedApp) {
@@ -245,7 +245,7 @@ module.exports = function (app) {
                     //verifica o token do usuário
                     user.checkToken(request.param('token', null), function (valid) {
                         if (!valid) {
-                            response.send({error : {message : 'invalid token', name : 'InvalidToken'}});
+                            response.send({error : {message : 'invalid token', name : 'InvalidTokenError'}});
                         } else {
                             //busca a autorização
                             user.findAuthorizedApp(request.params.id, function (error, authorizedApp) {
