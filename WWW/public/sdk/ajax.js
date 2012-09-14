@@ -72,7 +72,7 @@ sdk.modules.ajax = function (app) {
             }
             return invocation;
         } catch (error) {
-            console.error(error);
+            console.error(JSON.stringify(error));
         }
     };
 

@@ -30,6 +30,7 @@ module.exports = function (app) {
         var plugin;
 
         response.contentType('json');
+        response.header('Access-Control-Allow-Origin', '*');
 
         //valida o token do usuário
         auth(request.param('token', null), function (error, user) {
@@ -99,6 +100,7 @@ module.exports = function (app) {
      */
     app.get('/app/:slug/version/:number/plugins', function (request, response) {
         response.contentType('json');
+        response.header('Access-Control-Allow-Origin', '*');
 
         //busca o app
         App.findOne({slug : request.params.slug}, function (error, app) {
@@ -149,6 +151,7 @@ module.exports = function (app) {
      */
     app.get('/app/:slug/version/:number/plugin/:name', function (request, response) {
         response.contentType('json');
+        response.header('Access-Control-Allow-Origin', '*');
 
         //busca o app
         App.findOne({slug : request.params.slug}, function (error, app) {
@@ -203,6 +206,7 @@ module.exports = function (app) {
      */
     app.del('/app/:slug/version/:number/plugin/:name', function (request, response) {
         response.contentType('json');
+        response.header('Access-Control-Allow-Origin', '*');
 
         //valida o token do usuário
         auth(request.param('token', null), function (error, user) {
@@ -277,6 +281,7 @@ module.exports = function (app) {
      */
     app.put('/app/:slug/version/:number/plugin/:oldname', function (request, response) {
         response.contentType('json');
+        response.header('Access-Control-Allow-Origin', '*');
 
         //valida o token do usuário
         auth(request.param('token', null), function (error, user) {
