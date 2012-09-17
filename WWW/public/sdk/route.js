@@ -59,27 +59,20 @@ sdk.modules.route = function (app) {
         return params;
     };
 
-    /** parseQuery
+    /** query
      *
      * @autor : Rafael Erthal
      * @since : 2012-08
      *
-     * @description : converte um objeto jSon em query
+     * @description : seta ou retorna a parte da url após o #!/app-name/*
+     * @param value : valor a ser setado
      */
-    var parseQuery = function (obj, label) {
-        var query_string = "",
-            key;
-
-        for (key in obj) {
-            if (obj.hasOwnProperty(key)) {
-                if (typeof obj[key] !== 'object') {
-                    query_string += (label ? label + "[" + escape(key) + "]" : escape(key)) + '=' + escape(obj[key]) + '&';
-                } else {
-                    query_string += parseQuery(obj[key], (label ? label + "[" + key + "]" : key)) + '&';
-                }
-            }
+    this.query = function (value) {
+        if (value) {
+            this.path(this.path() + '?' + jsonToQuery(value));
+        } else {
+            return queryToJson(location.hash);
         }
-        return query_string.slice(0, query_string.length - 1);
     };
 
     /** path
@@ -98,27 +91,6 @@ sdk.modules.route = function (app) {
             var exec = regex.exec(location.hash);
             return exec ? exec[1] : '/';
             //return location.hash.replace(/\#\!\/[a-z,A-Z,0-9,\-]+\//, '').replace(/\?.+/, '').split('/');
-        }
-    };
-
-    /** query
-     *
-     * @autor : Rafael Erthal
-     * @since : 2012-08
-     *
-     * @description : seta ou retorna a parte da url após o #!/app-name/*
-     * @param value : valor a ser setado
-     */
-    this.query = function (value) {
-        if (value) {
-            this.path(this.path() + '?' + parseQuery(value));
-        } else {
-            var res = {};
-            location.hash.replace(/#!\/[a-z,0-9,-]+\/[a-z,0-9,\-,\/]+[a-z,0-9]\/?\??/, '')
-                .replace(new RegExp("([^?=&]+)(=([^&]*))?", "g"),
-                    function ($0, $1, $2, $3) {res[$1] = $3;}
-                );
-            return res;
         }
     };
 

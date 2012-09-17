@@ -149,7 +149,6 @@ sdk.modules.apps = function () {
                 header = undefined,
                 app;
 
-            console.log("Building app");
             eval(this.source);
             app.slug = this.slug;
             
@@ -162,7 +161,6 @@ sdk.modules.apps = function () {
             }
             app.config = sdk.config;    
             
-            console.log("Loading app");
             try {
                 if (app.Load) {
                     app.Load();
