@@ -48,6 +48,7 @@ module.exports = function (app) {
                         if (error) {
                             response.send({error : error});
                         } else {
+                            user.password = undefined;
                             response.send({user : user});
                         }
                     });
@@ -94,6 +95,7 @@ module.exports = function (app) {
                                 if (error) {
                                     response.send({error : error});
                                 } else {
+                                    user.password = undefined;
                                     response.send({user : user});
                                 }
                             });
@@ -140,6 +142,7 @@ module.exports = function (app) {
                                 if (error) {
                                     response.send({error : error});
                                 } else {
+                                    user.password = undefined;
                                     response.send({user : user});
                                 }
                             });
@@ -150,7 +153,7 @@ module.exports = function (app) {
         });
     });
 
-    /** PUT /user/:login/password-recovery
+    /** PUT /user/:login/change-password
      *
      * @autor : Rafael Erthal
      * @since : 2012-07
@@ -163,7 +166,7 @@ module.exports = function (app) {
      * @request : {token, newpassword, newpasswordconfirmation}
      * @response : {newtoken, confirmation}
      */
-    app.put('/user/:login/password-recovery', function (request, response) {
+    app.put('/user/:login/change-password', function (request, response) {
         response.contentType('json');
         response.header('Access-Control-Allow-Origin', '*');
 
@@ -193,6 +196,7 @@ module.exports = function (app) {
                                             if (error) {
                                                 response.send({error : error});
                                             } else {
+                                                user.password = undefined;
                                                 response.send({user : user});
                                             }
                                         });
@@ -235,7 +239,7 @@ module.exports = function (app) {
                     response.send({error : { message : 'invalid username or password', name : 'InvalidLoginError'}});
                 } else {
                     //verifica a senha do usuário
-                    if (user.password !== request.param('password', null)) {
+                    if (user.password !== User.encryptPassword(request.param('password', null))) {
                         response.send({error : { message : 'invalid username or password', name : 'InvalidLoginError'}});
                     } else {
                         //loga o usuário
@@ -324,6 +328,7 @@ module.exports = function (app) {
                 if (user === null) {
                     response.send({ error : { message : 'Invalid token', name : 'InvalidTokenError'}});
                 } else {
+                    user.password = undefined;
                     response.send({user : user});
                 }
             }
