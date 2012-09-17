@@ -91,14 +91,17 @@ describe('POST /user', function () {
             password_confirmation : 'testando',
             status : 'active'
         }, function(error, data, response) {
-            should.not.exist(data.error, "precisava retornar error");
-            data.should.have.property('user').have.property('token');
-            data.should.have.property('user').have.property('username');
-            data.should.have.property('user').have.property('password');
-            data.should.have.property('user').have.property('status');
-            data.should.have.property('user').have.property('thirdPartyLogins');
-            data.should.have.property('user').have.property('authorizedApps');
-            done();
+            if (error) done(error);
+            else {
+                data.should.not.have.property('error');
+                data.should.have.property('user').have.property('token');
+                data.should.have.property('user').have.property('username');
+                data.should.have.property('user').have.property('status');
+                data.should.have.property('user').not.have.property('password');
+                data.should.have.property('user').have.property('thirdPartyLogins');
+                data.should.have.property('user').have.property('authorizedApps');
+                done();
+            }
         });
     });
 });
@@ -131,14 +134,17 @@ describe('PUT /user/[login]/deactivate', function () {
         api.put('auth', '/user/'+userId+"/deactivate", {
             token : token
         }, function (error, data, response) {
-            should.not.exist(data.error, "precisava retornar error");
-            data.should.have.property('user').have.property('token');
-            data.should.have.property('user').have.property('username');
-            data.should.have.property('user').have.property('password');
-            data.should.have.property('user').have.property('status');
-            data.should.have.property('user').have.property('thirdPartyLogins');
-            data.should.have.property('user').have.property('authorizedApps');
-            done();
+            if (error) done(error);
+            else {
+                should.not.exist(data.error, "precisava retornar error");
+                data.should.have.property('user').have.property('token');
+                data.should.have.property('user').have.property('username');
+                data.should.have.property('user').not.have.property('password');
+                data.should.have.property('user').have.property('status');
+                data.should.have.property('user').have.property('thirdPartyLogins');
+                data.should.have.property('user').have.property('authorizedApps');
+                done();
+            }
         });
     });
     it('token em branco', function (done) {
@@ -188,14 +194,17 @@ describe('PUT /user/[login]/activate', function () {
         api.put('auth', '/user/'+userId+"/activate", {
             token : token
         }, function (error, data, response) {
-            should.not.exist(data.error, "precisava retornar error");
-            data.should.have.property('user').have.property('token');
-            data.should.have.property('user').have.property('username');
-            data.should.have.property('user').have.property('password');
-            data.should.have.property('user').have.property('status');
-            data.should.have.property('user').have.property('thirdPartyLogins');
-            data.should.have.property('user').have.property('authorizedApps');
-            done();
+            if (error) done(error);
+            else {
+                should.not.exist(data.error, "precisava retornar error");
+                data.should.have.property('user').have.property('token');
+                data.should.have.property('user').have.property('username');
+                data.should.have.property('user').not.have.property('password');
+                data.should.have.property('user').have.property('status');
+                data.should.have.property('user').have.property('thirdPartyLogins');
+                data.should.have.property('user').have.property('authorizedApps');
+                done();
+            }
         });
     });
     it('token em branco', function (done) {
@@ -224,7 +233,7 @@ describe('PUT /user/[login]/activate', function () {
     });
 });
 
-describe('PUT /user/[login]/password-recovery', function () {
+describe('PUT /user/[login]/change-password', function () {
     var token,
         userId;
 
@@ -242,7 +251,7 @@ describe('PUT /user/[login]/password-recovery', function () {
         });
     });
     it('página não encontrada', function (done) {
-        api.put('auth', '/user/'+userId+"/password-recovery", {
+        api.put('auth', '/user/'+userId+"/change-password", {
             token : token
         }, function (error, data, response) {
             response.should.have.status(200);
@@ -250,27 +259,31 @@ describe('PUT /user/[login]/password-recovery', function () {
         });
     });
     it('trocar de senha com sucesso', function(done) {
-        api.put('auth', '/user/'+userId+"/password-recovery", {
-            newpassword : 'testando',
-            newpasswordconfirmation : 'testando',
+        api.put('auth', '/user/'+userId+"/change-password", {
+            newpassword : 'testando2',
+            newpasswordconfirmation : 'testando2',
             token : token
         }, function(error, data, response) {
             if (error) {
                 done(error);
             } else {
-                should.not.exist(data.error, "precisava retornar error");
-                data.should.have.property('user').have.property('token');
-                data.should.have.property('user').have.property('username');
-                data.should.have.property('user').have.property('password');
-                data.should.have.property('user').have.property('status');
-                data.should.have.property('user').have.property('thirdPartyLogins');
-                data.should.have.property('user').have.property('authorizedApps');
-                done();
+                if (error) done(error);
+                else {
+                    should.not.exist(data.error, "precisava retornar error");
+                    data.should.have.property('user').have.property('token');
+                    data.should.have.property('user').have.property('username');
+                    data.should.have.property('user').not.have.property('password');
+                    data.should.have.property('user').have.property('status');
+                    data.should.have.property('user').have.property('thirdPartyLogins');
+                    data.should.have.property('user').have.property('authorizedApps');
+                    token = data.user.token;
+                    done();
+                }
             }
         });
     });
     it('token em branco', function(done) {
-        api.put('auth', '/user/'+userId+"/password-recovery", {
+        api.put('auth', '/user/'+userId+"/change-password", {
             newpassword : 'testando',
             newpasswordconfirmation : 'testando'
         }, function(error, data, response) {
@@ -283,7 +296,7 @@ describe('PUT /user/[login]/password-recovery', function () {
         });
     });
     it('usuário não cadastrado', function(done) {
-        api.put('auth', '/user/'+userId+"123asd123asd123/password-recovery", {
+        api.put('auth', '/user/'+userId+"123asd123asd123/change-password", {
             newpassword : 'testando',
             newpasswordconfirmation : 'testando',
             token : token
@@ -293,7 +306,7 @@ describe('PUT /user/[login]/password-recovery', function () {
         });
     });
     it('token errado', function(done) {
-        api.put('auth', '/user/'+userId+"/password-recovery", {
+        api.put('auth', '/user/'+userId+"/change-password", {
             newpassword : 'testando',
             newpasswordconfirmation : 'testando',
             token : token+"asdad123123asd"
@@ -303,7 +316,7 @@ describe('PUT /user/[login]/password-recovery', function () {
         });
     });
     it('Senhas não batem', function(done) {
-        api.put('auth', '/user/'+userId+"/password-recovery", {
+        api.put('auth', '/user/'+userId+"/change-password", {
             newpassword : 'testando',
             newpasswordconfirmation : 'testando123123123123',
             token : token
@@ -313,13 +326,16 @@ describe('PUT /user/[login]/password-recovery', function () {
         });
     });
     it('Senhas em branco', function(done) {
-        api.put('auth', '/user/'+userId+"/password-recovery", {
+        api.put('auth', '/user/'+userId+"/change-password", {
             newpassword : '',
             newpasswordconfirmation : '',
             token : token
         }, function(error, data, response) {
-            data.should.have.property('error').have.property('name', 'ValidationError');
-            done();
+            if (error) done(error);
+            else {
+                data.should.have.property('error').have.property('name', 'ValidationError');
+                done();
+            }
         });
     });
 });

@@ -29,7 +29,11 @@ userSchema = new Schema({
  * @description : verifica se o username ainda não foi cadastrado
  */
 userSchema.pre('save', function (next) {
-    var i, j;
+    var i, j, password;
+
+    if (this.isNew) {
+        this.password = User.encryptPassword(this.password);
+    }
 
     for (i = 0; i < this.thirdPartyLogins.length; i = i + 1) {
         if (this.thirdPartyLogins[i].isNew) {
@@ -72,6 +76,26 @@ userSchema.statics.findByIdentity = function (id, cb) {
     }
 };
 
+/** encryptPassword
+ * @author : Mauro Ribeiro
+ * @since : 2012-08
+ *
+ * @description : Encripta um password
+ * @param password : password
+ */
+userSchema.statics.encryptPassword = function (password) {
+    "use strict";
+
+    if (password && password != '') {
+        password = crypto
+            .createHash('sha256')
+            .update(config.security.password + password)
+            .digest('hex');
+    }
+
+    return password;
+};
+
 /** GenerateToken
  * @author : Rafael Erthal
  * @since : 2012-07
@@ -83,8 +107,8 @@ userSchema.methods.generateToken = function () {
     "use strict";
 
     var token = crypto
-        .createHash('sha256', config.security.token)
-        .update(this.login + this.password + crypto.randomBytes(10))
+        .createHash('sha256')
+        .update(config.security.token + this.login + this.password + crypto.randomBytes(10))
         .digest('hex');
 
     return token;
@@ -169,6 +193,8 @@ userSchema.methods.logout = function (cb) {
  */
 userSchema.methods.changePassword = function (password, cb) {
     "use strict";
+
+    password = User.encryptPassword(password);
 
     this.password = password;
     this.save(cb);
